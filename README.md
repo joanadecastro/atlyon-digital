@@ -1,25 +1,25 @@
-# Atlyon Digital
+# 🚀 Atlyon Digital
 
-Website institucional desenvolvido para a **Atlyon Digital**, uma agência focada em Web Design, Desenvolvimento Web, Branding e Soluções Digitais para empresas.
+Website institucional desenvolvido para a **Atlyon Digital**, uma agência focada em **Web Design, Desenvolvimento Web, Branding e Soluções Digitais** para empresas que procuram uma presença online moderna, profissional e orientada para resultados.
 
-O objetivo deste projeto foi criar uma presença digital premium, moderna e orientada para conversão, transmitindo profissionalismo e confiança desde o primeiro contacto.
+O principal objetivo deste projeto foi criar uma plataforma premium capaz de transmitir confiança, credibilidade e valor desde o primeiro contacto, combinando design moderno, performance e uma experiência de utilização intuitiva.
 
 ---
 
-## Objetivos do Projeto
+# 🎯 Objetivos do Projeto
 
 - Apresentar os serviços da Atlyon Digital.
-- Demonstrar casos de estudo reais através de páginas dedicadas.
+- Demonstrar projetos reais através de páginas de Case Study.
 - Reforçar a identidade visual da marca.
-- Criar uma experiência moderna e responsiva.
+- Criar uma experiência totalmente responsiva.
 - Facilitar o contacto de potenciais clientes.
-- Preparar a plataforma para futura integração com formulários, emails empresariais e automações.
+- Preparar a plataforma para futuras integrações.
 
 ---
 
-## Tecnologias Utilizadas
+# 🛠️ Tecnologias Utilizadas
 
-### Frontend
+## Frontend
 
 - Angular 21
 - TypeScript
@@ -27,10 +27,10 @@ O objetivo deste projeto foi criar uma presença digital premium, moderna e orie
 - SCSS
 - Angular Standalone Components
 
-### Design
+## Design
 
 - Design System próprio
-- Layout responsivo
+- Layout Responsivo
 - Gradientes personalizados
 - Animações CSS
 - Mockups Desktop e Mobile
@@ -38,44 +38,45 @@ O objetivo deste projeto foi criar uma presença digital premium, moderna e orie
 
 ---
 
-## Funcionalidades
+# ✨ Funcionalidades
 
-### Landing Page
+## Landing Page
 
-- Hero section premium
+- Hero Section Premium
 - Apresentação da empresa
 - Serviços
 - Processo de trabalho
 - Portefólio
 - Formulário de contacto
 
-### Portfolio
+## Portfolio
 
-- Cards de projetos
-- Hover interactions
-- Navegação para Case Studies
+- Cards interativos
+- Navegação dinâmica
+- Cases de estudo personalizados
 
-### Case Studies
+## Case Studies
 
 Cada projeto possui uma página dedicada com:
 
-- Desafio do projeto
-- Apresentação visual
-- Mockups Desktop
-- Mockups Mobile
-- Sistema de scroll interno
+- Apresentação do desafio
+- Solução desenvolvida
+- Mockup Desktop
+- Mockup Mobile
+- Scroll interno demonstrativo
 - Identidade visual
-- Cores utilizadas
+- Paleta de cores
 - Tipografia utilizada
 
-### Contacto
+## Contacto
 
 - Formulário de contacto
-- Preparado para integração com EmailJS ou backend próprio
+- Preparado para EmailJS
+- Preparado para backend próprio
 
 ---
 
-## Estrutura do Projeto
+# 📁 Estrutura do Projeto
 
 ```txt
 src/
@@ -104,58 +105,59 @@ public/
 
 ---
 
-# Screenshots
+# 📸 Screenshots
 
 ## Homepage
 
-![Homepage](public/doc/print1.png)
+<img src="./public/doc/print1.png?raw=true" width="100%">
 
 ---
 
 ## Processo
 
-![Processo](public/doc/print2.png)
+<img src="./public/doc/print2.png?raw=true" width="100%">
 
 ---
 
 ## Portfolio
 
-![Portfolio](public/doc/print3.png)
+<img src="./public/doc/print3.png?raw=true" width="100%">
 
 ---
 
 ## Case Study
 
-![Case Study](public/doc/print4.png)
+<img src="./public/doc/print4.png?raw=true" width="100%">
 
 ---
 
 ## Identidade Visual
 
-![Identidade Visual](public/doc/print5.png)
+<img src="./public/doc/print5.png?raw=true" width="100%">
 
 ---
 
 ## Contacto
 
-![Contacto](public/doc/print6.png)
+<img src="./public/doc/print6.png?raw=true" width="100%">
 
 ---
 
-## Melhorias Futuras
+# 🚀 Melhorias Futuras
 
 - Integração do formulário com EmailJS
 - Emails empresariais personalizados
-- CMS para gestão de projetos
-- Blog
+- CMS para gestão de conteúdos
+- Blog corporativo
 - Sistema de marcações online
 - Dashboard administrativa
 - Analytics avançados
+- SEO avançado
 
 ---
 
-## Autor
+# 👩‍💻 Autor
 
 Desenvolvido por **Joana Castro**
 
-Atlyon Digital © 2026
+### Atlyon Digital © 2026
