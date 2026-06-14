@@ -1129,19 +1129,20 @@ nav a.active {
 }
 
 .form-message {
-  margin: 4px 0 0;
+  width: 100%;
+  margin: 5px 0 0;
+  text-align: center;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .form-message.success {
-  color: #fff;
+  color: #46e488;
 }
 
 .form-message.error {
-  color: #2b0b05;
+  color: #ff2b2b;
 }
-
 .contact-form button:disabled {
   opacity: 0.55;
   cursor: not-allowed;

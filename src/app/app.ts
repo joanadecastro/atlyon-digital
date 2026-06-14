@@ -1,15 +1,16 @@
-import { AfterViewInit, Component, HostListener } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import emailjs from '@emailjs/browser';
 import { ProjectCaseComponent } from './project-case/project-case';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [ProjectCaseComponent, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements AfterViewInit {
+export class App implements OnInit, AfterViewInit {
   selectedProject: any = null;
   isScrolled = false;
   activeSection = '';
@@ -20,9 +21,13 @@ export class App implements AfterViewInit {
 
   private revealObserver?: IntersectionObserver;
 
-  private readonly emailServiceId = 'YOUR_SERVICE_ID';
-  private readonly emailTemplateId = 'YOUR_TEMPLATE_ID';
-  private readonly emailPublicKey = 'YOUR_PUBLIC_KEY';
+private readonly emailServiceId = 'service_jr984oj';
+private readonly emailTemplateId = 'template_7zyvxhl';
+private readonly emailPublicKey = 'uqQfbOsl3Txg0y5rt';
+
+  ngOnInit() {
+    emailjs.init(this.emailPublicKey);
+  }
 
   @HostListener('window:scroll')
   onWindowScroll() {
@@ -185,29 +190,31 @@ export class App implements AfterViewInit {
     this.isSubmitting = true;
 
     const templateParams = {
-      nome: form.value.nome,
-      empresa: form.value.empresa || 'Não indicado',
+      name: form.value.nome,
+      company: form.value.empresa || 'Não indicado',
       email: form.value.email,
-      telefone: form.value.telefone || 'Não indicado',
-      servico: form.value.servico,
-      mensagem: form.value.mensagem,
+      phone: form.value.telefone || 'Não indicado',
+      service: form.value.servico,
+      message: form.value.mensagem,
     };
 
     try {
       await emailjs.send(
-        this.emailServiceId,
-        this.emailTemplateId,
-        templateParams,
-        {
-          publicKey: this.emailPublicKey,
-        }
-      );
+  this.emailServiceId,
+  this.emailTemplateId,
+  templateParams,
+  {
+    publicKey: this.emailPublicKey,
+  }
+);
 
       this.formSuccess =
         'Pedido enviado com sucesso. Entraremos em contacto brevemente.';
+
       form.resetForm();
     } catch (error) {
-      console.error(error);
+      console.error('EmailJS Error:', error);
+
       this.formError =
         'Não foi possível enviar o pedido. Tenta novamente ou contacta-nos por email.';
     } finally {
