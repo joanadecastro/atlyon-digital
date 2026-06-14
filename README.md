@@ -1,59 +1,161 @@
-# AtlyonDigital
+# Atlyon Digital
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.14.
+Website institucional desenvolvido para a **Atlyon Digital**, uma agência focada em Web Design, Desenvolvimento Web, Branding e Soluções Digitais para empresas.
 
-## Development server
+O objetivo deste projeto foi criar uma presença digital premium, moderna e orientada para conversão, transmitindo profissionalismo e confiança desde o primeiro contacto.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## Objetivos do Projeto
+
+- Apresentar os serviços da Atlyon Digital.
+- Demonstrar casos de estudo reais através de páginas dedicadas.
+- Reforçar a identidade visual da marca.
+- Criar uma experiência moderna e responsiva.
+- Facilitar o contacto de potenciais clientes.
+- Preparar a plataforma para futura integração com formulários, emails empresariais e automações.
+
+---
+
+## Tecnologias Utilizadas
+
+### Frontend
+
+- Angular 21
+- TypeScript
+- HTML5
+- SCSS
+- Angular Standalone Components
+
+### Design
+
+- Design System próprio
+- Layout responsivo
+- Gradientes personalizados
+- Animações CSS
+- Mockups Desktop e Mobile
+- Tipografia Inter
+
+---
+
+## Funcionalidades
+
+### Landing Page
+
+- Hero section premium
+- Apresentação da empresa
+- Serviços
+- Processo de trabalho
+- Portefólio
+- Formulário de contacto
+
+### Portfolio
+
+- Cards de projetos
+- Hover interactions
+- Navegação para Case Studies
+
+### Case Studies
+
+Cada projeto possui uma página dedicada com:
+
+- Desafio do projeto
+- Apresentação visual
+- Mockups Desktop
+- Mockups Mobile
+- Sistema de scroll interno
+- Identidade visual
+- Cores utilizadas
+- Tipografia utilizada
+
+### Contacto
+
+- Formulário de contacto
+- Preparado para integração com EmailJS ou backend próprio
+
+---
+
+## Estrutura do Projeto
+
+```txt
+src/
+│
+├── app/
+│   ├── project-case/
+│   ├── portfolio/
+│   ├── services/
+│   ├── process/
+│   └── contact/
+│
+public/
+│
+├── projects/
+│   ├── imagens dos projetos
+│   └── mockups
+│
+└── doc/
+    ├── print1.png
+    ├── print2.png
+    ├── print3.png
+    ├── print4.png
+    ├── print5.png
+    └── print6.png
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+# Screenshots
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Homepage
 
-```bash
-ng generate component component-name
-```
+![Homepage](public/doc/print1.png)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## Processo
 
-## Building
+![Processo](public/doc/print2.png)
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## Portfolio
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+![Portfolio](public/doc/print3.png)
 
-## Running unit tests
+---
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Case Study
 
-```bash
-ng test
-```
+![Case Study](public/doc/print4.png)
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Identidade Visual
 
-```bash
-ng e2e
-```
+![Identidade Visual](public/doc/print5.png)
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## Contacto
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+![Contacto](public/doc/print6.png)
+
+---
+
+## Melhorias Futuras
+
+- Integração do formulário com EmailJS
+- Emails empresariais personalizados
+- CMS para gestão de projetos
+- Blog
+- Sistema de marcações online
+- Dashboard administrativa
+- Analytics avançados
+
+---
+
+## Autor
+
+Desenvolvido por **Joana Castro**
+
+Atlyon Digital © 2026
