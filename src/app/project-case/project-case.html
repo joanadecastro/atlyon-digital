@@ -1,0 +1,135 @@
+<main class="case-page" [style.--accent]="project.accent || '#fd643a'">
+  <button class="back-btn" type="button" (click)="goBack()">← Voltar</button>
+
+  <section class="case-hero" [style.background-image]="'url(' + project.background + ')'">
+    <div class="hero-overlay"></div>
+
+    <div class="case-hero-content">
+      <p>Case Study</p>
+      <h1>{{ project.name }}</h1>
+      <div class="hero-line"></div>
+      <span>Web Design & Branding</span>
+    </div>
+  </section>
+
+  <section class="case-intro">
+    <div class="intro-title">
+      <p>O desafio</p>
+      <h2>{{ project.caseTitle }}</h2>
+    </div>
+
+    <div class="intro-text">
+      <strong>{{ project.caseText }}</strong>
+      <p>{{ project.caseText2 }}</p>
+
+      <p>
+        O objetivo foi criar uma presença digital que transmitisse valor antes mesmo
+        do primeiro contacto. A experiência tinha de parecer premium, clara e fácil
+        de navegar, tanto em desktop como em mobile.
+      </p>
+
+      <p>
+        A estrutura foi pensada para apresentar serviços, reforçar confiança,
+        destacar a identidade visual da marca e guiar o utilizador até à conversão.
+      </p>
+    </div>
+  </section>
+
+  <section class="case-orange">
+    <section class="case-showcase">
+      <div class="showcase-copy">
+        <p>Showcase</p>
+        <h2>Design digital aplicado à marca.</h2>
+        <span></span>
+        <h3>Web Design & Branding</h3>
+      </div>
+
+      <div class="showcase-stage">
+        <div class="hover-hint">
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="desktop-mockup">
+          <div class="imac-scroll">
+            <img [src]="project.desktop" [alt]="project.name + ' desktop'">
+          </div>
+        </div>
+
+        <div class="iphone">
+          <div class="iphone-notch"></div>
+
+          <div class="iphone-screen">
+            <div class="iphone-scroll">
+              <img [src]="project.mobile" [alt]="project.name + ' mobile'">
+            </div>
+          </div>
+        </div>
+
+        <div class="scroll-callout">
+          <span></span>
+          <small>Scroll</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="case-brand">
+      <h2 class="brand-main-title">Identidade visual</h2>
+
+      <div class="brand-grid">
+        <div class="colors-block">
+          <div class="block-heading">
+            <p>Cores</p>
+            <span></span>
+          </div>
+
+          <div class="color-list">
+            @for (color of project.colors; track color.name) {
+              <div class="color-item">
+                <span [style.background]="color.hex"></span>
+
+                <div>
+                  <strong>{{ color.name }}</strong>
+                  <small>{{ color.hex }} — {{ color.role }}</small>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="type-block">
+          <div class="block-heading">
+            <p>Tipografia</p>
+            <span></span>
+          </div>
+
+          <h2>{{ project.primaryFont }}</h2>
+          <small>Usada para títulos, impacto visual e comunicação premium.</small>
+
+          <h3>{{ project.secondaryFont }}</h3>
+          <small>Usada para textos, navegação e elementos funcionais.</small>
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="case-cta">
+    <p>Próximo passo</p>
+    <h2>Pronto para elevar a tua marca?</h2>
+
+    <div>
+      <button type="button" (click)="goToContact()">
+        Pedir orçamento
+      </button>
+
+      <button type="button" (click)="goToServices()">
+        Ver serviços
+      </button>
+    </div>
+  </section>
+
+  <footer class="case-footer">
+    <strong>{{ project.name }}</strong>
+    <span>© 2026 Atlyon Digital</span>
+  </footer>
+</main>
