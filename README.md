@@ -1,23 +1,23 @@
 # 🚀 Atlyon Digital
 
-Website institucional desenvolvido para a **Atlyon Digital**, uma agência focada em **Web Design, Desenvolvimento Web, Branding e Soluções Digitais** para empresas que procuram uma presença online moderna, profissional e orientada para resultados.
+Atlyon Digital is a modern agency website focused on **Web Design, Web Development, Branding, and Digital Solutions** for businesses looking to establish a premium online presence.
 
-O principal objetivo deste projeto foi criar uma plataforma premium capaz de transmitir confiança, credibilidade e valor desde o primeiro contacto, combinando design moderno, performance e uma experiência de utilização intuitiva.
-
----
-
-# 🎯 Objetivos do Projeto
-
-- Apresentar os serviços da Atlyon Digital.
-- Demonstrar projetos reais através de páginas de Case Study.
-- Reforçar a identidade visual da marca.
-- Criar uma experiência totalmente responsiva.
-- Facilitar o contacto de potenciais clientes.
-- Preparar a plataforma para futuras integrações.
+The goal of this project was to create a high-end digital experience that communicates trust, professionalism, and value from the very first interaction while maintaining excellent usability across desktop and mobile devices.
 
 ---
 
-# 🛠️ Tecnologias Utilizadas
+# 🎯 Project Goals
+
+- Showcase Atlyon Digital's services.
+- Present real-world projects through dedicated Case Study pages.
+- Strengthen the company's visual identity.
+- Deliver a fully responsive experience.
+- Generate leads through a conversion-focused interface.
+- Prepare the platform for future integrations and automation.
+
+---
+
+# 🛠️ Technologies Used
 
 ## Frontend
 
@@ -29,54 +29,54 @@ O principal objetivo deste projeto foi criar uma plataforma premium capaz de tra
 
 ## Design
 
-- Design System próprio
-- Layout Responsivo
-- Gradientes personalizados
-- Animações CSS
-- Mockups Desktop e Mobile
-- Tipografia Inter
+- Custom Design System
+- Responsive Layout
+- Advanced CSS Animations
+- Desktop & Mobile Mockups
+- Inter Typography
+- Premium UI/UX Design
 
 ---
 
-# ✨ Funcionalidades
+# ✨ Features
 
 ## Landing Page
 
-- Hero Section Premium
-- Apresentação da empresa
-- Serviços
-- Processo de trabalho
-- Portefólio
-- Formulário de contacto
+- Premium Hero Section
+- Company Presentation
+- Services Overview
+- Work Process Section
+- Portfolio Showcase
+- Contact Form
 
 ## Portfolio
 
-- Cards interativos
-- Navegação dinâmica
-- Cases de estudo personalizados
+- Interactive Project Cards
+- Dynamic Navigation
+- Custom Case Study Pages
 
 ## Case Studies
 
-Cada projeto possui uma página dedicada com:
+Each project includes:
 
-- Apresentação do desafio
-- Solução desenvolvida
-- Mockup Desktop
-- Mockup Mobile
-- Scroll interno demonstrativo
-- Identidade visual
-- Paleta de cores
-- Tipografia utilizada
+- Project Challenge
+- Solution Overview
+- Desktop Mockup
+- Mobile Mockup
+- Interactive Internal Scrolling
+- Visual Identity Presentation
+- Color Palette
+- Typography System
 
-## Contacto
+## Contact Section
 
-- Formulário de contacto
-- Preparado para EmailJS
-- Preparado para backend próprio
+- Contact Form
+- Ready for EmailJS Integration
+- Ready for Custom Backend Integration
 
 ---
 
-# 📁 Estrutura do Projeto
+# 📁 Project Structure
 
 ```txt
 src/
@@ -91,7 +91,7 @@ src/
 public/
 │
 ├── projects/
-│   ├── imagens dos projetos
+│   ├── project assets
 │   └── mockups
 │
 └── doc/
@@ -113,7 +113,7 @@ public/
 
 ---
 
-## Processo
+## Process
 
 <img src="./public/doc/print2.png?raw=true" width="100%">
 
@@ -131,33 +131,33 @@ public/
 
 ---
 
-## Identidade Visual
+## Visual Identity
 
 <img src="./public/doc/print5.png?raw=true" width="100%">
 
 ---
 
-## Contacto
+## Contact Section
 
 <img src="./public/doc/print6.png?raw=true" width="100%">
 
 ---
 
-# 🚀 Melhorias Futuras
+# 🚀 Future Improvements
 
-- Integração do formulário com EmailJS
-- Emails empresariais personalizados
-- CMS para gestão de conteúdos
-- Blog corporativo
-- Sistema de marcações online
-- Dashboard administrativa
-- Analytics avançados
-- SEO avançado
+- EmailJS integration
+- Custom business email setup
+- Content Management System (CMS)
+- Blog section
+- Online booking system
+- Administrative dashboard
+- Advanced analytics
+- SEO optimization
 
 ---
 
-# 👩‍💻 Autor
+# 👩‍💻 Author
 
-Desenvolvido por **Joana Castro**
+Developed by **Joana Castro**
 
 ### Atlyon Digital © 2026
