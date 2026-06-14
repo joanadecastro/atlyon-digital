@@ -11,9 +11,7 @@
       <a href="#portfolio" [class.active]="activeSection === 'portfolio'">Portfólio</a>
       <a href="#processo" [class.active]="activeSection === 'processo'">Processo</a>
       <a href="#contacto" [class.active]="activeSection === 'contacto'">Contacto</a>
-      <a href="#contacto" class="nav-cta">
-        Pedir proposta
-      </a>
+      <a href="#contacto" class="nav-cta">Pedir proposta</a>
     </nav>
   </header>
 
@@ -157,20 +155,47 @@
           </p>
         </div>
 
-        <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <form
+          #proposalForm="ngForm"
+          class="contact-form"
+          (ngSubmit)="sendProposal(proposalForm)"
+          novalidate>
+
           <div class="form-row">
-            <input type="text" name="nome" placeholder="Nome" required>
-            <input type="text" name="empresa" placeholder="Empresa / Marca">
+            <input
+              type="text"
+              name="nome"
+              placeholder="Nome *"
+              required
+              minlength="2"
+              ngModel>
+
+            <input
+              type="text"
+              name="empresa"
+              placeholder="Empresa / Marca"
+              ngModel>
           </div>
 
           <div class="form-row">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="tel" name="telefone" placeholder="Telefone">
+            <input
+              type="email"
+              name="email"
+              placeholder="Email *"
+              required
+              email
+              ngModel>
+
+            <input
+              type="tel"
+              name="telefone"
+              placeholder="Telefone"
+              ngModel>
           </div>
 
           <div class="select-wrap">
-            <select name="servico" required>
-              <option value="">Serviço pretendido</option>
+            <select name="servico" required ngModel>
+              <option value="">Serviço pretendido *</option>
               <option value="Branding">Branding</option>
               <option value="Identidade Visual">Identidade Visual</option>
               <option value="Design Gráfico">Design Gráfico</option>
@@ -185,10 +210,30 @@
           <textarea
             name="mensagem"
             rows="6"
-            placeholder="Fala-me um pouco sobre o projeto..."
-            required></textarea>
+            placeholder="Fala-me um pouco sobre o projeto... *"
+            required
+            minlength="10"
+            ngModel></textarea>
 
-          <button type="submit">Pedir proposta</button>
+          <input
+            type="text"
+            name="website"
+            class="hidden-field"
+            tabindex="-1"
+            autocomplete="off"
+            ngModel>
+
+          @if (formError) {
+            <p class="form-message error">{{ formError }}</p>
+          }
+
+          @if (formSuccess) {
+            <p class="form-message success">{{ formSuccess }}</p>
+          }
+
+          <button type="submit" [disabled]="proposalForm.invalid || isSubmitting">
+            {{ isSubmitting ? 'A enviar...' : 'Pedir proposta' }}
+          </button>
         </form>
       </div>
     </section>

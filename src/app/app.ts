@@ -1,9 +1,11 @@
 import { AfterViewInit, Component, HostListener } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import emailjs from '@emailjs/browser';
 import { ProjectCaseComponent } from './project-case/project-case';
 
 @Component({
   selector: 'app-root',
-  imports: [ProjectCaseComponent],
+  imports: [ProjectCaseComponent, FormsModule],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -12,7 +14,15 @@ export class App implements AfterViewInit {
   isScrolled = false;
   activeSection = '';
 
+  isSubmitting = false;
+  formSuccess = '';
+  formError = '';
+
   private revealObserver?: IntersectionObserver;
+
+  private readonly emailServiceId = 'YOUR_SERVICE_ID';
+  private readonly emailTemplateId = 'YOUR_TEMPLATE_ID';
+  private readonly emailPublicKey = 'YOUR_PUBLIC_KEY';
 
   @HostListener('window:scroll')
   onWindowScroll() {
@@ -157,6 +167,52 @@ export class App implements AfterViewInit {
     this.onWindowScroll();
     this.preloadProjectImages();
     this.initRevealAnimations();
+  }
+
+  async sendProposal(form: NgForm) {
+    this.formSuccess = '';
+    this.formError = '';
+
+    if (form.invalid) {
+      this.formError = 'Preenche os campos obrigatórios antes de enviar.';
+      return;
+    }
+
+    if (form.value.website) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const templateParams = {
+      nome: form.value.nome,
+      empresa: form.value.empresa || 'Não indicado',
+      email: form.value.email,
+      telefone: form.value.telefone || 'Não indicado',
+      servico: form.value.servico,
+      mensagem: form.value.mensagem,
+    };
+
+    try {
+      await emailjs.send(
+        this.emailServiceId,
+        this.emailTemplateId,
+        templateParams,
+        {
+          publicKey: this.emailPublicKey,
+        }
+      );
+
+      this.formSuccess =
+        'Pedido enviado com sucesso. Entraremos em contacto brevemente.';
+      form.resetForm();
+    } catch (error) {
+      console.error(error);
+      this.formError =
+        'Não foi possível enviar o pedido. Tenta novamente ou contacta-nos por email.';
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 
   updateActiveSection() {

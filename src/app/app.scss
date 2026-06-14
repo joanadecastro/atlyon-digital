@@ -1123,3 +1123,26 @@ nav a.active {
     grid-template-columns: 1fr;
   }
 }
+
+.hidden-field {
+  display: none !important;
+}
+
+.form-message {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.form-message.success {
+  color: #fff;
+}
+
+.form-message.error {
+  color: #2b0b05;
+}
+
+.contact-form button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
