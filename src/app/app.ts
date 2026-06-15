@@ -21,9 +21,9 @@ export class App implements OnInit, AfterViewInit {
 
   private revealObserver?: IntersectionObserver;
 
-private readonly emailServiceId = 'service_jr984oj';
-private readonly emailTemplateId = 'template_7zyvxhl';
-private readonly emailPublicKey = 'uqQfbOsl3Txg0y5rt';
+  private readonly emailServiceId = 'service_jr984oj';
+  private readonly emailTemplateId = 'template_7zyvxhl';
+  private readonly emailPublicKey = 'uqQfbOsl3Txg0y5rt';
 
   ngOnInit() {
     emailjs.init(this.emailPublicKey);
@@ -36,56 +36,68 @@ private readonly emailPublicKey = 'uqQfbOsl3Txg0y5rt';
   }
 
   services = [
-    {
-      title: 'Branding e identidade visual',
-      description:
-        'Criação de logótipos, paletas de cor, tipografia, direção visual e sistemas de marca consistentes.',
-      price: 250,
-    },
-    {
-      title: 'Web design e desenvolvimento',
-      description:
-        'Websites modernos, responsivos e funcionais, pensados para apresentar a marca e gerar contactos.',
-      price: 450,
-    },
-    {
-      title: 'Design gráfico e packaging',
-      description:
-        'Materiais gráficos, embalagens, layouts, peças digitais e comunicação visual para diferentes suportes.',
-      price: 180,
-    },
-    {
-      title: 'Estratégia digital',
-      description:
-        'Organização da presença online, estrutura de conteúdos e soluções visuais para marcas crescerem com clareza.',
-      price: 150,
-    },
-  ];
+  {
+    title: 'Logótipo',
+    description:
+      'Criação de logótipos profissionais com versões adaptadas para diferentes suportes digitais e impressos.',
+    priceLabel: 'Desde 249€',
+  },
+  {
+    title: 'Branding',
+    description:
+      'Identidade visual completa com logótipo, cores, tipografia, direção visual e guia básico de marca.',
+    priceLabel: 'Desde 599€',
+  },
+  {
+    title: 'Websites',
+    description:
+      'Landing pages e websites empresariais modernos, responsivos e focados em credibilidade e conversão.',
+    priceLabel: 'Desde 499€',
+  },
+  {
+  title: 'Lojas online',
+  description:
+    'E-commerce personalizado com catálogo, produtos, pagamentos, encomendas e estrutura otimizada para vendas online.',
+  priceLabel: 'Desde 1499€',
+},
+  {
+    title: 'Soluções digitais',
+    description:
+      'Áreas reservadas, dashboards, portais de cliente, sistemas internos e funcionalidades à medida.',
+    priceLabel: 'Desde 1499€',
+  },
+ {
+  title: 'Prestação de serviços',
+  description:
+    'Colaboração contínua ou por projeto em design, branding, UI/UX, frontend, backend e desenvolvimento de soluções digitais para empresas.',
+  priceLabel: 'Sob orçamento',
+},
+];
 
   processSteps = [
     {
       number: '01',
       title: 'Briefing',
       description:
-        'Percebemos o negócio, objetivos, público e estilo visual pretendido.',
+        'Percebemos o negócio, objetivos, público, necessidades e tipo de solução pretendida.',
     },
     {
       number: '02',
-      title: 'Direção visual',
+      title: 'Direção e proposta',
       description:
-        'Criamos uma linguagem gráfica alinhada com a personalidade da marca.',
+        'Definimos a abordagem visual, técnica e comercial antes de avançar para a criação.',
     },
     {
       number: '03',
       title: 'Design e desenvolvimento',
       description:
-        'Transformamos a ideia em peças visuais, website ou experiência digital funcional.',
+        'Criamos a identidade, interface, website ou solução digital com foco em qualidade e funcionalidade.',
     },
     {
       number: '04',
       title: 'Entrega e lançamento',
       description:
-        'Preparamos os ficheiros finais, publicamos o site e deixamos tudo pronto a usar.',
+        'Finalizamos os detalhes, publicamos o projeto e deixamos tudo pronto para ser usado.',
     },
   ];
 
@@ -95,8 +107,8 @@ private readonly emailPublicKey = 'uqQfbOsl3Txg0y5rt';
       category: 'Barbearia Premium',
       description:
         'Website premium para barbearia, com serviços, marcações, galeria e tabela de preços.',
-      desktop: 'projects/barberdesktop.png',
-      mobile: 'projects/barbermobile.png',
+      desktop: 'projects/barberdesktop.jpg',
+      mobile: 'projects/barbermobile.jpg',
       study: 'projects/barber_house_study.png',
       background: 'projects/barbearia_background.jpg',
       caseTitle: 'Centenário de Elegância',
@@ -120,8 +132,8 @@ private readonly emailPublicKey = 'uqQfbOsl3Txg0y5rt';
       category: 'Restaurante',
       description:
         'Website elegante para restaurante, com menu, reservas, galeria e localização.',
-      desktop: 'projects/restaurantedesktop.png',
-      mobile: 'projects/restaurantemobile.png',
+      desktop: 'projects/restaurantedesktop.jpg',
+      mobile: 'projects/restaurantemobile.jpg',
       study: 'projects/mercado_bistro_study.png',
       background: 'projects/restaurante_background.jpg',
       caseTitle: 'Sabor com Presença',
@@ -145,8 +157,8 @@ private readonly emailPublicKey = 'uqQfbOsl3Txg0y5rt';
       category: 'Alojamento Local',
       description:
         'Website para alojamento premium, com suites, experiências, reservas e contacto.',
-      desktop: 'projects/hoteldesktop.png',
-      mobile: 'projects/hotelmobile.png',
+      desktop: 'projects/hoteldesktop.jpg',
+      mobile: 'projects/hotelmobile.jpg',
       study: 'projects/atlantic_suites_study.png',
       background: 'projects/hotel_background.jpg',
       caseTitle: 'Luxo Costeiro Redefinido',
@@ -200,13 +212,13 @@ private readonly emailPublicKey = 'uqQfbOsl3Txg0y5rt';
 
     try {
       await emailjs.send(
-  this.emailServiceId,
-  this.emailTemplateId,
-  templateParams,
-  {
-    publicKey: this.emailPublicKey,
-  }
-);
+        this.emailServiceId,
+        this.emailTemplateId,
+        templateParams,
+        {
+          publicKey: this.emailPublicKey,
+        }
+      );
 
       this.formSuccess =
         'Pedido enviado com sucesso. Entraremos em contacto brevemente.';

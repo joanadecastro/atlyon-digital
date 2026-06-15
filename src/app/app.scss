@@ -125,6 +125,7 @@ nav a.active {
   color: #fff;
 }
 
+
 .navbar.is-scrolled .nav-cta,
 .navbar.is-scrolled .nav-cta.active {
   color: #272a31;
@@ -136,6 +137,20 @@ nav a.active {
   color: #272a31;
   border-color: #272a31;
   transform: translateY(-2px);
+}
+
+.navbar .nav-cta.active-cta,
+.navbar.is-scrolled .nav-cta.active-cta {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff !important;
+}
+
+.navbar .nav-cta.active-cta:hover,
+.navbar.is-scrolled .nav-cta.active-cta:hover {
+  background: #ff764d;
+  border-color: #ff764d;
+  color: #fff !important;
 }
 
 /* HERO */
@@ -419,131 +434,169 @@ nav a.active {
 ========================= */
 
 .services-grid {
-  position: relative;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 26px;
-}
-
-.services-grid::before {
-  content: "";
-
-  position: absolute;
-
-  left: 10%;
-  right: 10%;
-
-  top: 126px;
-
-  height: 2px;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(253,100,58,.95),
-    transparent
-  );
-
-  background-size: 220% 100%;
-
-  animation: processLine 4s linear infinite;
-
-  z-index: 0;
 }
 
 .service-card {
   position: relative;
-  z-index: 2;
-
-  min-height: 365px;
-
-  padding: 26px 28px 34px;
-
+  min-height: 340px;
+  padding: 30px 30px 34px;
   display: flex;
   flex-direction: column;
-
   background: linear-gradient(
     180deg,
     rgba(255,255,255,.045),
     rgba(255,255,255,.018)
   );
-
   border: 1px solid var(--line);
   border-radius: 18px;
-
   overflow: hidden;
+  transition:
+    transform .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease;
+}
 
-  transition: .35s ease;
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--orange);
+  transition: width .45s ease;
 }
 
 .service-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-4px);
+  border-color: rgba(253,100,58,.35);
+  box-shadow: 0 20px 40px rgba(0,0,0,.18);
+}
 
-  border-color: rgba(253,100,58,.38);
-
-  box-shadow: 0 20px 46px rgba(0,0,0,.18);
+.service-card:hover::before {
+  width: 100%;
 }
 
 .service-card h3 {
-  margin: 20px 0 78px;
-
-  font-size: 24px;
+  margin: 16px 0 58px;
+  font-size: 25px;
   line-height: 1.1;
-
   color: #fff;
+  transition: color .35s ease;
+}
+
+.service-card:hover h3 {
+  color: var(--orange);
+}
+
+.service-badge {
+  position: absolute;
+
+  top: 18px;
+  right: 18px;
+
+  color: rgba(253, 100, 58, 0.45);
+
+  font-size: 10px;
+  font-weight: 700;
+
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+
+  line-height: 1;
+
+  animation: badgePulse 4s ease-in-out infinite;
+}
+
+@keyframes badgePulse {
+  0% {
+    opacity: .05;
+  }
+
+  30% {
+    opacity:1;
+  }
+
+  100% {
+    opacity:1;
+  }
 }
 
 .service-card p {
   margin: 0;
-
   line-height: 1.75;
-
   color: rgba(255,255,255,.82);
+  flex: 1;
 }
 
 .service-card span {
   margin-top: auto;
-
   padding-top: 28px;
-
   color: var(--orange);
-
   font-size: 19px;
   font-weight: 950;
-
   text-align: center;
+  transition: transform .35s ease;
+}
+
+.service-card:hover span {
+  transform: scale(1.04);
 }
 
 .service-card a {
   margin-top: 18px;
-
   width: 100%;
   height: 46px;
-
   border-radius: 999px;
-
   border: 1px solid rgba(255,255,255,.22);
-
   color: #fff;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   font-size: 12px;
   font-weight: 950;
-
   transition: .25s ease;
 }
 
 .service-card a:hover {
   transform: translateY(-2px);
-
   border-color: rgba(255,255,255,.35);
-
-  color: #fff;
-
   box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+
+/* PRESTAÇÃO DE SERVIÇOS */
+
+.service-card.featured-service {
+  border-color: rgba(253,100,58,.20);
+}
+
+.service-card.featured-service:hover {
+  border-color: rgba(253,100,58,.45);
+}
+
+/* RESPONSIVO */
+
+@media (max-width: 1100px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 950px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-card {
+    min-height: auto;
+  }
+
+  .service-card h3 {
+    margin-bottom: 34px;
+  }
 }
 /* PORTFOLIO */
 
@@ -682,7 +735,7 @@ nav a.active {
   left: 10%;
   right: 10%;
 
-  top: 126px;
+  top: 146px;
 
   height: 2px;
 
@@ -746,7 +799,7 @@ nav a.active {
 }
 
 .process-card h3 {
-  margin: 20px 0 78px;
+  margin: 40px 0 58px;
 
   color: #fff;
 
@@ -910,7 +963,7 @@ nav a.active {
 
 .footer img {
   width: 128px;
-  margin-bottom: 28px;
+  margin-bottom: 0px;
 }
 
 .footer strong {

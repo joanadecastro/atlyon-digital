@@ -10,8 +10,13 @@
       <a href="#servicos" [class.active]="activeSection === 'servicos'">Serviços</a>
       <a href="#portfolio" [class.active]="activeSection === 'portfolio'">Portfólio</a>
       <a href="#processo" [class.active]="activeSection === 'processo'">Processo</a>
-      <a href="#contacto" [class.active]="activeSection === 'contacto'">Contacto</a>
-      <a href="#contacto" class="nav-cta">Pedir proposta</a>
+
+      <a
+        href="#contacto"
+        class="nav-cta"
+        [class.active-cta]="activeSection === 'contacto'">
+        Pedir proposta
+      </a>
     </nav>
   </header>
 
@@ -21,9 +26,9 @@
         <p class="eyebrow light hero-eyebrow">
           <span>Branding</span>
           <i></i>
-          <span>Design gráfico</span>
+          <span>Websites</span>
           <i></i>
-          <span>Web design</span>
+          <span>UI/UX</span>
           <i></i>
           <span>Desenvolvimento</span>
         </p>
@@ -35,8 +40,8 @@
         </h1>
 
         <p>
-          Criamos identidades visuais, websites, materiais gráficos e experiências digitais
-          para marcas mais profissionais, confiáveis e memoráveis.
+          Criamos identidades visuais, websites e soluções digitais para empresas
+          que querem uma presença mais profissional, funcional e preparada para crescer.
         </p>
 
         <div class="hero-actions">
@@ -63,21 +68,33 @@
       <div class="section-split">
         <div>
           <p class="eyebrow">Serviços</p>
-          <h2>Soluções criativas e digitais para marcas modernas.</h2>
+          <h2>Serviços digitais para marcas que querem crescer com presença e confiança.</h2>
         </div>
 
         <p class="section-description">
-          Do conceito visual ao website final, criamos marcas consistentes,
-          funcionais e preparadas para crescer.
+          Criamos desde logótipos e websites até soluções digitais completas,
+          com possibilidade de colaboração pontual ou apoio contínuo a empresas.
         </p>
       </div>
 
       <div class="services-grid">
         @for (service of services; track service.title) {
-          <article class="service-card reveal-card">
+          <article
+            class="service-card reveal-card"
+            [class.featured-service]="service.title === 'Prestação de serviços'">
+
+            @if (service.title === 'Prestação de serviços') {
+              <div class="service-badge">
+                Para empresas
+              </div>
+            }
+
             <h3>{{ service.title }}</h3>
+
             <p>{{ service.description }}</p>
-            <span>A partir de {{ service.price }}€</span>
+
+            <span>{{ service.priceLabel }}</span>
+
             <a href="#contacto">Pedir proposta</a>
           </article>
         }
@@ -128,7 +145,7 @@
     <section id="processo" class="section process-section">
       <p class="eyebrow">Processo</p>
 
-      <h2>Um processo simples, estratégico e profissional.</h2>
+      <h2>Um processo claro, profissional e sem complicações.</h2>
 
       <div class="process-grid">
         @for (step of processSteps; track step.number) {
@@ -151,7 +168,7 @@
 
           <p>
             Preenche o formulário e recebe uma proposta <br>
-            para o teu projeto.
+            adaptada ao teu projeto.
           </p>
         </div>
 
@@ -196,13 +213,12 @@
           <div class="select-wrap">
             <select name="servico" required ngModel>
               <option value="">Serviço pretendido *</option>
+              <option value="Logótipo">Logótipo</option>
               <option value="Branding">Branding</option>
-              <option value="Identidade Visual">Identidade Visual</option>
-              <option value="Design Gráfico">Design Gráfico</option>
-              <option value="Packaging">Packaging</option>
-              <option value="Web Design">Web Design</option>
-              <option value="Desenvolvimento Web">Desenvolvimento Web</option>
+              <option value="Website">Website</option>
               <option value="Loja Online">Loja Online</option>
+              <option value="Solução Digital Personalizada">Solução Digital Personalizada</option>
+              <option value="Prestação de Serviços">Prestação de Serviços</option>
               <option value="Outro">Outro</option>
             </select>
           </div>
@@ -253,7 +269,7 @@
       <a href="#servicos">Serviços</a>
       <a href="#portfolio">Portfólio</a>
       <a href="#processo">Processo</a>
-      <a href="#contacto">Contacto</a>
+      <a href="#contacto">Pedir proposta</a>
     </div>
 
     <div>
