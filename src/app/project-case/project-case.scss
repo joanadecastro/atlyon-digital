@@ -717,3 +717,266 @@
     gap: 10px;
   }
 }
+
+@media (max-width: 820px) {
+  .case-orange {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .case-hero {
+    min-height: 100vh;
+    min-height: 100svh;
+    align-items: center;
+  }
+
+  .case-hero-content {
+    padding-top: 0;
+    padding-bottom: 0;
+    transform: translateY(10svh);
+  }
+
+  .case-intro {
+    padding: 44px 6vw 72px;
+    gap: 40px;
+  }
+
+  .intro-title {
+    padding-left: 0;
+  }
+
+  .intro-title h2 {
+    font-size: clamp(38px, 9.5vw, 48px);
+    line-height: .95;
+  }
+
+  .intro-text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .intro-text strong {
+    margin-bottom: 0;
+    font-size: 1.05rem;
+    line-height: 1.45;
+  }
+
+  .intro-text p {
+    margin-bottom: 0;
+  }
+
+  .back-btn {
+    top: calc(env(safe-area-inset-top) + 16px);
+    left: calc(env(safe-area-inset-left) + 16px);
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px;
+    background: rgba(17,17,17,.35);
+    color: #fff;
+    font-size: 0;
+    line-height: 1;
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background .2s ease, border-color .2s ease;
+  }
+
+  .back-btn::before {
+    content: "←";
+    display: block;
+    font-size: 18px;
+    line-height: 1;
+    transform: translateY(2px);
+  }
+
+  .back-btn:hover,
+  .back-btn:focus-visible {
+    color: #fff;
+    background: rgba(17,17,17,.52);
+    border-color: rgba(255,255,255,.22);
+    transform: none;
+  }
+
+  .back-btn:focus-visible {
+    outline: 2px solid rgba(255,255,255,.7);
+    outline-offset: 3px;
+  }
+
+  .case-showcase {
+    width: 100%;
+    max-width: 520px;
+    padding-right: 22px;
+    padding-left: 22px;
+    padding-top: 72px;
+    gap: 18px;
+  }
+
+  .showcase-copy {
+    padding-top: 0;
+  }
+
+  .showcase-copy p,
+  .showcase-copy span {
+    display: none;
+  }
+
+  .showcase-copy h2 {
+    display: block;
+    width: min(100%, 360px);
+    max-width: none;
+    margin: 0;
+    font-size: clamp(30px, 8vw, 36px);
+    line-height: .95;
+    letter-spacing: -1.5px;
+    text-wrap: balance;
+  }
+
+  .showcase-copy h3 {
+    margin-top: 16px;
+  }
+
+  .showcase-stage {
+    min-height: 710px;
+  }
+
+  .desktop-mockup {
+    left: 44%;
+    top: 30px;
+    width: 88%;
+    height: 600px;
+  }
+
+  .iphone {
+    left: 82%;
+    top: 300px;
+    width: 140px;
+    height: 420px;
+    padding: 0;
+    border: 2px solid rgba(255, 255, 255, .96);
+    border-radius: 14px;
+    background: transparent;
+    transform: translateX(-50%);
+  }
+
+  .iphone-notch {
+    display: none;
+  }
+
+  .iphone-screen {
+    height: 100%;
+    border-radius: 11px;
+    background: transparent;
+  }
+
+  .hover-hint {
+    display: none;
+  }
+
+  .imac-scroll,
+  .iphone-scroll {
+    overflow: hidden;
+    scrollbar-width: none;
+  }
+
+  .imac-scroll::-webkit-scrollbar,
+  .iphone-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .imac-scroll img {
+    will-change: transform;
+    animation: caseDesktopScrollMobile 50s linear infinite alternate;
+  }
+
+  .iphone-scroll img {
+    will-change: transform;
+    animation: casePhoneScrollMobile 70s linear infinite alternate;
+  }
+
+  @keyframes caseDesktopScrollMobile {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(calc(-100% + 600px));
+    }
+  }
+
+  @keyframes casePhoneScrollMobile {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(calc(-100% + 420px));
+    }
+  }
+
+  .brand-main-title {
+    margin-top: 24px;
+    font-size: clamp(32px, 9vw, 44px);
+  }
+
+  .case-brand {
+    width: 100%;
+    max-width: 520px;
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+
+  .colors-block,
+  .type-block {
+    padding-left: 6px;
+  }
+
+  .type-block h2 {
+    margin-bottom: 12px;
+  }
+
+  .type-block h3 {
+    margin-top: 32px;
+    margin-bottom: 12px;
+  }
+
+  .type-block small {
+    line-height: 1.55;
+  }
+
+  .case-cta div {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .case-cta button {
+    flex: 1 1 0;
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    height: 54px;
+    padding: 0 10px;
+  }
+
+  .case-cta {
+    padding: 64px 20px 48px;
+  }
+
+  .case-cta p {
+    margin-bottom: 16px;
+  }
+
+  .case-cta h2 {
+    margin-bottom: 36px;
+  }
+
+  .case-footer {
+    padding: 22px 5vw;
+  }
+}
