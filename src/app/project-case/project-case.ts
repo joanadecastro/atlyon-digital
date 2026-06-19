@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'app-project-case',
@@ -6,9 +15,45 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './project-case.html',
   styleUrl: './project-case.scss',
 })
-export class ProjectCaseComponent {
+export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   @Input() project: any;
   @Output() back = new EventEmitter<void>();
+
+  @ViewChild('showcaseStage')
+  private showcaseStage?: ElementRef<HTMLElement>;
+
+  private showcaseObserver?: IntersectionObserver;
+
+  ngAfterViewInit(): void {
+    const stage = this.showcaseStage?.nativeElement;
+
+    if (
+      !stage ||
+      typeof window === 'undefined' ||
+      typeof IntersectionObserver === 'undefined' ||
+      !window.matchMedia('(max-width: 820px)').matches
+    ) {
+      return;
+    }
+
+    this.showcaseObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) {
+          return;
+        }
+
+        stage.classList.add('is-active');
+        this.showcaseObserver?.disconnect();
+      },
+      { threshold: 0.15 },
+    );
+
+    this.showcaseObserver.observe(stage);
+  }
+
+  ngOnDestroy(): void {
+    this.showcaseObserver?.disconnect();
+  }
 
   goBack(): void {
     this.back.emit();

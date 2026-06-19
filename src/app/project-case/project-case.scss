@@ -889,13 +889,18 @@
     display: none;
   }
 
-  .imac-scroll img {
-    will-change: transform;
-    animation: caseDesktopScrollMobile 50s linear infinite alternate;
-  }
-
+  .imac-scroll img,
   .iphone-scroll img {
     will-change: transform;
+    transform: translateY(0);
+    animation: none;
+  }
+
+  .showcase-stage.is-active .imac-scroll img {
+    animation: caseDesktopScrollMobile 70s linear infinite alternate;
+  }
+
+  .showcase-stage.is-active .iphone-scroll img {
     animation: casePhoneScrollMobile 70s linear infinite alternate;
   }
 
