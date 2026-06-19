@@ -1,22 +1,46 @@
 @if (!selectedProject) {
-  <header class="navbar" [class.is-scrolled]="isScrolled">
-    <a href="#" class="brand" aria-label="Atlyon Digital">
+  <header class="navbar" [class.is-scrolled]="isScrolled" [class.menu-open]="isMenuOpen">
+    <a href="#" class="brand" aria-label="Atlyon Digital" (click)="closeMenu()">
       <img
-        [src]="isScrolled ? 'projects/logo/logo_cinza_vertical.png' : 'projects/logo/logo_branco_vertical.png'"
+        [src]="isScrolled && !isMenuOpen ? 'projects/logo/logo_cinza_vertical.png' : 'projects/logo/logo_branco_vertical.png'"
         alt="Atlyon Digital">
     </a>
 
-    <nav>
-      <a href="#servicos" [class.active]="activeSection === 'servicos'">Serviços</a>
-      <a href="#portfolio" [class.active]="activeSection === 'portfolio'">Portfólio</a>
-      <a href="#processo" [class.active]="activeSection === 'processo'">Processo</a>
+    <button
+      class="menu-toggle"
+      type="button"
+      (click)="toggleMenu()"
+      [class.is-open]="isMenuOpen"
+      aria-label="Abrir menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
-      <a
-        href="#contacto"
-        class="nav-cta"
-        [class.active-cta]="activeSection === 'contacto'">
-        Pedir proposta
-      </a>
+    <nav [class.mobile-open]="isMenuOpen">
+      <div class="mobile-menu-logo">
+        <img src="projects/logo/logo_branco.png" alt="Atlyon Digital">
+      </div>
+
+      <div class="mobile-menu-links">
+        <a href="#servicos" (click)="closeMenu()" [class.active]="activeSection === 'servicos'">Serviços</a>
+        <a href="#portfolio" (click)="closeMenu()" [class.active]="activeSection === 'portfolio'">Portfólio</a>
+        <a href="#processo" (click)="closeMenu()" [class.active]="activeSection === 'processo'">Processo</a>
+      </div>
+
+      <a href="#contacto" class="nav-cta" (click)="closeMenu()">Pedir proposta</a>
+
+      <div class="mobile-contact">
+        <a href="mailto:contacto@atlyon.pt" (click)="closeMenu()">contacto@atlyon.pt</a>
+
+        <a
+          href="https://www.linkedin.com/company/atlyon-digital/"
+          target="_blank"
+          rel="noopener"
+          (click)="closeMenu()">
+          LinkedIn
+        </a>
+      </div>
     </nav>
   </header>
 
@@ -33,11 +57,7 @@
           <span>Desenvolvimento</span>
         </p>
 
-        <h1>
-          Marcas digitais fortes<br>
-          para negócios que<br>
-          querem crescer.
-        </h1>
+        <h1>Marcas digitais fortes para negócios que querem crescer.</h1>
 
         <p>
           Criamos identidades visuais, websites e soluções digitais para empresas
@@ -77,34 +97,96 @@
         </p>
       </div>
 
-      <div class="services-grid">
-        @for (service of services; track service.title) {
-          <article
-            class="service-card reveal-card"
-            [class.featured-service]="service.title === 'Prestação de serviços'">
+   <div class="services-grid">
+  @for (service of services; track service.title) {
+    <article
+      class="service-card reveal-card"
+      [class.featured-service]="service.title === 'Prestação de serviços'">
 
-            @if (service.title === 'Prestação de serviços') {
-              <div class="service-badge">
-                Para empresas
-              </div>
-            }
+      @if (service.title === 'Prestação de serviços') {
+        <div class="service-badge">Para empresas</div>
+      }
 
-            <h3>{{ service.title }}</h3>
+      <h3>{{ service.title }}</h3>
 
-            <p>{{ service.description }}</p>
+      <p class="service-description">
+        {{ service.description }}
+      </p>
 
-            <span class="service-price">
-              {{ service.priceLabel }}
+      <span class="service-price service-price-desktop">
+        {{ service.priceLabel }}
 
-              @if (service.title !== 'Prestação de serviços') {
-                <small>+ IVA</small>
-              }
-            </span>
-
-            <a href="#contacto">Pedir proposta</a>
-          </article>
+        @if (service.title !== 'Prestação de serviços') {
+          <small>+ IVA</small>
         }
-      </div>
+      </span>
+
+      <span class="service-price service-price-mobile">
+        @if (service.title !== 'Prestação de serviços') {
+          <strong class="service-price-prefix">Desde</strong>
+          <strong class="service-price-value">
+            {{ service.priceLabel.replace('Desde ', '') }}
+          </strong>
+          <small class="service-price-tax">+ IVA</small>
+        } @else {
+          <strong class="service-price-value">
+            {{ service.priceLabel }}
+          </strong>
+        }
+      </span>
+
+      <a href="#contacto" class="service-proposal">
+        Pedir proposta
+      </a>
+
+      <button
+        type="button"
+        class="service-more"
+        (click)="openService(service)">
+        Ver mais
+      </button>
+    </article>
+  }
+</div>
+
+@if (selectedService) {
+  <div class="service-sheet-overlay" (click)="closeService()">
+    <div class="service-sheet" (click)="$event.stopPropagation()">
+      <button
+        type="button"
+        class="service-sheet-close"
+        (click)="closeService()"
+        aria-label="Fechar">
+        ×
+      </button>
+
+  
+
+      @if (selectedService.title === 'Prestação de serviços') {
+        <span class="service-sheet-badge">Para empresas</span>
+      }
+
+      <span class="service-sheet-price">
+        {{ selectedService.priceLabel }}
+
+        @if (selectedService.title !== 'Prestação de serviços') {
+          <small>+ IVA</small>
+        }
+      </span>
+
+      <h3>{{ selectedService.title }}</h3>
+
+      <p>{{ selectedService.description }}</p>
+
+      <a
+        href="#contacto"
+        class="service-sheet-cta"
+        (click)="closeService()">
+        Pedir proposta
+      </a>
+    </div>
+  </div>
+}
     </section>
 
     <section id="portfolio" class="section portfolio-section">
@@ -146,6 +228,10 @@
           </article>
         }
       </div>
+
+      <p class="portfolio-note">
+        * Projetos adicionais e casos de estudo disponíveis para apresentação em reunião mediante marcação.
+      </p>
     </section>
 
     <section id="processo" class="section process-section">
@@ -176,6 +262,11 @@
             Preenche o formulário e recebe uma proposta <br>
             adaptada ao teu projeto.
           </p>
+
+          <p class="contact-direct">
+            Ou envia um email para
+            <a href="mailto:contacto@atlyon.pt">contacto@atlyon.pt</a>
+          </p>
         </div>
 
         <form
@@ -185,35 +276,13 @@
           novalidate>
 
           <div class="form-row">
-            <input
-              type="text"
-              name="nome"
-              placeholder="Nome *"
-              required
-              minlength="2"
-              ngModel>
-
-            <input
-              type="text"
-              name="empresa"
-              placeholder="Empresa / Marca"
-              ngModel>
+            <input type="text" name="nome" placeholder="Nome *" required minlength="2" ngModel>
+            <input type="text" name="empresa" placeholder="Empresa / Marca" ngModel>
           </div>
 
           <div class="form-row">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email *"
-              required
-              email
-              ngModel>
-
-            <input
-              type="tel"
-              name="telefone"
-              placeholder="Telefone"
-              ngModel>
+            <input type="email" name="email" placeholder="Email *" required email ngModel>
+            <input type="tel" name="telefone" placeholder="Telefone" ngModel>
           </div>
 
           <div class="select-wrap">
@@ -262,15 +331,15 @@
   </main>
 
   <footer class="footer">
-    <div>
-      <img src="projects/logo/logo_branco_vertical.png" alt="Atlyon">
+    <div class="footer-brand">
+      <img src="projects/logo/logo_branco_vertical.png" alt="Atlyon Digital">
       <p>
-        Criamos marcas digitais fortes para negócios<br>
-        que querem crescer com clareza e confiança.
+        Criamos marcas digitais fortes para negócios que querem crescer
+        com clareza, presença e confiança.
       </p>
     </div>
 
-    <div>
+    <div class="footer-column">
       <strong>Navegação</strong>
       <a href="#servicos">Serviços</a>
       <a href="#portfolio">Portfólio</a>
@@ -278,10 +347,17 @@
       <a href="#contacto">Pedir proposta</a>
     </div>
 
-    <div>
+    <div class="footer-column">
       <strong>Contacto</strong>
-      <span>contacto@atlyon.pt</span>
-      <span>Porto, Portugal</span>
+      <a href="mailto:contacto@atlyon.pt">contacto@atlyon.pt</a>
+      <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener">
+        LinkedIn
+      </a>
+      <span>Portugal</span>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 Atlyon Digital. Todos os direitos reservados.</span>
     </div>
   </footer>
 

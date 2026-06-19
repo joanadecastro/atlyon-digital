@@ -12,14 +12,18 @@ import { ProjectCaseComponent } from './project-case/project-case';
 })
 export class App implements OnInit, AfterViewInit {
   selectedProject: any = null;
+  selectedService: any = null;
+
   isScrolled = false;
   activeSection = '';
+  isMenuOpen = false;
 
   isSubmitting = false;
   formSuccess = '';
   formError = '';
 
   private revealObserver?: IntersectionObserver;
+  private sheetScrollY = 0;
 
   private readonly emailServiceId = 'service_jr984oj';
   private readonly emailTemplateId = 'template_7zyvxhl';
@@ -33,46 +37,65 @@ export class App implements OnInit, AfterViewInit {
   onWindowScroll() {
     this.isScrolled = window.scrollY > 40;
     this.updateActiveSection();
+
+    if (this.isMenuOpen) {
+      this.closeMenu();
+    }
+  }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    if (window.innerWidth > 950 && this.isMenuOpen) {
+      this.closeMenu();
+    }
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  closeMenu() {
+    this.isMenuOpen = false;
   }
 
   services = [
-  {
-    title: 'Logótipo',
-    description:
-      'Criação de logótipos profissionais com versões adaptadas para diferentes suportes digitais e impressos.',
-    priceLabel: 'Desde 249€',
-  },
-  {
-    title: 'Branding',
-    description:
-      'Identidade visual completa com logótipo, cores, tipografia, direção visual e guia básico de marca.',
-    priceLabel: 'Desde 599€',
-  },
-  {
-    title: 'Websites',
-    description:
-      'Landing pages e websites empresariais modernos, responsivos e focados em credibilidade e conversão.',
-    priceLabel: 'Desde 499€',
-  },
-  {
-  title: 'Lojas online',
-  description:
-    'E-commerce personalizado com catálogo, produtos, pagamentos, encomendas e estrutura otimizada para vendas online.',
-  priceLabel: 'Desde 1499€',
-},
-  {
-    title: 'Soluções digitais',
-    description:
-      'Áreas reservadas, dashboards, portais de cliente, sistemas internos e funcionalidades à medida.',
-    priceLabel: 'Desde 1499€',
-  },
- {
-  title: 'Prestação de serviços',
-  description:
-    'Colaboração contínua ou por projeto em design, branding, UI/UX, frontend, backend e desenvolvimento de soluções digitais para empresas.',
-  priceLabel: 'Sob orçamento',
-},
-];
+    {
+      title: 'Logótipo',
+      description:
+        'Criação de logótipos profissionais com versões adaptadas para diferentes suportes digitais e impressos.',
+      priceLabel: 'Desde 249€',
+    },
+    {
+      title: 'Branding',
+      description:
+        'Identidade visual completa com logótipo, cores, tipografia, direção visual e guia básico de marca.',
+      priceLabel: 'Desde 599€',
+    },
+    {
+      title: 'Websites',
+      description:
+        'Landing pages e websites empresariais modernos, responsivos e focados em credibilidade e conversão.',
+      priceLabel: 'Desde 499€',
+    },
+    {
+      title: 'Lojas online',
+      description:
+        'E-commerce personalizado com catálogo, produtos, pagamentos, encomendas e estrutura otimizada para vendas online.',
+      priceLabel: 'Desde 1499€',
+    },
+    {
+      title: 'Soluções digitais',
+      description:
+        'Áreas reservadas, dashboards, portais de cliente, sistemas internos e funcionalidades à medida.',
+      priceLabel: 'Desde 1499€',
+    },
+    {
+      title: 'Prestação de serviços',
+      description:
+        'Colaboração contínua ou por projeto em design, branding, UI/UX, frontend, backend e desenvolvimento de soluções digitais para empresas.',
+      priceLabel: 'Sob orçamento',
+    },
+  ];
 
   processSteps = [
     {
@@ -298,6 +321,7 @@ export class App implements OnInit, AfterViewInit {
   }
 
   openProject(project: any) {
+    this.closeMenu();
     this.selectedProject = project;
 
     window.scrollTo({
@@ -321,9 +345,38 @@ export class App implements OnInit, AfterViewInit {
   }
 
   scrollTop() {
+    this.closeMenu();
+
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
     });
+  }
+
+  openService(service: any) {
+    this.selectedService = service;
+    this.closeMenu();
+
+    if (window.innerWidth <= 820) {
+      this.sheetScrollY = window.scrollY;
+
+      document.documentElement.classList.add('sheet-open');
+      document.body.classList.add('sheet-open');
+      document.body.style.top = `-${this.sheetScrollY}px`;
+    }
+  }
+
+  closeService() {
+    const wasSheetOpen = document.body.classList.contains('sheet-open');
+
+    this.selectedService = null;
+
+    document.documentElement.classList.remove('sheet-open');
+    document.body.classList.remove('sheet-open');
+    document.body.style.top = '';
+
+    if (wasSheetOpen) {
+      window.scrollTo(0, this.sheetScrollY);
+    }
   }
 }
