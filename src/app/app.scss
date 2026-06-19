@@ -1480,8 +1480,9 @@ nav a.active {
   }
 
   .services-section h2 {
-    font-size: 34px;
-    line-height: .95;
+    font-size: clamp(29px, 7.8vw, 31px);
+    line-height: 1;
+    letter-spacing: -1.5px;
     max-width: 100%;
   }
 
@@ -1576,6 +1577,10 @@ nav a.active {
     white-space: nowrap;
   }
 
+  .featured-service .service-price-mobile {
+    padding-top: 23px;
+  }
+
   .service-more,
   .service-card a {
     order: 4;
@@ -1610,7 +1615,7 @@ nav a.active {
     align-self: center;
     margin: 6px 0 0;
     color: var(--orange);
-    font-size: 6px;
+    font-size: 7px;
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: 1.6px;
@@ -1648,21 +1653,22 @@ nav a.active {
     background: #ece8e4;
     color: #272a31;
     border-radius: 0 20px 0 0;
-    clip-path: polygon(
-      0 46px,
-      calc(100% - 20px) 0,
-      calc(100% - 12px) 2px,
-      calc(100% - 6px) 7px,
-      calc(100% - 2px) 13px,
-      100% 20px,
-      100% 100%,
-      0 100%
-    );
+clip-path: polygon(
+  0 32px,
+  calc(100% - 20px) 0,
+  calc(100% - 12px) 2px,
+  calc(100% - 6px) 7px,
+  calc(100% - 2px) 13px,
+  100% 20px,
+  100% 100%,
+  0 100%
+);
     animation: serviceSheetUp .28s ease;
   }
 
   .service-sheet-close {
     position: absolute;
+    display: none !important;
     top: 34px;
     right: 16px;
     width: 48px;
@@ -1672,8 +1678,8 @@ nav a.active {
     padding: 0;
     border: 0;
     background: transparent;
-    color: rgba(39,42,49,.62);
-    font-size: 34px;
+    color: rgba(39,42,49,.45);
+    font-size: 31px;
     font-weight: 300;
     line-height: 1;
     cursor: pointer;
@@ -1681,7 +1687,7 @@ nav a.active {
 
   .service-sheet-badge {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     color: var(--orange);
     font-size: 9px;
     font-weight: 800;
@@ -1760,20 +1766,141 @@ nav a.active {
     height: 50px;
   }
 
+  .process-section .eyebrow {
+    margin-bottom: 10px;
+  }
+
+  .process-section h2 {
+    max-width: 100%;
+    margin-bottom: 46px;
+    font-size: clamp(24px, 7vw, 30px);
+    line-height: 1;
+    white-space: normal;
+    text-wrap: balance;
+  }
+
   .process-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .process-grid::before {
+    display: none;
+  }
+
+  .process-card {
+    min-height: 218px;
+    padding: 26px 24px;
+  }
+
+  .process-card::before {
+    font-size: 74px;
+  }
+
+  .process-card h3 {
+    position: relative;
+    margin: 18px 0;
+    font-size: 21px;
+  }
+
+  .process-card h3::after {
+    content: "";
+    display: block;
+    width: calc(100% - 116px);
+    height: 2px;
+    margin-top: 14px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(253,100,58,.95),
+      transparent
+    );
+    background-size: 220% 100%;
+    animation: processLine 4s linear infinite;
   }
 
   .form-row {
     grid-template-columns: 1fr;
   }
 
+  .portfolio-section .section-header h2 {
+    max-width: 100%;
+    margin-inline: auto;
+    font-size: clamp(27px, 7vw, 30px);
+    line-height: 1.02;
+    letter-spacing: -1.4px;
+  }
+
+  .portfolio-section .section-header.center {
+    margin-bottom: 36px;
+  }
+
+  .portfolio-grid {
+    gap: 32px;
+  }
+
   .project-card {
     grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 16px 18px;
   }
 
   .project-image {
-    height: 380px;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .project-image img {
+    width: 100%;
+    height: auto;
+    max-width: none;
+    transition: none;
+    animation: projectScrollMobile 18s ease-in-out infinite alternate;
+  }
+
+  .project-content {
+    min-height: auto;
+    gap: 14px;
+    justify-content: flex-start;
+    padding: 0 2px 2px;
+  }
+
+  .project-content span {
+    margin-bottom: 6px;
+    font-size: 10px;
+    letter-spacing: 2.4px;
+  }
+
+  .project-content h3 {
+    margin-bottom: 10px;
+    padding-top: 8px;
+     font-size: clamp(29px, 7.5vw, 32px);
+  }
+
+  .project-content p {
+    margin-bottom: 0;
+  }
+
+  .project-bottom {
+    width: 100%;
+  }
+
+  .project-btn {
+    width: 100%;
+    min-width: 0;
+    float: none;
+  }
+
+  @keyframes projectScrollMobile {
+    from {
+      transform: translateY(0);
+    }
+
+    to {
+      transform: translateY(calc(-100% + 56.25cqw));
+    }
   }
 }
 
