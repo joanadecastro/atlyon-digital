@@ -36,7 +36,9 @@
   </section>
 
   <section class="case-orange">
-    <section class="case-showcase">
+    <section
+      class="case-showcase"
+      [class.has-video]="project.caseVideo">
       <div class="showcase-copy">
         <p>Showcase</p>
         <h2>Design digital aplicado à marca.</h2>
@@ -45,26 +47,49 @@
       </div>
 
       <div #showcaseStage class="showcase-stage">
-        <div class="hover-hint">
-          <span></span>
-          <span></span>
-        </div>
+        @if (!project.caseVideo) {
+          <div class="hover-hint">
+            <span></span>
+            <span></span>
+          </div>
+        }
 
         <div class="desktop-mockup">
+          @if (project.caseVideo) {
+            <div class="hover-hint video-hint">
+              <span></span>
+            </div>
+          }
+
           <div class="imac-scroll">
-            <img [src]="project.desktop" [alt]="project.name + ' desktop'">
+            @if (project.caseVideo) {
+              <video
+                [src]="project.caseVideo"
+                autoplay
+                muted
+                loop
+                playsinline
+                disablePictureInPicture
+                disableRemotePlayback
+                controlsList="nodownload noplaybackrate">
+              </video>
+            } @else {
+              <img [src]="project.desktop" [alt]="project.name + ' desktop'">
+            }
           </div>
         </div>
 
-        <div class="iphone">
-          <div class="iphone-notch"></div>
+        @if (!project.hideMobileMockup) {
+          <div class="iphone">
+            <div class="iphone-notch"></div>
 
-          <div class="iphone-screen">
-            <div class="iphone-scroll">
-              <img [src]="project.mobile" [alt]="project.name + ' mobile'">
+            <div class="iphone-screen">
+              <div class="iphone-scroll">
+                <img [src]="project.mobile" [alt]="project.name + ' mobile'">
+              </div>
             </div>
           </div>
-        </div>
+        }
 
         <div class="scroll-callout">
           <span></span>

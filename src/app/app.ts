@@ -126,28 +126,30 @@ export class App implements OnInit, AfterViewInit {
 
   projects = [
     {
-      name: 'Barber House',
-      category: 'Barbearia Premium',
+      name: 'LicitaNow',
+      category: 'Plataforma Digital',
       description:
-        'Website premium para barbearia, com serviços, marcações, galeria e tabela de preços.',
-      desktop: 'projects/barberdesktop.jpg',
-      mobile: 'projects/barbermobile.jpg',
-      study: 'projects/barber_house_study.png',
-      background: 'projects/barbearia_background.jpg',
-      caseTitle: 'Centenário de Elegância',
+        'Website institucional para plataforma de licitações, com apresentação clara de serviços, proposta de valor e navegação profissional.',
+      desktop: 'projects/licita_desktop.png',
+      mobile: 'projects/licita_desktop.png',
+      study: 'projects/licita_desktop.png',
+      background: 'projects/licita_background.jpg',
+      caseVideo: 'projects/licitanow-demo.mp4',
+      hideMobileMockup: true,
+      caseTitle: 'Licitações com Presença Digital',
       caseText:
-        'A Barber House Porto nasceu como uma barbearia premium, com uma estética clássica inspirada no coração do Porto.',
+        'A landing page foi concebida para transmitir uma imagem forte, moderna e profissional através de uma linguagem visual minimalista e de elevado contraste. A combinação entre tons escuros e apontamentos em verde foi utilizada para reforçar a identidade da marca, criar destaque visual e conduzir naturalmente a atenção do utilizador pelos elementos mais importantes da página. Toda a estrutura foi desenhada com foco na clareza da informação e na fluidez da navegação. A hierarquia visual, a gestão do espaço e a organização do conteúdo permitem uma leitura intuitiva, facilitando a compreensão da mensagem desde o primeiro contacto.',
       caseText2:
-        'Desenvolvemos uma linguagem visual elegante, focada em confiança, tradição e perceção de valor.',
+        'O design privilegia uma estética contemporânea, com elementos visuais limpos, tipografia impactante e uma composição equilibrada entre conteúdo e componentes gráficos. Cada secção foi construída para reforçar a credibilidade da marca e criar uma experiência consistente em diferentes dispositivos. O resultado é uma landing page sólida, visualmente marcante e alinhada com uma abordagem digital moderna, onde identidade, legibilidade e experiência de utilização trabalham em conjunto para criar uma presença online diferenciadora.',
       primaryFont: 'Inter',
       secondaryFont: 'Inter',
-      accent: '#e9c349',
-      bg: '#111111',
-      surface: '#1d1c1b',
+      accent: '#92c900',
+      bg: '#07120d',
+      surface: '#101c16',
       colors: [
-        { name: 'Obsidiana', hex: '#101010', role: 'Base' },
-        { name: 'Ouro Porto', hex: '#e9c349', role: 'Accent' },
-        { name: 'Carvão', hex: '#1b1b1b', role: 'Surface' },
+        { name: 'Verde LicitaNow', hex: '#92c900', role: 'Accent' },
+        { name: 'Verde Escuro', hex: '#07120d', role: 'Base' },
+        { name: 'Grafite Digital', hex: '#101c16', role: 'Surface' },
       ],
     },
     {
@@ -324,9 +326,14 @@ export class App implements OnInit, AfterViewInit {
     this.closeMenu();
     this.selectedProject = project;
 
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'auto',
+        });
+      });
     });
   }
 

@@ -165,6 +165,30 @@
   gap: 38px;
 }
 
+.case-showcase.has-video {
+  min-height: auto;
+  grid-template-columns: 340px minmax(0, 1fr);
+}
+
+.case-showcase.has-video .showcase-stage {
+  min-height: 0;
+}
+
+.case-showcase.has-video .desktop-mockup {
+  position: relative;
+  left: 0;
+  top: 0;
+  width: min(900px, calc(100% + 98px));
+  height: auto;
+  aspect-ratio: 16 / 9;
+  margin-top: 40px;
+  transform: none;
+}
+
+.case-showcase.has-video .imac-scroll {
+  overflow: hidden;
+}
+
 .showcase-copy {
   padding-top: 30px;
 }
@@ -233,6 +257,7 @@
 }
 
 .iphone-notch {
+  display: none;
   position: absolute;
   top: 8px;
   left: 50%;
@@ -247,7 +272,6 @@
 .iphone-screen {
   height: 100%;
   overflow: hidden;
-  border-radius: 18px;
   background: #111;
 }
 
@@ -256,15 +280,21 @@
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;
+  scrollbar-width: none;
   scrollbar-color: var(--accent) transparent;
+}
+
+.iphone-screen,
+.iphone-scroll {
+  border-radius: 13px;
 }
 
 
 
 .imac-scroll::-webkit-scrollbar,
 .iphone-scroll::-webkit-scrollbar {
-  width: 3px;
+  display: none;
+  width: 0;
 }
 
 .imac-scroll::-webkit-scrollbar-track,
@@ -289,6 +319,13 @@
 .iphone-scroll img {
   width: 100%;
   height: auto;
+  display: block;
+}
+
+.case-showcase.has-video .imac-scroll video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
@@ -396,6 +433,22 @@
   top: 50%;
   transform: translate(-50%, -50%);
   animation-delay: .2s;
+}
+
+.hover-hint.video-hint span {
+  left: 50%;
+  top: 50%;
+  animation-name: videoHintMove;
+}
+
+@keyframes videoHintMove {
+  0%, 100% {
+    transform: translate(-50%, -50%);
+  }
+
+  50% {
+    transform: translate(-50%, calc(-50% + 15px));
+  }
 }
 
 .hover-hint span:nth-child(3) {
@@ -618,6 +671,14 @@
 /* MOBILE */
 
 @media (max-width: 1000px) {
+  .case-showcase.has-video {
+    grid-template-columns: 1fr;
+  }
+
+  .case-showcase.has-video .desktop-mockup {
+    width: 100%;
+  }
+
   .case-hero {
     min-height: 72vh;
   }
@@ -870,8 +931,12 @@
 
   .iphone-screen {
     height: 100%;
-    border-radius: 11px;
     background: transparent;
+  }
+
+  .iphone-screen,
+  .iphone-scroll {
+    border-radius: 13px;
   }
 
   .hover-hint {
@@ -910,7 +975,7 @@
     }
 
     to {
-      transform: translateY(calc(-100% + 600px));
+      transform: translateY(calc(-100% + 590px));
     }
   }
 
@@ -920,7 +985,7 @@
     }
 
     to {
-      transform: translateY(calc(-100% + 420px));
+      transform: translateY(calc(-100% + 416px));
     }
   }
 
