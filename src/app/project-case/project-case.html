@@ -98,6 +98,45 @@
       </div>
     </section>
 
+    @if (project.desktop2 && project.mobile2 && !project.caseVideo) {
+      <section class="case-showcase shopping-showcase">
+        <div class="showcase-copy">
+          <p>Showcase</p>
+          <h2>Compra fluida em qualquer ecrã.</h2>
+          <span></span>
+          <h3>Shopping Cart</h3>
+        </div>
+
+        <div #showcaseStage class="showcase-stage">
+          <div class="hover-hint">
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="desktop-mockup">
+            <div class="imac-scroll">
+              <img [src]="project.desktop2" [alt]="project.name + ' shopping cart desktop'">
+            </div>
+          </div>
+
+          <div class="iphone">
+            <div class="iphone-notch"></div>
+
+            <div class="iphone-screen">
+              <div class="iphone-scroll">
+                <img [src]="project.mobile2" [alt]="project.name + ' shopping cart mobile'">
+              </div>
+            </div>
+          </div>
+
+          <div class="scroll-callout">
+            <span></span>
+            <small>Scroll</small>
+          </div>
+        </div>
+      </section>
+    }
+
     <section class="case-brand">
       <h2 class="brand-main-title">Identidade visual</h2>
 

@@ -6,7 +6,8 @@ import {
   Input,
   OnDestroy,
   Output,
-  ViewChild,
+  QueryList,
+  ViewChildren,
 } from '@angular/core';
 
 @Component({
@@ -19,16 +20,17 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   @Input() project: any;
   @Output() back = new EventEmitter<void>();
 
-  @ViewChild('showcaseStage')
-  private showcaseStage?: ElementRef<HTMLElement>;
+  @ViewChildren('showcaseStage')
+  private showcaseStages?: QueryList<ElementRef<HTMLElement>>;
 
-  private showcaseObserver?: IntersectionObserver;
+  private showcaseObservers: IntersectionObserver[] = [];
 
   ngAfterViewInit(): void {
-    const stage = this.showcaseStage?.nativeElement;
+    const stages =
+      this.showcaseStages?.toArray().map((stage) => stage.nativeElement) ?? [];
 
     if (
-      !stage ||
+      !stages.length ||
       typeof window === 'undefined' ||
       typeof IntersectionObserver === 'undefined' ||
       !window.matchMedia('(max-width: 820px)').matches
@@ -36,23 +38,27 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.showcaseObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry?.isIntersecting) {
-          return;
-        }
+    stages.forEach((stage) => {
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry?.isIntersecting) {
+            return;
+          }
 
-        stage.classList.add('is-active');
-        this.showcaseObserver?.disconnect();
-      },
-      { threshold: 0.15 },
-    );
+          stage.classList.add('is-active');
+          observer.disconnect();
+        },
+        { threshold: 0.15 },
+      );
 
-    this.showcaseObserver.observe(stage);
+      observer.observe(stage);
+      this.showcaseObservers.push(observer);
+    });
   }
 
   ngOnDestroy(): void {
-    this.showcaseObserver?.disconnect();
+    this.showcaseObservers.forEach((observer) => observer.disconnect());
+    this.showcaseObservers = [];
   }
 
   goBack(): void {

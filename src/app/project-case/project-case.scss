@@ -272,6 +272,7 @@
 .iphone-screen {
   height: 100%;
   overflow: hidden;
+  border-radius: inherit;
   background: #111;
 }
 
@@ -286,7 +287,7 @@
 
 .iphone-screen,
 .iphone-scroll {
-  border-radius: 13px;
+  border-radius: inherit;
 }
 
 
@@ -320,6 +321,10 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+.iphone-scroll img {
+  border-radius: inherit;
 }
 
 .case-showcase.has-video .imac-scroll video {
@@ -931,12 +936,13 @@
 
   .iphone-screen {
     height: 100%;
+    overflow: hidden;
     background: transparent;
   }
 
   .iphone-screen,
   .iphone-scroll {
-    border-radius: 13px;
+    border-radius: inherit;
   }
 
   .hover-hint {
@@ -967,6 +973,14 @@
 
   .showcase-stage.is-active .iphone-scroll img {
     animation: casePhoneScrollMobile 70s linear infinite alternate;
+  }
+
+  .shopping-showcase .showcase-stage.is-active .iphone-scroll img {
+    animation: none;
+  }
+
+  .shopping-showcase .iphone {
+    height: 365px;
   }
 
   @keyframes caseDesktopScrollMobile {
