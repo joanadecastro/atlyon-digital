@@ -1,269 +1,244 @@
 @if (!selectedProject) {
-  <header
-    class="navbar"
-    [class.is-scrolled]="isScrolled"
-    [class.menu-open]="isMenuOpen"
-    (click)="isMenuOpen ? closeMenu() : null">
-    <a href="#" class="brand" aria-label="Atlyon Digital" (click)="closeMenu()">
-      <img
-        [src]="isScrolled && !isMenuOpen ? 'projects/logo/logo_cinza_vertical.png' : 'projects/logo/logo_branco_vertical.png'"
-        alt="Atlyon Digital">
-    </a>
+<header class="navbar" [class.is-scrolled]="isScrolled" [class.menu-open]="isMenuOpen"
+  [class.desktop-menu-open]="desktopMenuOpen || desktopMenuHover"
+  (mouseenter)="openDesktopMenuHover()"
+  (mouseleave)="closeDesktopMenuHover()"
+  (click)="isMenuOpen || desktopMenuOpen ? closeMenu() : null">
+  <a href="#" class="brand" aria-label="Atlyon Digital" (click)="closeMenu()">
+    <img class="brand-logo-main" src="projects/logo/logo_hero_bw.png" alt="Atlyon Digital">
+    <img class="brand-logo-small" src="projects/logo/logo_small.png" alt="Atlyon Digital">
+  </a>
 
-    <button
-      class="menu-toggle"
-      type="button"
-      (click)="$event.stopPropagation(); toggleMenu()"
-      [class.is-open]="isMenuOpen"
-      aria-label="Abrir menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+  <button class="menu-toggle" type="button" (click)="$event.stopPropagation(); toggleDesktopMenu()"
+    [class.is-open]="isMenuOpen || desktopMenuOpen" aria-label="Abrir menu">
+    <img class="menu-icon-custom" src="projects/menu_only.png" alt="">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-    <nav [class.mobile-open]="isMenuOpen" (click)="$event.stopPropagation()">
-      <div class="mobile-menu-logo">
-        <img src="projects/logo/logo_branco.png" alt="Atlyon Digital">
+  <nav [class.mobile-open]="isMenuOpen" (click)="$event.stopPropagation()">
+    <div class="mobile-menu-logo">
+      <img src="projects/logo/logo_branco.png" alt="Atlyon Digital">
+    </div>
+
+    <div class="mobile-menu-links">
+      <a href="#" (click)="scrollTop()">Home</a>
+      <a href="#portfolio" (click)="closeMenu()" [class.active]="activeSection === 'portfolio'">Case Studies</a>
+      <a href="#servicos" (click)="closeMenu()" [class.active]="activeSection === 'servicos'">Servi&ccedil;os</a>
+      <a href="#sobre" (click)="closeMenu()" [class.active]="activeSection === 'sobre'">Sobre</a>
+    </div>
+
+    <a href="#contacto" class="nav-cta" (click)="closeMenu()">Contacto</a>
+
+    <div class="mobile-contact">
+      <div class="mobile-socials">
+        <a href="mailto:contacto@atlyon.pt" aria-label="Email" (click)="closeMenu()">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="M3 7l9 6 9-6" />
+          </svg>
+        </a>
+
+        <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener" aria-label="LinkedIn"
+          (click)="closeMenu()">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z" />
+          </svg>
+        </a>
+
+        <a href="https://www.instagram.com/atlyondigital?igsh=MWxzY3pybGV1Zno5Nw%3D%3D&amp;utm_source=qr"
+          target="_blank" rel="noopener" aria-label="Instagram" (click)="closeMenu()">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17.5" cy="6.5" r="1" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main>
+<section class="hero hero-editorial"
+  [class.hero-changing]="heroChanging"
+  [class.hero-entering]="heroEntering"
+  [style.--hero-accent]="activeHeroProject.accentColor"
+  [style.--hero-button]="activeHeroProject.buttonColor">
+  <div class="hero-editorial-inner">
+
+    <div class="hero-main-panel">
+      <div class="hero-mockup-area">
+        <img
+          class="hero-main-mockup"
+          [src]="activeHeroProject.image"
+          [alt]="activeHeroProject.name"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high">
       </div>
 
-      <div class="mobile-menu-links">
-        <a href="#servicos" (click)="closeMenu()" [class.active]="activeSection === 'servicos'">Serviços</a>
-        <a href="#portfolio" (click)="closeMenu()" [class.active]="activeSection === 'portfolio'">Portfólio</a>
-        <a href="#processo" (click)="closeMenu()" [class.active]="activeSection === 'processo'">Processo</a>
-      </div>
-
-      <a href="#contacto" class="nav-cta" (click)="closeMenu()">Pedir proposta</a>
-
-      <div class="mobile-contact">
-        <div class="mobile-socials">
-          <a
-            href="mailto:contacto@atlyon.pt"
-            aria-label="Email"
-            (click)="closeMenu()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2"/>
-              <path d="M3 7l9 6 9-6"/>
-            </svg>
-          </a>
-
-          <a
-            href="https://www.linkedin.com/company/atlyon-digital/"
-            target="_blank"
-            rel="noopener"
-            aria-label="LinkedIn"
-            (click)="closeMenu()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z"/>
-            </svg>
-          </a>
-
-          <a
-            href="https://www.instagram.com/atlyondigital?igsh=MWxzY3pybGV1Zno5Nw%3D%3D&amp;utm_source=qr"
-            target="_blank"
-            rel="noopener"
-            aria-label="Instagram"
-            (click)="closeMenu()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="5"/>
-              <circle cx="12" cy="12" r="4"/>
-              <circle cx="17.5" cy="6.5" r="1"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="hero-content">
-        <p class="eyebrow light hero-eyebrow">
-          <span>Branding</span>
-          <i></i>
-          <span>Websites</span>
-          <i></i>
-          <span>UI/UX</span>
-          <i></i>
-          <span>Desenvolvimento</span>
+      <div class="hero-copy-area">
+        <p class="hero-kicker">
+          <span>PRODUTOS</span>
+          <span class="hero-kicker-wide">DIGITAIS</span>
         </p>
 
-        <h1>Marcas digitais fortes para negócios que querem crescer.</h1>
+        <h1>
+          <span>Desenho e desenvolvo produtos digitais</span>
+          <span>claros, funcionais e preparados para crescer.</span>
+        </h1>
+        <div class="hero-title-accent" aria-hidden="true"></div>
 
-        <p>
-          Criamos identidades visuais, websites e soluções digitais para empresas
-          que querem uma presença mais profissional, funcional e preparada para crescer.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#contacto" class="btn white">Pedir proposta</a>
-          <a href="#portfolio" class="btn white ghost">Ver portfólio</a>
-        </div>
+        <button type="button" class="hero-case-link" (click)="openActiveHeroProject()">
+          <span>Ver projeto</span>
+        </button>
       </div>
+    </div>
 
-      <div class="hero-visual reveal-phone">
-        <div class="phone">
+    <div class="hero-arrows" aria-label="Hero navigation">
+      <button type="button" (click)="previousHeroProject()" aria-label="Projeto anterior">&lsaquo;</button>
+      <button type="button" (click)="nextHeroProject()" aria-label="Projeto seguinte">&rsaquo;</button>
+    </div>
+
+    <div class="hero-thumbs">
+      @for (project of heroProjects; track project.name; let i = $index) {
+        <button type="button" class="hero-thumb-item" [class.is-active]="i === activeHeroProjectIndex" (click)="selectHeroProject(i)">
           <img
-            src="projects/logo/logo_branco.png"
-            alt="Atlyon"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high">
-        </div>
-      </div>
+            [src]="project.thumbnail"
+            [alt]="project.name"
+            loading="lazy"
+            decoding="async">
 
-      <div class="hero-word">ATLYON</div>
-    </section>
-
-    <section id="servicos" class="section services-section">
-      <div class="section-split">
-        <div>
-          <p class="eyebrow">Serviços</p>
-          <h2>Serviços digitais para marcas que querem crescer com presença e confiança.</h2>
-        </div>
-
-        <p class="section-description">
-          Criamos desde logótipos e websites até soluções digitais completas,
-          com possibilidade de colaboração pontual ou apoio contínuo a empresas.
-        </p>
-      </div>
-
-   <div class="services-grid">
-  @for (service of services; track service.title) {
-    <article
-      class="service-card reveal-card"
-      [class.featured-service]="service.title === 'Prestação de serviços'">
-
-      @if (service.title === 'Prestação de serviços') {
-        <div class="service-badge">Para empresas</div>
+        </button>
       }
+    </div>
 
-      <h3>{{ service.title }}</h3>
+    <div class="hero-counter" [attr.aria-label]="'Projeto ' + (activeHeroProjectIndex + 1) + ' de ' + heroProjects.length">
+      <strong>0{{ activeHeroProjectIndex + 1 }}</strong>
+      <span></span>
+      <em>0{{ heroProjects.length }}</em>
+    </div>
 
-      <p class="service-description">
-        {{ service.description }}
-      </p>
-
-      <span class="service-price service-price-desktop">
-        {{ service.priceLabel }}
-
-        @if (service.title !== 'Prestação de serviços') {
-          <small>+ IVA</small>
-        }
-      </span>
-
-      <span class="service-price service-price-mobile">
-        @if (service.title !== 'Prestação de serviços') {
-          <strong class="service-price-prefix">Desde</strong>
-          <strong class="service-price-value">
-            {{ service.priceLabel.replace('Desde ', '') }}
-          </strong>
-          <small class="service-price-tax">+ IVA</small>
-        } @else {
-          <strong class="service-price-value">
-            {{ service.priceLabel }}
-          </strong>
-        }
-      </span>
-
-      <a href="#contacto" class="service-proposal">
-        Pedir proposta
+    <div class="hero-socials" aria-label="Social links">
+      <a href="https://www.instagram.com/atlyondigital?igsh=MWxzY3pybGV1Zno5Nw%3D%3D&amp;utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1"/>
+        </svg>
       </a>
 
-      <button
-        type="button"
-        class="service-more"
-        (click)="openService(service)">
-        Ver mais
-      </button>
-    </article>
-  }
-</div>
+      <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z"/>
+        </svg>
+      </a>
 
-@if (selectedService) {
-  <div class="service-sheet-overlay" (click)="closeService()">
-    <div class="service-sheet" (click)="$event.stopPropagation()">
-      <button
-        type="button"
-        class="service-sheet-close"
-        (click)="closeService()"
-        aria-label="Fechar">
-        ×
-      </button>
-
-  
-
-      @if (selectedService.title === 'Prestação de serviços') {
-        <span class="service-sheet-badge">Para empresas</span>
-      }
-
-      <span class="service-sheet-price">
-        {{ selectedService.priceLabel }}
-
-        @if (selectedService.title !== 'Prestação de serviços') {
-          <small>+ IVA</small>
-        }
-      </span>
-
-      <h3>{{ selectedService.title }}</h3>
-
-      <p>{{ selectedService.description }}</p>
-
-      <a
-        href="#contacto"
-        class="service-sheet-cta"
-        (click)="closeService()">
-        Pedir proposta
+      <a href="mailto:contacto@atlyon.pt" aria-label="Email">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="14" rx="2"/>
+          <path d="M3 7l9 6 9-6"/>
+        </svg>
       </a>
     </div>
+
   </div>
-}
-    </section>
+</section>
 
-    <section id="portfolio" class="section portfolio-section">
-      <div class="section-header center">
-        <p class="eyebrow">Portfólio</p>
+  <section id="portfolio" class="section portfolio-section">
+    <div class="portfolio-editorial" aria-label="Portfolio">
+      <div class="portfolio-editorial-stage">
+        <div class="portfolio-editorial-copy">
+          <h2>CASE STUDIES</h2>
 
-        <h2>Projetos digitais criados para marcas com ambição.</h2>
+          <div class="portfolio-copy-text">
+            <p>
+              Cada projeto combina estrat&eacute;gia, design de interface e desenvolvimento front-end.
+            </p>
+            <p>
+              Criando experi&ecirc;ncias digitais simples, &uacute;teis e consistentes.
+            </p>
+          </div>
+        </div>
 
-        <p>
-          Uma seleção de trabalhos de branding, web design, desenvolvimento
-          e presença digital.
-        </p>
-      </div>
-
-      <div class="portfolio-grid">
-        @for (project of projects; track project.name) {
-          <article class="project-card reveal-card">
-            <div class="project-image">
+        <div class="portfolio-catalog">
+          @for (project of projects; track project.name) {
+            <button type="button" class="portfolio-project-card" (click)="openProject(project)">
               <img
+                class="portfolio-project-image"
                 [src]="project.desktop"
                 [alt]="project.name"
                 loading="lazy"
                 decoding="async">
-            </div>
 
-            <div class="project-content">
-              <div>
-                <span>{{ project.category }}</span>
-                <h3>{{ project.name }}</h3>
-                <p>{{ project.description }}</p>
-              </div>
-
-              <div class="project-bottom">
-                <button class="project-btn" (click)="openProject(project)">
-                  Explorar projeto
-                </button>
-              </div>
-            </div>
-          </article>
-        }
+              <span>
+                <strong>{{ project.name }}</strong>
+                <small>{{ project.category }}</small>
+              </span>
+            </button>
+          }
+        </div>
       </div>
+    </div>
+  </section>
 
-      <p class="portfolio-note">
-        * Projetos adicionais e casos de estudo disponíveis para apresentação em reunião mediante marcação.
-      </p>
-    </section>
+  <section id="sobre" class="about-showcase">
+    <div class="about-showcase-inner">
+      <div class="about-visual-panel about-reveal">
+        <img src="projects/perfil_sobre.jpg" alt="Por detr&aacute;s da Atlyon">
+        <div class="about-cursor-distortion"></div>
 
+        <div class="about-overlay">
+          <h2>
+            POR DETR&Aacute;S<br>
+            DA ATLYON
+          </h2>
+
+          <p class="about-overlay-text">
+            A Atlyon Digital nasce para criar produtos digitais completos. Da estrat&eacute;gia ao design de interface e ao desenvolvimento front-end, cada projeto &eacute; pensado para ser simples, consistente e preparado para crescer.
+          </p>
+        </div>
+
+        <div class="about-watermark">ATLYON</div>
+
+        <div class="about-metrics-overlay">
+          <div class="about-accent-line"></div>
+
+          <div class="about-metrics-row">
+            <div>
+              <strong>12+</strong>
+              <span>ANOS EM DESIGN</span>
+            </div>
+
+            <div>
+              <strong>4+</strong>
+              <span>FRONT-END</span>
+            </div>
+
+            <div>
+              <strong>100+</strong>
+              <span>INTERFACES</span>
+            </div>
+
+            <div>
+              <strong>Produtos</strong>
+              <span>DIGITAIS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="servicos" class="services-placeholder">
+    <div class="services-placeholder-inner">
+      <span>SERVI&Ccedil;OS</span>
+      <h2>SERVI&Ccedil;OS</h2>
+      <p>Sec&ccedil;&atilde;o em reconstru&ccedil;&atilde;o.</p>
+    </div>
+  </section>
     <section id="processo" class="section process-section">
       <p class="eyebrow">Processo</p>
 
@@ -358,66 +333,60 @@
         </form>
       </div>
     </section>
-  </main>
+</main>
 
-  <footer class="footer">
-    <div class="footer-brand">
-      <img src="projects/logo/logo_branco_vertical.png" alt="Atlyon Digital">
-      <p>
-        Criamos marcas digitais fortes para negócios que querem crescer
-        com clareza, presença e confiança.
-      </p>
-    </div>
+<footer class="footer section-reveal">
+  <div class="footer-brand">
+    <strong>ATLYON DIGITAL</strong>
+    <img src="projects/logo/logo_branco_vertical.png" alt="Atlyon Digital">
+    <p>
+      Digital products, UI/UX &amp; front-end.
+    </p>
+  </div>
 
-    <div class="footer-column">
-      <strong>Navegação</strong>
-      <a href="#servicos">Serviços</a>
-      <a href="#portfolio">Portfólio</a>
-      <a href="#processo">Processo</a>
-      <a href="#contacto">Pedir proposta</a>
-    </div>
+  <div class="footer-column">
+    <strong>Navega&ccedil;&atilde;o</strong>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#servicos">Servi&ccedil;os</a>
+    <a href="#contacto">Contacto</a>
+  </div>
 
-    <div class="footer-column footer-contact">
-      <strong>Contacto</strong>
-      <a href="mailto:contacto@atlyon.pt">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="3" y="5" width="18" height="14" rx="2"/>
-          <path d="M3 7l9 6 9-6"/>
-        </svg>
-        contacto@atlyon.pt
-      </a>
-      <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z"/>
-        </svg>
-        LinkedIn
-      </a>
-      <a
-        href="https://www.instagram.com/atlyondigital?igsh=MWxzY3pybGV1Zno5Nw%3D%3D&amp;utm_source=qr"
-        target="_blank"
-        rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="3" y="3" width="18" height="18" rx="5"/>
-          <circle cx="12" cy="12" r="4"/>
-          <circle cx="17.5" cy="6.5" r="1"/>
-        </svg>
-        Instagram
-      </a>
-    </div>
+  <div class="footer-column footer-contact">
+    <strong>Contacto</strong>
+    <a href="mailto:contacto@atlyon.pt">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="M3 7l9 6 9-6" />
+      </svg>
+      contacto@atlyon.pt
+    </a>
+    <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z" />
+      </svg>
+      LinkedIn
+    </a>
+    <a href="https://www.instagram.com/atlyondigital?igsh=MWxzY3pybGV1Zno5Nw%3D%3D&amp;utm_source=qr" target="_blank"
+      rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="1" />
+      </svg>
+      Instagram
+    </a>
+  </div>
 
-    <div class="footer-bottom">
-      <span>© 2026 Atlyon Digital. Todos os direitos reservados.</span>
-    </div>
-  </footer>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Atlyon Digital. Todos os direitos reservados.</span>
+  </div>
+</footer>
 
-  <button class="back-top" (click)="scrollTop()" aria-label="Voltar ao topo">
-    ↑
-  </button>
 }
 
 @if (selectedProject) {
-  <app-project-case
-    [project]="selectedProject"
-    (back)="closeProject()">
-  </app-project-case>
+<app-project-case [project]="selectedProject" (back)="closeProject()">
+</app-project-case>
 }

@@ -6,7 +6,8 @@ body {
   width: 100%;
   min-height: 100%;
   background: #232429;
-  overflow-x: hidden;
+  overflow-x: hidden !important;
+  overflow-y: auto;
 }
 
 body {
@@ -15,8 +16,9 @@ body {
 
 app-root {
   display: block;
-  min-height: 100vh;
+  min-height: 100%;
   background: #232429;
+  overflow-x: hidden;
 }
 
 html.sheet-open,

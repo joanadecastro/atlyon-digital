@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import emailjs from '@emailjs/browser';
 import { ProjectCaseComponent } from './project-case/project-case';
@@ -10,19 +10,23 @@ import { ProjectCaseComponent } from './project-case/project-case';
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
-export class App implements OnInit, AfterViewInit {
+export class App implements OnInit, AfterViewInit, OnDestroy {
   selectedProject: any = null;
   selectedService: any = null;
 
   isScrolled = false;
   activeSection = '';
   isMenuOpen = false;
+  desktopMenuOpen = false;
+  desktopMenuHover = false;
 
   isSubmitting = false;
   formSuccess = '';
   formError = '';
 
   private revealObserver?: IntersectionObserver;
+  private aboutObserver?: IntersectionObserver;
+  private aboutDistortionCleanup?: () => void;
   private sheetScrollY = 0;
 
   private readonly emailServiceId = 'service_jr984oj';
@@ -41,6 +45,7 @@ export class App implements OnInit, AfterViewInit {
     if (this.isMenuOpen) {
       this.closeMenu();
     }
+
   }
 
   @HostListener('window:resize')
@@ -48,14 +53,106 @@ export class App implements OnInit, AfterViewInit {
     if (window.innerWidth > 950 && this.isMenuOpen) {
       this.closeMenu();
     }
+
+    if (window.innerWidth < 821 && this.desktopMenuOpen) {
+      this.desktopMenuOpen = false;
+    }
   }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
+  toggleDesktopMenu() {
+    if (window.innerWidth >= 821) {
+      this.desktopMenuOpen = !this.desktopMenuOpen;
+      this.desktopMenuHover = false;
+      this.isMenuOpen = false;
+      return;
+    }
+
+    this.toggleMenu();
+  }
+
   closeMenu() {
     this.isMenuOpen = false;
+    this.desktopMenuOpen = false;
+    this.desktopMenuHover = false;
+  }
+
+  openDesktopMenuHover() {
+    if (window.innerWidth >= 821) {
+      this.desktopMenuHover = true;
+    }
+  }
+
+  closeDesktopMenuHover() {
+    this.desktopMenuHover = false;
+  }
+
+  technologies = ['Angular', 'TypeScript', 'SCSS', 'RxJS', 'REST API', 'Git', 'Figma'];
+
+  activeHeroProjectIndex = 0;
+  heroChanging = false;
+  heroEntering = false;
+  private heroChangeTimeout?: ReturnType<typeof setTimeout>;
+  private heroEnterTimeout?: ReturnType<typeof setTimeout>;
+
+  heroProjects = [
+    {
+      name: 'LicitaNow',
+      category: 'Digital Platform',
+      description: 'Plataforma digital com interface editorial e foco em clareza operacional.',
+      image: 'projects/image_hero.png',
+      thumbnail: 'projects/MacBook Pro 16.png',
+      accent: '#F7931F',
+      accentColor: '#F7931F',
+      buttonColor: '#4a4d53',
+    },
+    {
+      name: 'Smart Charging',
+      category: 'Enterprise Platform',
+      description: 'Dashboard operacional para processos complexos e dados em tempo real.',
+      image: 'projects/image_hero.png',
+      thumbnail: 'projects/iPhone Air.png',
+      accent: '#F7931F',
+      accentColor: '#2d6cdf',
+      buttonColor: '#4a4d53',
+    },
+    {
+      name: 'EstateFlow',
+      category: 'SaaS Product',
+      description: 'Preview editorial temporario para plataforma de gestao imobiliaria.',
+      image: 'projects/image_hero.png',
+      thumbnail: 'projects/iPad Pro (2022).png',
+      accent: '#F7931F',
+      accentColor: '#6a6f5f',
+      buttonColor: '#4a4d53',
+    },
+    {
+      name: 'E-commerce',
+      category: 'Digital Commerce',
+      description: 'Experiencia de compra digital com foco em produto e conversao.',
+      image: 'projects/image_hero.png',
+      thumbnail: 'projects/eccomerce.png',
+      accent: '#F7931F',
+      accentColor: '#8b5f4f',
+      buttonColor: '#4a4d53',
+    },
+    {
+      name: 'Email Marketing',
+      category: 'Marketing Product',
+      description: 'Preview editorial temporario para sistema de campanhas digitais.',
+      image: 'projects/image_hero.png',
+      thumbnail: 'projects/mercado_bistro_study.png',
+      accent: '#F7931F',
+      accentColor: '#b45b48',
+      buttonColor: '#4a4d53',
+    },
+  ];
+
+  get activeHeroProject() {
+    return this.heroProjects[this.activeHeroProjectIndex];
   }
 
   services = [
@@ -211,6 +308,16 @@ export class App implements OnInit, AfterViewInit {
     this.onWindowScroll();
     this.preloadProjectImages();
     this.initRevealAnimations();
+    this.initAboutReveal();
+    this.initAboutDistortion();
+  }
+
+  ngOnDestroy(): void {
+    this.revealObserver?.disconnect();
+    this.aboutObserver?.disconnect();
+    this.aboutDistortionCleanup?.();
+    clearTimeout(this.heroChangeTimeout);
+    clearTimeout(this.heroEnterTimeout);
   }
 
   async sendProposal(form: NgForm) {
@@ -302,7 +409,7 @@ export class App implements OnInit, AfterViewInit {
     this.revealObserver?.disconnect();
 
     setTimeout(() => {
-      const elements = document.querySelectorAll('.reveal-card, .reveal-phone');
+      const elements = document.querySelectorAll('.reveal-card, .reveal-phone, .section-reveal, .reveal-item');
 
       this.revealObserver = new IntersectionObserver(
         (entries) => {
@@ -341,6 +448,131 @@ export class App implements OnInit, AfterViewInit {
     });
   }
 
+  initAboutReveal() {
+    if (typeof window === 'undefined') return;
+
+    const aboutPanel = document.querySelector('.about-reveal');
+
+    if (!aboutPanel) return;
+
+    this.aboutObserver?.disconnect();
+    this.aboutObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            entry.target.classList.remove('is-visible');
+          }
+        });
+      },
+      {
+        threshold: 0.55,
+        rootMargin: '0px 0px -25% 0px',
+      }
+    );
+
+    this.aboutObserver.observe(aboutPanel);
+  }
+
+  initAboutDistortion(): void {
+    this.aboutDistortionCleanup?.();
+
+    const panel = document.querySelector('.about-visual-panel') as HTMLElement | null;
+    if (!panel) return;
+
+    const onMove = (event: MouseEvent) => {
+      const rect = panel.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      panel.style.setProperty('--mx', `${x}px`);
+      panel.style.setProperty('--my', `${y}px`);
+      panel.classList.add('is-hovering');
+    };
+
+    const onLeave = () => {
+      panel.classList.remove('is-hovering');
+    };
+
+    panel.addEventListener('mousemove', onMove);
+    panel.addEventListener('mouseleave', onLeave);
+
+    this.aboutDistortionCleanup = () => {
+      panel.removeEventListener('mousemove', onMove);
+      panel.removeEventListener('mouseleave', onLeave);
+    };
+  }
+
+  selectHeroProject(index: number) {
+    this.changeHeroProject(index);
+  }
+
+  previousHeroProject() {
+    this.changeHeroProject(
+      (this.activeHeroProjectIndex - 1 + this.heroProjects.length) %
+      this.heroProjects.length
+    );
+  }
+
+  nextHeroProject() {
+    this.changeHeroProject(
+      (this.activeHeroProjectIndex + 1) % this.heroProjects.length
+    );
+  }
+
+  private changeHeroProject(index: number) {
+    if (index === this.activeHeroProjectIndex || this.heroChanging) return;
+
+    clearTimeout(this.heroChangeTimeout);
+    clearTimeout(this.heroEnterTimeout);
+    this.heroEntering = false;
+    this.heroChanging = true;
+
+    this.heroChangeTimeout = setTimeout(() => {
+      this.activeHeroProjectIndex = index;
+      this.heroChanging = false;
+
+      requestAnimationFrame(() => {
+        this.heroEntering = true;
+        this.heroEnterTimeout = setTimeout(() => {
+          this.heroEntering = false;
+        }, 950);
+      });
+    }, 180);
+  }
+
+  openActiveHeroProject() {
+    const existingProject = this.projects.find(
+      (project) =>
+        project.name.toLowerCase() === this.activeHeroProject.name.toLowerCase() ||
+        project.category.toLowerCase() === this.activeHeroProject.category.toLowerCase()
+    );
+
+    this.openProject(existingProject || {
+      name: this.activeHeroProject.name,
+      category: this.activeHeroProject.category,
+      description: this.activeHeroProject.description,
+      desktop: this.activeHeroProject.image,
+      mobile: this.activeHeroProject.image,
+      study: this.activeHeroProject.image,
+      background: this.activeHeroProject.image,
+      caseTitle: this.activeHeroProject.name,
+      caseText: this.activeHeroProject.description,
+      caseText2: 'Case study completo a preparar.',
+      primaryFont: 'Inter',
+      secondaryFont: 'Inter',
+      accent: this.activeHeroProject.accent,
+      bg: '#F7F5F2',
+      surface: '#ffffff',
+      colors: [
+        { name: 'Atlyon Orange', hex: this.activeHeroProject.accent, role: 'Accent' },
+        { name: 'Warm Off White', hex: '#F7F5F2', role: 'Background' },
+        { name: 'Ink', hex: '#111111', role: 'Text' },
+      ],
+    });
+  }
+
   closeProject() {
     this.selectedProject = null;
 
@@ -351,6 +583,8 @@ export class App implements OnInit, AfterViewInit {
 
       this.preloadProjectImages();
       this.initRevealAnimations();
+      this.initAboutReveal();
+      this.initAboutDistortion();
       this.onWindowScroll();
     }, 100);
   }
