@@ -5,8 +5,8 @@
   (focusout)="scheduleDesktopMenuHoverClose($event)"
   (click)="isMenuOpen || desktopMenuOpen ? closeMenu() : null">
   @if (selectedProject) {
-    <a href="#portfolio" class="project-back-nav" aria-label="Voltar a Case Studies" (click)="navigateFromProject($event, 'portfolio')">
-      <span class="project-back-nav__arrow" aria-hidden="true">&larr;</span>
+    <a href="#portfolio" class="project-back-nav" aria-label="Voltar a Case Studies" (click)="navigateToSection($event, 'portfolio')">
+      <span class="project-back-nav__arrow" aria-hidden="true"></span>
     </a>
   }
 
@@ -21,15 +21,15 @@
 
   <nav [class.mobile-open]="isMenuOpen" (click)="$event.stopPropagation()"
     (mouseenter)="keepDesktopMenuHoverOpen()">
-    <a href="#" class="mobile-menu-logo" aria-label="Atlyon Digital" (click)="scrollTop()">
+    <a href="#home" class="mobile-menu-logo" aria-label="Atlyon Digital" (click)="navigateToSection($event, 'home')">
       <img src="/projects/logo/Group 7.png" alt="Atlyon Digital">
     </a>
     <div class="mobile-menu-links">
-      <a href="#" (click)="selectedProject ? navigateFromProject($event, 'top') : scrollTop()">In&iacute;cio</a>
-      <a href="#portfolio" (click)="selectedProject ? navigateFromProject($event, 'portfolio') : closeMenu()" [class.active]="activeSection === 'portfolio'">Projetos</a>
-      <a href="#sobre" (click)="selectedProject ? navigateFromProject($event, 'sobre') : closeMenu()" [class.active]="activeSection === 'sobre'"><span class="nav-label-mobile">Sobre</span><span class="nav-label-desktop">Sobre Mim</span></a>
-      <a href="#processo" (click)="selectedProject ? navigateFromProject($event, 'processo') : closeMenu()" [class.active]="activeSection === 'processo'">Processo</a>
-      <a href="#servicos" (click)="selectedProject ? navigateFromProject($event, 'servicos') : closeMenu()" [class.active]="activeSection === 'servicos'"><span class="nav-label-mobile">Servi&ccedil;os</span><span class="nav-label-desktop">Especializa&ccedil;&atilde;o</span></a>
+      <a href="#home" (click)="navigateToSection($event, 'home')">In&iacute;cio</a>
+      <a href="#portfolio" (click)="navigateToSection($event, 'portfolio')" [class.active]="activeSection === 'portfolio'">Projetos</a>
+      <a href="#sobre" (click)="navigateToSection($event, 'sobre')" [class.active]="activeSection === 'sobre'"><span class="nav-label-mobile">Sobre</span><span class="nav-label-desktop">Sobre Mim</span></a>
+      <a href="#processo" (click)="navigateToSection($event, 'processo')" [class.active]="activeSection === 'processo'">Processo</a>
+      <a href="#servicos" (click)="navigateToSection($event, 'servicos')" [class.active]="activeSection === 'servicos'"><span class="nav-label-mobile">Servi&ccedil;os</span><span class="nav-label-desktop">Especializa&ccedil;&atilde;o</span></a>
     </div>
     <div class="language-switcher" aria-label="Idioma">
       <button type="button" [class.is-active]="language.currentLanguage() === 'pt'" [attr.aria-pressed]="language.currentLanguage() === 'pt'" (click)="language.setLanguage('pt')">PT</button>
@@ -39,8 +39,8 @@
     <a href="#contacto" class="nav-cta" (click)="selectedProject ? navigateFromProject($event, 'contacto') : closeMenu()">Contacto</a>
     <div class="mobile-contact">
       <div class="mobile-socials">
-        <a href="mailto:joana@atlyon.pt" aria-label="Email" (click)="closeMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg></a>
-        <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener" aria-label="LinkedIn" (click)="closeMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z" /></svg></a>
+        <a class="mobile-social-circle" href="mailto:joana@atlyon.pt" aria-label="Email" (click)="closeMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg></a>
+        <a class="mobile-social-circle" href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener" aria-label="LinkedIn" (click)="closeMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z" /></svg></a>
       </div>
     </div>
   </nav>
@@ -49,8 +49,8 @@
 @if (!selectedProject) {
 
 <main>
-<div class="hero-stack hero-reveal sticky-section sticky-section--hero-about">
-  <a href="#" class="brand hero-brand-static" aria-label="Atlyon Digital" (click)="closeMenu()">
+<div id="home" class="hero-stack hero-reveal sticky-section sticky-section--hero-about">
+  <a href="#home" class="brand hero-brand-static" aria-label="Atlyon Digital" (click)="navigateToSection($event, 'home')">
     <img class="hero-brand-static__mark" src="/projects/logo/Group 7.png" alt="Atlyon Digital">
   </a>
 <section class="hero hero-editorial"
@@ -74,7 +74,7 @@
 
         <button type="button" class="hero-case-link" (click)="scrollToPortfolio()">
           <span class="hero-case-link__label">Ver trabalhos</span>
-          <span class="hero-case-link__arrow" aria-hidden="true">&nearr;</span>
+          <span class="hero-case-link__arrow cta-arrow" aria-hidden="true"></span>
           <span class="hero-case-link__line" aria-hidden="true"></span>
         </button>
       </div>
@@ -107,12 +107,12 @@
         <p>Com o tempo, aproximei-me naturalmente do design digital, do UI/UX e do desenvolvimento front-end. Hoje trabalho entre design e tecnologia, acompanhando projetos desde a estrat&eacute;gia e branding at&eacute; ao desenho e desenvolvimento de websites, plataformas e produtos digitais.</p>
       </div>
 
-      <a class="about-showcase-cv about-section__cv" href="Joana_Castro_CV_2025.pdf" download>
+      <a class="about-showcase-cv about-section__cv" href="/cv/Cv_JoanaCastro.pdf" download="Cv_JoanaCastro.pdf">
         <svg class="about-showcase-cv__icon" viewBox="0 0 20 20" aria-hidden="true">
           <path d="M5.5 2.5h5.8l3.2 3.2v11.8h-9z"/>
           <path d="M11.3 2.5v3.2h3.2M7.5 10h5M7.5 13h4"/>
         </svg>
-        DESCARREGAR CV <span aria-hidden="true">&nearr;</span>
+        DESCARREGAR CV <span class="cta-arrow" aria-hidden="true"></span>
       </a>
 
       <div class="about-editorial-skills-row" aria-label="Principais ferramentas e tecnologias">
@@ -184,6 +184,7 @@
               [class.portfolio-project-card--smart-charging]="projectIndex === 2"
               [disabled]="projectIndex === 2"
               (click)="projectIndex !== 2 && openProject(project)">
+              <div class="case-card-content">
               <div class="case-card-copy">
                 @if (projectIndex === 0) {
                   <strong>
@@ -210,9 +211,10 @@
                 <span class="case-card-action case-card-status">Projeto brevemente dispon&iacute;vel</span>
               } @else {
                 <span class="case-card-action case-card-cta">
-                  Ver projeto completo <span class="case-card-cta__arrow" aria-hidden="true">&nearr;</span>
+                  Ver projeto completo <span class="case-card-cta__arrow cta-arrow" aria-hidden="true"></span>
                 </span>
               }
+              </div>
 
             </button>
           }
@@ -231,7 +233,7 @@
                   <span>Sistema de componentes</span>
                   <span>Desktop + Mobile</span>
                 </div>
-                <span class="case-project-overlay__cta">Ver case study completo &nearr;</span>
+                <span class="case-project-overlay__cta">Ver case study completo <span class="cta-arrow" aria-hidden="true"></span></span>
               } @else if (false) {
                 <strong class="civitas-overlay-title">
                   <span class="civitas-overlay-title__main">LicitaNow</span>
@@ -243,7 +245,7 @@
                   <span>UI/UX + Front-end</span>
                   <span>Desktop</span>
                 </div>
-                <span class="case-project-overlay__cta">Ver case study completo &nearr;</span>
+                <span class="case-project-overlay__cta">Ver case study completo <span class="cta-arrow" aria-hidden="true"></span></span>
               } @else if (false) {
                 <strong class="civitas-overlay-title">
                   <span class="civitas-overlay-title__main">Smart Charging</span>
@@ -520,22 +522,33 @@
 
     <nav class="site-footer__column site-footer__navigation" aria-label="Navega&ccedil;&atilde;o do rodap&eacute;">
       <p class="site-footer__column-title">NAVEGA&Ccedil;&Atilde;O</p>
-      <a href="#">In&iacute;cio</a>
-      <a href="#sobre">Sobre Mim</a>
-      <a href="#portfolio">Projetos</a>
-      <a href="#processo">Processo</a>
-      <a href="#servicos">Especializa&ccedil;&atilde;o</a>
+      <a href="#home" (click)="navigateToSection($event, 'home')">In&iacute;cio</a>
+      <a href="#sobre" (click)="navigateToSection($event, 'sobre')">Sobre Mim</a>
+      <a href="#portfolio" (click)="navigateToSection($event, 'portfolio')">Projetos</a>
+      <a href="#processo" (click)="navigateToSection($event, 'processo')">Processo</a>
+      <a href="#servicos" (click)="navigateToSection($event, 'servicos')">Especializa&ccedil;&atilde;o</a>
     </nav>
 
     <div class="site-footer__column site-footer__resources">
       <p class="site-footer__column-title">RECURSOS</p>
-      <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener noreferrer">
+      <div class="site-footer__socials">
+      <a class="site-footer__linkedin mobile-social-circle" href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener noreferrer">
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z" />
         </svg>
-        LinkedIn
+        <span class="site-footer__social-label">LinkedIn</span>
       </a>
-      <a class="site-footer__cv" href="Joana_Castro_CV_2025.pdf" download>DESCARREGAR CV <span aria-hidden="true">&nearr;</span></a>
+      <a class="site-footer__github mobile-social-circle" href="https://github.com/joanadecastro" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.63-.2.63-.44v-1.8c-2.57.56-3.11-1.09-3.11-1.09-.42-1.07-1.03-1.35-1.03-1.35-.84-.58.06-.57.06-.57.93.07 1.42.96 1.42.96.83 1.41 2.17 1 2.7.76.08-.6.32-1 .59-1.23-2.05-.23-4.2-1.02-4.2-4.57 0-1.01.36-1.84.95-2.49-.1-.23-.41-1.17.09-2.45 0 0 .78-.25 2.54.95A8.84 8.84 0 0 1 12 7.1c.79 0 1.57.1 2.31.31 1.77-1.2 2.54-.95 2.54-.95.51 1.28.19 2.22.1 2.45.59.65.95 1.48.95 2.49 0 3.56-2.16 4.33-4.22 4.56.33.29.63.85.63 1.72v2.66c0 .24.17.53.64.44A9.25 9.25 0 0 0 12 2.75Z" />
+        </svg>
+        <span class="site-footer__social-label">GitHub</span>
+      </a>
+      </div>
+      <div class="site-footer__actions">
+      <a class="site-footer__source" href="https://github.com/joanadecastro/atlyon-digital" target="_blank" rel="noopener noreferrer"><svg class="site-footer__source-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.63-.2.63-.44v-1.8c-2.57.56-3.11-1.09-3.11-1.09-.42-1.07-1.03-1.35-1.03-1.35-.84-.58.06-.57.06-.57.93.07 1.42.96 1.42.96.83 1.41 2.17 1 2.7.76.08-.6.32-1 .59-1.23-2.05-.23-4.2-1.02-4.2-4.57 0-1.01.36-1.84.95-2.49-.1-.23-.41-1.17.09-2.45 0 0 .78-.25 2.54.95A8.84 8.84 0 0 1 12 7.1c.79 0 1.57.1 2.31.31 1.77-1.2 2.54-.95 2.54-.95.51 1.28.19 2.22.1 2.45.59.65.95 1.48.95 2.49 0 3.56-2.16 4.33-4.22 4.56.33.29.63.85.63 1.72v2.66c0 .24.17.53.64.44A9.25 9.25 0 0 0 12 2.75Z" /></svg><span class="site-footer__source-label site-footer__source-label--desktop">VER C&Oacute;DIGO DESTE SITE</span><span class="site-footer__source-label site-footer__source-label--mobile">C&Oacute;DIGO DO SITE</span><span class="cta-arrow" aria-hidden="true"></span></a>
+      <a class="site-footer__cv" href="/cv/Cv_JoanaCastro.pdf" download="Cv_JoanaCastro.pdf">DESCARREGAR CV <span class="cta-arrow" aria-hidden="true"></span></a>
+      </div>
     </div>
   </div>
 
@@ -621,7 +634,7 @@
                     [class.project-chat-suggestions--initial]="message.intro">
                     @for (action of message.actions; track action.id) {
                       @if (action.href) {
-                        <a class="project-chat-suggestion" [href]="action.href" [attr.download]="action.download ? '' : null" [attr.target]="action.href.startsWith('http') ? '_blank' : null" [attr.rel]="action.href.startsWith('http') ? 'noopener noreferrer' : null">{{ action.label }}</a>
+                        <a class="project-chat-suggestion" [href]="action.href" [attr.download]="action.download ? 'Cv_JoanaCastro.pdf' : null" [attr.target]="action.href.startsWith('http') ? '_blank' : null" [attr.rel]="action.href.startsWith('http') ? 'noopener noreferrer' : null">{{ action.label }}@if (action.download) {<span class="cta-arrow" aria-hidden="true"></span>}</a>
                       } @else {
                         <button
                           type="button"
@@ -687,7 +700,7 @@
               <label>Email<input type="email" [(ngModel)]="projectChat.email" autocomplete="email" placeholder="nome@email.com"></label>
             </div>
             @if (projectChatError) { <p class="project-chat__error">{{ projectChatError }}</p> }
-            <button type="button" class="project-chat__primary" (click)="continueProjectChat()">REVER PEDIDO <span>&rarr;</span></button>
+            <button type="button" class="project-chat__primary" (click)="continueProjectChat()">REVER PEDIDO <span class="cta-arrow" aria-hidden="true"></span></button>
           }
 
           @if (projectChatStep === 5) {
@@ -700,11 +713,11 @@
               <div><dt>Objetivo</dt><dd>{{ projectChat.goal }}</dd></div>
               <div><dt>Contacto</dt><dd>{{ projectChat.email }}</dd></div>
             </dl>
-            <button type="button" class="project-chat__primary" (click)="submitProjectChat()">ENVIAR PEDIDO <span>&nearr;</span></button>
+            <button type="button" class="project-chat__primary" (click)="submitProjectChat()">ENVIAR PEDIDO <span class="cta-arrow" aria-hidden="true"></span></button>
           }
 
           @if (projectChatStep > 0 && projectChatStep !== 2) {
-            <button type="button" class="project-chat__back" (click)="previousProjectChatStep()">&larr; Voltar</button>
+            <button type="button" class="project-chat__back" (click)="previousProjectChatStep()"><span class="cta-arrow cta-arrow--left" aria-hidden="true"></span>Voltar</button>
           }
         }
       </div>

@@ -728,7 +728,7 @@ export class App implements AfterViewInit, OnDestroy {
       this.addProjectChatMessage(
         'assistant',
         'Tenho mais de 15 anos de experiência em design e mais de 4 anos em desenvolvimento front-end, trabalhando entre UI/UX, produtos digitais e implementação.',
-        [{ id: 'experience-cv', label: 'Download CV', action: 'cv', href: 'Joana_Castro_CV_2025.pdf', download: true }]
+        [{ id: 'experience-cv', label: 'Download CV', action: 'cv', href: '/cv/Cv_JoanaCastro.pdf', download: true }]
       );
     } else if (action === 'portfolio') {
       this.addProjectChatMessage(
@@ -748,7 +748,7 @@ export class App implements AfterViewInit, OnDestroy {
         'Estou disponível para novas oportunidades em UI/UX Design, Product Design, Digital Design e Front-end Development.',
         [
           { id: 'recruiter-linkedin', label: 'LinkedIn', action: 'other', href: 'https://www.linkedin.com/company/atlyon-digital/' },
-          { id: 'cv', label: 'Download CV', action: 'cv', href: 'Joana_Castro_CV_2025.pdf', download: true },
+          { id: 'cv', label: 'Download CV', action: 'cv', href: '/cv/Cv_JoanaCastro.pdf', download: true },
         ]
       );
     } else {
@@ -806,7 +806,7 @@ export class App implements AfterViewInit, OnDestroy {
       this.addProjectChatMessage(
         'assistant',
         `Tenho experiência em ${role} e terei todo o gosto em partilhar mais detalhes sobre o meu percurso.`,
-        [{ id: `download-${action}`, label: 'DOWNLOAD CV ↗', action: 'cv', href: 'Joana_Castro_CV_2025.pdf', download: true }]
+        [{ id: `download-${action}`, label: 'DOWNLOAD CV', action: 'cv', href: '/cv/Cv_JoanaCastro.pdf', download: true }]
       );
     }
 
@@ -1912,6 +1912,27 @@ export class App implements AfterViewInit, OnDestroy {
       }
       document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 300);
+  }
+
+  navigateToSection(event: Event, sectionId: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.closeMenu();
+
+    const scrollToTarget = () => {
+      document.getElementById(sectionId)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    };
+
+    if (this.selectedProject) {
+      this.closeProject();
+      setTimeout(scrollToTarget, 300);
+      return;
+    }
+
+    requestAnimationFrame(scrollToTarget);
   }
 
   scrollTop() {

@@ -60,3 +60,49 @@ body.sheet-open {
   right: 0;
   width: 100%;
 }
+/* One font-independent SVG arrow for every CTA (safe on iOS). */
+.cta-arrow {
+  position: static !important;
+  display: inline-block !important;
+  width: 11px !important;
+  height: 11px !important;
+  flex: 0 0 11px !important;
+  margin: 0 0 0 6px !important;
+  color: inherit;
+  vertical-align: middle;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 13 13 3M7 3h6v6' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 13 13 3M7 3h6v6' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.cta-arrow::before,
+.cta-arrow::after {
+  content: none !important;
+  display: none !important;
+}
+
+.cta-arrow--right {
+  transform: rotate(45deg);
+}
+
+.cta-arrow--left {
+  margin: 0 6px 0 0 !important;
+  transform: rotate(180deg);
+}
+
+:is(
+  .about-showcase-cv,
+  .case-card-cta,
+  .case-project-overlay__cta,
+  .site-footer__source,
+  .site-footer__cv,
+  .challenge-screen-expand,
+  .licita-applied-comparison__expand,
+  .project-chat-suggestion,
+  .project-chat__primary,
+  .project-chat__back
+) {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
