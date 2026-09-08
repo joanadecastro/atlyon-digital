@@ -1,423 +1,731 @@
-@if (!selectedProject) {
-  <header
-    class="navbar"
-    [class.is-scrolled]="isScrolled"
-    [class.menu-open]="isMenuOpen"
-    (click)="isMenuOpen ? closeMenu() : null">
-    <a href="#" class="brand" aria-label="Atlyon Digital" (click)="closeMenu()">
-      <img
-        [src]="isScrolled && !isMenuOpen ? 'projects/logo/logo_cinza_vertical.png' : 'projects/logo/logo_branco_vertical.png'"
-        alt="Atlyon Digital">
+<header class="navbar" [class.is-scrolled]="isScrolled" [class.menu-open]="isMenuOpen" [class.project-page]="selectedProject"
+  [class.desktop-menu-open]="desktopMenuOpen || desktopMenuHover"
+  (mouseenter)="keepDesktopMenuHoverOpen()"
+  (mouseleave)="scheduleDesktopMenuHoverClose()"
+  (focusout)="scheduleDesktopMenuHoverClose($event)"
+  (click)="isMenuOpen || desktopMenuOpen ? closeMenu() : null">
+  @if (selectedProject) {
+    <a href="#portfolio" class="project-back-nav" aria-label="Voltar a Case Studies" (click)="navigateFromProject($event, 'portfolio')">
+      <span class="project-back-nav__arrow" aria-hidden="true">&larr;</span>
     </a>
+  }
 
-    <button
-      class="menu-toggle"
-      type="button"
-      (click)="$event.stopPropagation(); toggleMenu()"
-      [class.is-open]="isMenuOpen"
-      aria-label="Abrir menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+  <button class="menu-toggle" type="button" (click)="$event.stopPropagation(); toggleDesktopMenu()"
+    (mouseenter)="openDesktopMenuHover()" (focus)="openDesktopMenuHover()"
+    [class.is-open]="isMenuOpen || desktopMenuOpen" aria-label="Abrir menu">
+    <img class="menu-icon-custom" src="projects/menu_only.png" alt="">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-    <nav [class.mobile-open]="isMenuOpen" (click)="$event.stopPropagation()">
-      <div class="mobile-menu-logo">
-        <img src="projects/logo/logo_branco.png" alt="Atlyon Digital">
+  <nav [class.mobile-open]="isMenuOpen" (click)="$event.stopPropagation()"
+    (mouseenter)="keepDesktopMenuHoverOpen()">
+    <a href="#" class="mobile-menu-logo" aria-label="Atlyon Digital" (click)="scrollTop()">
+      <img src="/projects/logo/Group 7.png" alt="Atlyon Digital">
+    </a>
+    <div class="mobile-menu-links">
+      <a href="#" (click)="selectedProject ? navigateFromProject($event, 'top') : scrollTop()">In&iacute;cio</a>
+      <a href="#portfolio" (click)="selectedProject ? navigateFromProject($event, 'portfolio') : closeMenu()" [class.active]="activeSection === 'portfolio'">Projetos</a>
+      <a href="#sobre" (click)="selectedProject ? navigateFromProject($event, 'sobre') : closeMenu()" [class.active]="activeSection === 'sobre'"><span class="nav-label-mobile">Sobre</span><span class="nav-label-desktop">Sobre Mim</span></a>
+      <a href="#processo" (click)="selectedProject ? navigateFromProject($event, 'processo') : closeMenu()" [class.active]="activeSection === 'processo'">Processo</a>
+      <a href="#servicos" (click)="selectedProject ? navigateFromProject($event, 'servicos') : closeMenu()" [class.active]="activeSection === 'servicos'"><span class="nav-label-mobile">Servi&ccedil;os</span><span class="nav-label-desktop">Especializa&ccedil;&atilde;o</span></a>
+    </div>
+    <div class="language-switcher" aria-label="Idioma">
+      <button type="button" [class.is-active]="language.currentLanguage() === 'pt'" [attr.aria-pressed]="language.currentLanguage() === 'pt'" (click)="language.setLanguage('pt')">PT</button>
+      <span aria-hidden="true">|</span>
+      <button type="button" [class.is-active]="language.currentLanguage() === 'en'" [attr.aria-pressed]="language.currentLanguage() === 'en'" (click)="language.setLanguage('en')">EN</button>
+    </div>
+    <a href="#contacto" class="nav-cta" (click)="selectedProject ? navigateFromProject($event, 'contacto') : closeMenu()">Contacto</a>
+    <div class="mobile-contact">
+      <div class="mobile-socials">
+        <a href="mailto:joana@atlyon.pt" aria-label="Email" (click)="closeMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg></a>
+        <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener" aria-label="LinkedIn" (click)="closeMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z" /></svg></a>
       </div>
+    </div>
+  </nav>
+</header>
 
-      <div class="mobile-menu-links">
-        <a href="#servicos" (click)="closeMenu()" [class.active]="activeSection === 'servicos'">Serviços</a>
-        <a href="#portfolio" (click)="closeMenu()" [class.active]="activeSection === 'portfolio'">Portfólio</a>
-        <a href="#processo" (click)="closeMenu()" [class.active]="activeSection === 'processo'">Processo</a>
-      </div>
+@if (!selectedProject) {
 
-      <a href="#contacto" class="nav-cta" (click)="closeMenu()">Pedir proposta</a>
+<main>
+<div class="hero-stack hero-reveal sticky-section sticky-section--hero-about">
+  <a href="#" class="brand hero-brand-static" aria-label="Atlyon Digital" (click)="closeMenu()">
+    <img class="hero-brand-static__mark" src="/projects/logo/Group 7.png" alt="Atlyon Digital">
+  </a>
+<section class="hero hero-editorial"
+  [class.hero--dark-preview]="true"
+  [style.--hero-accent]="activeHeroProject.accentColor"
+  [style.--hero-button]="activeHeroProject.buttonColor">
+  <div class="hero-main">
+  <div class="hero-editorial-inner">
 
-      <div class="mobile-contact">
-        <div class="mobile-socials">
-          <a
-            href="mailto:contacto@atlyon.pt"
-            aria-label="Email"
-            (click)="closeMenu()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="14" rx="2"/>
-              <path d="M3 7l9 6 9-6"/>
-            </svg>
-          </a>
-
-          <a
-            href="https://www.linkedin.com/company/atlyon-digital/"
-            target="_blank"
-            rel="noopener"
-            aria-label="LinkedIn"
-            (click)="closeMenu()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z"/>
-            </svg>
-          </a>
-
-          <a
-            href="https://www.instagram.com/atlyondigital?igsh=MWxzY3pybGV1Zno5Nw%3D%3D&amp;utm_source=qr"
-            target="_blank"
-            rel="noopener"
-            aria-label="Instagram"
-            (click)="closeMenu()">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="5"/>
-              <circle cx="12" cy="12" r="4"/>
-              <circle cx="17.5" cy="6.5" r="1"/>
-            </svg>
-          </a>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div class="hero-content">
-        <p class="eyebrow light hero-eyebrow">
-          <span>Branding</span>
-          <i></i>
-          <span>Websites</span>
-          <i></i>
-          <span>UI/UX</span>
-          <i></i>
-          <span>Desenvolvimento</span>
+    <div class="hero-main-panel">
+      <div class="hero-copy-area">
+        <p class="hero-kicker">
+          <span class="hero-kicker-first">UI/UX &amp;</span>
+          <span class="hero-kicker-wide">FRONT-END</span>
         </p>
 
-        <h1>Marcas digitais fortes para negócios que querem crescer.</h1>
+        <h1>
+          <span>Da estrat&eacute;gia ao design e desenvolvimento front-end.</span>
+        </h1>
+        <div class="hero-title-accent" aria-hidden="true"></div>
 
-        <p>
-          Criamos identidades visuais, websites e soluções digitais para empresas
-          que querem uma presença mais profissional, funcional e preparada para crescer.
-        </p>
+        <button type="button" class="hero-case-link" (click)="scrollToPortfolio()">
+          <span class="hero-case-link__label">Ver trabalhos</span>
+          <span class="hero-case-link__arrow" aria-hidden="true">&nearr;</span>
+          <span class="hero-case-link__line" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
 
-        <div class="hero-actions">
-          <a href="#contacto" class="btn white">Pedir proposta</a>
-          <a href="#portfolio" class="btn white ghost">Ver portfólio</a>
-        </div>
+  </div>
+  <span class="hero-separator-accent" aria-hidden="true"></span>
+  </div>
+</section>
+
+  <div class="hero-bottom-strip" aria-hidden="true"></div>
+
+  <div class="about-hold sticky-section__panel">
+  <section
+    id="sobre"
+    class="about-showcase editorial-section"
+    [class.about-reveal-enabled]="true">
+    <div class="about-showcase-inner about-section__inner section-shell">
+      <div class="about-editorial-main">
+        <div class="about-editorial-copy">
+      <header class="about-section__header editorial-section-header">
+        <h2 class="about-section__heading section-heading-title">
+          SOBRE MIM
+        </h2>
+        <p class="editorial-section-subtitle">Design, tecnologia e experi&ecirc;ncia reunidos num percurso multidisciplinar.</p>
+      </header>
+
+      <div class="about-editorial-narrative">
+        <p>Tenho mais de 15 anos de experi&ecirc;ncia em design gr&aacute;fico e de moda. O meu percurso come&ccedil;ou na cria&ccedil;&atilde;o de cole&ccedil;&otilde;es, identidade visual e desenvolvimento de produto, tendo trabalhado como principal designer de moda na Trotti.</p>
+        <p>Com o tempo, aproximei-me naturalmente do design digital, do UI/UX e do desenvolvimento front-end. Hoje trabalho entre design e tecnologia, acompanhando projetos desde a estrat&eacute;gia e branding at&eacute; ao desenho e desenvolvimento de websites, plataformas e produtos digitais.</p>
       </div>
 
-      <div class="hero-visual reveal-phone">
-        <div class="phone">
-          <img
-            src="projects/logo/logo_branco.png"
-            alt="Atlyon"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high">
-        </div>
-      </div>
-
-      <div class="hero-word">ATLYON</div>
-    </section>
-
-    <section id="servicos" class="section services-section">
-      <div class="section-split">
-        <div>
-          <p class="eyebrow">Serviços</p>
-          <h2>Serviços digitais para marcas que querem crescer com presença e confiança.</h2>
-        </div>
-
-        <p class="section-description">
-          Criamos desde logótipos e websites até soluções digitais completas,
-          com possibilidade de colaboração pontual ou apoio contínuo a empresas.
-        </p>
-      </div>
-
-   <div class="services-grid">
-  @for (service of services; track service.title) {
-    <article
-      class="service-card reveal-card"
-      [class.featured-service]="service.title === 'Prestação de serviços'">
-
-      @if (service.title === 'Prestação de serviços') {
-        <div class="service-badge">Para empresas</div>
-      }
-
-      <h3>{{ service.title }}</h3>
-
-      <p class="service-description">
-        {{ service.description }}
-      </p>
-
-      <span class="service-price service-price-desktop">
-        {{ service.priceLabel }}
-
-        @if (service.title !== 'Prestação de serviços') {
-          <small>+ IVA</small>
-        }
-      </span>
-
-      <span class="service-price service-price-mobile">
-        @if (service.title !== 'Prestação de serviços') {
-          <strong class="service-price-prefix">Desde</strong>
-          <strong class="service-price-value">
-            {{ service.priceLabel.replace('Desde ', '') }}
-          </strong>
-          <small class="service-price-tax">+ IVA</small>
-        } @else {
-          <strong class="service-price-value">
-            {{ service.priceLabel }}
-          </strong>
-        }
-      </span>
-
-      <a href="#contacto" class="service-proposal">
-        Pedir proposta
+      <a class="about-showcase-cv about-section__cv" href="Joana_Castro_CV_2025.pdf" download>
+        <svg class="about-showcase-cv__icon" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M5.5 2.5h5.8l3.2 3.2v11.8h-9z"/>
+          <path d="M11.3 2.5v3.2h3.2M7.5 10h5M7.5 13h4"/>
+        </svg>
+        DESCARREGAR CV <span aria-hidden="true">&nearr;</span>
       </a>
 
-      <button
-        type="button"
-        class="service-more"
-        (click)="openService(service)">
-        Ver mais
-      </button>
-    </article>
-  }
+      <div class="about-editorial-skills-row" aria-label="Principais ferramentas e tecnologias">
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="7" r="5"/><circle cx="11" cy="16" r="5"/><circle cx="11" cy="25" r="5"/><circle cx="21" cy="7" r="5"/><circle cx="21" cy="16" r="5"/></svg><b>Figma</b></span>
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 27 7l-2 17-9 5-9-5L5 7l11-4Z"/><path d="m10.5 22 5.5-14 5.5 14M12.5 17.5h7"/></svg><b>Angular</b></span>
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="2"/><path d="M9 11h9M13.5 11v12M20 21.5c1.2 1 4.3 1.2 4.3-1.1 0-2.8-4.6-1.9-4.6-5 0-2.2 2.8-2.8 4.5-1.5"/></svg><b>TypeScript</b></span>
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M25 8c-4-4-14-3-16 2-2.4 6 12 4 10 9-1.4 3.4-8.5 2.6-12-.1M22 6l3 2-1 3M7 19l-1 3 3 2"/></svg><b>SCSS</b></span>
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="2"/><path d="M15 10v10c0 3-2 4-5 2M19 21.5c1.2 1 4.3 1.2 4.3-1.1 0-2.8-4.6-1.9-4.6-5 0-2.2 2.8-2.8 4.5-1.5"/></svg><b>JavaScript</b></span>
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="9" cy="7" r="3"/><circle cx="23" cy="11" r="3"/><circle cx="9" cy="25" r="3"/><path d="M9 10v12m0-8c7 0 7-3 11-3"/></svg><b>Git</b></span>
+      </div>
+
+      <div class="about-metrics-row about-section__metrics about-editorial-metrics">
+        <div class="about-metric" data-count-target="14" data-count-duration="900">
+          <div class="about-metric__value about-section__metric-value-wrap">
+            <span class="about-section__metric-number">0</span><span class="about-section__metric-suffix">+</span>
+          </div>
+          <span class="about-metric__label">ANOS EM DESIGN</span>
+        </div>
+        <div class="about-metric" data-count-target="4" data-count-duration="700">
+          <div class="about-metric__value about-section__metric-value-wrap">
+            <span class="about-section__metric-number">0</span><span class="about-section__metric-suffix">+</span>
+          </div>
+          <span class="about-metric__label">ANOS EM FRONT-END</span>
+        </div>
+        <div class="about-metric" data-count-target="95" data-count-duration="1100">
+          <div class="about-metric__value about-section__metric-value-wrap">
+            <span class="about-section__metric-number">0</span><span class="about-section__metric-suffix">+</span>
+          </div>
+          <span class="about-metric__label">INTERFACES DESENHADAS</span>
+        </div>
+        <div class="about-metric" data-count-target="19" data-count-duration="950">
+          <div class="about-metric__value about-section__metric-value-wrap">
+            <span class="about-section__metric-number">0</span><span class="about-section__metric-suffix">+</span>
+          </div>
+          <span class="about-metric__label">MARCAS DESENVOLVIDAS</span>
+        </div>
+      </div>
+
+        </div>
+
+      <div class="about-section__visual">
+        <div class="about-section__photo" aria-hidden="true">
+          <img src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="">
+        </div>
+      </div>
+      </div>
+
+    </div>
+  </section>
+  </div>
+
 </div>
 
-@if (selectedService) {
-  <div class="service-sheet-overlay" (click)="closeService()">
-    <div class="service-sheet" (click)="$event.stopPropagation()">
-      <button
-        type="button"
-        class="service-sheet-close"
-        (click)="closeService()"
-        aria-label="Fechar">
-        ×
-      </button>
+  <div class="about-bottom-shadow" aria-hidden="true"></div>
 
-  
+  <section id="portfolio" class="section portfolio-section editorial-section sticky-section sticky-section--portfolio">
+    <div class="portfolio-editorial sticky-section__panel" aria-label="Portfolio">
+      <div class="portfolio-editorial-stage section-shell">
+        <header class="portfolio-editorial-copy section-editorial-header section-heading-row editorial-section-header">
+          <h2 class="section-editorial-title section-heading-title">PROJETOS</h2>
+          <p class="editorial-section-subtitle">Do conceito &agrave; implementa&ccedil;&atilde;o de produtos digitais.</p>
+        </header>
 
-      @if (selectedService.title === 'Prestação de serviços') {
-        <span class="service-sheet-badge">Para empresas</span>
-      }
+        <div class="portfolio-catalog portfolio-catalog--static">
+          @for (project of projects; track project.name; let projectIndex = $index) {
+            <button type="button" class="portfolio-project-card"
+              [class.portfolio-project-card--civitas]="projectIndex === 0"
+              [class.portfolio-project-card--licitanow]="projectIndex === 1"
+              [class.portfolio-project-card--smart-charging]="projectIndex === 2"
+              [disabled]="projectIndex === 2"
+              (click)="projectIndex !== 2 && openProject(project)">
+              <div class="case-card-copy">
+                @if (projectIndex === 0) {
+                  <strong>
+                    <span class="case-card-title-main">Civitas</span>
+                    <span class="case-card-title-secondary">Plataforma SaaS de<br>gest&atilde;o energ&eacute;tica</span>
+                  </strong>
+                  <small>UI/UX &middot; Front-end</small>
+                } @else if (projectIndex === 1) {
+                  <strong>
+                    <span class="case-card-title-main">LicitaNow</span>
+                    <span class="case-card-title-secondary">Redesign de Landing Page</span>
+                  </strong>
+                  <small>UI/UX &middot; Front-end</small>
+                } @else {
+                  <strong>
+                    <span class="case-card-title-main">Smart Charging</span>
+                    <span class="case-card-title-secondary">SaaS de gest&atilde;o de<br>carregamentos el&eacute;tricos</span>
+                  </strong>
+                  <small>UI/UX &middot; Front-end</small>
+                }
+              </div>
 
-      <span class="service-sheet-price">
-        {{ selectedService.priceLabel }}
+              @if (projectIndex === 2) {
+                <span class="case-card-action case-card-status">Projeto brevemente dispon&iacute;vel</span>
+              } @else {
+                <span class="case-card-action case-card-cta">
+                  Ver projeto completo <span class="case-card-cta__arrow" aria-hidden="true">&nearr;</span>
+                </span>
+              }
 
-        @if (selectedService.title !== 'Prestação de serviços') {
-          <small>+ IVA</small>
-        }
-      </span>
+            </button>
+          }
 
-      <h3>{{ selectedService.title }}</h3>
+          <button type="button" class="case-project-overlay"
+            aria-hidden="true" tabindex="-1">
+            <div class="case-project-overlay__copy">
+              @if (false) {
+                <strong class="civitas-overlay-title">
+                  <span class="civitas-overlay-title__main">Civitas</span>
+                  <span class="civitas-overlay-title__subtitle">Dashboard Energético</span>
+                </strong>
+                <small>UI/UX &middot; Front-end</small>
+                <div class="case-project-overlay__metrics">
+                  <span>Painel + Vista Geral</span>
+                  <span>Sistema de componentes</span>
+                  <span>Desktop + Mobile</span>
+                </div>
+                <span class="case-project-overlay__cta">Ver case study completo &nearr;</span>
+              } @else if (false) {
+                <strong class="civitas-overlay-title">
+                  <span class="civitas-overlay-title__main">LicitaNow</span>
+                  <span class="civitas-overlay-title__subtitle">Plataforma para o setor da constru&ccedil;&atilde;o</span>
+                </strong>
+                <small>UI/UX &middot; Front-end</small>
+                <div class="case-project-overlay__metrics">
+                  <span>Redesign de Landing Page</span>
+                  <span>UI/UX + Front-end</span>
+                  <span>Desktop</span>
+                </div>
+                <span class="case-project-overlay__cta">Ver case study completo &nearr;</span>
+              } @else if (false) {
+                <strong class="civitas-overlay-title">
+                  <span class="civitas-overlay-title__main">Smart Charging</span>
+                  <span class="civitas-overlay-title__subtitle">Gest&atilde;o inteligente de carregamentos</span>
+                </strong>
+                <small>Produto SaaS &middot; UI/UX &middot; Front-end</small>
+                <div class="case-project-overlay__metrics">
+                  <span>Gest&atilde;o de carregamentos el&eacute;tricos</span>
+                  <span>para frotas autom&oacute;veis.</span>
+                </div>
+                <span class="case-project-overlay__status">Case study brevemente dispon&iacute;vel</span>
+              }
+            </div>
 
-      <p>{{ selectedService.description }}</p>
+            <div class="civitas-case-visual" aria-hidden="true">
+              <div class="civitas-print-shadow-shell civitas-mobile-shadow-shell">
+                <img class="civitas-case-image civitas-case-image--secondary"
+                  src="/projects/civitas/Dashboard%202%20(1).png" alt="" loading="lazy" decoding="async">
+                <span class="civitas-screen-overlay civitas-screen-overlay--overview-3">
+                  @for (metric of [{value:'1.8',progress:72},{value:'0.9',progress:64},{value:'1.5',progress:81}]; track $index) {
+                    <span class="civitas-screen-ring civitas-screen-ring--{{ $index + 1 }}">
+                      <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="civitas-screen-ring__track" cx="50" cy="50" r="44"/><circle class="civitas-screen-ring__progress" cx="50" cy="50" r="44" pathLength="100" [attr.stroke-dasharray]="metric.progress + ' ' + (100 - metric.progress)"/></svg>
+                      <span class="civitas-screen-value">{{ metric.value }} kW</span>
+                    </span>
+                  }
+                  <span class="civitas-screen-flow civitas-screen-flow--one civitas-screen-flow--green" aria-hidden="true"><i></i><i></i></span>
+                  <span class="civitas-screen-flow civitas-screen-flow--two civitas-screen-flow--red" aria-hidden="true"><i></i><i></i></span>
+                  @for (tag of [0,1,2]; track tag) {
+                    <span class="civitas-screen-status civitas-overview-status civitas-overview-status--{{ tag + 1 }}" [class.is-positive]="tag === 1">
+                      <span class="civitas-screen-status__negative">&#9660; -52.62%</span>
+                      <span class="civitas-screen-status__positive">&#9650; +18.40%</span>
+                    </span>
+                  }
+                </span>
+              </div>
+              <div class="civitas-print-shadow-shell civitas-dashboard-shadow-shell">
+                <img class="civitas-case-image civitas-case-image--main"
+                  src="projects/civitas/civitas_painel.png" alt="" loading="lazy" decoding="async">
+                <span class="civitas-screen-overlay civitas-screen-overlay--panel">
+                  @for (tag of [0,1,2,3,4,5,6]; track tag) {
+                    <span class="civitas-screen-status civitas-screen-status--{{ tag + 1 }}" [class.is-positive]="tag === 2 || tag === 5">
+                      <span class="civitas-screen-status__negative">&#9660; -52.62%</span>
+                      <span class="civitas-screen-status__positive">&#9650; +18.40%</span>
+                    </span>
+                  }
+                </span>
+              </div>
+            </div>
 
-      <a
-        href="#contacto"
-        class="service-sheet-cta"
-        (click)="closeService()">
-        Pedir proposta
-      </a>
+            <div class="licitanow-case-visual" aria-hidden="true">
+              <div class="licitanow-case-visual__group">
+                <img class="licitanow-case-image licitanow-case-image--before"
+                  src="/projects/licita/Frame%206.png" alt="" loading="lazy" decoding="async">
+                <img class="licitanow-case-image licitanow-case-image--after"
+                  src="/projects/licita/Frame%206%20(1).png" alt="" loading="lazy" decoding="async">
+              </div>
+            </div>
+
+            <div class="smart-charging-case-visual" aria-hidden="true">
+              <div class="smart-charging-case-visual__group">
+                <img class="smart-charging-case-image smart-charging-case-image--view-one"
+                  src="/projects/smartcharging/Frame%20120.png" alt="" loading="lazy" decoding="async">
+                <img class="smart-charging-case-image smart-charging-case-image--view-two"
+                  src="/projects/smartcharging/Frame%20139.png" alt="" loading="lazy" decoding="async">
+                <img class="smart-charging-case-image smart-charging-case-image--view-three"
+                  src="/projects/smartcharging/Group%203187%20(7).png" alt="" loading="lazy" decoding="async">
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-}
-    </section>
+  </section>
 
-    <section id="portfolio" class="section portfolio-section">
-      <div class="section-header center">
-        <p class="eyebrow">Portfólio</p>
+  <section id="processo" class="process-editorial sticky-section sticky-section--process">
+    <div class="process-inner process-sticky__inner sticky-section__panel">
+      <header class="process-intro process-sticky__header editorial-section-header">
+        <h2 class="process-sticky__title section-heading-title">PROCESSO</h2>
+        <p class="process-sticky__intro editorial-section-subtitle">Da compreens&atilde;o do problema &agrave; implementa&ccedil;&atilde;o.</p>
+      </header>
 
-        <h2>Projetos digitais criados para marcas com ambição.</h2>
-
-        <p>
-          Uma seleção de trabalhos de branding, web design, desenvolvimento
-          e presença digital.
-        </p>
-      </div>
-
-      <div class="portfolio-grid">
-        @for (project of projects; track project.name) {
-          <article class="project-card reveal-card">
-            <div class="project-image">
-              <img
-                [src]="project.desktop"
-                [alt]="project.name"
-                loading="lazy"
-                decoding="async">
-            </div>
-
-            <div class="project-content">
-              <div>
-                <span>{{ project.category }}</span>
-                <h3>{{ project.name }}</h3>
-                <p>{{ project.description }}</p>
-              </div>
-
-              <div class="project-bottom">
-                <button class="project-btn" (click)="openProject(project)">
-                  Explorar projeto
-                </button>
-              </div>
-            </div>
-          </article>
-        }
-      </div>
-
-      <p class="portfolio-note">
-        * Projetos adicionais e casos de estudo disponíveis para apresentação em reunião mediante marcação.
-      </p>
-    </section>
-
-    <section id="processo" class="section process-section">
-      <p class="eyebrow">Processo</p>
-
-      <h2>Um processo claro, profissional e sem complicações.</h2>
-
-      <div class="process-grid">
-        @for (step of processSteps; track step.number) {
-          <article
-            class="process-card reveal-card"
-            [attr.data-number]="step.number">
-            <h3>{{ step.title }}</h3>
-            <p>{{ step.description }}</p>
-          </article>
-        }
-      </div>
-    </section>
-
-    <section id="contacto" class="contact-section">
-      <div class="contact-inner">
-        <div class="contact-copy">
-          <p class="eyebrow light">Contacto</p>
-
-          <h2>Vamos criar a tua próxima marca digital?</h2>
-
-          <p>
-            Preenche o formulário e recebe uma proposta <br>
-            adaptada ao teu projeto.
-          </p>
-
-          <p class="contact-direct">
-            Ou envia um email para
-            <a href="mailto:contacto@atlyon.pt">contacto@atlyon.pt</a>
-          </p>
+      <div class="process-sticky__numbers" aria-label="Etapas do processo">
+        <div class="process-section__progress-mask" aria-hidden="true">
+          <span class="process-section__progress-fill"></span>
         </div>
 
-        <form
-          #proposalForm="ngForm"
-          class="contact-form"
-          (ngSubmit)="sendProposal(proposalForm)"
-          novalidate>
-
-          <div class="form-row">
-            <input type="text" name="nome" placeholder="Nome *" required minlength="2" ngModel>
-            <input type="text" name="empresa" placeholder="Empresa / Marca *" required ngModel>
+        <div class="process-sticky__steps">
+        <div class="process-sticky__number-column" [class.is-revealed]="highestProcessStepReached >= 0" [class.is-current]="highestProcessStepReached === 0">
+          <div class="process-sticky__number-wrap">
+            <span class="process-sticky__number" data-process-text="01.">01.</span>
           </div>
-
-          <div class="form-row">
-            <input type="email" name="email" placeholder="Email *" required email ngModel>
-            <input type="tel" name="telefone" placeholder="Telefone *" required ngModel>
+          <div class="process-step__title-wrap">
+            <h3 class="process-step__title" data-process-text="Contexto &amp;&#10;Objetivos">Contexto &amp;<br>Objetivos</h3>
           </div>
-
-          <div class="select-wrap">
-            <select name="servico" required ngModel>
-              <option value="">Serviço pretendido *</option>
-              <option value="Logótipo">Logótipo</option>
-              <option value="Branding">Branding</option>
-              <option value="Website">Website</option>
-              <option value="Loja Online">Loja Online</option>
-              <option value="Solução Digital Personalizada">Solução Digital Personalizada</option>
-              <option value="Prestação de Serviços">Prestação de Serviços</option>
-              <option value="Outro">Outro</option>
-            </select>
+          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 0">Compreendo o problema, os objetivos, o utilizador e os requisitos para definir prioridades antes de avan&ccedil;ar.</p>
+        </div>
+        <div class="process-sticky__number-column" [class.is-revealed]="highestProcessStepReached >= 1" [class.is-current]="highestProcessStepReached === 1">
+          <div class="process-sticky__number-wrap">
+            <span class="process-sticky__number" data-process-text="02.">02.</span>
           </div>
-
-          <textarea
-            name="mensagem"
-            rows="6"
-            placeholder="Fala-me um pouco sobre o projeto... *"
-            required
-            minlength="10"
-            ngModel></textarea>
-
-          <input
-            type="text"
-            name="website"
-            class="hidden-field"
-            tabindex="-1"
-            autocomplete="off"
-            ngModel>
-
-          @if (formError) {
-            <p class="form-message error">{{ formError }}</p>
-          }
-
-          @if (formSuccess) {
-            <p class="form-message success">{{ formSuccess }}</p>
-          }
-
-          <button type="submit" [disabled]="proposalForm.invalid || isSubmitting">
-            {{ isSubmitting ? 'A enviar...' : 'Pedir proposta' }}
-          </button>
-        </form>
+          <div class="process-step__title-wrap">
+            <h3 class="process-step__title" data-process-text="Estrat&eacute;gia &amp;&#10;Dire&ccedil;&atilde;o">Estrat&eacute;gia &amp;<br>Dire&ccedil;&atilde;o</h3>
+          </div>
+          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 1">Estruturo a abordagem, exploro solu&ccedil;&otilde;es e defino uma dire&ccedil;&atilde;o visual e funcional alinhada com o projeto.</p>
+        </div>
+        <div class="process-sticky__number-column" [class.is-revealed]="highestProcessStepReached >= 2" [class.is-current]="highestProcessStepReached === 2">
+          <div class="process-sticky__number-wrap">
+            <span class="process-sticky__number" data-process-text="03.">03.</span>
+          </div>
+          <div class="process-step__title-wrap">
+            <h3 class="process-step__title" data-process-text="Design &amp;&#10;Desenvolvimento">Design &amp;<br>Desenvolvimento</h3>
+          </div>
+          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 2">Transformo a dire&ccedil;&atilde;o definida em interfaces e experi&ecirc;ncias digitais, aproximando design e implementa&ccedil;&atilde;o.</p>
+        </div>
+        <div class="process-sticky__number-column" [class.is-revealed]="highestProcessStepReached >= 3" [class.is-current]="highestProcessStepReached === 3">
+          <div class="process-sticky__number-wrap">
+            <span class="process-sticky__number" data-process-text="04.">04.</span>
+          </div>
+          <div class="process-step__title-wrap">
+            <h3 class="process-step__title" data-process-text="Valida&ccedil;&atilde;o &amp;&#10;Entrega">Valida&ccedil;&atilde;o &amp;<br>Entrega</h3>
+          </div>
+          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 3">Refino a solu&ccedil;&atilde;o, valido os principais detalhes e preparo o trabalho para implementa&ccedil;&atilde;o, entrega ou evolu&ccedil;&atilde;o.</p>
+        </div>
+        </div>
       </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="footer-brand">
-      <img src="projects/logo/logo_branco_vertical.png" alt="Atlyon Digital">
-      <p>
-        Criamos marcas digitais fortes para negócios que querem crescer
-        com clareza, presença e confiança.
-      </p>
     </div>
+  </section>
 
-    <div class="footer-column">
-      <strong>Navegação</strong>
-      <a href="#servicos">Serviços</a>
-      <a href="#portfolio">Portfólio</a>
-      <a href="#processo">Processo</a>
-      <a href="#contacto">Pedir proposta</a>
-    </div>
+  <section id="servicos" class="services-scene sticky-section sticky-section--services">
+    <div class="services-scene__viewport sticky-section__panel">
+      <div class="services-scene__sticky">
+      <div class="services-scene__content">
+        <header class="services-scene__header editorial-section-header">
+          <div class="services-scene__heading-group">
+            <h2 class="services-scene__title section-heading-title">ESPECIALIZAÇÃO</h2>
+            <p class="services-scene__intro editorial-section-subtitle">Estrat&eacute;gia, design e tecnologia aplicados a produtos digitais.</p>
+          </div>
+        </header>
 
-    <div class="footer-column footer-contact">
-      <strong>Contacto</strong>
-      <a href="mailto:contacto@atlyon.pt">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="3" y="5" width="18" height="14" rx="2"/>
-          <path d="M3 7l9 6 9-6"/>
+        <div class="services-scene__grid">
+        <svg class="services-scene__graphic-sprite" aria-hidden="true">
+          <defs>
+            <symbol id="service-graphic-branding" viewBox="0 0 52 48">
+              <rect x="5" y="7" width="20" height="20" rx="1"></rect>
+              <rect x="17" y="19" width="20" height="20" rx="1"></rect>
+              <path d="M31 7h16v16M39 7v16M31 15h16"></path>
+            </symbol>
+            <symbol id="service-graphic-ui-ux-design" viewBox="0 0 52 48">
+              <rect x="4" y="6" width="19" height="28" rx="2"></rect>
+              <rect x="29" y="14" width="19" height="28" rx="2"></rect>
+              <path d="M9 12h9M9 18h6M34 20h9M34 26h6M23 24h6"></path>
+              <circle cx="26" cy="24" r="2"></circle>
+            </symbol>
+            <symbol id="service-graphic-front-end-development" viewBox="0 0 52 48">
+              <path d="M17 8 6 24l11 16M35 8l11 16-11 16M30 5 22 43"></path>
+              <path d="M20 15h8M18 24h10M24 33h8"></path>
+            </symbol>
+            <symbol id="service-graphic-graphic-design" viewBox="0 0 52 48">
+              <rect x="5" y="6" width="42" height="36" rx="1"></rect>
+              <circle cx="17" cy="18" r="6"></circle>
+              <path d="M29 13h12M29 19h9M11 31h30M11 36h19"></path>
+            </symbol>
+            <symbol id="service-graphic-saas-products" viewBox="0 0 52 48">
+              <rect x="4" y="5" width="17" height="14" rx="2"></rect>
+              <rect x="31" y="5" width="17" height="14" rx="2"></rect>
+              <rect x="4" y="29" width="17" height="14" rx="2"></rect>
+              <rect x="31" y="29" width="17" height="14" rx="2"></rect>
+              <path d="M21 12h10M12.5 19v10M39.5 19v10M21 36h10"></path>
+            </symbol>
+            <symbol id="service-graphic-websites" viewBox="0 0 52 48">
+              <rect x="4" y="6" width="44" height="36" rx="2"></rect>
+              <path d="M4 14h44M10 10h1M15 10h1M20 10h1M10 20h19M10 26h12M34 20h8v15h-8M10 34h19"></path>
+            </symbol>
+          </defs>
         </svg>
-        contacto@atlyon.pt
-      </a>
-      <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z"/>
-        </svg>
-        LinkedIn
-      </a>
-      <a
-        href="https://www.instagram.com/atlyondigital?igsh=MWxzY3pybGV1Zno5Nw%3D%3D&amp;utm_source=qr"
-        target="_blank"
-        rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="3" y="3" width="18" height="18" rx="5"/>
-          <circle cx="12" cy="12" r="4"/>
-          <circle cx="17.5" cy="6.5" r="1"/>
-        </svg>
-        Instagram
-      </a>
-    </div>
+        <div class="services-scene__row services-scene__row--top">
+          @for (service of services.slice(0, 3); track service.id) {
+            <article
+              class="services-scene__item"
+              role="button"
+              tabindex="0"
+              [attr.aria-label]="'Falar sobre ' + service.title"
+              (click)="openProjectChatForService(service)"
+              (keydown.enter)="openProjectChatForService(service)"
+              (keydown.space)="$event.preventDefault(); openProjectChatForService(service)">
+              <svg class="services-scene__item-graphic" viewBox="0 0 52 48" aria-hidden="true" focusable="false">
+                <use [attr.href]="'#service-graphic-' + service.id"></use>
+              </svg>
+              <h3 class="services-scene__item-title">{{ service.title }}</h3>
+              <p class="services-scene__item-description">{{ service.description }}</p>
+            </article>
+          }
+        </div>
 
-    <div class="footer-bottom">
-      <span>© 2026 Atlyon Digital. Todos os direitos reservados.</span>
+        <div class="services-scene__row services-scene__row--bottom">
+          @for (service of services.slice(3, 6); track service.id) {
+            <article
+              class="services-scene__item"
+              role="button"
+              tabindex="0"
+              [attr.aria-label]="'Falar sobre ' + service.title"
+              (click)="openProjectChatForService(service)"
+              (keydown.enter)="openProjectChatForService(service)"
+              (keydown.space)="$event.preventDefault(); openProjectChatForService(service)">
+              <svg class="services-scene__item-graphic" viewBox="0 0 52 48" aria-hidden="true" focusable="false">
+                <use [attr.href]="'#service-graphic-' + service.id"></use>
+              </svg>
+              <h3 class="services-scene__item-title">{{ service.title }}</h3>
+              <p class="services-scene__item-description">{{ service.description }}</p>
+            </article>
+          }
+        </div>
+        </div>
+      </div>
     </div>
-  </footer>
+    </div>
+  </section>
 
-  <button class="back-top" (click)="scrollTop()" aria-label="Voltar ao topo">
-    ↑
-  </button>
+  <div class="services-footer-gap" aria-hidden="true"></div>
+</main>
+
 }
 
 @if (selectedProject) {
-  <app-project-case
-    [project]="selectedProject"
-    (back)="closeProject()">
-  </app-project-case>
+@if (selectedProject.slug === 'licitanow') {
+<app-licitanow-case></app-licitanow-case>
+} @else if (selectedProject.slug === 'smart-charging') {
+<main class="smart-charging-teaser">
+  <section class="smart-charging-teaser__hero">
+    <div class="smart-charging-teaser__glow" aria-hidden="true"></div>
+    <div class="smart-charging-teaser__inner">
+      <div class="smart-charging-teaser__copy">
+        <h1>SMART CHARGING</h1>
+        <h2>Gest&atilde;o inteligente de carregamentos</h2>
+        <span class="smart-charging-teaser__meta">Produto SaaS &middot; UI/UX &middot; Front-end</span>
+        <p>Produto digital para gest&atilde;o de carregamentos el&eacute;tricos de frotas autom&oacute;veis.</p>
+        <span class="smart-charging-teaser__status">BREVEMENTE DISPON&Iacute;VEL</span>
+      </div>
+      <div class="smart-charging-teaser__visual" aria-hidden="true">
+        <img class="smart-charging-teaser__image smart-charging-teaser__image--secondary"
+          src="/projects/smart_charging.png" alt="">
+        <img class="smart-charging-teaser__image smart-charging-teaser__image--primary"
+          src="/projects/hero/hero_smartcharging.png" alt="">
+      </div>
+    </div>
+  </section>
+</main>
+} @else {
+<app-project-case [project]="selectedProject" (back)="closeProject()">
+</app-project-case>
 }
+}
+
+<nav class="social-rail" [class.project-page]="selectedProject" aria-label="Redes sociais">
+  <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener" aria-label="LinkedIn">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z"/></svg>
+  </a>
+  <a href="mailto:joana@atlyon.pt" aria-label="Email">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+  </a>
+</nav>
+
+<footer class="site-footer" id="contacto">
+  <div class="site-footer__main">
+    <div class="site-footer__brand">
+      <div class="site-footer__logo" role="img" aria-label="Atlyon Digital">
+        <img class="site-footer__logo-static" src="/projects/logo/Group 3187 (8).png" alt="Atlyon Digital">
+      </div>
+      <div class="site-footer__brand-contacts">
+        <a href="mailto:joanacastro.webdeveloper@gmail.com">joanacastro.webdeveloper@gmail.com</a>
+        <a href="tel:+351935665281">+351 935 665 281</a>
+      </div>
+    </div>
+
+    <nav class="site-footer__column site-footer__navigation" aria-label="Navega&ccedil;&atilde;o do rodap&eacute;">
+      <p class="site-footer__column-title">NAVEGA&Ccedil;&Atilde;O</p>
+      <a href="#">In&iacute;cio</a>
+      <a href="#sobre">Sobre Mim</a>
+      <a href="#portfolio">Projetos</a>
+      <a href="#processo">Processo</a>
+      <a href="#servicos">Especializa&ccedil;&atilde;o</a>
+    </nav>
+
+    <div class="site-footer__column site-footer__resources">
+      <p class="site-footer__column-title">RECURSOS</p>
+      <a href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z" />
+        </svg>
+        LinkedIn
+      </a>
+      <a class="site-footer__cv" href="Joana_Castro_CV_2025.pdf" download>DESCARREGAR CV <span aria-hidden="true">&nearr;</span></a>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <p>&copy; 2026 ATLYON DIGITAL</p>
+    <p>DESIGN &amp; DESENVOLVIMENTO &mdash; JOANA CASTRO</p>
+  </div>
+</footer>
+
+<div class="project-chat" [class.is-open]="projectChatOpen" [class.is-closing]="projectChatClosing" [class.is-dragging]="projectChatDragging">
+  <button
+    type="button"
+    class="project-chat-fab project-chat-fab--footer-safe"
+    [attr.aria-expanded]="projectChatOpen"
+    aria-label="Abrir ou fechar conversa"
+    aria-controls="project-chat-panel"
+    (click)="projectChatOpen ? closeProjectChat() : openProjectChat()">
+    <svg class="project-chat-fab__chat-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 5.5h14v10H10l-4.5 3v-3H5v-10Z"></path>
+      <path d="M8.5 9.5h7M8.5 12.5h4.5"></path>
+    </svg>
+  </button>
+
+  @if (projectChatOpen || projectChatClosing) {
+  <button
+    type="button"
+    class="project-chat__overlay"
+    aria-label="Fechar conversa"
+    (click)="closeProjectChat()"></button>
+  <section
+    id="project-chat-panel"
+    class="project-chat__panel"
+    [style.--project-chat-drag-y.px]="projectChatDragOffset"
+    role="dialog"
+    aria-modal="false"
+    aria-labelledby="project-chat-title">
+      <header
+        class="project-chat__header"
+        (pointerdown)="onProjectChatDragStart($event)"
+        (pointermove)="onProjectChatDragMove($event)"
+        (pointerup)="onProjectChatDragEnd($event)"
+        (pointercancel)="onProjectChatDragEnd($event)">
+        <div class="project-chat__header-profile">
+          <svg class="project-chat__header-symbol" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 5.5h14v10H10l-4.5 3v-3H5v-10Z"></path>
+            <path d="M8.5 9.5h7M8.5 12.5h4.5"></path>
+          </svg>
+          <div class="project-chat__header-copy">
+            <h2 id="project-chat-title" class="project-chat__header-title">Vamos falar</h2>
+            <p class="project-chat__header-subtitle">Contacto profissional, projetos ou oportunidades.</p>
+          </div>
+        </div>
+        <button type="button" class="project-chat__close" aria-label="Fechar conversa" (click)="closeProjectChat()">&times;</button>
+      </header>
+
+      <div class="project-chat__progress" aria-hidden="true">
+        <span [style.width.%]="projectChatSent ? 100 : (projectChatStep / 5) * 100"></span>
+      </div>
+
+      <div #projectChatBody class="project-chat__body" aria-live="polite">
+        @for (message of projectChatMessages; track message.id) {
+          @if (message.sender === 'assistant') {
+            <div class="project-chat__message project-chat__message--agent">
+              @if (message.intro) {
+                <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
+              }
+              <div>
+                @if (message.intro) {
+                  <div class="project-chat__intro-message">
+                    <p class="project-chat__intro-name">Ol&aacute;, sou a Joana</p>
+                    <p class="project-chat__intro-role">UI/UX Designer &amp; Front-end Developer</p>
+                    <p>Trabalho entre design e desenvolvimento, criando interfaces, produtos digitais e experi&ecirc;ncias web.</p>
+                    <p>Se est&aacute;s a recrutar, tens um projeto ou simplesmente queres saber mais sobre o meu trabalho, escolhe uma op&ccedil;&atilde;o abaixo.</p>
+                    <p class="project-chat__intro-question">O que procuras?</p>
+                  </div>
+                } @else {
+                  <small>JOANA</small>
+                  <p class="project-chat__message-text">{{ message.text }}</p>
+                }
+                @if (message.actions?.length) {
+                  <div
+                    class="project-chat-suggestions"
+                    [class.project-chat-suggestions--initial]="message.intro">
+                    @for (action of message.actions; track action.id) {
+                      @if (action.href) {
+                        <a class="project-chat-suggestion" [href]="action.href" [attr.download]="action.download ? '' : null" [attr.target]="action.href.startsWith('http') ? '_blank' : null" [attr.rel]="action.href.startsWith('http') ? 'noopener noreferrer' : null">{{ action.label }}</a>
+                      } @else {
+                        <button
+                          type="button"
+                          class="project-chat-suggestion"
+                          (click)="handleProjectChatAction(action.action)">{{ action.label }}</button>
+                      }
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          } @else {
+            <div class="project-chat__message project-chat__message--user">
+              <p>{{ message.text }}</p>
+            </div>
+          }
+        }
+
+        @if (projectChatSent) {
+          <div class="project-chat__message project-chat__message--agent">
+            <div>
+              <small>JOANA</small>
+              <p>Obrigada, {{ projectChat.name }}. O teu pedido ficou preparado.</p>
+              <p class="project-chat__muted">A liga&ccedil;&atilde;o ao servi&ccedil;o de email ser&aacute; adicionada numa pr&oacute;xima fase.</p>
+            </div>
+          </div>
+          <button type="button" class="project-chat__primary" (click)="resetProjectChat()">NOVA CONVERSA</button>
+        } @else {
+          @if (projectChatStep === 1) {
+            <div class="project-chat__message project-chat__message--agent">
+              <div><small>JOANA</small><p>Que tipo de projeto tens em mente?</p></div>
+            </div>
+            <div class="project-chat__options">
+              @for (option of projectTypeOptions; track option) {
+                <button type="button" (click)="chooseProjectType(option)">{{ option }}</button>
+              }
+            </div>
+          }
+
+          @if (projectChatStep === 2) {
+            <div class="project-chat__message project-chat__message--agent">
+              <div><small>JOANA</small><p>O que gostarias de criar ou melhorar?</p></div>
+            </div>
+          }
+
+          @if (projectChatStep === 3) {
+            <div class="project-chat__message project-chat__message--agent">
+              <div><small>JOANA</small><p>Qual &eacute; o investimento previsto?</p></div>
+            </div>
+            <div class="project-chat__options">
+              @for (option of projectBudgetOptions; track option) {
+                <button type="button" (click)="chooseProjectBudget(option)">{{ option }}</button>
+              }
+            </div>
+          }
+
+          @if (projectChatStep === 4) {
+            <div class="project-chat__message project-chat__message--agent">
+              <div><small>JOANA</small><p>Perfeito. Como te posso contactar?</p></div>
+            </div>
+            <div class="project-chat__fields">
+              <label>Nome<input type="text" [(ngModel)]="projectChat.name" autocomplete="name" placeholder="O teu nome"></label>
+              <label>Email<input type="email" [(ngModel)]="projectChat.email" autocomplete="email" placeholder="nome@email.com"></label>
+            </div>
+            @if (projectChatError) { <p class="project-chat__error">{{ projectChatError }}</p> }
+            <button type="button" class="project-chat__primary" (click)="continueProjectChat()">REVER PEDIDO <span>&rarr;</span></button>
+          }
+
+          @if (projectChatStep === 5) {
+            <div class="project-chat__message project-chat__message--agent">
+              <div><small>JOANA</small><p>Est&aacute; tudo certo, {{ projectChat.name }}?</p></div>
+            </div>
+            <dl class="project-chat__summary">
+              <div><dt>Projeto</dt><dd>{{ projectChat.type }}</dd></div>
+              <div><dt>Investimento</dt><dd>{{ projectChat.budget }}</dd></div>
+              <div><dt>Objetivo</dt><dd>{{ projectChat.goal }}</dd></div>
+              <div><dt>Contacto</dt><dd>{{ projectChat.email }}</dd></div>
+            </dl>
+            <button type="button" class="project-chat__primary" (click)="submitProjectChat()">ENVIAR PEDIDO <span>&nearr;</span></button>
+          }
+
+          @if (projectChatStep > 0 && projectChatStep !== 2) {
+            <button type="button" class="project-chat__back" (click)="previousProjectChatStep()">&larr; Voltar</button>
+          }
+        }
+      </div>
+
+      @if (!projectChatSent) {
+        <form class="project-chat__composer" (ngSubmit)="sendProjectChatMessage()">
+          <textarea
+            name="projectChatInput"
+            [(ngModel)]="projectChatInput"
+            rows="1"
+            placeholder="Escreve uma mensagem..."
+            aria-label="Mensagem"
+            (keydown)="onProjectChatInputKeydown($event)"></textarea>
+          <button type="submit" aria-label="Enviar mensagem" [disabled]="!projectChatInput.trim()">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 11.5 21 3l-7.5 18-2.2-7.3L3 11.5Z"></path>
+              <path d="m11.3 13.7 4.8-4.8"></path>
+            </svg>
+          </button>
+        </form>
+      }
+  </section>
+  }
+</div>

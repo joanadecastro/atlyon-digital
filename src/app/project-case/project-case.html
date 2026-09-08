@@ -1,199 +1,413 @@
-<main class="case-page" [style.--accent]="project.accent || '#fd643a'">
-  <button class="back-btn" type="button" (click)="goBack()">← Voltar</button>
+<main class="civitas-page">
+  <section class="civitas-hero">
+    <div class="civitas-hero__surface">
+      <div class="civitas-hero__glow" aria-hidden="true"></div>
+      <div class="civitas-hero__inner case-shell">
+        <header class="civitas-hero__copy civitas-reveal">
+          <h1>CIVITAS</h1>
+          <p class="civitas-hero__product">Painel Energético</p>
+          <p class="civitas-hero__disciplines">UI/UX &middot; Front-end</p>
+          <p class="civitas-hero__description">Plataforma de monitorização energética desenvolvida para uma comunidade, transformando dados de produção, consumo e desempenho numa experiência clara, visual e de leitura imediata.</p>
+          <p class="civitas-hero__metadata"><span>2022—2023</span> &middot; Design de Produto &middot; Desktop + Mobile</p>
+          <p class="civitas-hero__technologies">Figma &middot; HTML &middot; CSS &middot; JavaScript</p>
+        </header>
 
-  <section class="case-hero" [style.background-image]="'url(' + project.background + ')'">
-    <div class="hero-overlay"></div>
-
-    <div class="case-hero-content">
-      <p>Case Study</p>
-      <h1>{{ project.name }}</h1>
-      <div class="hero-line"></div>
-      <span>Web Design & Branding</span>
-    </div>
-  </section>
-
-  <section class="case-intro">
-    <div class="intro-title">
-      <p>O desafio</p>
-      <h2>{{ project.caseTitle }}</h2>
-    </div>
-
-    <div class="intro-text">
-      <strong>{{ project.caseText }}</strong>
-      <p>{{ project.caseText2 }}</p>
-
-      <p>
-        O objetivo foi criar uma presença digital que transmitisse valor antes mesmo
-        do primeiro contacto. A experiência tinha de parecer premium, clara e fácil
-        de navegar, tanto em desktop como em mobile.
-      </p>
-
-      <p>
-        A estrutura foi pensada para apresentar serviços, reforçar confiança,
-        destacar a identidade visual da marca e guiar o utilizador até à conversão.
-      </p>
-    </div>
-  </section>
-
-  <section class="case-orange">
-    <section
-      class="case-showcase"
-      [class.has-video]="project.caseVideo">
-      <div class="showcase-copy">
-        <p>Showcase</p>
-        <h2>Design digital aplicado à marca.</h2>
-        <span></span>
-        <h3>Web Design & Branding</h3>
-      </div>
-
-      <div #showcaseStage class="showcase-stage">
-        @if (!project.caseVideo) {
-          <div class="hover-hint">
-            <span></span>
-            <span></span>
-          </div>
-        }
-
-        <div class="desktop-mockup">
-          @if (project.caseVideo) {
-            <div class="hover-hint video-hint">
-              <span></span>
-            </div>
-          }
-
-          <div class="imac-scroll">
-            @if (project.caseVideo) {
-              <video
-                [src]="project.caseVideo"
-                autoplay
-                muted
-                loop
-                playsinline
-                disablePictureInPicture
-                disableRemotePlayback
-                controlsList="nodownload noplaybackrate">
-              </video>
-            } @else {
-              <img [src]="project.desktop" [alt]="project.name + ' desktop'">
-            }
-          </div>
-        </div>
-
-        @if (!project.hideMobileMockup) {
-          <div class="iphone">
-            <div class="iphone-notch"></div>
-
-            <div class="iphone-screen">
-              <div class="iphone-scroll">
-                <img [src]="project.mobile" [alt]="project.name + ' mobile'">
+        <div class="cover-panel" aria-label="Interfaces Civitas">
+          <div class="cover-panel__cycle">
+            <img class="cover-panel__desktop cover-panel__desktop--one" src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Dashboard Civitas — vista geral">
+            <div #heroFlowOverlay class="cover-panel__overview-overlay compact-flow-overlay" aria-hidden="true">
+              <div class="hero-indicator-grid">
+                <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="1.8">0.0 kW</span></div>
+                <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="0.9">0.0 kW</span></div>
+                <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="1.5">0.0 kW</span></div>
               </div>
+              <span class="compact-flow-arrow compact-flow-arrow--one compact-flow-arrow--green"><i></i><i></i><i></i></span><span class="compact-flow-arrow compact-flow-arrow--two compact-flow-arrow--red"><i></i><i></i><i></i></span>
+            </div>
+            <img class="cover-panel__desktop cover-panel__desktop--two" src="/projects/civitas/civitas_painel.png" alt="Dashboard Civitas — painel">
+            <div #heroPanelTags class="cover-panel__panel-overlay compact-flow-overlay" aria-hidden="true">
+              <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
             </div>
           </div>
-        }
-
-        <div class="scroll-callout">
-          <span></span>
-          <small>Scroll</small>
         </div>
       </div>
-    </section>
-
-    @if (project.desktop2 && project.mobile2 && !project.caseVideo) {
-      <section class="case-showcase shopping-showcase">
-        <div class="showcase-copy">
-          <p>Showcase</p>
-          <h2>Compra fluida em qualquer ecrã.</h2>
-          <span></span>
-          <h3>Shopping Cart</h3>
-        </div>
-
-        <div #showcaseStage class="showcase-stage">
-          <div class="hover-hint">
-            <span></span>
-            <span></span>
-          </div>
-
-          <div class="desktop-mockup">
-            <div class="imac-scroll">
-              <img [src]="project.desktop2" [alt]="project.name + ' shopping cart desktop'">
-            </div>
-          </div>
-
-          <div class="iphone">
-            <div class="iphone-notch"></div>
-
-            <div class="iphone-screen">
-              <div class="iphone-scroll">
-                <img [src]="project.mobile2" [alt]="project.name + ' shopping cart mobile'">
-              </div>
-            </div>
-          </div>
-
-          <div class="scroll-callout">
-            <span></span>
-            <small>Scroll</small>
-          </div>
-        </div>
-      </section>
-    }
-
-    <section class="case-brand">
-      <h2 class="brand-main-title">Identidade visual</h2>
-
-      <div class="brand-grid">
-        <div class="colors-block">
-          <div class="block-heading">
-            <p>Cores</p>
-            <span></span>
-          </div>
-
-          <div class="color-list">
-            @for (color of project.colors; track color.name) {
-              <div class="color-item">
-                <span [style.background]="color.hex"></span>
-
-                <div>
-                  <strong>{{ color.name }}</strong>
-                  <small>{{ color.hex }} — {{ color.role }}</small>
-                </div>
-              </div>
-            }
-          </div>
-        </div>
-
-        <div class="type-block">
-          <div class="block-heading">
-            <p>Tipografia</p>
-            <span></span>
-          </div>
-
-          <h2>{{ project.primaryFont }}</h2>
-          <small>Usada para títulos, impacto visual e comunicação premium.</small>
-
-          <h3>{{ project.secondaryFont }}</h3>
-          <small>Usada para textos, navegação e elementos funcionais.</small>
-        </div>
-      </div>
-    </section>
-  </section>
-
-  <section class="case-cta">
-    <p>Próximo passo</p>
-    <h2>Pronto para elevar a tua marca?</h2>
-
-    <div>
-      <button type="button" (click)="goToContact()">
-        Pedir orçamento
-      </button>
-
-      <button type="button" (click)="goToServices()">
-        Ver serviços
-      </button>
     </div>
   </section>
 
-  <footer class="case-footer">
-    <strong>{{ project.name }}</strong>
-    <span>© 2026 Atlyon Digital</span>
-  </footer>
+  <section class="case-shell civitas-story-panel civitas-story-panel--green-test">
+    <div class="story-chapter story-challenge">
+    <div class="challenge-story">
+      <header class="challenge-header case-study-section-header editorial-section-header">
+        <span class="case-study-section-number">01.</span>
+        <h2 class="story-chapter-title case-study-section-title section-heading-title">DESAFIO</h2>
+        <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Clareza num contexto de muitos dados.</div>
+      </header>
+      <div class="challenge-content">
+        <div class="challenge-copy">
+          <p>O Civitas trabalha com um grande volume de dados, métricas e indicadores energéticos, todos relevantes para a utilização da plataforma. O desafio não era reduzir informação, mas torná-la clara, organizada e fácil de interpretar.</p>
+          <p>O trabalho de UI/UX passou por criar uma hierarquia visual capaz de reduzir a carga cognitiva: componentes consistentes, informação bem segmentada, ícones grandes e de leitura imediata e uma interface limpa, pensada para facilitar a consulta frequente sem cansar o utilizador.</p>
+        </div>
+        <div class="challenge-visuals" aria-label="Interfaces Civitas com indicadores, filtros e gráficos">
+          <img class="challenge-screen challenge-screen-main" [class.is-depth-front]="challengeFrontScreen === 'panel'" [class.is-depth-back]="challengeFrontScreen !== 'panel'" [class.is-depth-transitioning]="challengeDepthSwitching" src="/projects/civitas/civitas_painel.png" alt="Dashboard Civitas com indicadores e gráficos" role="button" tabindex="0" (click)="bringChallengeScreenToFront('panel')" (keydown.enter)="bringChallengeScreenToFront('panel')" (keydown.space)="bringChallengeScreenToFront('panel'); $event.preventDefault()">
+          <div #challengePanelTags class="challenge-screen-overlay challenge-screen-main-overlay compact-flow-overlay" [class.is-depth-front]="challengeFrontScreen === 'panel'" [class.is-depth-back]="challengeFrontScreen !== 'panel'" [class.is-depth-transitioning]="challengeDepthSwitching" aria-hidden="true">
+            <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+          </div>
+          <button type="button" class="challenge-screen-expand challenge-screen-expand--main licita-applied-comparison__expand" [class.is-depth-front]="challengeFrontScreen === 'panel'" [class.is-depth-back]="challengeFrontScreen !== 'panel'" aria-label="Ampliar dashboard Civitas com indicadores e gráficos" (click)="openChallengePreview('/projects/civitas/civitas_painel.png', 'Dashboard Civitas com indicadores e gráficos', $event)">Ampliar <span aria-hidden="true">↗</span></button>
+          <img class="challenge-screen challenge-screen-detail" [class.is-depth-front]="challengeFrontScreen === 'overview'" [class.is-depth-back]="challengeFrontScreen !== 'overview'" [class.is-depth-transitioning]="challengeDepthSwitching" src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Vista Civitas com métricas, filtros e estados" role="button" tabindex="0" (click)="bringChallengeScreenToFront('overview')" (keydown.enter)="bringChallengeScreenToFront('overview')" (keydown.space)="bringChallengeScreenToFront('overview'); $event.preventDefault()">
+          <div #challengeFlowOverlay class="challenge-screen-overlay challenge-screen-detail-overlay compact-flow-overlay" [class.is-depth-front]="challengeFrontScreen === 'overview'" [class.is-depth-back]="challengeFrontScreen !== 'overview'" [class.is-depth-transitioning]="challengeDepthSwitching" aria-hidden="true">
+            <svg class="compact-flow-ring compact-flow-ring--one" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><svg class="compact-flow-ring compact-flow-ring--two" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><svg class="compact-flow-ring compact-flow-ring--three" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
+            <span class="compact-flow-arrow compact-flow-arrow--one compact-flow-arrow--green"><i></i><i></i><i></i></span><span class="compact-flow-arrow compact-flow-arrow--two compact-flow-arrow--red"><i></i><i></i><i></i></span>
+            <span class="compact-flow-value compact-flow-value--one" data-final="1.8">0.0 kW</span><span class="compact-flow-value compact-flow-value--two" data-final="0.9">0.0 kW</span><span class="compact-flow-value compact-flow-value--three" data-final="1.5">0.0 kW</span>
+            <span class="overview-metric-state-tag compact-flow-tag compact-flow-tag--one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag compact-flow-tag compact-flow-tag--two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag compact-flow-tag compact-flow-tag--three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+          </div>
+          <button type="button" class="challenge-screen-expand challenge-screen-expand--detail licita-applied-comparison__expand" [class.is-depth-front]="challengeFrontScreen === 'overview'" [class.is-depth-back]="challengeFrontScreen !== 'overview'" aria-label="Ampliar vista Civitas com métricas, filtros e estados" (click)="openChallengePreview('/projects/civitas/Dashboard%202%20%281%29.png', 'Vista Civitas com métricas, filtros e estados', $event)">Ampliar <span aria-hidden="true">↗</span></button>
+        </div>
+      </div>
+    </div>
+
+    </div>
+
+    <div class="story-chapter story-user">
+      <div class="user-story">
+        <header class="user-copy case-study-section-header editorial-section-header">
+          <span class="case-study-section-number">02.</span>
+          <h2 class="story-chapter-title case-study-section-title section-heading-title">UTILIZADOR</h2>
+          <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Compreender o que precisa de ver, sem aumentar a complexidade.</div>
+          <p><span>A plataforma foi pensada para membros de uma comunidade energética que precisam de acompanhar produção,</span><span>consumo e desempenho regularmente, sem depender de conhecimento técnico especializado.</span></p>
+        </header>
+
+        <section class="user-profile-map" aria-label="Perfil de utilização">
+          <div class="user-profile-map__grid">
+            <article class="user-need user-need--goals"><h4>OBJETIVOS</h4><ul><li>Acompanhar produção e consumo</li><li>Consultar evolução e desempenho</li><li>Comparar diferentes períodos</li><li>Perceber rapidamente o estado da comunidade</li></ul></article>
+            <article class="user-need user-need--needs"><h4>NECESSIDADES</h4><ul><li><span>Informação imediata</span><strong>→ Hierarquia e segmentação</strong></li><li><span>Informação técnica</span><strong>→ Iconografia e leitura visual</strong></li><li><span>Diferentes contextos</span><strong>→ Filtros consistentes</strong></li><li><span>Consulta frequente</span><strong>→ Componentes reutilizáveis</strong></li></ul></article>
+            <div class="user-profile-map__person" aria-label="Utilizador da comunidade energética"><img src="/projects/civitas/user.jpg" alt=""></div>
+            <article class="user-need user-need--difficulties"><h4>DIFICULDADES</h4><ul><li>Grande volume de métricas</li><li>Diferentes contextos de análise</li><li>Relação entre produção e consumo</li><li>Informação técnica pouco imediata</li><li>Necessidade de comparar vários períodos</li></ul></article>
+            <article class="user-need user-need--behavior"><h4>COMPORTAMENTO</h4><ul><li>Consulta frequente</li><li>Compara períodos</li><li>Alterna entre diferentes contextos</li><li>Procura uma leitura rápida</li><li>Aprofunda informação apenas quando necessário</li></ul></article>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="story-chapter story-architecture">
+      <div class="architecture-intro case-study-section-header editorial-section-header">
+        <span class="case-study-section-number">03.</span>
+        <h2 class="story-chapter-title case-study-section-title section-heading-title">ARQUITETURA DA INFORMAÇÃO</h2>
+        <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Organizar diferentes níveis de informação numa estrutura simples e previsível.</div>
+        <p><span>A arquitetura foi organizada para permitir navegar entre visão geral, métricas, gestão e diferentes contextos</span><span>de análise sem perder consistência entre vistas.</span></p>
+      </div>
+      <div class="architecture-tree" aria-label="Arquitetura da informação do produto Civitas">
+        <div class="architecture-root">CIVITAS</div>
+        <div class="architecture-level-two architecture-modules">
+          <section class="architecture-area architecture-area--panel">
+            <h3>PAINEL</h3>
+            <div class="architecture-area__children">
+              <div class="architecture-group"><strong>CONTEXTO</strong><div class="architecture-items"><span>Comunidade</span><span>Entidades</span><span>Intervalo de Tempo</span></div></div>
+              <div class="architecture-group architecture-group--indicators"><strong>INDICADORES</strong><div class="architecture-items"><span>Energia Fotovoltaica</span><span>Quota Média</span><span>Energia Consumida</span><span>Rendimentos</span><i class="architecture-items__break" aria-hidden="true"></i><span>Produção Média</span><span>Consumo Médio</span><span>Redução de CO₂</span><span>Sistema</span></div></div>
+              <div class="architecture-group"><strong>METEOROLOGIA</strong><div class="architecture-items"><span>Localização / Porto</span><span>Temperatura</span><span>Evolução horária</span></div></div>
+              <div class="architecture-group"><strong>PREVISÃO DA PRODUÇÃO</strong><div class="architecture-items"><span>Evolução temporal da produção de energia</span></div></div>
+            </div>
+          </section>
+          <section class="architecture-area architecture-area--overview">
+            <h3>VISTA GERAL</h3>
+            <div class="architecture-area__children">
+              <div class="architecture-group"><strong>CONTEXTO</strong><div class="architecture-items"><span>Comunidade</span><span>Consumidor</span><span>Intervalo de Tempo</span></div></div>
+              <div class="architecture-group"><strong>INDICADORES AO VIVO</strong><div class="architecture-items"><span>Produção Fotovoltaica</span><span>Quota Média</span><span>Consumo Total</span><span>Rede Elétrica</span></div></div>
+              <div class="architecture-group"><strong>MÉTRICAS AGREGADAS</strong><div class="architecture-items"><span>Total Produzido por Comunidade</span><span>Total Consumido</span><span>Energia Disponível</span><span>Rendimento Total</span></div></div>
+              <div class="architecture-group"><strong>CAPITAL</strong><div class="architecture-items"><span>Rendimento de Capital</span><span>Poupança de Capital</span></div></div>
+              <div class="architecture-group architecture-group--evolution"><strong>EVOLUÇÃO</strong><div class="architecture-items"><span>Valores Médios</span></div></div>
+            </div>
+          </section>
+          <div class="architecture-scope-group">
+            <section class="architecture-area architecture-area--secondary architecture-area--reports"><h3>RELATÓRIOS</h3></section>
+            <section class="architecture-area architecture-area--secondary architecture-area--alarms"><h3>ALARMES</h3></section>
+            <section class="architecture-area architecture-area--secondary architecture-area--management"><h3>GESTÃO</h3></section>
+            <section class="architecture-area architecture-area--secondary architecture-area--account"><h3>UTILIZADOR</h3></section>
+            <aside class="architecture-scope-note">
+              <strong>ÂMBITO DO CASE STUDY</strong>
+              <p>Estas áreas são representadas para contextualizar<br>a arquitetura global do produto. O case study concentra-se<br>no Painel e na Vista Geral.</p>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-chapter story-interface-intro">
+      <header class="story-chapter-header case-study-section-header editorial-section-header">
+        <span class="case-study-section-number">04.</span>
+        <h2 class="story-chapter-title case-study-section-title section-heading-title">INTERFACE E DECIS&Otilde;ES DE DESIGN</h2>
+        <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Da arquitetura &agrave; organiza&ccedil;&atilde;o visual da informa&ccedil;&atilde;o.</div>
+        <p>A arquitetura definida anteriormente traduz-se em duas vistas principais &mdash; Painel e Vista Geral &mdash; que partilham a mesma l&oacute;gica visual, adaptando a hierarquia da informa&ccedil;&atilde;o a diferentes n&iacute;veis de leitura.</p>
+      </header>
+    </div>
+
+    <div class="story-chapter story-system story-interface-panel">
+    <div class="interface-view-label">PAINEL &middot; LEITURA IMEDIATA</div>
+    <div #panelMockupDemo class="overview-hotspot-visual panel-hotspot-visual" aria-label="Painel Civitas com explicações interativas">
+      <figure class="overview-hotspot-visual__screen panel-hotspot-visual__screen">
+        <img src="/projects/civitas/civitas_painel.png" alt="Painel completo do Civitas anotado">
+        <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--panel-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--panel-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--panel-five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--panel-six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--panel-seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+
+        <div class="overview-hotspot panel-hotspot--filters" [class.is-open]="activeOverviewHotspot === 'panel-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-1'">
+          <button type="button" aria-label="Ver explicação: Navegação e filtros" aria-describedby="panel-popover-1"
+            [attr.aria-expanded]="activeOverviewHotspot === 'panel-1'" (click)="toggleOverviewHotspot('panel-1', $event)">01</button>
+          <div class="overview-hotspot__popover" id="panel-popover-1" role="tooltip"><strong>NAVEGAÇÃO E FILTROS</strong><p>Comunidade, entidade e período definem o contexto da análise sem interferir com a leitura principal.</p></div>
+        </div>
+        <div class="overview-hotspot panel-hotspot--indicators" [class.is-open]="activeOverviewHotspot === 'panel-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-2'">
+          <button type="button" aria-label="Ver explicação: Indicadores principais" aria-describedby="panel-popover-2"
+            [attr.aria-expanded]="activeOverviewHotspot === 'panel-2'" (click)="toggleOverviewHotspot('panel-2', $event)">02</button>
+          <div class="overview-hotspot__popover" id="panel-popover-2" role="tooltip"><strong>INDICADORES PRINCIPAIS</strong><p>Uma grelha consistente permite comparar métricas diferentes. Nos cards, verde assinala uma variação positiva e vermelho uma variação negativa face ao período de referência.</p></div>
+        </div>
+        <div class="overview-hotspot panel-hotspot--weather" [class.is-open]="activeOverviewHotspot === 'panel-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-3'">
+          <button type="button" aria-label="Ver explicação: Meteorologia" aria-describedby="panel-popover-3"
+            [attr.aria-expanded]="activeOverviewHotspot === 'panel-3'" (click)="toggleOverviewHotspot('panel-3', $event)">03</button>
+          <div class="overview-hotspot__popover" id="panel-popover-3" role="tooltip"><strong>METEOROLOGIA</strong><p>Localização e temperatura acrescentam contexto ambiental à leitura da produção energética.</p></div>
+        </div>
+        <div class="overview-hotspot panel-hotspot--forecast" [class.is-open]="activeOverviewHotspot === 'panel-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-4'">
+          <button type="button" aria-label="Ver explicação: Previsão da produção" aria-describedby="panel-popover-4"
+            [attr.aria-expanded]="activeOverviewHotspot === 'panel-4'" (click)="toggleOverviewHotspot('panel-4', $event)">04</button>
+          <div class="overview-hotspot__popover" id="panel-popover-4" role="tooltip"><strong>PREVISÃO DA PRODUÇÃO</strong><p>A visualização temporal permite acompanhar a evolução prevista da produção ao longo do período selecionado.</p></div>
+        </div>
+      </figure>
+    </div>
+    <p class="interface-view-summary">A hierarquia concentra primeiro o contexto e os indicadores essenciais, deixando meteorologia e evolu&ccedil;&atilde;o temporal como informa&ccedil;&atilde;o complementar.</p>
+    </div>
+
+    <div class="story-chapter story-structure story-interface-overview">
+    <div class="structure-story">
+      <div class="interface-view-label">VISTA GERAL &middot; AN&Aacute;LISE DETALHADA</div>
+    </div>
+      <div #overviewMockupDemo class="overview-hotspot-visual" aria-label="Vista Geral Civitas com explicações interativas">
+      <figure class="overview-hotspot-visual__screen structure-screen structure-screen-main">
+        <img src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Vista Geral completa do Civitas">
+        <svg class="flow-ring flow-ring--main-one" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
+        <svg class="flow-ring flow-ring--main-two" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
+        <svg class="flow-ring flow-ring--main-three" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
+        <span class="component-flow component-flow--green overview-component-flow overview-component-flow--one component-flow--state-a" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="component-flow component-flow--red overview-component-flow overview-component-flow--one component-flow--state-b" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="component-flow component-flow--red overview-component-flow overview-component-flow--two component-flow--state-a" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="component-flow component-flow--green overview-component-flow overview-component-flow--two component-flow--state-b" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="overview-flow-value overview-flow-value--one" data-final="1.8" data-unit=" kW">0.0 kW</span><span class="overview-flow-value overview-flow-value--two" data-final="0.9" data-unit=" kW">0.0 kW</span><span class="overview-flow-value overview-flow-value--three" data-final="1.5" data-unit=" kW">0.0 kW</span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--main-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--main-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--main-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+
+        <div class="overview-hotspot overview-hotspot--context" [class.is-open]="activeOverviewHotspot === 'overview-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-1'">
+          <button type="button" aria-label="Ver explicação: Contexto" aria-describedby="overview-popover-1"
+            [attr.aria-expanded]="activeOverviewHotspot === 'overview-1'" (click)="toggleOverviewHotspot('overview-1', $event)">01</button>
+          <div class="overview-hotspot__popover" id="overview-popover-1" role="tooltip">
+            <strong>CONTEXTO</strong>
+            <p>Comunidade, consumidor e período permitem adaptar a análise ao contexto pretendido.</p>
+          </div>
+        </div>
+
+        <div class="overview-hotspot overview-hotspot--live" [class.is-open]="activeOverviewHotspot === 'overview-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-2'">
+          <button type="button" aria-label="Ver explicação: Indicadores ao vivo" aria-describedby="overview-popover-2"
+            [attr.aria-expanded]="activeOverviewHotspot === 'overview-2'" (click)="toggleOverviewHotspot('overview-2', $event)">02</button>
+          <div class="overview-hotspot__popover" id="overview-popover-2" role="tooltip">
+            <strong>INDICADORES AO VIVO</strong>
+            <p>Produção, consumo e rede são apresentados em conjunto para tornar imediato o fluxo de energia. As setas verdes indicam energia recebida e as vermelhas energia cedida.</p>
+          </div>
+        </div>
+
+        <div class="overview-hotspot overview-hotspot--metrics" [class.is-open]="activeOverviewHotspot === 'overview-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-3'">
+          <button type="button" aria-label="Ver explicação: Métricas agregadas" aria-describedby="overview-popover-3"
+            [attr.aria-expanded]="activeOverviewHotspot === 'overview-3'" (click)="toggleOverviewHotspot('overview-3', $event)">03</button>
+          <div class="overview-hotspot__popover" id="overview-popover-3" role="tooltip">
+            <strong>MÉTRICAS AGREGADAS</strong>
+            <p>Os valores acumulados acrescentam uma leitura global. Os estados verdes assinalam uma variação positiva e os vermelhos uma variação negativa face ao período de referência.</p>
+          </div>
+        </div>
+
+        <div class="overview-hotspot overview-hotspot--capital" [class.is-open]="activeOverviewHotspot === 'overview-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-4'">
+          <button type="button" aria-label="Ver explicação: Capital" aria-describedby="overview-popover-4"
+            [attr.aria-expanded]="activeOverviewHotspot === 'overview-4'" (click)="toggleOverviewHotspot('overview-4', $event)">04</button>
+          <div class="overview-hotspot__popover" id="overview-popover-4" role="tooltip">
+            <strong>CAPITAL</strong>
+            <p>Rendimento e poupança são separados das métricas energéticas para facilitar a leitura económica.</p>
+          </div>
+        </div>
+
+        <div class="overview-hotspot overview-hotspot--evolution" [class.is-open]="activeOverviewHotspot === 'overview-5'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-5'">
+          <button type="button" aria-label="Ver explicação: Evolução" aria-describedby="overview-popover-5"
+            [attr.aria-expanded]="activeOverviewHotspot === 'overview-5'" (click)="toggleOverviewHotspot('overview-5', $event)">05</button>
+          <div class="overview-hotspot__popover" id="overview-popover-5" role="tooltip">
+            <strong>EVOLUÇÃO</strong>
+            <p>A representação temporal acrescenta contexto à leitura pontual dos indicadores.</p>
+          </div>
+        </div>
+      </figure>
+    </div>
+
+    <div class="overview-variant" aria-label="Variante da Vista Geral com quatro indicadores">
+      <div class="overview-variant__caption">
+        <h3>VARIANTE &mdash; 4 INDICADORES</h3>
+        <p>Quando a Quota M&eacute;dia est&aacute; dispon&iacute;vel no contexto selecionado, a &aacute;rea de indicadores ao vivo adapta-se para apresentar uma quarta m&eacute;trica, mantendo a mesma hierarquia e estrutura visual.</p>
+      </div>
+      <figure #variantMockupDemo class="overview-variant__screen overview-variant__screen--hotspots structure-screen structure-screen-main">
+        <img src="/projects/civitas/Group%201852%20%281%29.png" alt="Vista Geral Civitas com quatro indicadores ao vivo">
+        <svg class="variant-progress-ring variant-progress-ring--one" viewBox="0 0 100 100" aria-hidden="true"><circle class="variant-progress-ring__track" cx="50" cy="50" r="44"/><circle class="variant-progress-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
+        <svg class="variant-progress-ring variant-progress-ring--two" viewBox="0 0 100 100" aria-hidden="true"><circle class="variant-progress-ring__track" cx="50" cy="50" r="44"/><circle class="variant-progress-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
+        <svg class="variant-progress-ring variant-progress-ring--three" viewBox="0 0 100 100" aria-hidden="true"><circle class="variant-progress-ring__track" cx="50" cy="50" r="44"/><circle class="variant-progress-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
+        <svg class="variant-progress-ring variant-progress-ring--four" viewBox="0 0 100 100" aria-hidden="true"><circle class="variant-progress-ring__track" cx="50" cy="50" r="44"/><circle class="variant-progress-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
+        <span class="variant-flow variant-flow--one variant-flow--green variant-flow--state-a" aria-hidden="true"><i></i><i></i><i></i></span><span class="variant-flow variant-flow--one variant-flow--red variant-flow--state-b" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="variant-flow variant-flow--two variant-flow--red variant-flow--state-a" aria-hidden="true"><i></i><i></i><i></i></span><span class="variant-flow variant-flow--two variant-flow--green variant-flow--state-b" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="variant-flow variant-flow--three variant-flow--green variant-flow--state-a" aria-hidden="true"><i></i><i></i><i></i></span><span class="variant-flow variant-flow--three variant-flow--red variant-flow--state-b" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="variant-flow-value variant-flow-value--one" data-final="1.8" data-unit=" kW">0.0 kW</span><span class="variant-flow-value variant-flow-value--two" data-final="38" data-unit="%">0%</span><span class="variant-flow-value variant-flow-value--three" data-final="0.9" data-unit=" kW">0.0 kW</span><span class="variant-flow-value variant-flow-value--four" data-final="1.5" data-unit=" kW">0.0 kW</span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--variant-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--variant-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--variant-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+        <span class="overview-metric-state-tag overview-metric-state-tag--variant-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+
+        <div class="overview-hotspot overview-hotspot--context" [class.is-open]="activeOverviewHotspot === 'overview-variant-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-1'">
+          <button type="button" aria-label="Ver explica&ccedil;&atilde;o do contexto" aria-describedby="overview-variant-popover-1" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-1'" (click)="toggleOverviewHotspot('overview-variant-1', $event)">01</button>
+          <div class="overview-hotspot__popover" id="overview-variant-popover-1" role="tooltip">
+            <strong>CONTEXTO</strong>
+            <p>Comunidade, consumidor e per&iacute;odo permitem adaptar a an&aacute;lise ao contexto pretendido.</p>
+          </div>
+        </div>
+        <div class="overview-hotspot overview-hotspot--live" [class.is-open]="activeOverviewHotspot === 'overview-variant-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-2'">
+          <button type="button" aria-label="Ver explica&ccedil;&atilde;o dos indicadores ao vivo" aria-describedby="overview-variant-popover-2" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-2'" (click)="toggleOverviewHotspot('overview-variant-2', $event)">02</button>
+          <div class="overview-hotspot__popover" id="overview-variant-popover-2" role="tooltip">
+            <strong>INDICADORES AO VIVO</strong>
+            <p>Produ&ccedil;&atilde;o, consumo e rede tornam imediato o fluxo de energia. As setas verdes indicam energia recebida e as vermelhas energia cedida.</p>
+          </div>
+        </div>
+        <div class="overview-hotspot overview-hotspot--quota" [class.is-open]="activeOverviewHotspot === 'overview-variant-quota'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-quota'">
+          <button type="button" aria-label="Ver explica&ccedil;&atilde;o da Quota M&eacute;dia" aria-describedby="overview-variant-popover-quota" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-quota'" (click)="toggleOverviewHotspot('overview-variant-quota', $event)">02A</button>
+          <div class="overview-hotspot__popover" id="overview-variant-popover-quota" role="tooltip">
+            <strong>QUOTA M&Eacute;DIA</strong>
+            <p>Quando dispon&iacute;vel no contexto selecionado, a Quota M&eacute;dia &eacute; integrada no primeiro n&iacute;vel de leitura, fazendo a grelha adaptar-se de tr&ecirc;s para quatro indicadores sem alterar a hierarquia da interface.</p>
+          </div>
+        </div>
+        <div class="overview-hotspot overview-hotspot--metrics" [class.is-open]="activeOverviewHotspot === 'overview-variant-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-3'">
+          <button type="button" aria-label="Ver explica&ccedil;&atilde;o das m&eacute;tricas agregadas" aria-describedby="overview-variant-popover-3" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-3'" (click)="toggleOverviewHotspot('overview-variant-3', $event)">03</button>
+          <div class="overview-hotspot__popover" id="overview-variant-popover-3" role="tooltip">
+            <strong>M&Eacute;TRICAS AGREGADAS</strong>
+            <p>Os valores acumulados acrescentam uma leitura global. Os estados verdes assinalam uma varia&ccedil;&atilde;o positiva e os vermelhos uma varia&ccedil;&atilde;o negativa face ao per&iacute;odo de refer&ecirc;ncia.</p>
+          </div>
+        </div>
+        <div class="overview-hotspot overview-hotspot--capital" [class.is-open]="activeOverviewHotspot === 'overview-variant-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-4'">
+          <button type="button" aria-label="Ver explica&ccedil;&atilde;o do capital" aria-describedby="overview-variant-popover-4" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-4'" (click)="toggleOverviewHotspot('overview-variant-4', $event)">04</button>
+          <div class="overview-hotspot__popover" id="overview-variant-popover-4" role="tooltip">
+            <strong>CAPITAL</strong>
+            <p>Rendimento e poupan&ccedil;a s&atilde;o separados das m&eacute;tricas energ&eacute;ticas para facilitar a leitura econ&oacute;mica.</p>
+          </div>
+        </div>
+        <div class="overview-hotspot overview-hotspot--evolution" [class.is-open]="activeOverviewHotspot === 'overview-variant-5'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-5'">
+          <button type="button" aria-label="Ver explica&ccedil;&atilde;o da evolu&ccedil;&atilde;o" aria-describedby="overview-variant-popover-5" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-5'" (click)="toggleOverviewHotspot('overview-variant-5', $event)">05</button>
+          <div class="overview-hotspot__popover" id="overview-variant-popover-5" role="tooltip">
+            <strong>EVOLU&Ccedil;&Atilde;O</strong>
+            <p>A representa&ccedil;&atilde;o temporal acrescenta contexto &agrave; leitura pontual dos indicadores.</p>
+          </div>
+        </div>
+      </figure>
+    </div>
+    <p class="interface-view-summary">A Vista Geral aprofunda a leitura, combinando indicadores em tempo real, m&eacute;tricas acumuladas, informa&ccedil;&atilde;o financeira e evolu&ccedil;&atilde;o temporal.</p>
+    </div>
+
+    <div class="story-chapter story-components">
+    <header class="story-chapter-header case-study-section-header editorial-section-header civitas-reveal">
+      <span class="case-study-section-number">05.</span>
+      <h2 class="story-chapter-title case-study-section-title section-heading-title">SISTEMA DE COMPONENTES</h2>
+      <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Uma linguagem visual consistente entre diferentes vistas.</div>
+      <p>Em vez de desenhar cada ecr&atilde; como uma composi&ccedil;&atilde;o isolada, a interface foi constru&iacute;da a partir de padr&otilde;es reutiliz&aacute;veis. Filtros, cards de m&eacute;tricas, indicadores e estados seguem a mesma l&oacute;gica visual, facilitando a leitura e mantendo consist&ecirc;ncia entre diferentes contextos.</p>
+      <p>Esta abordagem permite adaptar a quantidade e o tipo de informa&ccedil;&atilde;o sem alterar a linguagem da interface, tornando o sistema mais previs&iacute;vel para o utilizador e mais simples de evoluir.</p>
+    </header>
+    <div class="components-layout">
+      <div class="components-board component-crops">
+        <figure class="component-crop component-crop--filters"><figcaption>01 &mdash; FILTROS</figcaption><div><img src="/projects/civitas/componentes/civitas_painel%201%20(2).png" alt="Filtros de comunidade, entidades e intervalo de tempo"></div><p class="component-crop__note">Os filtros mant&ecirc;m a mesma estrutura visual entre diferentes contextos, permitindo alterar comunidade, entidade e per&iacute;odo sem modificar a l&oacute;gica de navega&ccedil;&atilde;o.</p></figure>
+        <figure class="component-crop component-crop--cards"><figcaption>02 &mdash; CARDS DE M&Eacute;TRICA</figcaption><div #metricTagsDemo><img src="/projects/civitas/componentes/civitas_painel%201.png" alt="Grelha de oito cards de m&eacute;trica Civitas"><span class="metric-state-tag metric-state-tag--one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span></div><p class="component-crop__note">Os cards seguem uma estrutura comum de t&iacute;tulo, valor, &iacute;cone e estado, permitindo comparar m&eacute;tricas diferentes atrav&eacute;s da mesma linguagem visual.</p><p class="component-crop__note">As tags de estado permitem identificar rapidamente a evolu&ccedil;&atilde;o de cada m&eacute;trica face ao per&iacute;odo de refer&ecirc;ncia. A cor e a dire&ccedil;&atilde;o da seta distinguem varia&ccedil;&otilde;es positivas e negativas, mantendo a leitura imediata entre diferentes indicadores.</p></figure>
+        <figure class="component-crop component-crop--indicators">
+          <figcaption>03 &mdash; INDICADORES E FLUXO</figcaption>
+          <div #flowMetricsDemo>
+            <img src="/projects/civitas/componentes/Group%201852%20(1)%201.png" alt="Quatro indicadores ao vivo e fluxo energ&eacute;tico Civitas">
+            <svg class="flow-ring flow-ring--green flow-ring--variant-one" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="75 25"/></svg>
+            <svg class="flow-ring flow-ring--green flow-ring--variant-two" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="38 62"/></svg>
+            <svg class="flow-ring flow-ring--red flow-ring--variant-three" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="48 52"/></svg>
+            <svg class="flow-ring flow-ring--green flow-ring--variant-four" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="82 18"/></svg>
+            <span class="component-flow component-flow--green component-flow--one component-flow--state-a" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="component-flow component-flow--red component-flow--one component-flow--state-b" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="component-flow component-flow--red component-flow--center component-flow--state-a" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="component-flow component-flow--green component-flow--center component-flow--state-b" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="component-flow component-flow--green component-flow--two component-flow--state-a" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="component-flow component-flow--red component-flow--two component-flow--state-b" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="flow-metric-value flow-metric-value--one">{{ flowMetricValues[0] }}</span>
+            <span class="flow-metric-value flow-metric-value--two">{{ flowMetricValues[1] }}</span>
+            <span class="flow-metric-value flow-metric-value--three">{{ flowMetricValues[2] }}</span>
+            <span class="flow-metric-value flow-metric-value--four">{{ flowMetricValues[3] }}</span>
+          </div>
+          <p class="component-crop__note">Os indicadores ao vivo permitem acompanhar a rela&ccedil;&atilde;o entre produ&ccedil;&atilde;o, consumo e rede, mantendo vis&iacute;vel a evolu&ccedil;&atilde;o de cada m&eacute;trica e a dire&ccedil;&atilde;o do fluxo energ&eacute;tico.</p>
+          <p class="component-crop__note">As liga&ccedil;&otilde;es adaptam-se ao estado do sistema: a cor e a orienta&ccedil;&atilde;o das setas identificam o sentido da transfer&ecirc;ncia, permitindo distinguir rapidamente energia recebida e energia cedida entre os diferentes pontos da comunidade.</p>
+        </figure>
+        <figure class="component-crop component-crop--evolution"><figcaption>04 &mdash; EVOLU&Ccedil;&Atilde;O</figcaption><div><img src="/projects/civitas/componentes/civitas_painel%201%20(1).png" alt="Previs&atilde;o meteorol&oacute;gica e evolu&ccedil;&atilde;o temporal da produ&ccedil;&atilde;o"></div><p class="component-crop__note">A informa&ccedil;&atilde;o temporal combina previs&atilde;o meteorol&oacute;gica e evolu&ccedil;&atilde;o da produ&ccedil;&atilde;o, acrescentando contexto aos valores apresentados no estado atual.</p></figure>
+      </div>
+    </div>
+    </div>
+
+    <div class="story-chapter story-responsive">
+    <header class="story-chapter-header case-study-section-header editorial-section-header civitas-reveal"><span class="case-study-section-number">06.</span><h2 class="story-chapter-title case-study-section-title section-heading-title">RESPONSIVO / MÓVEL</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">A mesma hierarquia, adaptada a ecrãs mais pequenos.</div><p>A adaptação para ecrãs mais pequenos exigiu reorganizar a informação sem perder a hierarquia definida no desktop. Os diferentes níveis de conteúdo passam a ocupar o espaço de forma sequencial, preservando prioridades, legibilidade e consistência visual.</p></header>
+    <div class="responsive-panel">
+      <div class="responsive-panel__visual">
+        <div class="responsive-compare-groups">
+          <section #responsivePanelDemo class="responsive-compare-group" aria-label="Comparação do Painel em desktop e mobile">
+            <div class="responsive-compare-row">
+              <figure class="responsive-compare-desktop"><div class="responsive-desktop-copy"><strong>DO HORIZONTAL AO SEQUENCIAL</strong><p>A estrutura em grelha do desktop transforma-se numa leitura sequencial no mobile,<br>preservando a hierarquia das m&eacute;tricas, filtros e informa&ccedil;&atilde;o temporal.</p></div><div class="responsive-desktop-media"><figcaption>PAINEL · COMPUTADOR</figcaption><span class="responsive-panel-desktop-screen"><img src="/projects/civitas/mockups_fixas/Group%201856.png" alt="Painel Civitas em desktop"></span></div></figure>
+              <span class="responsive-comparison__vs" aria-hidden="true">VS</span>
+              <figure class="responsive-compare-mobile"><figcaption>PAINEL · MÓVEL</figcaption><span class="responsive-mobile-crop"><span class="responsive-mobile-canvas responsive-mobile-canvas--panel"><img src="/projects/civitas/mockups_fixas/Overview%20mobile%202%20(1).png" alt="Painel Civitas em mobile"></span></span></figure>
+            </div>
+          </section>
+
+          <section #responsiveMobileDemo class="responsive-compare-group responsive-mobile-demo" aria-label="Comparação da Vista Geral em desktop e mobile">
+            <div class="responsive-compare-row">
+              <figure class="responsive-compare-desktop"><div class="responsive-desktop-copy"><strong>FLUXO HORIZONTAL &rarr; VERTICAL</strong><p>Os indicadores mant&ecirc;m a mesma l&oacute;gica e as rela&ccedil;&otilde;es entre produ&ccedil;&atilde;o, consumo e rede. No mobile,<br>a disposi&ccedil;&atilde;o e a dire&ccedil;&atilde;o do fluxo adaptam-se a uma leitura vertical.</p><p>A estrutura adapta-se tamb&eacute;m &agrave; disponibilidade das m&eacute;tricas, mantendo a mesma hierarquia<br>nas configura&ccedil;&otilde;es de tr&ecirc;s ou quatro indicadores.</p></div><div class="responsive-desktop-media"><figcaption>VISTA GERAL · DESKTOP</figcaption><span class="responsive-desktop-variants"><img class="responsive-variant responsive-variant--three" [class.is-active]="responsiveOverviewVariant === 0" src="/projects/civitas/mockups_fixas/Group%201853%20(1).png" alt="Vista Geral Civitas com tr&ecirc;s indicadores em desktop"><img class="responsive-variant responsive-variant--four" [class.is-active]="responsiveOverviewVariant === 1" src="/projects/civitas/mockups_fixas/Group%201851.png" alt="Vista Geral Civitas com quatro indicadores em desktop"></span></div></figure>
+              <span class="responsive-comparison__vs" aria-hidden="true">VS</span>
+              <figure class="responsive-compare-mobile"><figcaption>VISTA GERAL · MOBILE</figcaption><span class="responsive-mobile-crop"><span class="responsive-mobile-canvas responsive-mobile-canvas--flow">
+              <span class="mobile-variant-layer mobile-variant-layer--three" [class.is-active]="responsiveOverviewVariant === 0">
+                <img src="/projects/civitas/mockups_fixas/Group%201854%20(1).png" alt="Vista Geral mobile Civitas com três indicadores">
+              </span>
+              <span class="mobile-variant-layer mobile-variant-layer--four" [class.is-active]="responsiveOverviewVariant === 1">
+                <img src="/projects/civitas/mockups_fixas/Group%201855.png" alt="Vista Geral mobile Civitas com quatro indicadores">
+              </span>
+              </span></span></figure>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="story-chapter story-design-code">
+    <header class="story-chapter-header case-study-section-header editorial-section-header civitas-reveal"><span class="case-study-section-number">07.</span><h2 class="story-chapter-title case-study-section-title section-heading-title">DESIGN &rarr; CÓDIGO &rarr; RESULTADO</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Do design à experiência implementada.</div></header>
+    <div class="design-code-layout"><div class="story-copy"><p>Desenvolvido em contexto empresarial e integrado numa equipa multidisciplinar, o projeto passou do desenho da interface à implementação em front-end. A minha participação abrangeu UI/UX e desenvolvimento da interface, garantindo continuidade entre as decisões definidas em Figma e a experiência final em browser.</p><p>Por se tratar de um produto desenvolvido internamente, o código-fonte não é apresentado neste case study.</p></div><div class="design-code-diagram" aria-label="Design em Figma, desenvolvimento front-end e produto implementado">
+      <div class="design-code-stage design-code-stage--figma"><div class="design-code-icons"><svg class="design-code-icon design-code-icon--figma" viewBox="0 0 48 72" role="img" aria-label="Figma"><path fill="#F24E1E" d="M24 0h12a12 12 0 0 1 0 24H24z"/><path fill="#A259FF" d="M0 12A12 12 0 0 1 12 0h12v24H12A12 12 0 0 1 0 12z"/><path fill="#1ABCFE" d="M24 24h12a12 12 0 1 1-12 12z"/><path fill="#FF7262" d="M0 36a12 12 0 0 1 12-12h12v24H12A12 12 0 0 1 0 36z"/><path fill="#0ACF83" d="M0 60a12 12 0 0 1 12-12h12v12a12 12 0 1 1-24 0z"/></svg></div><strong>FIGMA</strong><small>UI/UX · Componentes</small></div>
+      <span class="design-code-connector" aria-hidden="true"><i></i></span>
+      <div class="design-code-stage design-code-stage--frontend"><div class="design-code-icons"><svg class="design-code-icon" viewBox="0 0 64 72" role="img" aria-label="HTML5"><path fill="#E44D26" d="M5 2h54l-5 60-22 8-22-8z"/><path fill="#F16529" d="M32 7v57l18-6 4-51z"/><path fill="#fff" d="M16 16h34l-1 8H25l1 8h22l-3 21-13 4-13-4-1-11h8l1 5 5 2 6-2 1-8H18z"/></svg><svg class="design-code-icon" viewBox="0 0 64 72" role="img" aria-label="CSS3"><path fill="#1572B6" d="M5 2h54l-5 60-22 8-22-8z"/><path fill="#33A9DC" d="M32 7v57l18-6 4-51z"/><path fill="#fff" d="M15 16h35l-1 8-22 9h21l-3 20-13 4-13-4-1-10h8l1 4 5 2 6-2 1-7H17l-1-8 21-8H16z"/></svg><svg class="design-code-icon design-code-icon--js" viewBox="0 0 72 72" role="img" aria-label="JavaScript"><rect width="72" height="72" rx="3" fill="#F7DF1E"/><path fill="#1f2328" d="M38 56c1.4 2.4 3.2 4.2 6.5 4.2 2.8 0 4.5-1.4 4.5-3.3 0-2.3-1.8-3.1-4.9-4.4l-1.7-.7c-4.9-2.1-8.1-4.7-8.1-10.2 0-5.1 3.9-9 10-9 4.3 0 7.5 1.5 9.7 5.5l-5.3 3.4c-1.2-2.1-2.5-2.9-4.4-2.9-2 0-3.3 1.3-3.3 2.9 0 2 1.3 2.8 4.2 4.1l1.7.7c5.7 2.5 9 5 9 10.7 0 6.1-4.8 9.5-11.3 9.5-6.3 0-10.4-3-12.4-7zM14 33h6.6v24c0 6.3-3.7 8-9.1 8-1.5 0-2.7-.2-3.7-.5v-6.1c.7.2 1.3.3 2.1.3 2.8 0 4.1-1.1 4.1-4.3z"/></svg></div><strong>FRONT-END</strong><small>HTML · CSS · JavaScript</small></div>
+      <span class="design-code-connector" aria-hidden="true"><i></i></span>
+      <div class="design-code-stage design-code-stage--browser"><div class="design-code-icons"><svg class="design-code-icon design-code-icon--browser" viewBox="0 0 104 72" role="img" aria-label="Produto em browser"><rect x="2" y="2" width="100" height="68" rx="7" fill="none" stroke="currentColor" stroke-width="3"/><path d="M3.5 18h97" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="13" cy="10" r="2.5" fill="currentColor"/><circle cx="22" cy="10" r="2.5" fill="currentColor"/><circle cx="31" cy="10" r="2.5" fill="currentColor"/><path d="M20 50l13-13 11 9 19-18 21 22" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><strong>PRODUTO IMPLEMENTADO</strong><small>Experiência em browser</small></div>
+    </div><p class="design-code-conclusion">Uma interface mais clara, consistente e adaptável, levada do design à implementação e preparada para uma utilização contínua em desktop e mobile.</p></div>
+    </div>
+  </section>
+
+  <a #nextProjectNav class="next-case next-case--licitanow" href="/case-studies/licitanow" aria-label="Ver o case study LicitaNow">
+    <span class="case-shell next-case__simple">
+      <span>PRÓXIMO PROJETO <b>→</b></span>
+    </span>
+  </a>
 </main>
+
+<div class="licita-image-preview" [class.is-open]="challengePreviewOpen" [attr.aria-hidden]="!challengePreviewOpen"
+  role="dialog" aria-modal="true" aria-label="Preview ampliado da interface Civitas"
+  (pointerdown)="closeChallengePreviewFromBackdrop($event)"
+  (document:keydown.escape)="closeChallengePreview()">
+  @if (challengePreviewSrc) {
+    <div class="licita-image-preview__panel" (pointerdown)="$event.stopPropagation()">
+      <button type="button" class="licita-image-preview__close" aria-label="Fechar preview" (click)="closeChallengePreview()">×</button>
+      <img [src]="challengePreviewSrc" [alt]="challengePreviewAlt">
+    </div>
+  }
+</div>

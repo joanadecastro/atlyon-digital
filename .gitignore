@@ -42,3 +42,16 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Codex / local development artifacts
+.codex-*
+.edge-hotspot-test/
+.chrome-*
+
+.angular/
+
+public/projects/licita/licita_monitorGrande (1).mp4
+
+public/projects/licita/licita_monitorGrande.mp4
+
+public/projects/licita/licita_monitorGrande (1).mp4

@@ -1,22 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
-html,
-body {
-  margin: 0;
-  padding: 0;
+:root {
+  --section-title-font-size: clamp(32px, calc(2.4vw + 2px), 42px);
+  --section-title-font-weight: 600;
+  --section-title-line-height: .92;
+  --section-title-letter-spacing: -.055em;
+  --section-title-color: #3a3f47;
+  --section-subtitle-font-size: 16px;
+  --section-subtitle-font-weight: 400;
+  --section-subtitle-line-height: 1.45;
+  --section-subtitle-letter-spacing: normal;
+  --section-subtitle-color: rgba(32, 36, 43, .58);
+  --section-header-gap: 9px;
+  --body-copy-font-size: 16px;
+  --body-copy-font-weight: 400;
+  --body-copy-line-height: 1.65;
+  --body-copy-color: #3f4347;
+  --process-number-active-font-size: 60px;
+  --process-number-font-weight: 600;
+  --process-number-line-height: .9;
+  --process-number-letter-spacing: -.075em;
+  --process-step-title-font-size: 24px;
+  --process-step-title-font-weight: 700;
+  --process-step-title-line-height: 1.08;
+  --process-step-title-letter-spacing: -.025em;
+  --process-step-title-color: #3f4347;
+}
+
+html {
   width: 100%;
   min-height: 100%;
-  background: #232429;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
+  width: 100%;
+  min-height: 100%;
   margin: 0;
+  overflow: visible;
 }
 
 app-root {
   display: block;
-  min-height: 100vh;
+  min-height: 100%;
   background: #232429;
+  overflow: visible;
 }
 
 html.sheet-open,
