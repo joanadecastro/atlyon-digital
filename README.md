@@ -1,4 +1,4 @@
-# 🚀 Atlyon Digital
+# Atlyon Digital
 
 Atlyon Digital is a modern agency website focused on **Web Design, Web Development, Branding, and Digital Solutions** for businesses looking to establish a premium online presence.
 
@@ -6,7 +6,7 @@ The goal of this project was to create a high-end digital experience that commun
 
 ---
 
-# 🎯 Project Goals
+# Project Goals
 
 - Showcase Atlyon Digital's services.
 - Present real-world projects through dedicated Case Study pages.
@@ -17,7 +17,7 @@ The goal of this project was to create a high-end digital experience that commun
 
 ---
 
-# 🛠️ Technologies Used
+# Technologies Used
 
 ## Frontend
 
@@ -38,7 +38,7 @@ The goal of this project was to create a high-end digital experience that commun
 
 ---
 
-# ✨ Features
+# Features
 
 ## Landing Page
 
@@ -76,7 +76,7 @@ Each project includes:
 
 ---
 
-# 📁 Project Structure
+# Project Structure
 
 ```txt
 src/
@@ -105,7 +105,7 @@ public/
 
 ---
 
-# 📸 Screenshots
+# Screenshots
 
 ## Homepage
 
@@ -143,7 +143,7 @@ public/
 
 ---
 
-# 🚀 Future Improvements
+# Future Improvements
 
 - EmailJS integration
 - Custom business email setup
@@ -156,7 +156,7 @@ public/
 
 ---
 
-# 👩‍💻 Author
+# Author
 
 Developed by **Joana Castro**
 
