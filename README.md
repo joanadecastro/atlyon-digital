@@ -34,13 +34,13 @@ The interface itself is part of the work being presented — combining visual di
 
 The homepage introduces the core positioning — **UI/UX & Front-end** — through a minimal, editorial interface designed to keep the focus on the work.
 
-<img src="./public/projects/readmeGithub/hero_atlyon_shadow.png" width="100%" alt="Atlyon UI UX and Front-end portfolio homepage">
+<img src="./public/projects/readmeGithub/hero_atlyon_shadow.png" width="100%" alt="Atlyon UI/UX and Front-end portfolio homepage">
 
 ---
 
 ### Selected Projects
 
-Projects are presented as direct entry points into detailed case studies, using a visual system that gives each product its own identity while maintaining consistency across the portfolio.
+Projects link directly to detailed case studies. A consistent visual system gives each product its own identity.
 
 <img src="./public/projects/readmeGithub/portfolio_atlyon_shadow.png" width="100%" alt="Atlyon selected projects">
 
@@ -48,7 +48,7 @@ Projects are presented as direct entry points into detailed case studies, using 
 
 ### Process
 
-The portfolio also communicates the workflow behind the work:
+The portfolio also presents the workflow behind each project:
 
 **Context & Objectives → Strategy & Direction → Design & Development → Validation & Delivery**
 
@@ -67,7 +67,7 @@ The project transforms energy production, consumption and performance data into 
 Key areas:
 
 - SaaS dashboard design
-- Information Architecture
+- Information architecture
 - Data visualisation
 - Reusable UI components
 - Responsive interfaces
@@ -82,7 +82,7 @@ Key areas:
 
 The product architecture was structured to organise multiple levels of information across dashboards, metrics, management and analysis contexts.
 
-<img src="./public/projects/readmeGithub/diagramaCivitas_atlyon_shadow.png" width="100%" alt="Civitas information architecture">
+<img src="./public/projects/readmeGithub/diagramaCivitas_atlyon_shadow.png" width="100%" alt="Civitas information architecture diagram">
 
 🌐 **Case study:** https://atlyon.pt/case-studies/civitas
 
@@ -99,7 +99,7 @@ Key areas:
 - User journey
 - Information prioritisation
 - Interface redesign
-- Responsive Design
+- Responsive design
 - Front-end implementation
 
 **UI/UX · Front-end**
@@ -134,7 +134,7 @@ Digital product work for a SaaS platform focused on electric-vehicle charging ma
 
 ## Responsive Experience
 
-The mobile version was treated as an experience in its own right rather than simply scaling down the desktop interface.
+The mobile version was designed as an experience in its own right, rather than a scaled-down desktop interface.
 
 Navigation, content hierarchy, project presentation, process and contact interactions were specifically adapted for smaller screens.
 
@@ -144,14 +144,14 @@ Navigation, content hierarchy, project presentation, process and contact interac
     <td align="center"><strong>Projects</strong></td>
     <td align="center"><strong>Process</strong></td>
     <td align="center"><strong>Navigation</strong></td>
-    <td align="center"><strong>Contact</strong></td>
+    <td align="center"><strong>Chat</strong></td>
   </tr>
   <tr>
-    <td><img src="./public/projects/readmeGithub/heroMobile_atlyon.png" width="180" alt="Atlyon mobile hero"></td>
-    <td><img src="./public/projects/readmeGithub/projetosMobile_atlyon.png" width="180" alt="Atlyon mobile projects"></td>
-    <td><img src="./public/projects/readmeGithub/processoMobile_atlyon.png" width="180" alt="Atlyon mobile process"></td>
-    <td><img src="./public/projects/readmeGithub/menuMobile_atlyon.png" width="180" alt="Atlyon mobile navigation"></td>
-    <td><img src="./public/projects/readmeGithub/chatMobile_atlyon.png" width="180" alt="Atlyon mobile contact experience"></td>
+    <td><img src="./public/projects/readmeGithub/heroMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile hero"></td>
+    <td><img src="./public/projects/readmeGithub/projetosMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile projects"></td>
+    <td><img src="./public/projects/readmeGithub/processoMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile process"></td>
+    <td><img src="./public/projects/readmeGithub/menuMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile navigation"></td>
+    <td><img src="./public/projects/readmeGithub/chatMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile chat interface"></td>
   </tr>
 </table>
 
@@ -230,10 +230,10 @@ Visitors can explore paths for:
 - Recruiter enquiries
 - Project quotes
 
-Project enquiries can collect relevant information such as the type of project, objective, budget, name and email before submitting the request.
+The enquiry form collects the project type, objective, budget, name and email before the visitor submits the request.
 
 <p align="center">
-  <img src="./public/projects/readmeGithub/chatMobile_atlyon.png" width="380" alt="Atlyon guided contact experience">
+  <img src="./public/projects/readmeGithub/chatMobile_atlyon_shadow.png" width="380" alt="Atlyon guided chat with visitor options">
 </p>
 
 ---
@@ -289,12 +289,12 @@ atlyon-digital/
 | Area | Technologies |
 |---|---|
 | **Framework** | Angular |
-| **Languages** | TypeScript · JavaScript · HTML |
+| **Languages** | TypeScript · JavaScript · HTML5 |
 | **Styling** | SCSS · CSS |
 | **UI/UX** | Figma · Responsive Design · Design Systems |
 | **Architecture** | Component-based UI · Reusable Interfaces |
 | **Version Control** | Git · GitHub |
-| **AI Workflow** | Claude Code · OpenAI Codex · Google Stitch |
+| **AI-Assisted Workflow** | Claude Code · OpenAI Codex · Google Stitch |
 | **Deployment** | Netlify |
 
 ---
@@ -313,11 +313,7 @@ Run the development server:
 ng serve
 ```
 
-Open:
-
-```txt
-http://localhost:4200
-```
+Open the local address shown in the terminal.
 
 Create a production build:
 
