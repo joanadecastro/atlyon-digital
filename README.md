@@ -34,7 +34,7 @@ The interface itself is part of the work being presented — combining visual di
 
 The homepage introduces the core positioning — **UI/UX & Front-end** — through a minimal, editorial interface designed to keep the focus on the work.
 
-<img src="./public/projects/readmeGithub/hero_atlyon.png" width="100%" alt="Atlyon UI UX and Front-end portfolio homepage">
+<img src="./public/projects/readmeGithub/hero_atlyon_shadow.png" width="100%" alt="Atlyon UI UX and Front-end portfolio homepage">
 
 ---
 
@@ -42,7 +42,7 @@ The homepage introduces the core positioning — **UI/UX & Front-end** — throu
 
 Projects are presented as direct entry points into detailed case studies, using a visual system that gives each product its own identity while maintaining consistency across the portfolio.
 
-<img src="./public/projects/readmeGithub/portfolio_atlyon.png" width="100%" alt="Atlyon selected projects">
+<img src="./public/projects/readmeGithub/portfolio_atlyon_shadow.png" width="100%" alt="Atlyon selected projects">
 
 ---
 
@@ -52,7 +52,7 @@ The portfolio also communicates the workflow behind the work:
 
 **Context & Objectives → Strategy & Direction → Design & Development → Validation & Delivery**
 
-<img src="./public/projects/readmeGithub/processo_atlyon.png" width="100%" alt="Atlyon design and development process">
+<img src="./public/projects/readmeGithub/processo_atlyon_shadow.png" width="100%" alt="Atlyon design and development process">
 
 ---
 
@@ -76,13 +76,13 @@ Key areas:
 
 **UI/UX · Front-end**
 
-<img src="./public/projects/readmeGithub/civitasHero_atlyon.png" width="100%" alt="Civitas energy management platform case study">
+<img src="./public/projects/readmeGithub/civitasHero_atlyon_shadow.png" width="100%" alt="Civitas energy management platform case study">
 
 ### Information Architecture
 
 The product architecture was structured to organise multiple levels of information across dashboards, metrics, management and analysis contexts.
 
-<img src="./public/projects/readmeGithub/diagramaCivitas_atlyon.png" width="100%" alt="Civitas information architecture">
+<img src="./public/projects/readmeGithub/diagramaCivitas_atlyon_shadow.png" width="100%" alt="Civitas information architecture">
 
 🌐 **Case study:** https://atlyon.pt/case-studies/civitas
 
@@ -104,19 +104,19 @@ Key areas:
 
 **UI/UX · Front-end**
 
-<img src="./public/projects/readmeGithub/heroLicita_atlyon.png" width="100%" alt="LicitaNow landing page redesign before and after">
+<img src="./public/projects/readmeGithub/heroLicita_atlyon_shadow.png" width="100%" alt="LicitaNow landing page redesign before and after">
 
 ### Redesign Overview
 
 The redesign brings together the decisions made throughout the process into a clearer and more cohesive landing-page experience.
 
-<img src="./public/projects/readmeGithub/overviewLicita_atlyon.png" width="100%" alt="LicitaNow redesign overview">
+<img src="./public/projects/readmeGithub/overviewLicita_atlyon_shadow.png" width="100%" alt="LicitaNow redesign overview">
 
 ### Problems & Solutions
 
 The case study documents the main experience problems identified in the original landing page and the design decisions used to address them.
 
-<img src="./public/projects/readmeGithub/problemasLicita_atlyon.png" width="100%" alt="LicitaNow UX problems and solutions">
+<img src="./public/projects/readmeGithub/problemasLicita_atlyon_shadow.png" width="100%" alt="LicitaNow UX problems and solutions">
 
 🌐 **Case study:** https://atlyon.pt/case-studies/licitanow
 
