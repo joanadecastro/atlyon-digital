@@ -1,163 +1,143 @@
-# Atlyon Digital
+# Atlyon — UI/UX & Front-end Portfolio
 
-Atlyon Digital is a modern agency website focused on **Web Design, Web Development, Branding, and Digital Solutions** for businesses looking to establish a premium online presence.
+Atlyon is my personal **UI/UX and Front-end portfolio**, designed and developed to present selected digital products, interfaces and case studies through a single cohesive experience.
 
-The goal of this project was to create a high-end digital experience that communicates trust, professionalism, and value from the very first interaction while maintaining excellent usability across desktop and mobile devices.
+The project reflects the way I work across **design and development** — from visual direction and interface design to responsive implementation and interaction.
 
----
-
-# Project Goals
-
-- Showcase Atlyon Digital's services.
-- Present real-world projects through dedicated Case Study pages.
-- Strengthen the company's visual identity.
-- Deliver a fully responsive experience.
-- Generate leads through a conversion-focused interface.
-- Prepare the platform for future integrations and automation.
+🌐 **Live website:** https://atlyon.pt
 
 ---
 
-# Technologies Used
+## Overview
 
-## Frontend
+The portfolio was designed around a simple objective: present my work without separating design from implementation.
 
-- Angular 21
-- TypeScript
-- HTML5
-- SCSS
-- Angular Standalone Components
+Rather than functioning as a traditional gallery, Atlyon combines:
 
-## Design
+- UI/UX and product design
+- Front-end development
+- Digital product case studies
+- Responsive interaction
+- Design systems and reusable components
+- Branding and visual communication
 
-- Custom Design System
-- Responsive Layout
-- Advanced CSS Animations
-- Desktop & Mobile Mockups
-- Inter Typography
-- Premium UI/UX Design
+The result is a portfolio where the interface itself is also part of the work being presented.
 
 ---
 
-# Features
+## Selected Projects
 
-## Landing Page
+### Civitas — Energy Management Platform
 
-- Premium Hero Section
-- Company Presentation
-- Services Overview
-- Work Process Section
-- Portfolio Showcase
-- Contact Form
+UI/UX and front-end work for an energy management SaaS platform.
 
-## Portfolio
+The case study explores the design of dashboards, reusable interface components, responsive behaviour and the transition from design decisions to implementation.
 
-- Interactive Project Cards
-- Dynamic Navigation
-- Custom Case Study Pages
+**UI/UX · Front-end**
+
+---
+
+### LicitaNow — Landing Page Redesign
+
+Redesign of a digital platform focused on improving hierarchy, communication and the overall user experience.
+
+The case study presents the visual direction, interface decisions and responsive implementation of the redesigned experience.
+
+**UI/UX · Front-end**
+
+---
+
+### Smart Charging
+
+Digital product work for an electric-vehicle charging management SaaS platform.
+
+**Case study coming soon.**
+
+---
+
+## Desktop Experience
+
+<img src="./public/doc/atlyon-desktop.png?raw=true" width="100%" alt="Atlyon portfolio desktop interface">
+
+---
+
+## Mobile Experience
+
+The mobile version was designed as an experience in its own right rather than simply reducing the desktop layout.
+
+Navigation, project presentation, interactions and content hierarchy were adapted specifically for smaller screens.
+
+<p align="center">
+  <img src="./public/doc/atlyon-mobile.png?raw=true" width="380" alt="Atlyon portfolio mobile interface">
+</p>
+
+---
 
 ## Case Studies
 
-Each project includes:
+### Civitas
 
-- Project Challenge
-- Solution Overview
-- Desktop Mockup
-- Mobile Mockup
-- Interactive Internal Scrolling
-- Visual Identity Presentation
-- Color Palette
-- Typography System
+<img src="./public/doc/civitas-case-study.png?raw=true" width="100%" alt="Civitas energy management platform case study">
 
-## Contact Section
+### LicitaNow
 
-- Contact Form
-- Ready for EmailJS Integration
-- Ready for Custom Backend Integration
+<img src="./public/doc/licitanow-case-study.png?raw=true" width="100%" alt="LicitaNow landing page redesign case study">
 
 ---
 
-# Project Structure
+## Design & Development
+
+Atlyon was designed and developed from scratch, with particular attention to maintaining consistency between the visual system and its implementation.
+
+### Design
+
+- UI/UX Design
+- Interface Design
+- Responsive Design
+- Design Systems
+- Visual Direction
+- Figma
+
+### Front-end
+
+- Angular
+- TypeScript
+- HTML
+- SCSS
+- Responsive implementation
+- Component-based architecture
+
+---
+
+## Interaction & Responsive Behaviour
+
+The interface includes custom interactions and responsive behaviour developed specifically for the portfolio, including:
+
+- responsive desktop and mobile layouts
+- interactive project cards
+- animated process presentation
+- mobile navigation
+- contextual project navigation
+- multilingual content (PT / EN)
+- reusable CTA and interface patterns
+- responsive case-study experiences
+
+---
+
+## Project Structure
 
 ```txt
 src/
-│
 ├── app/
+│   ├── i18n/
 │   ├── project-case/
-│   ├── portfolio/
-│   ├── services/
-│   ├── process/
-│   └── contact/
+│   └── licitanow-case/
 │
 public/
-│
+├── cv/
 ├── projects/
-│   ├── project assets
-│   └── mockups
-│
+│   ├── civitas/
+│   ├── licita/
+│   ├── smartcharging/
+│   └── ...
 └── doc/
-    ├── print1.png
-    ├── print2.png
-    ├── print3.png
-    ├── print4.png
-    ├── print5.png
-    └── print6.png
-```
-
----
-
-# Screenshots
-
-## Homepage
-
-<img src="./public/doc/print1.png?raw=true" width="100%">
-
----
-
-## Process
-
-<img src="./public/doc/print2.png?raw=true" width="100%">
-
----
-
-## Portfolio
-
-<img src="./public/doc/print3.png?raw=true" width="100%">
-
----
-
-## Case Study
-
-<img src="./public/doc/print4.png?raw=true" width="100%">
-
----
-
-## Visual Identity
-
-<img src="./public/doc/print5.png?raw=true" width="100%">
-
----
-
-## Contact Section
-
-<img src="./public/doc/print6.png?raw=true" width="100%">
-
----
-
-# Future Improvements
-
-- EmailJS integration
-- Custom business email setup
-- Content Management System (CMS)
-- Blog section
-- Online booking system
-- Administrative dashboard
-- Advanced analytics
-- SEO optimization
-
----
-
-# Author
-
-Developed by **Joana Castro**
-
-### Atlyon Digital © 2026
