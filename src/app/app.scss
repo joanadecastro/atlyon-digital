@@ -16322,3 +16322,16 @@ body {
     margin-left:0!important;
   }
 }
+
+@media (max-width:768px) {
+  .site-footer__resources .site-footer__source::after {
+    content:none!important;
+    display:none!important;
+  }
+
+  .site-footer__resources .site-footer__source-icon {
+    width:15px!important;
+    height:15px!important;
+    flex-basis:15px!important;
+  }
+}

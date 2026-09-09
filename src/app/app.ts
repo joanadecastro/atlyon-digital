@@ -847,20 +847,6 @@ export class App implements AfterViewInit, OnDestroy {
     this.sendProjectChatMessage();
   }
 
-  private showProjectChatServices(): void {
-    this.addProjectChatMessage(
-      'assistant',
-      'Trabalho sobretudo nestas áreas:\n\n• Branding\n• Websites\n• E-commerce\n• Soluções digitais\n• Prestação de serviços UI/UX e Front-end\n\nQual delas queres explorar?',
-      [
-        { id: 'branding', label: 'Branding', action: 'branding' },
-        { id: 'websites', label: 'Websites', action: 'websites' },
-        { id: 'ecommerce', label: 'E-commerce', action: 'ecommerce' },
-        { id: 'digital-solutions', label: 'Soluções digitais', action: 'digital-solutions' },
-        { id: 'staff-augmentation', label: 'Prestação de serviços', action: 'staff-augmentation' },
-      ]
-    );
-  }
-
   private addProjectChatMessage(
     sender: ProjectChatMessage['sender'],
     text: string,
