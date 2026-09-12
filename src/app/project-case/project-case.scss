@@ -6548,11 +6548,16 @@
 }
 
 .panel-mobile-preview-trigger,
-.civitas-mobile-preview-trigger {
+.civitas-mobile-preview-trigger,
+.challenge-media-expand {
   display:none;
 }
 
 @media (max-width:768px) {
+  .civitas-page:not(.licitanow-page) .challenge-media-expand {
+    display:grid;
+  }
+
   .civitas-page:not(.licitanow-page) :is(.panel-mobile-preview-trigger,.civitas-mobile-preview-trigger) {
     display:flex;
     align-items:center;
@@ -6562,6 +6567,15 @@
     margin:0 0 4px;
     padding:0;
     text-align:right;
+  }
+
+  .civitas-page:not(.licitanow-page) .case-expand-affordance:is(.civitas-mobile-preview-trigger) {
+    display:grid;
+    width:34px;
+    height:34px;
+    min-height:0;
+    margin:0;
+    font-size:0;
   }
 
   .civitas-page:not(.licitanow-page) :is(
