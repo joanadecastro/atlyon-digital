@@ -7212,20 +7212,6 @@
     font-size:8px!important;
   }
 
-  .case-study-page.civitas-page:not(.licitanow-page) .story-components figure.component-crop {
-    border:0!important;
-    box-shadow:none!important;
-  }
-
-  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive :is(
-    figure.responsive-compare-desktop,
-    figure.responsive-compare-mobile
-  ) {
-    border:0!important;
-    border-radius:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
-  }
 }
 
 @include case-code.blocks;
