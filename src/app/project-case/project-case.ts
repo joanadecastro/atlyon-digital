@@ -34,6 +34,7 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   responsiveOverviewVariant: 0 | 1 = 0;
   openArchitectureGroup: string | null = null;
   openUserNeed: string | null = null;
+  isMobileViewport = false;
 
   private revealObserver?: IntersectionObserver;
   private storyRevealObserver?: IntersectionObserver;
@@ -202,6 +203,8 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.isMobileViewport = matchMedia('(max-width: 768px)').matches;
+    this.cdr.detectChanges();
     this.unbindExpandableMedia = bindCaseExpandableMedia(this.host.nativeElement, (src, alt) => this.imagePreview?.open(src, alt));
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hero = document.querySelector<HTMLElement>('.civitas-hero');

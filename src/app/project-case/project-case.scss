@@ -6162,6 +6162,109 @@
 }
 @include case-mobile.layout;
 
+@media (max-width:768px) {
+  .civitas-page:not(.licitanow-page) .story-components .component-crop__note {
+    margin-inline:auto!important;
+    text-align:center!important;
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .overview-hotspot-visual__screen,
+    .overview-variant__screen--hotspots
+  ) .overview-hotspot {
+    display:block!important;
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .overview-hotspot-visual__screen,
+    .overview-variant__screen--hotspots
+  ) .overview-hotspot > button {
+    width:22px;
+    height:22px;
+    font-size:7px;
+  }
+
+  .civitas-page:not(.licitanow-page) .overview-variant__screen--hotspots .overview-hotspot--quota > button {
+    min-width:28px;
+    height:22px;
+    padding-inline:4px;
+    font-size:7px;
+  }
+
+  .civitas-page:not(.licitanow-page) .overview-hotspot-visual__screen .flow-ring,
+  .civitas-page:not(.licitanow-page) .overview-variant__screen--hotspots .variant-progress-ring {
+    top:calc(29.3% - 18px);
+    width:36px;
+  }
+
+  .civitas-page:not(.licitanow-page) .overview-variant__screen--hotspots .variant-progress-ring {
+    top:calc(29.9% - 18px);
+  }
+
+  .civitas-page:not(.licitanow-page) .overview-component-flow {
+    width:30px;
+  }
+
+  .civitas-page:not(.licitanow-page) .overview-variant__screen--hotspots .variant-flow {
+    width:23px;
+  }
+
+  .civitas-page:not(.licitanow-page) .overview-flow-value {
+    top:calc(29.3% + 21px);
+    font-size:4px;
+  }
+
+  .civitas-page:not(.licitanow-page) .overview-variant__screen--hotspots .variant-flow-value {
+    top:calc(29.9% + 21px);
+    font-size:4px;
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .overview-hotspot-visual__screen,
+    .overview-variant__screen--hotspots
+  ) .overview-metric-state-tag > span {
+    font-size:3px;
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .overview-hotspot-visual__screen,
+    .overview-variant__screen--hotspots
+  ) :is(.overview-hotspot--context,.overview-hotspot--quota) .overview-hotspot__popover {
+    right:auto;
+    left:50%;
+    transform:translate(-50%,6px);
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .overview-hotspot-visual__screen,
+    .overview-variant__screen--hotspots
+  ) :is(.overview-hotspot--context,.overview-hotspot--quota):is(:hover,.is-open) .overview-hotspot__popover {
+    transform:translate(-50%,0);
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .overview-hotspot-visual__screen,
+    .overview-variant__screen--hotspots
+  ) .overview-hotspot--quota .overview-hotspot__popover {
+    transform:translate(-35%,6px);
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .overview-hotspot-visual__screen,
+    .overview-variant__screen--hotspots
+  ) .overview-hotspot--quota:is(:hover,.is-open) .overview-hotspot__popover {
+    transform:translate(-35%,0);
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .overview-hotspot-visual__screen,
+    .overview-variant__screen--hotspots
+  ) .overview-hotspot--evolution .overview-hotspot__popover {
+    right:0;
+    left:auto;
+  }
+}
+
 /* Civitas information architecture: compact vertical tree on mobile only. */
 .architecture-group__toggle {
   display:none;
@@ -6703,7 +6806,7 @@
     width:108px;
     height:108px;
     margin:0 auto 22px;
-    border:1px solid color-mix(in srgb,var(--case-accent) 24%,transparent);
+    border:0;
     box-shadow:0 6px 16px rgba(0,0,0,.035);
   }
 
@@ -7089,6 +7192,42 @@
 }
 
 @include case-media-shadow.mobile;
+
+@media (max-width:768px) {
+  .civitas-page:not(.licitanow-page) :is(
+    .story-interface-panel .panel-hotspot-visual__screen,
+    .story-interface-overview .overview-hotspot-visual__screen
+  ) .overview-hotspot > button {
+    width:24px!important;
+    height:24px!important;
+    font-size:8px!important;
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .story-interface-panel .panel-hotspot-visual__screen,
+    .story-interface-overview .overview-hotspot-visual__screen
+  ) .overview-hotspot--quota > button {
+    min-width:30px!important;
+    height:24px!important;
+    font-size:8px!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-components figure.component-crop {
+    border:0!important;
+    box-shadow:none!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive :is(
+    figure.responsive-compare-desktop,
+    figure.responsive-compare-mobile
+  ) {
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+}
+
 @include case-code.blocks;
 @include case-typography.system;
 

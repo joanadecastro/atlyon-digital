@@ -6,11 +6,11 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
   selector: 'app-case-image-preview',
   standalone: true,
   template: `
-    <div class="case-image-preview" [class.is-open]="isOpen" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.attach-close-to-media]="attachCloseToMedia"
+    <div class="case-image-preview" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.attach-close-to-media]="attachCloseToMedia"
       [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" aria-label="Preview ampliado da mockup"
       (pointerdown)="closeFromBackdrop($event)">
       @if (src) {
-        <div class="case-image-preview__panel" [class.has-legend]="legend.length > 0" (pointerdown)="$event.stopPropagation()">
+        <div class="case-image-preview__panel" [class.has-legend]="legend.length > 0" (pointerdown)="handlePanelPointerDown($event)">
           <button type="button" class="case-image-preview__close" aria-label="Fechar preview" (click)="close()">×</button>
           <div class="case-image-preview__composition" [class.trim-top-edge]="trimTopEdge">
             <img [src]="src" [alt]="alt" (load)="onImageLoad($event)">
@@ -50,12 +50,16 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     .is-vertical-landing img { width:100%; max-width:none; height:auto; max-height:none; object-fit:initial; border-radius:0; box-shadow:none; transform:none; }
     .is-vertical-landing .case-image-preview__close { position:sticky; top:16px; right:16px; margin:16px 16px -52px auto; }
     @media (max-width:768px) {
-      .case-image-preview { padding:16px; }
+      .case-image-preview { padding:16px; transition:opacity 550ms ease,visibility 0s linear 900ms; }
+      .case-image-preview.is-open { transition:opacity 380ms ease; }
+      .case-image-preview.is-closing { visibility:visible; pointer-events:auto; }
+      .case-image-preview__close { display:none; }
       .case-image-preview__panel { width:calc(100vw - 32px); max-width:calc(100vw - 32px); height:calc(100dvh - 32px); max-height:calc(100dvh - 32px); }
-      img { width:auto; max-width:calc(100vw - 32px); max-height:calc(100dvh - 32px); object-fit:contain; }
+      img { width:auto; max-width:calc(100vw - 32px); max-height:calc(100dvh - 32px); object-fit:contain; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
+      .is-image-entered img { transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__panel { width:100%; max-width:none; height:100%; max-height:none; }
-      .is-landscape:not(.is-vertical-landing) .case-image-preview__composition { position:fixed; top:50%; left:50%; display:flex; flex-direction:column; align-items:stretch; gap:10px; width:min(calc(100dvh - 40px),680px); max-width:calc(100dvh - 40px); max-height:calc(100vw - 32px); opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.96); transition:transform 700ms cubic-bezier(.22,1,.36,1),opacity 350ms ease; }
-      .is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { opacity:1; transform:translate(-50%,-50%) rotate(90deg) scale(1); }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__composition { position:fixed; top:50%; left:50%; display:flex; flex-direction:column; align-items:stretch; gap:10px; width:min(calc(100dvh - 40px),680px); max-width:calc(100dvh - 40px); max-height:calc(100vw - 32px); opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.96); transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
+      .is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { opacity:1; transform:translate(-50%,-50%) rotate(90deg) scale(1); transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) img { position:static; width:100%; max-width:100%; max-height:calc(100vw - 32px); opacity:1; transform:none; transition:none; }
       .is-landscape:not(.is-vertical-landing) .has-legend img { max-height:calc(100vw - 96px); }
       .case-image-preview__legend { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:0; padding:8px 0 0; border-top:1px solid rgba(255,255,255,.22); color:#fff; list-style:none; }
@@ -77,6 +81,7 @@ export class CaseImagePreviewComponent implements OnDestroy {
   src: string | null = null;
   alt = '';
   isOpen = false;
+  isClosing = false;
   isImageEntered = false;
   isVerticalLanding = false;
   isLandscape = false;
@@ -84,11 +89,14 @@ export class CaseImagePreviewComponent implements OnDestroy {
   private bodyOverflow = '';
   private cleanupTimer?: number;
   private returnFocus?: HTMLElement;
+  private previewCycle = 0;
 
   constructor(private readonly host: ElementRef<HTMLElement>, private readonly cdr: ChangeDetectorRef) {}
 
   open(src: string, alt: string, verticalLanding = false, legend: readonly CaseImagePreviewLegendItem[] = []): void {
+    const cycle = ++this.previewCycle;
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
+    this.isClosing = false;
     this.src = src;
     this.alt = alt;
     this.isVerticalLanding = verticalLanding;
@@ -100,6 +108,7 @@ export class CaseImagePreviewComponent implements OnDestroy {
     document.body.style.overflow = 'hidden';
     this.cdr.detectChanges();
     requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (cycle !== this.previewCycle) return;
       this.isOpen = true;
       this.cdr.detectChanges();
       this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
@@ -107,12 +116,13 @@ export class CaseImagePreviewComponent implements OnDestroy {
   }
 
   onImageLoad(event: Event): void {
+    const cycle = this.previewCycle;
     const image = event.currentTarget as HTMLImageElement;
     this.isLandscape = !this.isVerticalLanding && image.naturalWidth > image.naturalHeight;
     this.isImageEntered = false;
     this.cdr.detectChanges();
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      if (this.isOpen) {
+      if (cycle === this.previewCycle && this.isOpen) {
         this.isImageEntered = true;
         this.cdr.detectChanges();
       }
@@ -120,21 +130,44 @@ export class CaseImagePreviewComponent implements OnDestroy {
   }
 
   close(): void {
-    this.isImageEntered = false;
+    if (this.isClosing) return;
+    const cycle = ++this.previewCycle;
+    this.isClosing = true;
     this.isOpen = false;
+    this.isImageEntered = false;
     this.cdr.detectChanges();
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
     this.cleanupTimer = window.setTimeout(() => {
-      if (!this.isOpen) {
+      if (cycle === this.previewCycle && !this.isOpen) {
         this.src = null; this.alt = ''; this.isVerticalLanding = false; this.isLandscape = false; this.legend = [];
+        this.isClosing = false;
         document.body.style.overflow = this.bodyOverflow;
         this.returnFocus?.focus();
         this.cdr.detectChanges();
       }
-    }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 140 : 720);
+    }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 140 : matchMedia('(max-width: 768px)').matches ? 900 : 720);
   }
 
-  closeFromBackdrop(event: Event): void { if (event.target === event.currentTarget) this.close(); }
+  handlePanelPointerDown(event: Event): void {
+    if (this.isClosing) {
+      event.stopPropagation();
+      return;
+    }
+    if (matchMedia('(max-width: 768px)').matches) {
+      this.close();
+      event.stopPropagation();
+      return;
+    }
+    event.stopPropagation();
+  }
+
+  closeFromBackdrop(event: Event): void {
+    if (this.isClosing) {
+      event.stopPropagation();
+      return;
+    }
+    if (matchMedia('(max-width: 768px)').matches || event.target === event.currentTarget) this.close();
+  }
   @HostListener('document:keydown', ['$event']) onKeydown(event: KeyboardEvent): void {
     if (!this.isOpen) return;
     if (event.key === 'Escape') this.close();

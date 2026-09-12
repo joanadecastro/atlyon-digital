@@ -158,9 +158,11 @@
 
     <div class="story-chapter story-system story-interface-panel">
     <div class="interface-view-label">PAINEL &middot; LEITURA IMEDIATA</div>
-    <button type="button" class="panel-mobile-preview-trigger licita-applied-comparison__expand" aria-label="Ampliar Painel Civitas com legenda" (click)="openPanelPreview($event)">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button>
+    @if (!isMobileViewport) {
+      <button type="button" class="panel-mobile-preview-trigger licita-applied-comparison__expand" aria-label="Ampliar Painel Civitas com legenda" (click)="openPanelPreview($event)">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button>
+    }
     <div #panelMockupDemo class="overview-hotspot-visual panel-hotspot-visual" aria-label="Painel Civitas com explicações interativas">
-      <figure class="overview-hotspot-visual__screen panel-hotspot-visual__screen">
+      <figure class="overview-hotspot-visual__screen panel-hotspot-visual__screen" [attr.data-case-native-controls]="isMobileViewport ? '' : null">
         <img src="/projects/civitas/civitas_painel.png" alt="Painel completo do Civitas anotado">
         <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
         <span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
@@ -206,8 +208,10 @@
       <div class="interface-view-label">VISTA GERAL &middot; AN&Aacute;LISE DETALHADA</div>
     </div>
       <div #overviewMockupDemo class="overview-hotspot-visual" aria-label="Vista Geral Civitas com explicações interativas">
-      <figure class="overview-hotspot-visual__screen structure-screen structure-screen-main">
-        <button type="button" class="case-expand-affordance challenge-media-expand" aria-label="Ampliar Vista Geral Civitas com legenda" (click)="openOverviewPreview('/projects/civitas/Dashboard%202%20%281%29.png', 'Vista Geral completa do Civitas', false, $event)"></button>
+      <figure class="overview-hotspot-visual__screen structure-screen structure-screen-main" [attr.data-case-native-controls]="isMobileViewport ? '' : null">
+        @if (!isMobileViewport) {
+          <button type="button" class="case-expand-affordance challenge-media-expand" aria-label="Ampliar Vista Geral Civitas com legenda" (click)="openOverviewPreview('/projects/civitas/Dashboard%202%20%281%29.png', 'Vista Geral completa do Civitas', false, $event)"></button>
+        }
         <img src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Vista Geral completa do Civitas">
         <svg class="flow-ring flow-ring--main-one" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
         <svg class="flow-ring flow-ring--main-two" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>

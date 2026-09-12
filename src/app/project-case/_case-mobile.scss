@@ -90,17 +90,6 @@
       .story-architecture :is(.architecture-root, .architecture-level-two, .architecture-area, .architecture-area__children, .architecture-group, .architecture-items, .architecture-scope-note, h3, strong)::before,
       .story-architecture :is(.architecture-root, .architecture-level-two, .architecture-area, .architecture-area__children, .architecture-group, .architecture-items, .architecture-scope-note, h3, strong)::after { display: none !important; }
       .story-responsive :is(.responsive-compare-desktop, .responsive-compare-mobile, .responsive-comparison__vs) { opacity: 1 !important; transform: none !important; }
-      .overview-hotspot-visual__screen > :is(span, svg), .overview-variant__screen > :is(span, svg) { display: none; }
-      .overview-hotspot {
-        position: static; inset: auto; transform: none; margin-top: 12px;
-      }
-      .overview-hotspot > button { width: 44px; height: 44px; }
-      .overview-hotspot .overview-hotspot__popover {
-        display: none; position: static; inset: auto; transform: none;
-        box-sizing: border-box; width: 100%; max-width: 100%; margin-top: 12px;
-        opacity: 1; visibility: visible;
-      }
-      .overview-hotspot.is-open .overview-hotspot__popover { display: block; pointer-events: auto; }
       .civitas-story-panel :is(.licita-challenge__video, .licita-illustration-comparison, .licita-composition-gallery, .licita-wireframes, .visual-process-media),
       .civitas-story-panel .licita-applied-comparison__visual,
       .civitas-story-panel .licita-applied-comparison__media,
