@@ -1,32 +1,35 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { TranslateDirective } from '../i18n/translate.directive';
+import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scroll-indicator.component';
+import { CaseImagePreviewComponent } from '../project-case/case-image-preview.component';
+import { bindCaseExpandableMedia } from '../project-case/case-expandable-media';
 
 @Component({
   selector: 'app-licitanow-case',
   standalone: true,
+  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent],
   hostDirectives: [TranslateDirective],
   templateUrl: './licitanow-case.html',
   styleUrl: './licitanow-case.scss',
 })
 export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   openSolution: number | null = null;
-  previewSrc: string | null = null;
-  previewAlt = '';
-  previewOpen = false;
-  previewIsLanding = false;
   videoPreviewSrc: string | null = null;
   videoPreviewLabel = '';
   videoPreviewOpen = false;
   @ViewChild('challengeVideo', { static: true }) private challengeVideoRef!: ElementRef<HTMLVideoElement>;
+  @ViewChild(CaseImagePreviewComponent) private imagePreview?: CaseImagePreviewComponent;
   @ViewChild('nextProjectNav', { read: ElementRef }) private nextProjectNavRef?: ElementRef<HTMLElement>;
 
   private observer?: IntersectionObserver;
   private videoObserver?: IntersectionObserver;
   private nextProjectObserver?: IntersectionObserver;
   private videos: HTMLVideoElement[] = [];
-  private previewCleanupTimer?: number;
   private bodyOverflowBeforePreview = '';
   private bodyScrollLocked = false;
+  private unbindExpandableMedia?: () => void;
+
+  constructor(private readonly host: ElementRef<HTMLElement>) {}
 
   toggleSolution(solution: number): void {
     this.openSolution = this.openSolution === solution ? null : solution;
@@ -39,29 +42,11 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     const image = trigger?.closest('figure')?.querySelector<HTMLImageElement>('.licita-applied-comparison__media img');
     if (!trigger || !image) return;
 
-    if (this.previewCleanupTimer !== undefined) window.clearTimeout(this.previewCleanupTimer);
-    this.previewSrc = image.currentSrc || image.src;
-    this.previewAlt = image.alt;
-    this.previewIsLanding = image.classList.contains('licita-global-view__image');
-    if (!this.bodyScrollLocked) {
-      this.bodyOverflowBeforePreview = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      this.bodyScrollLocked = true;
-    }
-    this.previewOpen = true;
+    this.imagePreview?.open(image.currentSrc || image.src, image.alt, image.classList.contains('licita-global-view__image'));
   }
 
   closeComparisonPreview(): void {
-    this.previewOpen = false;
-    this.restoreBodyScroll();
-    if (this.previewCleanupTimer !== undefined) window.clearTimeout(this.previewCleanupTimer);
-    this.previewCleanupTimer = window.setTimeout(() => {
-      if (!this.previewOpen) {
-        this.previewSrc = null;
-        this.previewAlt = '';
-        this.previewIsLanding = false;
-      }
-    }, 230);
+    this.imagePreview?.close();
   }
 
   closeComparisonPreviewFromBackdrop(event: Event): void {
@@ -97,6 +82,11 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.unbindExpandableMedia = bindCaseExpandableMedia(
+      this.host.nativeElement,
+      (src, alt) => this.imagePreview?.open(src, alt),
+      (src, label) => this.openVideoPreview(src, label),
+    );
     const challengeVideo = this.challengeVideoRef.nativeElement;
     challengeVideo.muted = true;
     challengeVideo.defaultMuted = true;
@@ -116,6 +106,7 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     const chapters = Array.from(document.querySelectorAll<HTMLElement>('.licitanow-page .story-chapter'));
     const observed = [hero, ...chapters].filter((item): item is HTMLElement => Boolean(item));
     const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobileViewport = matchMedia('(max-width: 768px)').matches;
     this.setupNextProjectReveal(prefersReducedMotion);
     this.videos = Array.from(document.querySelectorAll<HTMLVideoElement>('.licitanow-page video[data-viewport-video]'));
     this.videos.forEach((video) => {
@@ -144,15 +135,17 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     this.observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         const section = entry.target as HTMLElement;
-        if (entry.intersectionRatio >= .18) { section.classList.add('is-entered'); section.querySelectorAll<HTMLElement>('.civitas-reveal').forEach((item) => item.classList.add('is-visible')); }
-        else if (entry.intersectionRatio < .05) { section.classList.remove('is-entered'); section.querySelectorAll<HTMLElement>('.civitas-reveal').forEach((item) => item.classList.remove('is-visible')); }
+        const hasEntered = isMobileViewport ? entry.isIntersecting : entry.intersectionRatio >= .18;
+        const hasExited = isMobileViewport ? !entry.isIntersecting : entry.intersectionRatio < .05;
+        if (hasEntered) { section.classList.add('is-entered'); section.querySelectorAll<HTMLElement>('.civitas-reveal').forEach((item) => item.classList.add('is-visible')); }
+        else if (hasExited) { section.classList.remove('is-entered'); section.querySelectorAll<HTMLElement>('.civitas-reveal').forEach((item) => item.classList.remove('is-visible')); }
       });
     }, { threshold: [0, .05, .18, .3], rootMargin: '0px 0px -6% 0px' });
     observed.forEach((item) => this.observer?.observe(item));
   }
 
   ngOnDestroy(): void {
-    if (this.previewCleanupTimer !== undefined) window.clearTimeout(this.previewCleanupTimer);
+    this.unbindExpandableMedia?.();
     this.videoPreviewSrc = null;
     this.restoreBodyScroll();
     this.observer?.disconnect();

@@ -13,7 +13,7 @@
   --section-header-gap: 9px;
   --body-copy-font-size: 16px;
   --body-copy-font-weight: 400;
-  --body-copy-line-height: 1.65;
+  --body-copy-line-height: 1.58;
   --body-copy-color: #3f4347;
   --process-number-active-font-size: 60px;
   --process-number-font-weight: 600;
@@ -24,6 +24,227 @@
   --process-step-title-line-height: 1.08;
   --process-step-title-letter-spacing: -.025em;
   --process-step-title-color: #3f4347;
+}
+
+/* Landing typography is the single source of truth for every case study. */
+:is(app-project-case, app-licitanow-case, app-juh-case) {
+  font-family: Inter, Arial, sans-serif;
+}
+
+:is(app-project-case, app-licitanow-case, app-juh-case) :is(
+  .civitas-page,
+  .licitanow-page,
+  .juh-page
+) {
+  font-family: inherit;
+}
+
+:is(app-project-case, app-licitanow-case, app-juh-case) :is(
+  .civitas-hero__copy h1,
+  .case-study-section-title
+) {
+  font-family: inherit !important;
+  font-size: var(--section-title-font-size) !important;
+  font-weight: var(--section-title-font-weight) !important;
+  line-height: var(--section-title-line-height) !important;
+  letter-spacing: var(--section-title-letter-spacing) !important;
+  text-transform: none !important;
+}
+
+:is(app-project-case, app-licitanow-case, app-juh-case) .case-study-section-subtitle {
+  font-family: inherit !important;
+  font-size: var(--section-subtitle-font-size) !important;
+  font-weight: var(--section-subtitle-font-weight) !important;
+  line-height: var(--section-subtitle-line-height) !important;
+  letter-spacing: var(--section-subtitle-letter-spacing) !important;
+  text-transform: none !important;
+}
+
+:is(app-project-case, app-licitanow-case, app-juh-case) :is(
+  .civitas-story-panel,
+  .licitanow-story-panel,
+  .juh-story
+) p {
+  font-family: inherit !important;
+  font-size: var(--body-copy-font-size) !important;
+  font-weight: var(--body-copy-font-weight) !important;
+  line-height: var(--body-copy-line-height) !important;
+  letter-spacing: normal !important;
+}
+
+:is(app-project-case, app-licitanow-case, app-juh-case) .case-study-section-number {
+  font-family: inherit !important;
+  font-size: var(--section-title-font-size) !important;
+  font-weight: var(--section-title-font-weight) !important;
+  line-height: var(--section-title-line-height) !important;
+  letter-spacing: var(--section-title-letter-spacing) !important;
+}
+
+:is(app-project-case, app-licitanow-case, app-juh-case) :is(
+  .story-label,
+  .interface-view-label,
+  .licita-applied-comparison__label,
+  .licita-applied-comparison__meta figcaption,
+  .juh-comparison__meta > span,
+  .case-hero__metadata,
+  .case-hero__technologies,
+  .case-hero__category
+) {
+  font-family: inherit !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  letter-spacing: .11em !important;
+}
+
+/* Editorial headings keep template capitalization at every viewport width. */
+.case-study-page :is(
+  h1,
+  h2,
+  .case-study-section-title,
+  .case-study-mobile-section-title,
+  .story-chapter-title,
+  header > h3,
+  header > h4
+) {
+  text-transform: none !important;
+}
+
+/* Shared hero metadata color for current and future case studies. */
+.case-study-page .case-hero .case-hero__copy :is(.case-hero__metadata, .case-hero__technologies) {
+  color: var(--section-title-color);
+
+  span {
+    color: inherit;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --section-title-font-size: clamp(28px, 8vw, 32px);
+    --section-title-line-height: 1.08;
+    --section-subtitle-font-size: clamp(16px, 4.35vw, 17px);
+    --body-copy-line-height: 1.58;
+  }
+
+  /* Structural authority for the Civitas IA tree; component rules keep its desktop visuals. */
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page)
+    .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-level-two::before {
+    content:none!important;
+    display:none!important;
+  }
+
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page) .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-root::after,
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page) .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-area::before,
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page) .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-area::after,
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page) .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-area__children::before,
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page) .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-group::before {
+    display:block!important;
+    opacity:1!important;
+    transform:none!important;
+  }
+
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page)
+    .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-area {
+    padding-left:70px!important;
+  }
+
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page)
+    .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-area > h3 {
+    margin-left:0!important;
+  }
+
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page)
+    .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-area__children {
+    width:calc(100% - 22px)!important;
+    margin-left:22px!important;
+    padding-left:28px!important;
+    border-left:0!important;
+  }
+
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page)
+    .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-group__toggle {
+    width:100%!important;
+    margin-left:0!important;
+  }
+
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page)
+    .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-scope-group {
+    padding-left:0!important;
+  }
+
+  html body app-project-case .civitas-page.civitas-page:not(.licitanow-page)
+    .story-architecture.story-architecture .architecture-tree.architecture-tree .architecture-scope-group .architecture-area {
+    padding-left:70px!important;
+  }
+}
+
+/* Encapsulated case styles may be loaded after global CSS; keep this mapping authoritative. */
+html body :is(app-project-case, app-licitanow-case, app-juh-case)
+  .case-study-page.civitas-page .civitas-story-panel
+  .case-study-section-header.editorial-section-header > .case-study-section-title {
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:var(--section-title-font-size)!important;
+  font-weight:var(--section-title-font-weight)!important;
+  line-height:var(--section-title-line-height)!important;
+  letter-spacing:var(--section-title-letter-spacing)!important;
+  text-transform:none!important;
+}
+
+html body :is(app-project-case, app-licitanow-case, app-juh-case)
+  .case-study-page.civitas-page .civitas-story-panel
+  .case-study-section-header.editorial-section-header > .case-study-section-subtitle {
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:var(--section-subtitle-font-size)!important;
+  font-weight:var(--section-subtitle-font-weight)!important;
+  line-height:var(--section-subtitle-line-height)!important;
+  letter-spacing:var(--section-subtitle-letter-spacing)!important;
+  text-transform:none!important;
+}
+
+html body :is(app-project-case, app-licitanow-case, app-juh-case)
+  .case-study-page.civitas-page .civitas-story-panel :is(.story-copy,.licita-challenge__copy) > p {
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:var(--body-copy-font-size)!important;
+  font-weight:var(--body-copy-font-weight)!important;
+  line-height:var(--body-copy-line-height)!important;
+  letter-spacing:normal!important;
+}
+
+html body :is(app-project-case, app-licitanow-case, app-juh-case)
+  .case-study-page.civitas-page :is(
+    .story-label,
+    .interface-view-label,
+    .licita-applied-comparison__label,
+    .licita-applied-comparison__meta figcaption,
+    .juh-comparison__meta > span
+  ) {
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:12px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  letter-spacing:.11em!important;
+  text-transform:none!important;
+}
+
+html body :is(app-project-case, app-licitanow-case, app-juh-case)
+  .case-study-page.civitas-page .civitas-story-panel
+  .case-study-section-header.editorial-section-header > .case-study-section-number {
+  font-family:Inter,Arial,sans-serif!important;
+  font-size:var(--section-title-font-size)!important;
+  font-weight:var(--section-title-font-weight)!important;
+  line-height:var(--section-title-line-height)!important;
+  letter-spacing:var(--section-title-letter-spacing)!important;
+}
+
+/* The same canonical stack is explicit on the landing reference specimens. */
+html body app-root :is(
+  .section-heading-title,
+  .editorial-section-subtitle,
+  .services-scene__item-description,
+  .case-card-copy small
+) {
+  font-family:Inter,Arial,sans-serif!important;
 }
 
 html {
@@ -105,4 +326,20 @@ body.sheet-open {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  body .case-study-page .case-hero .case-hero__copy > p.case-hero__metadata,
+  body .case-study-page .case-hero .case-hero__copy > p.case-hero__technologies {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    color: rgba(32, 36, 43, .78) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0 !important;
+    white-space: nowrap !important;
+  }
 }

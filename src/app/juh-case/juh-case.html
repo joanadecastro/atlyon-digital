@@ -1,0 +1,150 @@
+<main class="case-study-page civitas-page juh-page">
+  <section class="case-hero civitas-hero">
+    <div class="case-hero__surface civitas-hero__surface">
+      <div class="civitas-hero__glow" aria-hidden="true"></div>
+      <div class="case-hero__inner civitas-hero__inner case-shell">
+        <header class="case-hero__copy civitas-hero__copy civitas-reveal">
+          <h1>JUH</h1>
+          <p class="case-hero__subtitle civitas-hero__product">E-commerce</p>
+          <p class="case-hero__category civitas-hero__disciplines">UI/UX · Front-end</p>
+          <p class="case-hero__description civitas-hero__description">Projeto pessoal em Angular focado em lógica de aplicação, estado reativo e implementação responsiva.</p>
+          <p class="case-hero__metadata civitas-hero__metadata"><span>Angular 21</span> · 42 testes · Responsive · Persistência local</p>
+          <p class="case-hero__technologies civitas-hero__technologies">Angular · TypeScript · Signals · RxJS · Reactive Forms</p>
+          <a class="juh-hero__github juh-github-link" [href]="github" target="_blank" rel="noopener noreferrer">VER CÓDIGO NO GITHUB <span class="cta-arrow" aria-hidden="true"></span></a>
+        </header>
+        <div class="case-hero__screens cover-panel" aria-label="Home e carrinho da aplicação JUH">
+          <div class="case-hero__stage cover-panel__cycle">
+            <img class="case-hero__screen case-hero__screen--rear cover-panel__desktop cover-panel__desktop--one" src="/projects/juh/carrinho_descktop.png" width="1893" height="941" alt="Carrinho JUH com variantes, quantidades e totais">
+            <img class="case-hero__screen case-hero__screen--front cover-panel__desktop cover-panel__desktop--two" src="/projects/juh/hero_desktop.png" width="1909" height="948" alt="Home JUH com composição branca e fotografia de moda" fetchpriority="high">
+          </div>
+        </div>
+      </div>
+    </div>
+    <app-case-hero-scroll-indicator />
+  </section>
+
+  <div class="case-shell civitas-story-panel juh-story">
+    <section class="story-chapter juh-chapter juh-overview" aria-labelledby="juh-overview">
+      <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">01.</span><h2 id="juh-overview" class="story-chapter-title case-study-section-title section-heading-title">Visão Geral</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Um percurso completo, com um âmbito deliberadamente focado.</div></header>
+      <p class="juh-intro">JUH implementa um fluxo demonstrativo de compra completo. Três produtos de exemplo mantêm o âmbito concentrado na navegação, seleção de variantes, estado partilhado do carrinho, persistência, validação e comportamento responsivo.</p>
+      <ol class="juh-flow" aria-label="Percurso demonstrativo da aplicação"><li>Home</li><li>Produtos</li><li>Detalhe</li><li>Carrinho</li><li>Checkout</li><li>Conclusão</li></ol>
+    </section>
+
+    <section class="story-chapter juh-chapter juh-challenge" aria-labelledby="juh-challenge">
+      <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">02.</span><h2 id="juh-challenge" class="story-chapter-title case-study-section-title section-heading-title">Desafio</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Estruturar comportamento real sem simular um produto comercial.</div></header>
+      <p class="juh-intro">O objetivo não era criar um catálogo extenso, mas ligar rotas de produto, variantes, quantidades, totais, persistência e validação num percurso coerente. Loading, erro de pedido, produto inexistente e adaptação a diferentes ecrãs fazem parte do mesmo sistema.</p>
+      <figure class="juh-challenge-video-frame">
+        <div class="juh-comparison__meta juh-challenge-video__meta"><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar vídeo demonstrativo do JUH" (click)="openVideoPreview('/projects/juh/video_juhecommerce.mp4', 'Vídeo demonstrativo completo do JUH')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div>
+        <div class="juh-challenge-video__media">
+          <video class="juh-flow-video juh-challenge-video" src="/projects/juh/video_juhecommerce.mp4" controls autoplay muted playsinline preload="metadata" data-case-native-controls (loadedmetadata)="configureFlowVideo($event)"></video>
+          <button type="button" class="juh-challenge-video__mobile-expand case-expand-affordance" aria-label="Ampliar vídeo demonstrativo do JUH" (click)="openVideoPreview('/projects/juh/video_juhecommerce.mp4', 'Vídeo demonstrativo completo do JUH')"></button>
+        </div>
+      </figure>
+      <div class="juh-screen-pair">
+        <figure><div class="juh-comparison__meta"><span>HOME</span><button type="button" class="licita-applied-comparison__expand" (click)="openImagePreview('/projects/juh/hero_desktop.png', 'Home JUH em desktop com identidade e entrada no catálogo')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="juh-comparison__media"><img src="/projects/juh/hero_desktop.png" width="1909" height="948" alt="Home JUH em desktop com identidade e entrada no catálogo" loading="lazy"></div><figcaption>Home · identidade e entrada no catálogo</figcaption></figure>
+        <figure><div class="juh-comparison__meta"><span>CATÁLOGO</span><button type="button" class="licita-applied-comparison__expand" (click)="openImagePreview('/projects/juh/produtos_descktop.png', 'Catálogo JUH com três produtos demonstrativos')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="juh-comparison__media"><img src="/projects/juh/produtos_descktop.png" width="1888" height="943" alt="Catálogo JUH com três produtos demonstrativos" loading="lazy"></div><figcaption>Catálogo · três produtos, um fluxo partilhado</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="story-chapter juh-chapter juh-editorial-intro-section" aria-labelledby="juh-flow-title">
+      <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">03.</span><h2 id="juh-flow-title" class="story-chapter-title case-study-section-title section-heading-title">Fluxo de Produto</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Escolher, adicionar, rever e confirmar.</div></header>
+      <p class="juh-intro juh-editorial-intro">O detalhe exige tamanho e cor antes de adicionar. No carrinho, a variante permanece visível e cada alteração de quantidade atualiza imediatamente a contagem e o total.</p>
+      <div class="juh-flow-media">
+        <div class="juh-flow-screens">
+          <figure data-case-expand-desktop><div class="juh-comparison__meta"><button type="button" class="licita-applied-comparison__expand" (click)="openImagePreview('/projects/juh/verproduto_descktop.png', 'Detalhe de produto JUH com opções de tamanho e cor')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><img src="/projects/juh/verproduto_descktop.png" width="1892" height="950" alt="Detalhe de produto JUH com opções de tamanho e cor" loading="lazy" (click)="openImagePreview('/projects/juh/verproduto_descktop.png', 'Detalhe de produto JUH com opções de tamanho e cor')"><figcaption>01 · Detalhe e seleção de variantes</figcaption></figure>
+          <figure data-case-expand-desktop><div class="juh-comparison__meta"><button type="button" class="licita-applied-comparison__expand" (click)="openImagePreview('/projects/juh/carrinho_descktop.png', 'Carrinho JUH com duas variantes e resumo da compra')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><img src="/projects/juh/carrinho_descktop.png" width="1893" height="941" alt="Carrinho JUH com duas variantes e resumo da compra" loading="lazy" (click)="openImagePreview('/projects/juh/carrinho_descktop.png', 'Carrinho JUH com duas variantes e resumo da compra')"><figcaption>02 · Carrinho e revisão do pedido</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="story-chapter juh-chapter juh-functional juh-editorial-intro-section" aria-labelledby="juh-functional-title">
+        <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">04.</span><h2 id="juh-functional-title" class="story-chapter-title case-study-section-title section-heading-title">Fluxo Funcional</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Do produto à validação num único percurso.</div></header>
+        <p class="juh-intro juh-editorial-intro">O fluxo liga navegação, estado e validação numa sequência única, mantendo cada etapa sincronizada ao longo da experiência.</p>
+        <ol class="juh-functional-flow" aria-label="Fluxo funcional e técnico da aplicação JUH">
+          <li><strong>CATÁLOGO</strong><span>HttpClient</span></li>
+          <li><strong>PRODUTO</strong><span>/products/:id</span></li>
+          <li><strong>VARIANTE</strong><span>size + color</span></li>
+          <li><strong>CARRINHO</strong><span>Angular Signals</span></li>
+          <li><strong>PERSISTÊNCIA</strong><span>localStorage</span></li>
+          <li><strong>CHECKOUT</strong><span>Reactive Forms</span></li>
+          <li><strong>VALIDAÇÃO</strong><span>Validators + form state</span></li>
+        </ol>
+    </section>
+
+    <section class="story-chapter juh-chapter juh-editorial-intro-section juh-code-implementation-section" aria-labelledby="juh-cart">
+      <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">05.</span><h2 id="juh-cart" class="story-chapter-title case-study-section-title section-heading-title">Implementação do Código</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Estado, variantes e persistência numa única lógica.</div></header>
+      <div class="juh-state-implementation">
+        <article class="juh-state-implementation__column"><h3>ESTADO REATIVO</h3><figure class="juh-code"><figcaption>CartService · Signals e computed</figcaption><pre><code>{{ snippets.signals }}</code></pre></figure><p>O CartService mantém o Signal editável privado e expõe uma versão apenas de leitura. Valores computed derivam a quantidade total e o valor monetário.</p></article>
+        <article class="juh-state-implementation__column"><h3>VARIANTES E PERSISTÊNCIA</h3><figure class="juh-code"><figcaption>CartService · identidade da variante</figcaption><pre><code>{{ snippets.variant }}</code></pre></figure><div class="juh-state-implementation__copy"><p>A mesma combinação incrementa a quantidade; uma combinação diferente cria outra linha. As atualizações produzem novos arrays e objetos, enquanto tamanhos ou cores inválidos são rejeitados.</p><p>O carrinho usa a chave <code>juh.cart.v1</code>. O restauro valida defensivamente produtos, variantes e quantidades; dados inválidos resultam num carrinho vazio. A proteção browser/SSR e o tratamento de falhas mantêm o estado em memória utilizável.</p></div></article>
+      </div>
+      <div class="juh-technical-note"><div class="juh-technical-note__content"><h3>Routing e estado assíncrono</h3><p>A rota <code>/products/:id</code> alimenta o detalhe através do parâmetro de rota e de <code>switchMap</code>. Uma mudança de produto repõe a seleção de variante; loading, erro de pedido e produto inexistente têm estados explícitos. O catálogo local é lido por <code>HttpClient</code>.</p><a class="juh-github-link" [href]="github + '/blob/main/src/app/features/product-detail/product-detail.ts'" target="_blank" rel="noopener noreferrer">VER IMPLEMENTAÇÃO DA ROTA <span class="cta-arrow" aria-hidden="true"></span></a></div></div>
+    </section>
+
+    <section class="story-chapter juh-chapter juh-editorial-intro-section juh-checkout-section" aria-labelledby="juh-checkout">
+      <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">06.</span><h2 id="juh-checkout" class="story-chapter-title case-study-section-title section-heading-title">Checkout e Validação</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Validar antes de confirmar.</div></header>
+      <div class="juh-checkout-content">
+        <div class="story-copy juh-editorial-intro"><p>Um Reactive Form tipado e não anulável valida campos obrigatórios, email e o formato português do código postal. Uma submissão inválida marca os campos como tocados e apresenta erros junto aos respetivos campos.</p><p>Uma confirmação válida limpa o formulário e o carrinho. O checkout é demonstrativo: os dados não são transmitidos nem persistidos e não existe pagamento real.</p></div>
+        <figure class="juh-code juh-checkout-code"><figcaption>CheckoutComponent · Reactive Form</figcaption><pre><code>{{ snippets.form }}</code></pre></figure>
+        <figure class="juh-challenge-video-frame juh-checkout-demo-frame">
+          <div class="juh-comparison__meta juh-challenge-video__meta"><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar micro-demo de checkout e validação" (click)="openCheckoutVideoPreview()">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div>
+          <div class="juh-challenge-video__media">
+            <video class="juh-flow-video juh-checkout-demo" src="/projects/juh/video_juhecommerce.mp4" controls autoplay muted playsinline preload="metadata" data-case-native-controls (loadedmetadata)="configureCheckoutDemo($event)" (timeupdate)="limitCheckoutDemo($event)" (play)="restartCheckoutDemo($event)" (seeked)="keepCheckoutDemoInRange($event)"></video>
+            <button type="button" class="juh-challenge-video__mobile-expand case-expand-affordance" aria-label="Ampliar micro-demo de checkout e validação" (click)="openCheckoutVideoPreview()"></button>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="story-chapter juh-chapter juh-editorial-intro-section juh-responsive-section" aria-labelledby="juh-responsive">
+      <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">07.</span><h2 id="juh-responsive" class="story-chapter-title case-study-section-title section-heading-title">Implementação Responsiva</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">O mesmo percurso, adaptado ao espaço.</div></header>
+      <div class="juh-editorial-intro juh-editorial-intro--stack"><p>A Home passa de uma divisão horizontal para uma composição vertical. O detalhe adapta imagem e opções; carrinho e checkout reorganizam o conteúdo; a navbar mantém-se legível e sem colisões. Não foi uma abordagem mobile-first, mas um responsive safety pass sobre todo o percurso.</p><p>Validado em Chrome / Windows: 320 · 375 · 390 · 430 · 768 · 1024 · 1440px · zero overflow horizontal.</p></div>
+      <div class="juh-mobile-gallery juh-editorial-followup">
+        <figure><div class="juh-comparison__meta"><button type="button" class="licita-applied-comparison__expand" (click)="openImagePreview('/projects/juh/hero.png', 'Home JUH adaptada a mobile')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><img src="/projects/juh/hero.png" width="340" height="741" alt="Home JUH adaptada a mobile" loading="lazy"><figcaption>Home</figcaption></figure>
+        <figure><div class="juh-comparison__meta"><button type="button" class="licita-applied-comparison__expand" (click)="openImagePreview('/projects/juh/verprodutos2.png', 'Detalhe de produto JUH adaptado a mobile')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><img src="/projects/juh/verprodutos2.png" width="341" height="738" alt="Detalhe de produto JUH adaptado a mobile" loading="lazy"><figcaption>Detalhe de produto</figcaption></figure>
+        <figure><div class="juh-comparison__meta"><button type="button" class="licita-applied-comparison__expand" (click)="openImagePreview('/projects/juh/finalizarcompra.png', 'Checkout JUH adaptado a mobile')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><img src="/projects/juh/finalizarcompra.png" width="342" height="737" alt="Checkout JUH adaptado a mobile" loading="lazy"><figcaption>Checkout</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="story-chapter juh-chapter juh-editorial-intro-section juh-frontend-implementation-section" aria-labelledby="juh-implementation">
+      <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">08.</span><h2 id="juh-implementation" class="story-chapter-title case-study-section-title section-heading-title">Implementação Front-end</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Interface e lógica organizadas por responsabilidade.</div></header>
+      <div class="story-copy juh-editorial-intro"><p>Componentes standalone organizam as funcionalidades; serviços concentram catálogo e carrinho. Angular Signals, RxJS, Reactive Forms, routing, <code>HttpClient</code> e <code>localStorage</code> ligam interface, dados e comportamento.</p><p>Vitest cobre estado e fluxos críticos. SSR/hybrid rendering é protegido nos acessos às APIs exclusivas do browser.</p></div>
+      <div class="juh-architecture juh-editorial-followup" aria-label="Arquitetura de funcionalidades do JUH"><div><h3>CORE</h3><ul><li>models</li><li>services</li></ul></div><div><h3>FEATURES</h3><ul><li>home</li><li>products</li><li>product-detail</li><li>cart</li><li>checkout</li><li>order-success</li></ul></div><div><h3>SHARED</h3><ul><li>navbar</li><li>product-card</li></ul></div></div>
+      <p class="juh-tech-stack">Angular 21.2.22 · Angular CLI / SSR 21.2.23 · TypeScript 5.9.3 · RxJS 7.8.2 · Vitest 4.1.11 · HTML · CSS · localStorage</p>
+    </section>
+
+    <section class="story-chapter juh-chapter juh-editorial-intro-section juh-result-section" data-case-study-final aria-labelledby="juh-result">
+      <header class="case-study-section-header editorial-section-header"><span class="case-study-section-number">09.</span><h2 id="juh-result" class="story-chapter-title case-study-section-title section-heading-title">Resultado</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Da interface ao comportamento de uma aplicação.</div></header>
+      <div class="juh-result-layout">
+        <div class="juh-result-content">
+          <p class="juh-intro juh-result-intro">O resultado é um fluxo demonstrativo de e-commerce completo, com estado reativo partilhado, carrinho persistente, checkout validado, layouts responsivos e estados explícitos de loading e erro.</p>
+          <dl class="juh-results" aria-label="Indicadores do projeto"><div data-count-target="42"><dt>Testes aprovados</dt><dd class="juh-result-counter">0</dd></div><div data-count-target="10"><dt>Ficheiros de teste</dt><dd class="juh-result-counter">0</dd></div><div data-count-target="0"><dt class="juh-results__vulnerabilities"><span>Vulnerabilidades</span><span>No npm audit</span></dt><dd class="juh-result-counter">0</dd></div></dl>
+          <p class="juh-validation-note">Production build, TypeScript checks e <code>git diff --check</code> aprovados. Não existe CI/CD configurado para este projeto.</p>
+          <a class="juh-github-link" [href]="github" target="_blank" rel="noopener noreferrer">VER PROJETO NO GITHUB <span class="cta-arrow" aria-hidden="true"></span></a>
+        </div>
+        <figure class="juh-result-screen" data-case-expand-desktop><div class="juh-comparison__meta"><button type="button" class="licita-applied-comparison__expand" (click)="openImagePreview('/projects/juh/compraconcluida_descktop.png', 'Página de confirmação final da compra demonstrativa JUH')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><img src="/projects/juh/compraconcluida_descktop.png" width="1893" height="947" alt="Página de confirmação final da compra demonstrativa JUH" loading="lazy" (click)="openImagePreview('/projects/juh/compraconcluida_descktop.png', 'Página de confirmação final da compra demonstrativa JUH')"><figcaption>Conclusão do percurso demonstrativo</figcaption></figure>
+      </div>
+      <div class="juh-result-conclusion">
+        <h3>Conclusão</h3>
+        <p>JUH evoluiu de uma demonstração visual para uma aplicação front-end estruturada, com navegação real, estado partilhado, persistência, validação e comportamento responsivo. O projeto evidencia a passagem do design para uma implementação Angular funcional e organizada.</p>
+      </div>
+    </section>
+  </div>
+  <a class="next-case next-case--licitanow is-visible" href="/case-studies/civitas" aria-label="Ver o case study Civitas">
+    <span class="case-shell next-case__simple">
+      <span>PRÓXIMO PROJETO <b class="cta-arrow" aria-hidden="true"></b></span>
+    </span>
+  </a>
+</main>
+
+<app-case-image-preview [attachCloseToMedia]="true" />
+
+<div class="licita-video-preview" [class.is-open]="videoPreviewOpen" [attr.aria-hidden]="!videoPreviewOpen" role="dialog" aria-modal="true" [attr.aria-label]="videoPreviewLabel" (pointerdown)="closeVideoPreviewFromBackdrop($event)" (document:keydown.escape)="closeVideoPreview()">
+  @if (videoPreviewSrc) {
+    <div class="licita-video-preview__panel" (pointerdown)="$event.stopPropagation()">
+      <button type="button" class="licita-video-preview__close" aria-label="Fechar preview" (click)="closeVideoPreview()">×</button>
+      <div class="licita-video-preview__media">
+        <video [src]="videoPreviewSrc" controls muted playsinline (loadedmetadata)="configureVideoPreview($event)" (timeupdate)="limitVideoPreview($event)" (play)="restartVideoPreview($event)" (seeked)="keepVideoPreviewInRange($event)"></video>
+      </div>
+    </div>
+  }
+</div>

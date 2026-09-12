@@ -1,13 +1,21 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, ViewChild, afterNextRender } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import emailjs from '@emailjs/browser';
 import { ProjectCaseComponent } from './project-case/project-case';
 import { LicitaNowCaseComponent } from './licitanow-case/licitanow-case';
+import { JuhCaseComponent } from './juh-case/juh-case';
 import { LanguageService } from './i18n/language.service';
 import { TranslateDirective } from './i18n/translate.directive';
 
 type ProjectChatQuickAction = 'services' | 'pricing' | 'portfolio' | 'client' | 'recruiter' | 'quote';
 type ProjectChatActionId =
   | ProjectChatQuickAction
+  | 'service-uiux'
+  | 'service-frontend'
+  | 'service-websites'
+  | 'service-branding'
+  | 'service-saas'
+  | 'service-projects'
   | 'branding'
   | 'websites'
   | 'ecommerce'
@@ -41,7 +49,7 @@ interface ProjectChatMessage {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ProjectCaseComponent, LicitaNowCaseComponent, FormsModule],
+  imports: [ProjectCaseComponent, LicitaNowCaseComponent, JuhCaseComponent, FormsModule],
   hostDirectives: [TranslateDirective],
   templateUrl: './app.html',
   styleUrl: './app.scss',
@@ -53,10 +61,15 @@ export class App implements AfterViewInit, OnDestroy {
   isScrolled = false;
   activeSection = '';
   isMenuOpen = false;
+  isMenuMounted = false;
+  isMenuClosing = false;
   desktopMenuOpen = false;
   desktopMenuHover = false;
   private desktopMenuAutoCloseTimeout?: ReturnType<typeof setTimeout>;
   private desktopMenuHoverCloseTimeout?: ReturnType<typeof setTimeout>;
+  private mobileMenuCloseTimeout?: ReturnType<typeof setTimeout>;
+  private mobileMenuOpenRaf?: number;
+  private mobileMenuSecondOpenRaf?: number;
   readonly serviceIconPaths = [
     'M12 3l1.1 3.4L16.5 7.5l-3.4 1.1L12 12l-1.1-3.4L7.5 7.5l3.4-1.1L12 3zM18.5 13l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2zM5 14l.9 2.6L8.5 17l-2.6.9L5 20.5l-.9-2.6L1.5 17l2.6-.4L5 14z',
     'M4 5h16v11H4zM8 20h8M12 16v4',
@@ -75,6 +88,10 @@ export class App implements AfterViewInit, OnDestroy {
   private projectChatCloseTimeout?: ReturnType<typeof setTimeout>;
   projectChatStep = 0;
   projectChatSent = false;
+  projectChatSending = false;
+  private readonly emailServiceId = 'service_jr984oj';
+  private readonly emailTemplateId = 'template_7zyvxhl';
+  private readonly emailPublicKey = 'xOAXNdGvEpf5va2VL';
   projectChatError = '';
   projectChatInput = '';
   activeProcessStep = -1;
@@ -118,11 +135,24 @@ export class App implements AfterViewInit, OnDestroy {
     'Outro',
   ];
 
+  private readonly projectChatServices: Array<{
+    action: ProjectChatActionId;
+    label: string;
+    description: string;
+  }> = [
+    { action: 'service-uiux', label: 'UI/UX Design', description: 'Desenho interfaces e experiências digitais claras e intuitivas, desde os fluxos de navegação até aos protótipos e ao design final.' },
+    { action: 'service-frontend', label: 'Front-end Development', description: 'Transformo designs em interfaces web responsivas e acessíveis, com atenção ao detalhe e à experiência de utilização.' },
+    { action: 'service-websites', label: 'Websites', description: 'Crio websites que apresentam a tua marca e os teus serviços de forma clara, com uma experiência consistente em desktop e mobile.' },
+    { action: 'service-branding', label: 'Branding', description: 'Desenvolvo identidades visuais coerentes, do logótipo às cores e tipografia, para comunicar a personalidade da tua marca.' },
+    { action: 'service-saas', label: 'Produtos SaaS', description: 'Desenho interfaces para produtos SaaS, organizando funcionalidades e informação para simplificar tarefas e apoiar a evolução do produto.' },
+  ];
+
   readonly projectBudgetOptions = [
-    'Até 2.500 €',
-    '2.500 € — 5.000 €',
-    '5.000 € — 10.000 €',
-    'Acima de 10.000 €',
+    'Até 750 €',
+    '750 € — 1.500 €',
+    '1.500 € — 3.000 €',
+    '3.000 € — 5.000 €',
+    'Acima de 5.000 €',
     'Ainda não sei',
   ];
 
@@ -131,9 +161,19 @@ export class App implements AfterViewInit, OnDestroy {
   private servicesGridRevealObserver?: IntersectionObserver;
   private processRevealObserver?: IntersectionObserver;
   private footerSocialObserver?: IntersectionObserver;
+  private caseStudyChatObserver?: IntersectionObserver;
+  private caseStudyChatTrigger?: HTMLElement;
+  private caseStudyChatInitRaf?: number;
+  private caseStudyChatSecondRaf?: number;
+  caseStudyChatVisible = false;
   private processRevealRafId?: number;
   private processRevealSecondRafId?: number;
   private heroStackRafId?: number;
+  private mobileHeroResizeObserver?: ResizeObserver;
+  private observedMobileHeroStack?: HTMLElement;
+  private readonly refreshMobileHeroLayout = () => {
+    if (window.innerWidth <= 768) this.scheduleHeroStackUpdate();
+  };
   private servicesSceneElement?: HTMLElement;
   private servicesSceneRafId?: number;
   private servicesSceneListening = false;
@@ -148,11 +188,12 @@ export class App implements AfterViewInit, OnDestroy {
   constructor(private readonly changeDetectorRef: ChangeDetectorRef, readonly language: LanguageService) {
     afterNextRender(() => {
       const caseRoute = window.location.pathname.replace(/\/$/, '');
-      if (caseRoute === '/case-studies/civitas' || caseRoute === '/case-studies/licitanow' || caseRoute === '/case-studies/smart-charging') {
-        this.selectedProject = caseRoute.endsWith('/licitanow')
+      if (caseRoute === '/case-studies/civitas' || caseRoute === '/case-studies/licitanow' || caseRoute === '/case-studies/smart-charging' || caseRoute === '/case-studies/juh') {
+        this.selectedProject = caseRoute.endsWith('/juh') ? this.juhProject : caseRoute.endsWith('/licitanow')
           ? this.projects[1]
           : caseRoute.endsWith('/smart-charging') ? this.projects[2] : this.projects[0];
         this.changeDetectorRef.detectChanges();
+        this.scheduleCaseStudyChatObserver();
         window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
       }
       this.initServicesScene();
@@ -168,8 +209,10 @@ export class App implements AfterViewInit, OnDestroy {
       ? this.projects[0]
       : caseRoute === '/case-studies/licitanow'
         ? this.projects[1]
-        : caseRoute === '/case-studies/smart-charging' ? this.projects[2] : null;
+        : caseRoute === '/case-studies/smart-charging' ? this.projects[2]
+          : caseRoute === '/case-studies/juh' ? this.juhProject : null;
     this.changeDetectorRef.detectChanges();
+    this.scheduleCaseStudyChatObserver();
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }
 
@@ -187,7 +230,7 @@ export class App implements AfterViewInit, OnDestroy {
     this.updateDesktopMenuContrast();
     this.updateFooterSocialVisibility();
 
-    if (this.isMenuOpen) {
+    if (this.isMenuOpen && window.innerWidth > 768) {
       this.closeMenu();
     }
 
@@ -576,10 +619,12 @@ export class App implements AfterViewInit, OnDestroy {
 
   @HostListener('window:resize')
   onWindowResize() {
+    this.updateProjectNavigation();
     this.scheduleHeroStackUpdate();
     this.updateDesktopMenuContrast();
+    this.scheduleCaseStudyChatObserver();
 
-    if (window.innerWidth > 768 && this.isMenuOpen) {
+    if (window.innerWidth > 768 && this.isMenuMounted) {
       this.closeMenu();
     }
 
@@ -588,9 +633,15 @@ export class App implements AfterViewInit, OnDestroy {
     }
   }
 
+  @HostListener('window:pageshow')
+  @HostListener('window:orientationchange')
+  onMobileViewportChange(): void {
+    this.refreshMobileHeroLayout();
+  }
+
   @HostListener('document:keydown.escape')
   closeProjectChatOnEscape() {
-    if (this.isMenuOpen || this.desktopMenuOpen) this.closeMenu();
+    if (this.isMenuMounted || this.desktopMenuOpen) this.closeMenu();
     if (this.projectChatOpen) this.closeProjectChat();
   }
 
@@ -691,9 +742,44 @@ export class App implements AfterViewInit, OnDestroy {
     }
   }
 
-  submitProjectChat() {
-    this.projectChatSent = true;
+  async submitProjectChat(): Promise<void> {
+    if (this.projectChatSending || this.projectChatSent) return;
     this.projectChatError = '';
+    const request = this.projectChat;
+    const { name, email, type, goal, budget } = request;
+    if (name.trim().length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      this.projectChatError = 'Indica um nome e um email válidos.';
+      return;
+    }
+    if (!type.trim() || !goal.trim() || !budget.trim()) {
+      this.projectChatError = 'Preenche o tipo de projeto, o objetivo e o orçamento antes de enviar.';
+      return;
+    }
+
+    const templateParams = {
+      name: name.trim(),
+      email: email.trim(),
+      reply_to: request.email,
+      service: type.trim(),
+      company: 'Não indicado',
+      phone: 'Não indicado',
+      message: `Objetivo: ${goal.trim()}\nOrçamento: ${budget.trim()}\nPágina: ${window.location.href}`,
+    };
+
+    this.projectChatSending = true;
+    try {
+      await emailjs.send(this.emailServiceId, this.emailTemplateId, templateParams, {
+        publicKey: this.emailPublicKey,
+      });
+      if (this.projectChat === request) this.projectChatSent = true;
+    } catch {
+      if (this.projectChat === request) {
+        this.projectChatError = 'Não foi possível enviar o pedido. Tenta novamente ou contacta-me por email.';
+      }
+    } finally {
+      this.projectChatSending = false;
+      this.changeDetectorRef.markForCheck();
+    }
   }
 
   resetProjectChat() {
@@ -722,7 +808,9 @@ export class App implements AfterViewInit, OnDestroy {
       this.addProjectChatMessage(
         'assistant',
         'Trabalho em UI/UX Design, Front-end Development, Branding, Websites e produtos SaaS.',
-        [{ id: 'expertise', label: 'Ver Especialização', action: 'expertise' }]
+        this.projectChatServices.map(service => ({
+          id: service.action, label: service.label, action: service.action,
+        }))
       );
     } else if (action === 'pricing') {
       this.addProjectChatMessage(
@@ -761,6 +849,24 @@ export class App implements AfterViewInit, OnDestroy {
   handleProjectChatAction(action: ProjectChatActionId): void {
     if (['services', 'pricing', 'portfolio', 'client', 'recruiter', 'quote'].includes(action)) {
       this.handleQuickAction(action as ProjectChatQuickAction);
+      return;
+    }
+
+    const service = this.projectChatServices.find(service => service.action === action);
+    if (service) {
+      this.addProjectChatMessage('user', service.label);
+      this.addProjectChatMessage('assistant', service.description, [
+        { id: 'service-projects', label: 'Ver projetos', action: 'service-projects' },
+        { id: 'service-quote', label: 'Pedir orçamento', action: 'quote' },
+        { id: 'service-contact', label: 'Contactar', action: 'other', href: 'mailto:joanacastro.webdeveloper@gmail.com' },
+      ]);
+      this.scrollProjectChatToEnd();
+      return;
+    }
+
+    if (action === 'service-projects') {
+      this.closeProjectChat();
+      this.navigateToSection(new Event('click'), 'portfolio');
       return;
     }
 
@@ -884,8 +990,27 @@ export class App implements AfterViewInit, OnDestroy {
   }
 
   toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
+    if (this.isMenuMounted) {
+      this.closeMenu();
+      return;
+    }
+    clearTimeout(this.mobileMenuCloseTimeout);
+    this.mobileMenuCloseTimeout = undefined;
+    this.cancelMobileMenuOpenFrames();
+    this.isMenuClosing = false;
+    this.isMenuMounted = true;
+    this.isMenuOpen = false;
     this.syncMobileMenuState();
+    this.changeDetectorRef.detectChanges();
+    this.mobileMenuOpenRaf = requestAnimationFrame(() => {
+      this.mobileMenuOpenRaf = undefined;
+      this.mobileMenuSecondOpenRaf = requestAnimationFrame(() => {
+        this.mobileMenuSecondOpenRaf = undefined;
+        if (!this.isMenuMounted || this.isMenuClosing) return;
+        this.isMenuOpen = true;
+        this.changeDetectorRef.detectChanges();
+      });
+    });
   }
 
   toggleDesktopMenu() {
@@ -911,15 +1036,53 @@ export class App implements AfterViewInit, OnDestroy {
     clearTimeout(this.desktopMenuHoverCloseTimeout);
     this.desktopMenuAutoCloseTimeout = undefined;
     this.desktopMenuHoverCloseTimeout = undefined;
+    if (window.innerWidth <= 768 && this.isMenuMounted && !this.isMenuClosing) {
+      this.cancelMobileMenuOpenFrames();
+      this.isMenuClosing = true;
+      this.isMenuOpen = false;
+      this.changeDetectorRef.detectChanges();
+      clearTimeout(this.mobileMenuCloseTimeout);
+      this.mobileMenuCloseTimeout = setTimeout(() => {
+        this.completeMobileMenuClose();
+      }, 1100);
+      return;
+    }
+    clearTimeout(this.mobileMenuCloseTimeout);
+    this.mobileMenuCloseTimeout = undefined;
+    this.isMenuClosing = false;
     this.isMenuOpen = false;
+    this.isMenuMounted = false;
     this.desktopMenuOpen = false;
     this.desktopMenuHover = false;
     this.syncMobileMenuState();
   }
 
+  finishMobileMenuClose(event: TransitionEvent): void {
+    if (!this.isMenuClosing || event.propertyName !== 'transform' ||
+        event.target !== event.currentTarget) return;
+    this.completeMobileMenuClose();
+  }
+
+  private completeMobileMenuClose(): void {
+    clearTimeout(this.mobileMenuCloseTimeout);
+    this.mobileMenuCloseTimeout = undefined;
+    this.isMenuOpen = false;
+    this.isMenuMounted = false;
+    this.isMenuClosing = false;
+    this.syncMobileMenuState();
+    this.changeDetectorRef.detectChanges();
+  }
+
+  private cancelMobileMenuOpenFrames(): void {
+    if (this.mobileMenuOpenRaf !== undefined) cancelAnimationFrame(this.mobileMenuOpenRaf);
+    if (this.mobileMenuSecondOpenRaf !== undefined) cancelAnimationFrame(this.mobileMenuSecondOpenRaf);
+    this.mobileMenuOpenRaf = undefined;
+    this.mobileMenuSecondOpenRaf = undefined;
+  }
+
   private syncMobileMenuState(): void {
     if (typeof document === 'undefined') return;
-    const shouldLock = this.isMenuOpen && window.innerWidth <= 768;
+    const shouldLock = this.isMenuMounted && window.innerWidth <= 768;
     document.body.classList.toggle('mobile-menu-open', shouldLock);
     document.body.style.overflow = shouldLock ? 'hidden' : '';
     document.body.style.touchAction = shouldLock ? 'none' : '';
@@ -1119,6 +1282,65 @@ export class App implements AfterViewInit, OnDestroy {
     },
   ];
 
+  readonly juhProject = { slug: 'juh', route: '/case-studies/juh', name: 'JUH – E-commerce' };
+  readonly juhProjectUrl = this.juhProject.route;
+
+  openJuhProject(event: MouseEvent): void {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    this.openProject(this.juhProject);
+  }
+
+  canScrollProjectsBack = false;
+  canScrollProjectsForward = true;
+  projectPreviewPointer = false;
+  private projectStripElement?: HTMLElement;
+
+  updateProjectPreview(event: PointerEvent): void {
+    const strip = this.projectStripElement;
+    const card = strip?.querySelector<HTMLElement>('.portfolio-project-card--juh');
+    if (!strip || !card || event.pointerType === 'touch') return;
+    // Use the stationary grid slot so the moving edge cannot retrigger hover.
+    const width = card.getBoundingClientRect().width;
+    const x = event.clientX - strip.getBoundingClientRect().left + strip.scrollLeft;
+    this.projectPreviewPointer = x >= width * 2 && x < width * 3;
+  }
+
+  @ViewChild('projectStrip')
+  set projectStrip(ref: ElementRef<HTMLElement> | undefined) {
+    this.projectStripElement = ref?.nativeElement;
+    if (ref) requestAnimationFrame(() => this.updateProjectNavigation());
+  }
+
+  updateProjectNavigation(): void {
+    const strip = this.projectStripElement;
+    if (!strip) return;
+    this.canScrollProjectsBack = strip.scrollLeft > 1;
+    if (this.canScrollProjectsBack) this.projectPreviewPointer = false;
+    this.canScrollProjectsForward = strip.scrollLeft < strip.scrollWidth - strip.clientWidth - 1;
+    this.changeDetectorRef.markForCheck();
+  }
+
+  moveProjects(direction: -1 | 1): void {
+    const strip = this.projectStripElement;
+    const card = strip?.querySelector<HTMLElement>('.portfolio-project-card');
+    if (!strip || !card) return;
+    const step = card.getBoundingClientRect().width;
+    const index = Math.round(strip.scrollLeft / step);
+    strip.scrollTo({ left: (index + direction) * step, behavior: 'smooth' });
+  }
+
+  scrollProjects(event: WheelEvent): void {
+    if (event.ctrlKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+    const strip = event.currentTarget as HTMLElement;
+    const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? strip.clientWidth : 1);
+    const maxScroll = strip.scrollWidth - strip.clientWidth;
+    if (maxScroll <= 0 || (delta < 0 && strip.scrollLeft <= 1) ||
+        (delta > 0 && strip.scrollLeft >= maxScroll - 1)) return;
+    event.preventDefault();
+    strip.scrollBy({ left: delta, behavior: 'smooth' });
+  }
+
   projects = [
     {
       name: 'Civitas Energy Dashboard',
@@ -1205,17 +1427,26 @@ export class App implements AfterViewInit, OnDestroy {
     this.initServicesGridReveal();
     this.initProcessReveal();
     this.initFooterSocialVisibility();
-    this.scheduleHeroStackUpdate();
+    window.visualViewport?.addEventListener('resize', this.refreshMobileHeroLayout);
+    // Apply the mobile layered geometry before the first paint.
+    if (window.innerWidth <= 768) this.updateHeroStack();
+    else this.scheduleHeroStackUpdate();
   }
 
   ngOnDestroy(): void {
+    this.menuScrollCleanup?.();
+    this.mobileHeroResizeObserver?.disconnect();
+    window.visualViewport?.removeEventListener('resize', this.refreshMobileHeroLayout);
     if (this.projectChatCloseTimeout) clearTimeout(this.projectChatCloseTimeout);
     document.documentElement.style.removeProperty('overflow');
     document.body.style.removeProperty('overflow');
     clearTimeout(this.desktopMenuAutoCloseTimeout);
     clearTimeout(this.desktopMenuHoverCloseTimeout);
+    clearTimeout(this.mobileMenuCloseTimeout);
+    this.cancelMobileMenuOpenFrames();
     this.desktopMenuAutoCloseTimeout = undefined;
     this.desktopMenuHoverCloseTimeout = undefined;
+    this.mobileMenuCloseTimeout = undefined;
     document.body.classList.remove('hero-menu-dark');
     if (this.heroStackRafId !== undefined) {
       cancelAnimationFrame(this.heroStackRafId);
@@ -1242,6 +1473,7 @@ export class App implements AfterViewInit, OnDestroy {
     document.documentElement.classList.remove('services-grid-reveal-enabled');
     this.footerSocialObserver?.disconnect();
     this.footerSocialObserver = undefined;
+    this.cleanupCaseStudyChatObserver();
     this.cleanupProcessReveal();
     this.cleanupServicesScene();
   }
@@ -1259,7 +1491,6 @@ export class App implements AfterViewInit, OnDestroy {
     this.footerSocialObserver = new IntersectionObserver(
       ([entry]) => {
         document.querySelector<HTMLElement>('.navbar')?.classList.toggle('is-hidden-on-footer', entry.isIntersecting);
-        if (entry.isIntersecting) this.closeMenu();
       },
       {
         threshold: 0,
@@ -1267,6 +1498,72 @@ export class App implements AfterViewInit, OnDestroy {
       },
     );
     this.footerSocialObserver.observe(footer);
+  }
+
+  private scheduleCaseStudyChatObserver(): void {
+    this.cleanupCaseStudyChatObserver();
+
+    if (!this.selectedProject || window.innerWidth > 768) return;
+
+    this.caseStudyChatInitRaf = requestAnimationFrame(() => {
+      this.caseStudyChatInitRaf = undefined;
+      this.caseStudyChatSecondRaf = requestAnimationFrame(() => {
+        this.caseStudyChatSecondRaf = undefined;
+        this.initCaseStudyChatObserver();
+      });
+    });
+  }
+
+  private initCaseStudyChatObserver(): void {
+    const explicitFinal = document.querySelector<HTMLElement>('[data-case-study-final]');
+    const visibleSections = Array.from(document.querySelectorAll<HTMLElement>('main section'))
+      .filter(section => getComputedStyle(section).display !== 'none');
+    const finalSection = explicitFinal ?? visibleSections.at(-1);
+
+    if (!finalSection || typeof IntersectionObserver === 'undefined') return;
+
+    const trigger = document.createElement('span');
+    trigger.className = 'case-study-chat-trigger';
+    trigger.setAttribute('aria-hidden', 'true');
+    finalSection.before(trigger);
+    this.caseStudyChatTrigger = trigger;
+
+    const updateVisibility = (isVisible: boolean) => {
+      if (this.caseStudyChatVisible === isVisible) return;
+      this.caseStudyChatVisible = isVisible;
+      this.changeDetectorRef.detectChanges();
+    };
+
+    this.caseStudyChatObserver = new IntersectionObserver(([entry]) => {
+      const triggerIsAboveViewport = entry.boundingClientRect.top < (entry.rootBounds?.top ?? 0);
+      updateVisibility(entry.isIntersecting || triggerIsAboveViewport);
+    }, {
+      threshold: 0,
+      rootMargin: '0px 0px -18% 0px',
+    });
+
+    this.caseStudyChatObserver.observe(trigger);
+  }
+
+  private cleanupCaseStudyChatObserver(): void {
+    this.caseStudyChatObserver?.disconnect();
+    this.caseStudyChatObserver = undefined;
+    this.caseStudyChatTrigger?.remove();
+    this.caseStudyChatTrigger = undefined;
+
+    if (this.caseStudyChatInitRaf !== undefined) {
+      cancelAnimationFrame(this.caseStudyChatInitRaf);
+      this.caseStudyChatInitRaf = undefined;
+    }
+    if (this.caseStudyChatSecondRaf !== undefined) {
+      cancelAnimationFrame(this.caseStudyChatSecondRaf);
+      this.caseStudyChatSecondRaf = undefined;
+    }
+
+    if (this.caseStudyChatVisible) {
+      this.caseStudyChatVisible = false;
+      this.changeDetectorRef.detectChanges();
+    }
   }
 
   private updateFooterSocialVisibility(): void {
@@ -1314,6 +1611,15 @@ export class App implements AfterViewInit, OnDestroy {
     stack.classList.add('is-layered');
 
     const isMobileHeroStack = window.innerWidth <= 768;
+    if (isMobileHeroStack && this.observedMobileHeroStack !== stack) {
+      this.mobileHeroResizeObserver?.disconnect();
+      this.observedMobileHeroStack = stack;
+      // Images/fonts and Safari viewport changes can resize these after initialisation.
+      // Observe the measured children, not the container whose height we write below.
+      this.mobileHeroResizeObserver = new ResizeObserver(this.refreshMobileHeroLayout);
+      this.mobileHeroResizeObserver.observe(hero);
+      this.mobileHeroResizeObserver.observe(aboutHold);
+    }
     const heroHeight = hero.offsetHeight;
     const portfolioHeight = aboutHold.offsetHeight;
     const revealDistance = isMobileHeroStack
@@ -1362,7 +1668,13 @@ export class App implements AfterViewInit, OnDestroy {
       !!darkHeroRect && darkHeroRect.top <= 170 && darkHeroRect.bottom >= 170
     );
 
-    const sections = ['servicos', 'portfolio', 'processo', 'contacto'];
+    const heroContentRect = darkHero?.querySelector('.hero-main')?.getBoundingClientRect();
+    if (darkHero && (window.scrollY <= 0 || (heroContentRect && heroContentRect.bottom > 170))) {
+      this.activeSection = 'home';
+      return;
+    }
+
+    const sections = ['servicos', 'portfolio', 'processo', 'contacto', 'sobre'];
 
     for (const section of sections) {
       const element = document.getElementById(section);
@@ -1753,6 +2065,7 @@ export class App implements AfterViewInit, OnDestroy {
     this.closeMenu();
     this.closeProjectChat();
     this.selectedProject = project;
+    this.scheduleCaseStudyChatObserver();
 
     if (project === this.projects[0] && window.location.pathname !== '/case-studies/civitas') {
       window.history.pushState({}, '', '/case-studies/civitas');
@@ -1864,6 +2177,7 @@ export class App implements AfterViewInit, OnDestroy {
 
   closeProject() {
     this.closeProjectChat();
+    this.cleanupCaseStudyChatObserver();
     this.selectedProject = null;
 
     if (window.location.pathname.replace(/\/$/, '').startsWith('/case-studies/')) {
@@ -1906,10 +2220,7 @@ export class App implements AfterViewInit, OnDestroy {
     this.closeMenu();
 
     const scrollToTarget = () => {
-      document.getElementById(sectionId)?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
+      this.scrollToMenuSection(sectionId);
     };
 
     if (this.selectedProject) {
@@ -1919,6 +2230,86 @@ export class App implements AfterViewInit, OnDestroy {
     }
 
     requestAnimationFrame(scrollToTarget);
+  }
+
+  private menuScrollCleanup?: () => void;
+
+  private getMenuSectionTop(sectionId: string): number | null {
+    const section = document.getElementById(sectionId);
+    if (!section) return null;
+    // #home also contains About: never use a descendant heading as its destination.
+    if (sectionId === 'home') return 0;
+    const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+    const heading = section.querySelector<HTMLElement>('.editorial-section-header');
+    if (!heading) return Math.max(0, sectionTop);
+
+    // Use the actual closed menu clearance, not the anchors' legacy 130px margin.
+    const gutter = Math.max(0, document.querySelector('.navbar .menu-toggle')
+      ?.getBoundingClientRect().bottom ?? 0);
+    const title = heading.querySelector<HTMLElement>('h2') ?? heading;
+    const titleStyle = getComputedStyle(title);
+    const titleTransform = titleStyle.transform === 'none'
+      ? 0 : new DOMMatrixReadOnly(titleStyle.transform).m42;
+    const titleTop = title.getBoundingClientRect().top - titleTransform;
+    const panel = sectionId === 'sobre'
+      ? section.closest<HTMLElement>('.about-hold')
+      : section.querySelector<HTMLElement>('.sticky-section__panel');
+    const container = sectionId === 'sobre' ? section.closest<HTMLElement>('.hero-stack') : section;
+
+    if (panel && container) {
+      const panelStyle = getComputedStyle(panel);
+      const containerStyle = getComputedStyle(container);
+      const titleInset = titleTop - panel.getBoundingClientRect().top;
+      const containerTop = window.scrollY + container.getBoundingClientRect().top;
+      const layeredAbout = sectionId === 'sobre' && container.classList.contains('is-layered');
+      const pinnedTitleTop = (parseFloat(panelStyle.top) || 0) + titleInset;
+
+      // A pinned title cannot move above its sticky inset until the panel releases.
+      // Target that real position rather than changing the section's composition.
+      if (layeredAbout || (panelStyle.position === 'sticky' && pinnedTitleTop > gutter)) {
+        return Math.max(0, containerTop + container.clientHeight
+          - (parseFloat(containerStyle.paddingBottom) || 0)
+          - panel.offsetHeight + titleInset - gutter);
+      }
+      if (panelStyle.position === 'sticky') {
+        return Math.max(0, containerTop + (parseFloat(containerStyle.paddingTop) || 0)
+          + titleInset - gutter);
+      }
+    }
+
+    return Math.max(0, sectionTop, window.scrollY + titleTop - gutter);
+  }
+
+  private scrollToMenuSection(sectionId: string): void {
+    this.menuScrollCleanup?.();
+    this.updateHeroStack();
+    const top = this.getMenuSectionTop(sectionId);
+    if (top === null) return;
+
+    const cleanup = () => {
+      window.clearTimeout(timeout);
+      window.removeEventListener('scrollend', settle);
+      window.removeEventListener('wheel', cleanup);
+      window.removeEventListener('touchstart', cleanup);
+      window.removeEventListener('keydown', cleanup);
+      this.menuScrollCleanup = undefined;
+    };
+    const settle = () => {
+      cleanup();
+      // The mobile hero changes height during its reveal. Measure its final layout.
+      this.updateHeroStack();
+      const finalTop = this.getMenuSectionTop(sectionId);
+      if (finalTop !== null && Math.abs(window.scrollY - finalTop) > 1) {
+        window.scrollTo({ top: finalTop, behavior: 'instant' });
+      }
+    };
+    const timeout = window.setTimeout(settle, 1500);
+    this.menuScrollCleanup = cleanup;
+    window.addEventListener('scrollend', settle, { once: true });
+    window.addEventListener('wheel', cleanup, { once: true, passive: true });
+    window.addEventListener('touchstart', cleanup, { once: true, passive: true });
+    window.addEventListener('keydown', cleanup, { once: true });
+    window.scrollTo({ top, behavior: 'smooth' });
   }
 
   scrollTop() {

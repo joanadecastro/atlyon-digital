@@ -1,10 +1,13 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { TranslateDirective } from '../i18n/translate.directive';
+import { CaseHeroScrollIndicatorComponent } from './case-hero-scroll-indicator.component';
+import { CaseImagePreviewComponent, CaseImagePreviewLegendItem } from './case-image-preview.component';
+import { bindCaseExpandableMedia } from './case-expandable-media';
 
 type DemoKey = 'panel' | 'overview' | 'variant';
 type Demo = { key: DemoKey; element: HTMLElement; order: string[] };
 
-@Component({ selector: 'app-project-case', standalone: true, hostDirectives: [TranslateDirective], templateUrl: './project-case.html', styleUrl: './project-case.scss' })
+@Component({ selector: 'app-project-case', standalone: true, imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent], hostDirectives: [TranslateDirective], templateUrl: './project-case.html', styleUrl: './project-case.scss' })
 export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   @Input() project: any;
   @Output() back = new EventEmitter<void>();
@@ -20,15 +23,17 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   @ViewChild('nextProjectNav', { read: ElementRef }) nextProjectNavRef?: ElementRef<HTMLElement>;
   @ViewChild('responsiveMobileDemo', { read: ElementRef }) responsiveMobileDemoRef?: ElementRef<HTMLElement>;
   @ViewChild('responsivePanelDemo', { read: ElementRef }) responsivePanelDemoRef?: ElementRef<HTMLElement>;
+  @ViewChild('userNeedClose', { read: ElementRef }) userNeedCloseRef?: ElementRef<HTMLButtonElement>;
+  @ViewChild('userNeedSurface', { read: ElementRef }) userNeedSurfaceRef?: ElementRef<HTMLElement>;
+  @ViewChild(CaseImagePreviewComponent) private imagePreview?: CaseImagePreviewComponent;
   activeOverviewHotspot: string | null = null;
   demoPulsingHotspot: string | null = null;
   challengeFrontScreen: 'panel' | 'overview' = 'panel';
   challengeDepthSwitching = false;
-  challengePreviewSrc: string | null = null;
-  challengePreviewAlt = '';
-  challengePreviewOpen = false;
   flowMetricValues = ['0.0 kW', '0%', '0.0 kW', '0.0 kW'];
   responsiveOverviewVariant: 0 | 1 = 0;
+  openArchitectureGroup: string | null = null;
+  openUserNeed: string | null = null;
 
   private revealObserver?: IntersectionObserver;
   private storyRevealObserver?: IntersectionObserver;
@@ -66,27 +71,98 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   private flowMetricsActive = false;
   private flowMetricsStart?: () => void;
   private flowMetricsReset?: () => void;
+  private userNeedTrigger?: HTMLButtonElement;
+  private userNeedOutsidePointerHandler?: (event: PointerEvent) => void;
+  private unbindExpandableMedia?: () => void;
 
-  constructor(private readonly cdr: ChangeDetectorRef) {}
+  constructor(private readonly cdr: ChangeDetectorRef, private readonly host: ElementRef<HTMLElement>) {}
 
   openChallengePreview(src: string, alt: string, event: Event): void {
     event.stopPropagation();
-    this.challengePreviewSrc = src;
-    this.challengePreviewAlt = alt;
-    this.challengePreviewOpen = true;
-    document.body.style.overflow = 'hidden';
+    this.imagePreview?.open(src, alt);
+  }
+
+  openPanelPreview(event: Event): void {
+    event.stopPropagation();
+    const legend: readonly CaseImagePreviewLegendItem[] = [
+      { number: '01', title: 'NAVEGAÇÃO E FILTROS' },
+      { number: '02', title: 'INDICADORES PRINCIPAIS' },
+      { number: '03', title: 'METEOROLOGIA' },
+      { number: '04', title: 'PREVISÃO DA PRODUÇÃO' },
+    ];
+    this.imagePreview?.open('/projects/civitas/civitas_painel.png', 'Painel completo do Civitas anotado', false, legend);
+  }
+
+  openOverviewPreview(src: string, alt: string, includeQuota: boolean, event: Event): void {
+    event.stopPropagation();
+    const legend: CaseImagePreviewLegendItem[] = [
+      { number: '01', title: 'CONTEXTO' },
+      { number: '02', title: 'INDICADORES AO VIVO' },
+    ];
+    if (includeQuota) legend.push({ number: '02A', title: 'QUOTA MÉDIA' });
+    legend.push(
+      { number: '03', title: 'MÉTRICAS AGREGADAS' },
+      { number: '04', title: 'CAPITAL' },
+      { number: '05', title: 'EVOLUÇÃO' },
+    );
+    this.imagePreview?.open(src, alt, false, legend);
   }
 
   closeChallengePreview(): void {
-    if (!this.challengePreviewOpen && !this.challengePreviewSrc) return;
-    this.challengePreviewOpen = false;
-    this.challengePreviewSrc = null;
-    this.challengePreviewAlt = '';
-    document.body.style.overflow = '';
+    this.imagePreview?.close();
   }
 
   closeChallengePreviewFromBackdrop(event: Event): void {
     if (event.target === event.currentTarget) this.closeChallengePreview();
+  }
+
+  toggleArchitectureGroup(group: string): void {
+    this.openArchitectureGroup = this.openArchitectureGroup === group ? null : group;
+  }
+
+  get userNeedTitle(): string {
+    return ({ goals: 'OBJETIVOS', difficulties: 'DIFICULDADES', needs: 'NECESSIDADES', behavior: 'COMPORTAMENTO' } as Record<string, string>)[this.openUserNeed ?? ''] ?? '';
+  }
+
+  toggleUserNeed(need: string, event: Event): void {
+    const trigger = event.currentTarget as HTMLButtonElement;
+    if (this.openUserNeed === need) { this.closeUserNeed(); return; }
+    this.userNeedTrigger = trigger;
+    this.openUserNeed = need;
+    this.bindUserNeedOutsidePointer();
+    requestAnimationFrame(() => this.userNeedCloseRef?.nativeElement.focus());
+  }
+
+  closeUserNeed(): void {
+    if (!this.openUserNeed) return;
+    this.unbindUserNeedOutsidePointer();
+    this.openUserNeed = null;
+    const trigger = this.userNeedTrigger;
+    this.userNeedTrigger = undefined;
+    requestAnimationFrame(() => trigger?.focus());
+  }
+
+  private bindUserNeedOutsidePointer(): void {
+    this.unbindUserNeedOutsidePointer();
+    this.userNeedOutsidePointerHandler = (event: PointerEvent) => {
+      const surface = this.userNeedSurfaceRef?.nativeElement;
+      if (surface?.contains(event.target as Node)) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.closeUserNeed();
+    };
+    document.addEventListener('pointerdown', this.userNeedOutsidePointerHandler, true);
+  }
+
+  private unbindUserNeedOutsidePointer(): void {
+    if (!this.userNeedOutsidePointerHandler) return;
+    document.removeEventListener('pointerdown', this.userNeedOutsidePointerHandler, true);
+    this.userNeedOutsidePointerHandler = undefined;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  closeUserNeedFromEscape(event: KeyboardEvent): void {
+    if (event.key === 'Escape') this.closeUserNeed();
   }
 
   toggleOverviewHotspot(id: string, event: Event): void {
@@ -126,6 +202,7 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.unbindExpandableMedia = bindCaseExpandableMedia(this.host.nativeElement, (src, alt) => this.imagePreview?.open(src, alt));
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hero = document.querySelector<HTMLElement>('.civitas-hero');
     const heroItems = Array.from(document.querySelectorAll<HTMLElement>('.civitas-hero .civitas-reveal'));
@@ -758,6 +835,8 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   private render(): void { this.cdr.detectChanges(); }
 
   ngOnDestroy(): void {
+    this.unbindExpandableMedia?.();
+    this.unbindUserNeedOutsidePointer();
     this.closeChallengePreview();
     if (this.heroFrame !== undefined) cancelAnimationFrame(this.heroFrame);
     if (this.scrollFrame !== undefined) cancelAnimationFrame(this.scrollFrame);

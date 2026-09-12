@@ -1,9 +1,9 @@
-<header class="navbar" [class.is-scrolled]="isScrolled" [class.menu-open]="isMenuOpen" [class.project-page]="selectedProject"
+<header class="navbar" [class.is-scrolled]="isScrolled" [class.menu-open]="isMenuMounted" [class.menu-closing]="isMenuClosing" [class.project-page]="selectedProject"
   [class.desktop-menu-open]="desktopMenuOpen || desktopMenuHover"
   (mouseenter)="keepDesktopMenuHoverOpen()"
   (mouseleave)="scheduleDesktopMenuHoverClose()"
   (focusout)="scheduleDesktopMenuHoverClose($event)"
-  (click)="isMenuOpen || desktopMenuOpen ? closeMenu() : null">
+  (click)="isMenuMounted || desktopMenuOpen ? closeMenu() : null">
   @if (selectedProject) {
     <a href="#portfolio" class="project-back-nav" aria-label="Voltar a Case Studies" (click)="navigateToSection($event, 'portfolio')">
       <span class="project-back-nav__arrow" aria-hidden="true"></span>
@@ -12,20 +12,22 @@
 
   <button class="menu-toggle" type="button" (click)="$event.stopPropagation(); toggleDesktopMenu()"
     (mouseenter)="openDesktopMenuHover()" (focus)="openDesktopMenuHover()"
-    [class.is-open]="isMenuOpen || desktopMenuOpen" aria-label="Abrir menu">
+    [class.is-open]="isMenuOpen || desktopMenuOpen" [attr.aria-expanded]="isMenuOpen || desktopMenuOpen"
+    aria-controls="site-navigation" [attr.aria-label]="isMenuOpen ? 'Fechar menu' : 'Abrir menu'">
     <img class="menu-icon-custom" src="projects/menu_only.png" alt="">
     <span></span>
     <span></span>
     <span></span>
   </button>
 
-  <nav [class.mobile-open]="isMenuOpen" (click)="$event.stopPropagation()"
-    (mouseenter)="keepDesktopMenuHoverOpen()">
+  <nav id="site-navigation" [class.mobile-open]="isMenuMounted" [class.panel-open]="isMenuOpen" (click)="$event.stopPropagation()"
+    (mouseenter)="keepDesktopMenuHoverOpen()" (transitionend)="finishMobileMenuClose($event)">
+    <button type="button" class="mobile-menu-close" aria-label="Fechar menu" (click)="closeMenu()">&times;</button>
     <a href="#home" class="mobile-menu-logo" aria-label="Atlyon Digital" (click)="navigateToSection($event, 'home')">
       <img src="/projects/logo/Group 7.png" alt="Atlyon Digital">
     </a>
     <div class="mobile-menu-links">
-      <a href="#home" (click)="navigateToSection($event, 'home')">In&iacute;cio</a>
+      <a href="#home" (click)="navigateToSection($event, 'home')" [class.active]="activeSection === 'home'">In&iacute;cio</a>
       <a href="#portfolio" (click)="navigateToSection($event, 'portfolio')" [class.active]="activeSection === 'portfolio'">Projetos</a>
       <a href="#sobre" (click)="navigateToSection($event, 'sobre')" [class.active]="activeSection === 'sobre'"><span class="nav-label-mobile">Sobre</span><span class="nav-label-desktop">Sobre Mim</span></a>
       <a href="#processo" (click)="navigateToSection($event, 'processo')" [class.active]="activeSection === 'processo'">Processo</a>
@@ -107,25 +109,35 @@
         <p>Com o tempo, aproximei-me naturalmente do design digital, do UI/UX e do desenvolvimento front-end. Hoje trabalho entre design e tecnologia, acompanhando projetos desde a estrat&eacute;gia e branding at&eacute; ao desenho e desenvolvimento de websites, plataformas e produtos digitais.</p>
       </div>
 
-      <a class="about-showcase-cv about-section__cv" href="/cv/Cv_JoanaCastro.pdf" download="Cv_JoanaCastro.pdf">
+      <div class="about-showcase-cv about-section__cv about-editorial-links">
+        <a class="about-resource-link" href="https://github.com/joanadecastro" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <svg class="about-showcase-cv__icon about-resource-link__github" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.63-.2.63-.44v-1.8c-2.57.56-3.11-1.09-3.11-1.09-.42-1.07-1.03-1.35-1.03-1.35-.84-.58.06-.57.06-.57.93.07 1.42.96 1.42.96.83 1.41 2.17 1 2.7.76.08-.6.32-1 .59-1.23-2.05-.23-4.2-1.02-4.2-4.57 0-1.01.36-1.84.95-2.49-.1-.23-.41-1.17.09-2.45 0 0 .78-.25 2.54.95A8.84 8.84 0 0 1 12 7.1c.79 0 1.57.1 2.31.31 1.77-1.2 2.54-.95 2.54-.95.51 1.28.19 2.22.1 2.45.59.65.95 1.48.95 2.49 0 3.56-2.16 4.33-4.22 4.56.33.29.63.85.63 1.72v2.66c0 .24.17.53.64.44A9.25 9.25 0 0 0 12 2.75Z"/></svg>
+          <span class="cta-arrow" aria-hidden="true"></span>
+        </a>
+        <a class="about-resource-link" href="/cv/Cv_JoanaCastro.pdf" download="Cv_JoanaCastro.pdf" aria-label="Descarregar CV">
         <svg class="about-showcase-cv__icon" viewBox="0 0 20 20" aria-hidden="true">
           <path d="M5.5 2.5h5.8l3.2 3.2v11.8h-9z"/>
           <path d="M11.3 2.5v3.2h3.2M7.5 10h5M7.5 13h4"/>
         </svg>
-        DESCARREGAR CV <span class="cta-arrow" aria-hidden="true"></span>
-      </a>
+        CV <span class="cta-arrow" aria-hidden="true"></span>
+        </a>
+      </div>
 
       <div class="about-editorial-skills-row" aria-label="Principais ferramentas e tecnologias">
         <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="11" cy="7" r="5"/><circle cx="11" cy="16" r="5"/><circle cx="11" cy="25" r="5"/><circle cx="21" cy="7" r="5"/><circle cx="21" cy="16" r="5"/></svg><b>Figma</b></span>
         <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3 27 7l-2 17-9 5-9-5L5 7l11-4Z"/><path d="m10.5 22 5.5-14 5.5 14M12.5 17.5h7"/></svg><b>Angular</b></span>
-        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="2"/><path d="M9 11h9M13.5 11v12M20 21.5c1.2 1 4.3 1.2 4.3-1.1 0-2.8-4.6-1.9-4.6-5 0-2.2 2.8-2.8 4.5-1.5"/></svg><b>TypeScript</b></span>
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="2"/><path d="M9 11h9M13.5 11v12M20 21.5c1.2 1 4.3 1.2 4.3-1.1 0-2.8-4.6-1.9-4.6-5 0-2.2 2.8-2.8 4.5-1.5"/></svg><b>TS</b></span>
         <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M25 8c-4-4-14-3-16 2-2.4 6 12 4 10 9-1.4 3.4-8.5 2.6-12-.1M22 6l3 2-1 3M7 19l-1 3 3 2"/></svg><b>SCSS</b></span>
-        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="2"/><path d="M15 10v10c0 3-2 4-5 2M19 21.5c1.2 1 4.3 1.2 4.3-1.1 0-2.8-4.6-1.9-4.6-5 0-2.2 2.8-2.8 4.5-1.5"/></svg><b>JavaScript</b></span>
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="2"/><path d="M15 10v10c0 3-2 4-5 2M19 21.5c1.2 1 4.3 1.2 4.3-1.1 0-2.8-4.6-1.9-4.6-5 0-2.2 2.8-2.8 4.5-1.5"/></svg><b>JS</b></span>
         <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="9" cy="7" r="3"/><circle cx="23" cy="11" r="3"/><circle cx="9" cy="25" r="3"/><path d="M9 10v12m0-8c7 0 7-3 11-3"/></svg><b>Git</b></span>
+        <span class="about-editorial-skill"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="6" width="24" height="20" rx="3"/><path d="m9 12 4 4-4 4m8 0h6"/></svg><b>Claude Code</b></span>
+        <span class="about-editorial-skill" aria-label="OpenAI Codex"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m10 9-7 7 7 7m12-14 7 7-7 7M18 7l-4 18"/></svg><b>Codex</b></span>
+        <span class="about-editorial-skill" aria-label="Google Stitch"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="4" width="24" height="24" rx="3"/><path d="M4 11h24M13 11v17m7-13 .9 2.6L24 19l-3.1 1.4L20 23l-.9-2.6L16 19l3.1-1.4L20 15Z"/></svg><b>Stitch</b></span>
+        <span class="about-editorial-skills-label">AI WORKFLOW: CLAUDE CODE, CODEX, STITCH</span>
       </div>
 
       <div class="about-metrics-row about-section__metrics about-editorial-metrics">
-        <div class="about-metric" data-count-target="14" data-count-duration="900">
+        <div class="about-metric" data-count-target="15" data-count-duration="900">
           <div class="about-metric__value about-section__metric-value-wrap">
             <span class="about-section__metric-number">0</span><span class="about-section__metric-suffix">+</span>
           </div>
@@ -176,8 +188,25 @@
           <p class="editorial-section-subtitle">Do conceito &agrave; implementa&ccedil;&atilde;o de produtos digitais.</p>
         </header>
 
-        <div class="portfolio-catalog portfolio-catalog--static">
+        <div class="portfolio-scroll-frame">
+        <div #projectStrip id="project-strip" class="portfolio-catalog portfolio-catalog--static" [class.project-preview-at-start]="!canScrollProjectsBack" [class.project-preview-pointer]="projectPreviewPointer" (pointermove)="updateProjectPreview($event)" (pointerleave)="projectPreviewPointer = false" tabindex="0" role="region" aria-label="Projetos" (wheel)="scrollProjects($event)" (scroll)="updateProjectNavigation()">
           @for (project of projects; track project.name; let projectIndex = $index) {
+            @if (projectIndex === 2) {
+              <a class="portfolio-project-card portfolio-project-card--juh" [href]="juhProjectUrl" (click)="openJuhProject($event)">
+                <div class="case-card-content">
+                  <div class="case-card-copy">
+                    <strong>
+                      <span class="case-card-title-main">JUH</span>
+                      <span class="case-card-title-secondary">&ngsp;– E-commerce</span>
+                    </strong>
+                    <small>Front-end &middot; Angular &middot; TypeScript</small>
+                  </div>
+                  <span class="case-card-action case-card-cta">
+                    Ver projeto completo <span class="case-card-cta__arrow cta-arrow" aria-hidden="true"></span>
+                  </span>
+                </div>
+              </a>
+            }
             <button type="button" class="portfolio-project-card"
               [class.portfolio-project-card--civitas]="projectIndex === 0"
               [class.portfolio-project-card--licitanow]="projectIndex === 1"
@@ -315,6 +344,11 @@
               </div>
             </div>
           </button>
+        </div>
+        <nav class="portfolio-scroll-nav" aria-label="Navegar pelos projetos">
+          <button type="button" aria-label="Projeto anterior" aria-controls="project-strip" [disabled]="!canScrollProjectsBack" (click)="moveProjects(-1)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m15 5-7 7 7 7"/></svg></button>
+          <button type="button" aria-label="Projeto seguinte" aria-controls="project-strip" [disabled]="!canScrollProjectsForward" (click)="moveProjects(1)"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m9 5 7 7-7 7"/></svg></button>
+        </nav>
         </div>
       </div>
     </div>
@@ -470,7 +504,11 @@
 }
 
 @if (selectedProject) {
-@if (selectedProject.slug === 'licitanow') {
+@if (selectedProject.slug === 'juh') {
+  @defer (when selectedProject.slug === 'juh') {
+    <app-juh-case></app-juh-case>
+  }
+} @else if (selectedProject.slug === 'licitanow') {
 <app-licitanow-case></app-licitanow-case>
 } @else if (selectedProject.slug === 'smart-charging') {
 <main class="smart-charging-teaser">
@@ -558,7 +596,7 @@
   </div>
 </footer>
 
-<div class="project-chat" [class.is-open]="projectChatOpen" [class.is-closing]="projectChatClosing" [class.is-dragging]="projectChatDragging">
+<div class="project-chat" [class.project-chat--case-study]="!!selectedProject" [class.is-case-end-visible]="caseStudyChatVisible" [class.is-open]="projectChatOpen" [class.is-closing]="projectChatClosing" [class.is-dragging]="projectChatDragging">
   <button
     type="button"
     class="project-chat-fab project-chat-fab--footer-safe"
@@ -597,7 +635,7 @@
             <path d="M8.5 9.5h7M8.5 12.5h4.5"></path>
           </svg>
           <div class="project-chat__header-copy">
-            <h2 id="project-chat-title" class="project-chat__header-title">Vamos falar</h2>
+            <h2 id="project-chat-title" class="project-chat__header-title">Vamos falar?</h2>
             <p class="project-chat__header-subtitle">Contacto profissional, projetos ou oportunidades.</p>
           </div>
         </div>
@@ -612,9 +650,7 @@
         @for (message of projectChatMessages; track message.id) {
           @if (message.sender === 'assistant') {
             <div class="project-chat__message project-chat__message--agent">
-              @if (message.intro) {
-                <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
-              }
+              <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
               <div>
                 @if (message.intro) {
                   <div class="project-chat__intro-message">
@@ -655,16 +691,18 @@
 
         @if (projectChatSent) {
           <div class="project-chat__message project-chat__message--agent">
+            <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
             <div>
               <small>JOANA</small>
-              <p>Obrigada, {{ projectChat.name }}. O teu pedido ficou preparado.</p>
-              <p class="project-chat__muted">A liga&ccedil;&atilde;o ao servi&ccedil;o de email ser&aacute; adicionada numa pr&oacute;xima fase.</p>
+              <p>Obrigada, {{ projectChat.name }}. O teu pedido foi enviado.</p>
+              <p class="project-chat__muted">Entrarei em contacto contigo assim que poss&iacute;vel.</p>
             </div>
           </div>
           <button type="button" class="project-chat__primary" (click)="resetProjectChat()">NOVA CONVERSA</button>
         } @else {
           @if (projectChatStep === 1) {
             <div class="project-chat__message project-chat__message--agent">
+              <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
               <div><small>JOANA</small><p>Que tipo de projeto tens em mente?</p></div>
             </div>
             <div class="project-chat__options">
@@ -676,12 +714,14 @@
 
           @if (projectChatStep === 2) {
             <div class="project-chat__message project-chat__message--agent">
+              <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
               <div><small>JOANA</small><p>O que gostarias de criar ou melhorar?</p></div>
             </div>
           }
 
           @if (projectChatStep === 3) {
             <div class="project-chat__message project-chat__message--agent">
+              <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
               <div><small>JOANA</small><p>Qual &eacute; o investimento previsto?</p></div>
             </div>
             <div class="project-chat__options">
@@ -693,6 +733,7 @@
 
           @if (projectChatStep === 4) {
             <div class="project-chat__message project-chat__message--agent">
+              <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
               <div><small>JOANA</small><p>Perfeito. Como te posso contactar?</p></div>
             </div>
             <div class="project-chat__fields">
@@ -705,6 +746,7 @@
 
           @if (projectChatStep === 5) {
             <div class="project-chat__message project-chat__message--agent">
+              <img class="project-chat__avatar" src="/projects/logo/ChatGPT Image 5_08_2026, 18_27_27.png" alt="Joana">
               <div><small>JOANA</small><p>Est&aacute; tudo certo, {{ projectChat.name }}?</p></div>
             </div>
             <dl class="project-chat__summary">
@@ -713,11 +755,12 @@
               <div><dt>Objetivo</dt><dd>{{ projectChat.goal }}</dd></div>
               <div><dt>Contacto</dt><dd>{{ projectChat.email }}</dd></div>
             </dl>
-            <button type="button" class="project-chat__primary" (click)="submitProjectChat()">ENVIAR PEDIDO <span class="cta-arrow" aria-hidden="true"></span></button>
+            @if (projectChatError) { <p class="project-chat__error" role="alert">{{ projectChatError }}</p> }
+            <button type="button" class="project-chat__primary" [disabled]="projectChatSending" [attr.aria-busy]="projectChatSending" (click)="submitProjectChat()">{{ projectChatSending ? 'A ENVIAR...' : 'ENVIAR PEDIDO' }} <span class="cta-arrow" aria-hidden="true"></span></button>
           }
 
           @if (projectChatStep > 0 && projectChatStep !== 2) {
-            <button type="button" class="project-chat__back" (click)="previousProjectChatStep()"><span class="cta-arrow cta-arrow--left" aria-hidden="true"></span>Voltar</button>
+            <button type="button" class="project-chat__back" [disabled]="projectChatSending" (click)="previousProjectChatStep()"><span class="cta-arrow cta-arrow--left" aria-hidden="true"></span>Voltar</button>
           }
         }
       </div>

@@ -1,0 +1,137 @@
+// A restrained desktop treatment, opt-in for video and screenshot evidence alike.
+@mixin subtle {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .07) !important;
+}
+
+// Final mobile normalization layer for visual evidence in every case study.
+@mixin mobile {
+  @media (max-width: 768px) {
+    :host {
+      --case-media-shadow: 0 3px 8px rgba(0, 0, 0, .10);
+      --case-media-border: 1px solid rgba(0, 0, 0, .06);
+    }
+
+    :is(.case-study-page.civitas-page .civitas-story-panel, .case-study-page.civitas-page .licita-global-view) :is(
+      .challenge-screen,
+      .structure-screen,
+      .overview-hotspot-visual__screen,
+      .overview-variant__screen,
+      .information-system__screen,
+      .interface-crop,
+      .editorial-crop,
+      .component-crop,
+      .responsive-panel__screens img,
+      .responsive-compare-desktop,
+      .responsive-compare-mobile,
+      .design-code-layout figure,
+      .result-layout__main,
+      .result-layout__detail,
+      .licita-challenge__video-frame,
+      .licita-full-screen img,
+      .licita-experience__comparison img,
+      .licita-applied-comparison__media img,
+      .licita-comparison__visual figure,
+      .licita-reference-strip img,
+      .licita-video,
+      .licita-proposal__crops img,
+      .licita-composition-studies figure,
+      .licita-selected-direction figure,
+      .licita-final-video figure,
+      .licita-landing-breakdown__list figure,
+      .licita-global-view__image,
+      .illustration-evolution img,
+      .licita-process-asset > img,
+      .juh-chapter figure > img,
+      .juh-comparison__media img,
+      .juh-mobile-gallery img
+    ) {
+      box-sizing: border-box;
+      border: var(--case-media-border) !important;
+      box-shadow: var(--case-media-shadow) !important;
+    }
+
+    :is(.case-study-page.civitas-page .civitas-story-panel, .case-study-page.civitas-page .licita-global-view) :is(
+      .challenge-screen,
+      .structure-screen,
+      .overview-hotspot-visual__screen,
+      .overview-variant__screen,
+      .information-system__screen,
+      .interface-crop,
+      .editorial-crop,
+      .component-crop,
+      .design-code-layout figure,
+      .result-layout__main,
+      .result-layout__detail
+    ) > :is(img, video),
+    :is(.case-study-page.civitas-page .civitas-story-panel, .case-study-page.civitas-page .licita-global-view) :is(
+      .licita-challenge__video-frame,
+      .licita-comparison__visual figure,
+      .licita-video,
+      .licita-composition-studies figure,
+      .licita-selected-direction figure,
+      .licita-final-video figure,
+      .licita-landing-breakdown__list figure
+    ) :is(img, video) {
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+
+    :is(.case-study-page.civitas-page .civitas-story-panel, .case-study-page.civitas-page .licita-global-view) .licita-concept-visual img {
+      filter: none !important;
+      box-sizing: border-box;
+      border: var(--case-media-border) !important;
+      box-shadow: var(--case-media-shadow) !important;
+    }
+  }
+}
+
+// Desktop media needs a small internal runway so the existing shadow can render
+// on both sides without changing its visual weight or the editorial grid.
+@mixin desktop {
+  @media (min-width: 769px) {
+    :host {
+      --case-desktop-media-inset: clamp(12px, 1vw, 16px);
+    }
+
+    :is(
+      .juh-screen-pair,
+      .juh-flow-screens,
+      .juh-comparison__media,
+      .licita-applied-comparison__visual,
+      .licita-applied-comparison__media,
+      .licita-global-view__comparison,
+      .challenge-visuals,
+      .overview-hotspot-visual,
+      .overview-hotspot-visual__screen,
+      .overview-variant__screen,
+      .responsive-compare-row,
+      .responsive-compare-desktop,
+      .responsive-compare-mobile,
+      .result-layout
+    ) {
+      overflow: visible;
+    }
+
+    :is(
+      .challenge-visuals,
+      .overview-hotspot-visual,
+      .responsive-compare-row,
+      .result-layout
+    ) {
+      box-sizing: border-box;
+      padding-inline: var(--case-desktop-media-inset);
+    }
+
+    :is(
+      .juh-comparison__media,
+      .juh-flow-screens > figure,
+      .juh-chapter > figure,
+      .licita-applied-comparison__media
+    ) {
+      box-sizing: border-box;
+      width: calc(100% - (2 * var(--case-desktop-media-inset)));
+      max-width: calc(100% - (2 * var(--case-desktop-media-inset)));
+      margin-inline: auto;
+    }
+  }
+}

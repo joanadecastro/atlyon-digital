@@ -1,0 +1,103 @@
+// One typography mapping for current and future case studies.
+@mixin system {
+  :host { font-family:Inter,Arial,sans-serif; }
+
+  :is(.civitas-hero__copy h1,.case-study-section-title) {
+    font-family:inherit!important;
+    font-size:var(--section-title-font-size)!important;
+    font-weight:var(--section-title-font-weight)!important;
+    line-height:var(--section-title-line-height)!important;
+    letter-spacing:var(--section-title-letter-spacing)!important;
+    text-transform:none!important;
+  }
+
+  .case-study-section-subtitle {
+    font-family:inherit!important;
+    font-size:var(--section-subtitle-font-size)!important;
+    font-weight:var(--section-subtitle-font-weight)!important;
+    line-height:var(--section-subtitle-line-height)!important;
+    letter-spacing:var(--section-subtitle-letter-spacing)!important;
+    text-transform:none!important;
+  }
+
+  :is(.civitas-story-panel,.licitanow-story-panel,.juh-story) p {
+    font-family:inherit!important;
+    font-size:var(--body-copy-font-size)!important;
+    font-weight:var(--body-copy-font-weight)!important;
+    line-height:var(--body-copy-line-height)!important;
+    letter-spacing:normal!important;
+  }
+
+  .case-study-section-number {
+    font-family:inherit!important;
+    font-size:var(--section-title-font-size)!important;
+    font-weight:var(--section-title-font-weight)!important;
+    line-height:var(--section-title-line-height)!important;
+    letter-spacing:var(--section-title-letter-spacing)!important;
+  }
+
+  :is(
+    .story-label,
+    .interface-view-label,
+    .licita-applied-comparison__label,
+    .licita-applied-comparison__meta figcaption,
+    .juh-comparison__meta > span,
+    .case-hero__metadata,
+    .case-hero__technologies,
+    .case-hero__category
+  ) {
+    font-family:inherit!important;
+    font-size:12px!important;
+    font-weight:600!important;
+    line-height:1!important;
+    letter-spacing:.11em!important;
+    text-transform:none!important;
+  }
+
+  @media (max-width:768px) {
+    .case-study-page.civitas-page .civitas-story-panel
+      .case-study-section-header.editorial-section-header > .case-study-section-subtitle {
+      font-size:clamp(16px,4.35vw,17px)!important;
+      line-height:1.45!important;
+    }
+
+    .case-study-page.civitas-page :is(
+      .story-label,
+      .interface-view-label,
+      .licita-applied-comparison__label,
+      .licita-applied-comparison__meta figcaption,
+      .juh-comparison__meta > span
+    ) {
+      font-family:Inter,Arial,sans-serif!important;
+      font-size:12px!important;
+      font-weight:600!important;
+      line-height:1!important;
+      letter-spacing:.11em!important;
+      text-transform:none!important;
+    }
+
+    .case-study-page.civitas-page .civitas-story-panel
+      .case-study-section-header.editorial-section-header > .case-study-section-number {
+      line-height:1.08!important;
+    }
+  }
+}
+
+@mixin mobile-section-titles {
+  @media (max-width:768px) {
+    :host .case-study-page.civitas-page .civitas-story-panel
+      .case-study-section-header.editorial-section-header > .case-study-section-title,
+    :host .case-study-page.civitas-page .civitas-story-panel :is(
+      .case-study-mobile-section-title,
+      .licita-final-experience__header > h3,
+      .visual-process-heading > h3
+    ) {
+      font-family:Inter,Arial,sans-serif!important;
+      font-size:clamp(20px,5.6vw,22px)!important;
+      font-weight:600!important;
+      line-height:1.04!important;
+      letter-spacing:-.035em!important;
+      text-transform:none!important;
+    }
+  }
+}

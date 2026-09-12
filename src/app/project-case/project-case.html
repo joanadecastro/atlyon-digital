@@ -1,20 +1,20 @@
-<main class="civitas-page">
-  <section class="civitas-hero">
-    <div class="civitas-hero__surface">
+<main class="case-study-page civitas-page">
+  <section class="case-hero civitas-hero">
+    <div class="case-hero__surface civitas-hero__surface">
       <div class="civitas-hero__glow" aria-hidden="true"></div>
-      <div class="civitas-hero__inner case-shell">
-        <header class="civitas-hero__copy civitas-reveal">
-          <h1>CIVITAS</h1>
-          <p class="civitas-hero__product">Painel Energético</p>
-          <p class="civitas-hero__disciplines">UI/UX &middot; Front-end</p>
-          <p class="civitas-hero__description">Plataforma de monitorização energética desenvolvida para uma comunidade, transformando dados de produção, consumo e desempenho numa experiência clara, visual e de leitura imediata.</p>
-          <p class="civitas-hero__metadata"><span>2022—2023</span> &middot; Design de Produto &middot; Desktop + Mobile</p>
-          <p class="civitas-hero__technologies">Figma &middot; HTML &middot; CSS &middot; JavaScript</p>
+      <div class="case-hero__inner civitas-hero__inner case-shell">
+        <header class="case-hero__copy civitas-hero__copy civitas-reveal">
+          <h1>Civitas</h1>
+          <p class="case-hero__subtitle civitas-hero__product">Painel Energético</p>
+          <p class="case-hero__category civitas-hero__disciplines">UI/UX &middot; Front-end</p>
+          <p class="case-hero__description civitas-hero__description">Plataforma de monitorização energética desenvolvida para uma comunidade, transformando dados de produção, consumo e desempenho numa experiência clara, visual e de leitura imediata.</p>
+          <p class="case-hero__metadata civitas-hero__metadata"><span>2022—2023</span> &middot; Design de Produto &middot; Desktop + Mobile</p>
+          <p class="case-hero__technologies civitas-hero__technologies">Figma &middot; HTML &middot; CSS &middot; JavaScript</p>
         </header>
 
-        <div class="cover-panel" aria-label="Interfaces Civitas">
-          <div class="cover-panel__cycle">
-            <img class="cover-panel__desktop cover-panel__desktop--one" src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Dashboard Civitas — vista geral">
+        <div class="case-hero__screens cover-panel" aria-label="Interfaces Civitas">
+          <div class="case-hero__stage cover-panel__cycle">
+            <img class="case-hero__screen case-hero__screen--rear cover-panel__desktop cover-panel__desktop--one" src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Dashboard Civitas — vista geral">
             <div #heroFlowOverlay class="cover-panel__overview-overlay compact-flow-overlay" aria-hidden="true">
               <div class="hero-indicator-grid">
                 <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="1.8">0.0 kW</span></div>
@@ -23,7 +23,7 @@
               </div>
               <span class="compact-flow-arrow compact-flow-arrow--one compact-flow-arrow--green"><i></i><i></i><i></i></span><span class="compact-flow-arrow compact-flow-arrow--two compact-flow-arrow--red"><i></i><i></i><i></i></span>
             </div>
-            <img class="cover-panel__desktop cover-panel__desktop--two" src="/projects/civitas/civitas_painel.png" alt="Dashboard Civitas — painel">
+            <img class="case-hero__screen case-hero__screen--front cover-panel__desktop cover-panel__desktop--two" src="/projects/civitas/civitas_painel.png" alt="Dashboard Civitas — painel">
             <div #heroPanelTags class="cover-panel__panel-overlay compact-flow-overlay" aria-hidden="true">
               <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
             </div>
@@ -31,6 +31,7 @@
         </div>
       </div>
     </div>
+    <app-case-hero-scroll-indicator />
   </section>
 
   <section class="case-shell civitas-story-panel civitas-story-panel--green-test">
@@ -38,7 +39,7 @@
     <div class="challenge-story">
       <header class="challenge-header case-study-section-header editorial-section-header">
         <span class="case-study-section-number">01.</span>
-        <h2 class="story-chapter-title case-study-section-title section-heading-title">DESAFIO</h2>
+        <h2 class="story-chapter-title case-study-section-title section-heading-title">Desafio</h2>
         <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Clareza num contexto de muitos dados.</div>
       </header>
       <div class="challenge-content">
@@ -70,18 +71,30 @@
       <div class="user-story">
         <header class="user-copy case-study-section-header editorial-section-header">
           <span class="case-study-section-number">02.</span>
-          <h2 class="story-chapter-title case-study-section-title section-heading-title">UTILIZADOR</h2>
+          <h2 class="story-chapter-title case-study-section-title section-heading-title">Utilizador</h2>
           <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Compreender o que precisa de ver, sem aumentar a complexidade.</div>
           <p><span>A plataforma foi pensada para membros de uma comunidade energética que precisam de acompanhar produção,</span><span>consumo e desempenho regularmente, sem depender de conhecimento técnico especializado.</span></p>
         </header>
 
         <section class="user-profile-map" aria-label="Perfil de utilização">
           <div class="user-profile-map__grid">
-            <article class="user-need user-need--goals"><h4>OBJETIVOS</h4><ul><li>Acompanhar produção e consumo</li><li>Consultar evolução e desempenho</li><li>Comparar diferentes períodos</li><li>Perceber rapidamente o estado da comunidade</li></ul></article>
-            <article class="user-need user-need--needs"><h4>NECESSIDADES</h4><ul><li><span>Informação imediata</span><strong>→ Hierarquia e segmentação</strong></li><li><span>Informação técnica</span><strong>→ Iconografia e leitura visual</strong></li><li><span>Diferentes contextos</span><strong>→ Filtros consistentes</strong></li><li><span>Consulta frequente</span><strong>→ Componentes reutilizáveis</strong></li></ul></article>
+            <article class="user-need user-need--goals"><h4>OBJETIVOS</h4><button class="user-need__toggle" type="button" [attr.aria-expanded]="openUserNeed === 'goals'" aria-controls="user-need-panel" (click)="toggleUserNeed('goals', $event)"><span>OBJETIVOS</span><i aria-hidden="true"></i></button><ul class="user-copy--full"><li>Acompanhar produção e consumo</li><li>Consultar evolução e desempenho</li><li>Comparar diferentes períodos</li><li>Perceber rapidamente o estado da comunidade</li></ul></article>
+            <article class="user-need user-need--needs"><h4>NECESSIDADES</h4><button class="user-need__toggle" type="button" [attr.aria-expanded]="openUserNeed === 'needs'" aria-controls="user-need-panel" (click)="toggleUserNeed('needs', $event)"><span>NECESSIDADES</span><i aria-hidden="true"></i></button><ul class="user-copy--full"><li><span>Informação imediata</span><strong>→ Hierarquia e segmentação</strong></li><li><span>Informação técnica</span><strong>→ Iconografia e leitura visual</strong></li><li><span>Diferentes contextos</span><strong>→ Filtros consistentes</strong></li><li><span>Consulta frequente</span><strong>→ Componentes reutilizáveis</strong></li></ul></article>
             <div class="user-profile-map__person" aria-label="Utilizador da comunidade energética"><img src="/projects/civitas/user.jpg" alt=""></div>
-            <article class="user-need user-need--difficulties"><h4>DIFICULDADES</h4><ul><li>Grande volume de métricas</li><li>Diferentes contextos de análise</li><li>Relação entre produção e consumo</li><li>Informação técnica pouco imediata</li><li>Necessidade de comparar vários períodos</li></ul></article>
-            <article class="user-need user-need--behavior"><h4>COMPORTAMENTO</h4><ul><li>Consulta frequente</li><li>Compara períodos</li><li>Alterna entre diferentes contextos</li><li>Procura uma leitura rápida</li><li>Aprofunda informação apenas quando necessário</li></ul></article>
+            <article class="user-need user-need--difficulties"><h4>DIFICULDADES</h4><button class="user-need__toggle" type="button" [attr.aria-expanded]="openUserNeed === 'difficulties'" aria-controls="user-need-panel" (click)="toggleUserNeed('difficulties', $event)"><span>DIFICULDADES</span><i aria-hidden="true"></i></button><ul class="user-copy--full"><li>Grande volume de métricas</li><li>Diferentes contextos de análise</li><li>Relação entre produção e consumo</li><li>Informação técnica pouco imediata</li><li>Necessidade de comparar vários períodos</li></ul></article>
+            <article class="user-need user-need--behavior"><h4>COMPORTAMENTO</h4><button class="user-need__toggle" type="button" [attr.aria-expanded]="openUserNeed === 'behavior'" aria-controls="user-need-panel" (click)="toggleUserNeed('behavior', $event)"><span>COMPORTAMENTO</span><i aria-hidden="true"></i></button><ul class="user-copy--full"><li>Consulta frequente</li><li>Compara períodos</li><li>Alterna entre diferentes contextos</li><li>Procura uma leitura rápida</li><li>Aprofunda informação apenas quando necessário</li></ul></article>
+            <div class="user-need-backdrop" [class.is-open]="openUserNeed" aria-hidden="true" (click)="closeUserNeed()"></div>
+            <div id="user-need-panel" class="user-need-panel" [class.is-open]="openUserNeed" [attr.aria-hidden]="!openUserNeed" role="dialog" aria-modal="true" (click)="closeUserNeed()">
+              <div #userNeedSurface class="user-need-panel__surface" (click)="$event.stopPropagation()">
+                <header><h4>{{ userNeedTitle }}</h4><button #userNeedClose type="button" aria-label="Fechar detalhe" (click)="closeUserNeed()">×</button></header>
+                @switch (openUserNeed) {
+                  @case ('goals') { <ul><li>Acompanhar produção, consumo e desempenho</li><li>Comparar períodos e evolução</li><li>Perceber rapidamente o estado da comunidade</li></ul> }
+                  @case ('difficulties') { <ul><li>Grande volume de métricas e contextos</li><li>Relação entre produção, consumo e desempenho pouco imediata</li><li>Necessidade de comparar vários períodos</li></ul> }
+                  @case ('needs') { <ul><li>Informação imediata e bem hierarquizada</li><li>Leitura técnica mais visual e consistente</li><li>Componentes reutilizáveis entre diferentes contextos</li></ul> }
+                  @case ('behavior') { <ul><li>Consulta frequente e comparação de períodos</li><li>Alterna entre diferentes contextos</li><li>Aprofunda informação apenas quando necessário</li></ul> }
+                }
+              </div>
+            </div>
           </div>
         </section>
       </div>
@@ -90,7 +103,7 @@
     <div class="story-chapter story-architecture">
       <div class="architecture-intro case-study-section-header editorial-section-header">
         <span class="case-study-section-number">03.</span>
-        <h2 class="story-chapter-title case-study-section-title section-heading-title">ARQUITETURA DA INFORMAÇÃO</h2>
+        <h2 class="story-chapter-title case-study-section-title section-heading-title">Arquitetura da Informação</h2>
         <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Organizar diferentes níveis de informação numa estrutura simples e previsível.</div>
         <p><span>A arquitetura foi organizada para permitir navegar entre visão geral, métricas, gestão e diferentes contextos</span><span>de análise sem perder consistência entre vistas.</span></p>
       </div>
@@ -100,20 +113,20 @@
           <section class="architecture-area architecture-area--panel">
             <h3>PAINEL</h3>
             <div class="architecture-area__children">
-              <div class="architecture-group"><strong>CONTEXTO</strong><div class="architecture-items"><span>Comunidade</span><span>Entidades</span><span>Intervalo de Tempo</span></div></div>
-              <div class="architecture-group architecture-group--indicators"><strong>INDICADORES</strong><div class="architecture-items"><span>Energia Fotovoltaica</span><span>Quota Média</span><span>Energia Consumida</span><span>Rendimentos</span><i class="architecture-items__break" aria-hidden="true"></i><span>Produção Média</span><span>Consumo Médio</span><span>Redução de CO₂</span><span>Sistema</span></div></div>
-              <div class="architecture-group"><strong>METEOROLOGIA</strong><div class="architecture-items"><span>Localização / Porto</span><span>Temperatura</span><span>Evolução horária</span></div></div>
-              <div class="architecture-group"><strong>PREVISÃO DA PRODUÇÃO</strong><div class="architecture-items"><span>Evolução temporal da produção de energia</span></div></div>
+              <div class="architecture-group"><strong>CONTEXTO</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'panel-context'" aria-controls="architecture-panel-context" (click)="toggleArchitectureGroup('panel-context')"><span>CONTEXTO</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-panel-context" [class.is-open]="openArchitectureGroup === 'panel-context'"><span>Comunidade</span><span>Entidades</span><span>Intervalo de Tempo</span></div></div>
+              <div class="architecture-group architecture-group--indicators"><strong>INDICADORES</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'panel-indicators'" aria-controls="architecture-panel-indicators" (click)="toggleArchitectureGroup('panel-indicators')"><span>INDICADORES</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-panel-indicators" [class.is-open]="openArchitectureGroup === 'panel-indicators'"><span>Energia Fotovoltaica</span><span>Quota Média</span><span>Energia Consumida</span><span>Rendimentos</span><i class="architecture-items__break" aria-hidden="true"></i><span>Produção Média</span><span>Consumo Médio</span><span>Redução de CO₂</span><span>Sistema</span></div></div>
+              <div class="architecture-group"><strong>METEOROLOGIA</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'panel-weather'" aria-controls="architecture-panel-weather" (click)="toggleArchitectureGroup('panel-weather')"><span>METEOROLOGIA</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-panel-weather" [class.is-open]="openArchitectureGroup === 'panel-weather'"><span>Localização / Porto</span><span>Temperatura</span><span>Evolução horária</span></div></div>
+              <div class="architecture-group"><strong>PREVISÃO DA PRODUÇÃO</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'panel-forecast'" aria-controls="architecture-panel-forecast" (click)="toggleArchitectureGroup('panel-forecast')"><span>PREVISÃO DA PRODUÇÃO</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-panel-forecast" [class.is-open]="openArchitectureGroup === 'panel-forecast'"><span>Evolução temporal da produção de energia</span></div></div>
             </div>
           </section>
           <section class="architecture-area architecture-area--overview">
             <h3>VISTA GERAL</h3>
             <div class="architecture-area__children">
-              <div class="architecture-group"><strong>CONTEXTO</strong><div class="architecture-items"><span>Comunidade</span><span>Consumidor</span><span>Intervalo de Tempo</span></div></div>
-              <div class="architecture-group"><strong>INDICADORES AO VIVO</strong><div class="architecture-items"><span>Produção Fotovoltaica</span><span>Quota Média</span><span>Consumo Total</span><span>Rede Elétrica</span></div></div>
-              <div class="architecture-group"><strong>MÉTRICAS AGREGADAS</strong><div class="architecture-items"><span>Total Produzido por Comunidade</span><span>Total Consumido</span><span>Energia Disponível</span><span>Rendimento Total</span></div></div>
-              <div class="architecture-group"><strong>CAPITAL</strong><div class="architecture-items"><span>Rendimento de Capital</span><span>Poupança de Capital</span></div></div>
-              <div class="architecture-group architecture-group--evolution"><strong>EVOLUÇÃO</strong><div class="architecture-items"><span>Valores Médios</span></div></div>
+              <div class="architecture-group"><strong>CONTEXTO</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'overview-context'" aria-controls="architecture-overview-context" (click)="toggleArchitectureGroup('overview-context')"><span>CONTEXTO</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-overview-context" [class.is-open]="openArchitectureGroup === 'overview-context'"><span>Comunidade</span><span>Consumidor</span><span>Intervalo de Tempo</span></div></div>
+              <div class="architecture-group"><strong>INDICADORES AO VIVO</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'overview-live'" aria-controls="architecture-overview-live" (click)="toggleArchitectureGroup('overview-live')"><span>INDICADORES AO VIVO</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-overview-live" [class.is-open]="openArchitectureGroup === 'overview-live'"><span>Produção Fotovoltaica</span><span>Quota Média</span><span>Consumo Total</span><span>Rede Elétrica</span></div></div>
+              <div class="architecture-group"><strong>MÉTRICAS AGREGADAS</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'overview-metrics'" aria-controls="architecture-overview-metrics" (click)="toggleArchitectureGroup('overview-metrics')"><span>MÉTRICAS AGREGADAS</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-overview-metrics" [class.is-open]="openArchitectureGroup === 'overview-metrics'"><span>Total Produzido por Comunidade</span><span>Total Consumido</span><span>Energia Disponível</span><span>Rendimento Total</span></div></div>
+              <div class="architecture-group"><strong>CAPITAL</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'overview-capital'" aria-controls="architecture-overview-capital" (click)="toggleArchitectureGroup('overview-capital')"><span>CAPITAL</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-overview-capital" [class.is-open]="openArchitectureGroup === 'overview-capital'"><span>Rendimento de Capital</span><span>Poupança de Capital</span></div></div>
+              <div class="architecture-group architecture-group--evolution"><strong>EVOLUÇÃO</strong><button class="architecture-group__toggle" type="button" [attr.aria-expanded]="openArchitectureGroup === 'overview-evolution'" aria-controls="architecture-overview-evolution" (click)="toggleArchitectureGroup('overview-evolution')"><span>EVOLUÇÃO</span><i aria-hidden="true"></i></button><div class="architecture-items" id="architecture-overview-evolution" [class.is-open]="openArchitectureGroup === 'overview-evolution'"><span>Valores Médios</span></div></div>
             </div>
           </section>
           <div class="architecture-scope-group">
@@ -133,7 +146,7 @@
     <div class="story-chapter story-interface-intro">
       <header class="story-chapter-header case-study-section-header editorial-section-header">
         <span class="case-study-section-number">04.</span>
-        <h2 class="story-chapter-title case-study-section-title section-heading-title">INTERFACE E DECIS&Otilde;ES DE DESIGN</h2>
+        <h2 class="story-chapter-title case-study-section-title section-heading-title">Interface e Decis&otilde;es de Design</h2>
         <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Da arquitetura &agrave; organiza&ccedil;&atilde;o visual da informa&ccedil;&atilde;o.</div>
         <p>A arquitetura definida anteriormente traduz-se em duas vistas principais &mdash; Painel e Vista Geral &mdash; que partilham a mesma l&oacute;gica visual, adaptando a hierarquia da informa&ccedil;&atilde;o a diferentes n&iacute;veis de leitura.</p>
       </header>
@@ -141,6 +154,7 @@
 
     <div class="story-chapter story-system story-interface-panel">
     <div class="interface-view-label">PAINEL &middot; LEITURA IMEDIATA</div>
+    <button type="button" class="panel-mobile-preview-trigger licita-applied-comparison__expand" aria-label="Ampliar Painel Civitas com legenda" (click)="openPanelPreview($event)">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button>
     <div #panelMockupDemo class="overview-hotspot-visual panel-hotspot-visual" aria-label="Painel Civitas com explicações interativas">
       <figure class="overview-hotspot-visual__screen panel-hotspot-visual__screen">
         <img src="/projects/civitas/civitas_painel.png" alt="Painel completo do Civitas anotado">
@@ -173,6 +187,12 @@
           <div class="overview-hotspot__popover" id="panel-popover-4" role="tooltip"><strong>PREVISÃO DA PRODUÇÃO</strong><p>A visualização temporal permite acompanhar a evolução prevista da produção ao longo do período selecionado.</p></div>
         </div>
       </figure>
+      <ol class="civitas-hotspot-index" aria-label="Pontos destacados do Painel Civitas">
+        <li><span>01</span><strong>NAVEGA&Ccedil;&Atilde;O E FILTROS</strong></li>
+        <li><span>02</span><strong>INDICADORES PRINCIPAIS</strong></li>
+        <li><span>03</span><strong>METEOROLOGIA</strong></li>
+        <li><span>04</span><strong>PREVIS&Atilde;O DA PRODU&Ccedil;&Atilde;O</strong></li>
+      </ol>
     </div>
     <p class="interface-view-summary">A hierarquia concentra primeiro o contexto e os indicadores essenciais, deixando meteorologia e evolu&ccedil;&atilde;o temporal como informa&ccedil;&atilde;o complementar.</p>
     </div>
@@ -181,6 +201,7 @@
     <div class="structure-story">
       <div class="interface-view-label">VISTA GERAL &middot; AN&Aacute;LISE DETALHADA</div>
     </div>
+      <button type="button" class="civitas-mobile-preview-trigger licita-applied-comparison__expand" aria-label="Ampliar Vista Geral Civitas com legenda" (click)="openOverviewPreview('/projects/civitas/Dashboard%202%20%281%29.png', 'Vista Geral completa do Civitas', false, $event)">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button>
       <div #overviewMockupDemo class="overview-hotspot-visual" aria-label="Vista Geral Civitas com explicações interativas">
       <figure class="overview-hotspot-visual__screen structure-screen structure-screen-main">
         <img src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Vista Geral completa do Civitas">
@@ -241,6 +262,13 @@
           </div>
         </div>
       </figure>
+      <ol class="civitas-hotspot-index" aria-label="Pontos destacados da Vista Geral Civitas">
+        <li><span>01</span><strong>CONTEXTO</strong></li>
+        <li><span>02</span><strong>INDICADORES AO VIVO</strong></li>
+        <li><span>03</span><strong>M&Eacute;TRICAS AGREGADAS</strong></li>
+        <li><span>04</span><strong>CAPITAL</strong></li>
+        <li><span>05</span><strong>EVOLU&Ccedil;&Atilde;O</strong></li>
+      </ol>
     </div>
 
     <div class="overview-variant" aria-label="Variante da Vista Geral com quatro indicadores">
@@ -248,6 +276,7 @@
         <h3>VARIANTE &mdash; 4 INDICADORES</h3>
         <p>Quando a Quota M&eacute;dia est&aacute; dispon&iacute;vel no contexto selecionado, a &aacute;rea de indicadores ao vivo adapta-se para apresentar uma quarta m&eacute;trica, mantendo a mesma hierarquia e estrutura visual.</p>
       </div>
+      <button type="button" class="civitas-mobile-preview-trigger licita-applied-comparison__expand" aria-label="Ampliar variante da Vista Geral Civitas com legenda" (click)="openOverviewPreview('/projects/civitas/Group%201852%20%281%29.png', 'Vista Geral Civitas com quatro indicadores ao vivo', true, $event)">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button>
       <figure #variantMockupDemo class="overview-variant__screen overview-variant__screen--hotspots structure-screen structure-screen-main">
         <img src="/projects/civitas/Group%201852%20%281%29.png" alt="Vista Geral Civitas com quatro indicadores ao vivo">
         <svg class="variant-progress-ring variant-progress-ring--one" viewBox="0 0 100 100" aria-hidden="true"><circle class="variant-progress-ring__track" cx="50" cy="50" r="44"/><circle class="variant-progress-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
@@ -306,6 +335,14 @@
           </div>
         </div>
       </figure>
+      <ol class="civitas-hotspot-index" aria-label="Pontos destacados da variante da Vista Geral Civitas">
+        <li><span>01</span><strong>CONTEXTO</strong></li>
+        <li><span>02</span><strong>INDICADORES AO VIVO</strong></li>
+        <li><span>02A</span><strong>QUOTA M&Eacute;DIA</strong></li>
+        <li><span>03</span><strong>M&Eacute;TRICAS AGREGADAS</strong></li>
+        <li><span>04</span><strong>CAPITAL</strong></li>
+        <li><span>05</span><strong>EVOLU&Ccedil;&Atilde;O</strong></li>
+      </ol>
     </div>
     <p class="interface-view-summary">A Vista Geral aprofunda a leitura, combinando indicadores em tempo real, m&eacute;tricas acumuladas, informa&ccedil;&atilde;o financeira e evolu&ccedil;&atilde;o temporal.</p>
     </div>
@@ -313,7 +350,7 @@
     <div class="story-chapter story-components">
     <header class="story-chapter-header case-study-section-header editorial-section-header civitas-reveal">
       <span class="case-study-section-number">05.</span>
-      <h2 class="story-chapter-title case-study-section-title section-heading-title">SISTEMA DE COMPONENTES</h2>
+      <h2 class="story-chapter-title case-study-section-title section-heading-title">Sistema de Componentes</h2>
       <div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Uma linguagem visual consistente entre diferentes vistas.</div>
       <p>Em vez de desenhar cada ecr&atilde; como uma composi&ccedil;&atilde;o isolada, a interface foi constru&iacute;da a partir de padr&otilde;es reutiliz&aacute;veis. Filtros, cards de m&eacute;tricas, indicadores e estados seguem a mesma l&oacute;gica visual, facilitando a leitura e mantendo consist&ecirc;ncia entre diferentes contextos.</p>
       <p>Esta abordagem permite adaptar a quantidade e o tipo de informa&ccedil;&atilde;o sem alterar a linguagem da interface, tornando o sistema mais previs&iacute;vel para o utilizador e mais simples de evoluir.</p>
@@ -350,7 +387,7 @@
     </div>
 
     <div class="story-chapter story-responsive">
-    <header class="story-chapter-header case-study-section-header editorial-section-header civitas-reveal"><span class="case-study-section-number">06.</span><h2 class="story-chapter-title case-study-section-title section-heading-title">RESPONSIVO / MÓVEL</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">A mesma hierarquia, adaptada a ecrãs mais pequenos.</div><p>A adaptação para ecrãs mais pequenos exigiu reorganizar a informação sem perder a hierarquia definida no desktop. Os diferentes níveis de conteúdo passam a ocupar o espaço de forma sequencial, preservando prioridades, legibilidade e consistência visual.</p></header>
+    <header class="story-chapter-header case-study-section-header editorial-section-header civitas-reveal"><span class="case-study-section-number">06.</span><h2 class="story-chapter-title case-study-section-title section-heading-title">Responsivo / Móvel</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">A mesma hierarquia, adaptada a ecrãs mais pequenos.</div><p>A adaptação para ecrãs mais pequenos exigiu reorganizar a informação sem perder a hierarquia definida no desktop. Os diferentes níveis de conteúdo passam a ocupar o espaço de forma sequencial, preservando prioridades, legibilidade e consistência visual.</p></header>
     <div class="responsive-panel">
       <div class="responsive-panel__visual">
         <div class="responsive-compare-groups">
@@ -381,8 +418,8 @@
     </div>
     </div>
 
-    <div class="story-chapter story-design-code">
-    <header class="story-chapter-header case-study-section-header editorial-section-header civitas-reveal"><span class="case-study-section-number">07.</span><h2 class="story-chapter-title case-study-section-title section-heading-title">DESIGN &rarr; CÓDIGO &rarr; RESULTADO</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Do design à experiência implementada.</div></header>
+    <div class="story-chapter story-design-code" data-case-study-final>
+    <header class="story-chapter-header case-study-section-header editorial-section-header civitas-reveal"><span class="case-study-section-number">07.</span><h2 class="story-chapter-title case-study-section-title section-heading-title">Design &rarr; Código &rarr; Resultado</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Do design à experiência implementada.</div></header>
     <div class="design-code-layout"><div class="story-copy"><p>Desenvolvido em contexto empresarial e integrado numa equipa multidisciplinar, o projeto passou do desenho da interface à implementação em front-end. A minha participação abrangeu UI/UX e desenvolvimento da interface, garantindo continuidade entre as decisões definidas em Figma e a experiência final em browser.</p><p>Por se tratar de um produto desenvolvido internamente, o código-fonte não é apresentado neste case study.</p></div><div class="design-code-diagram" aria-label="Design em Figma, desenvolvimento front-end e produto implementado">
       <div class="design-code-stage design-code-stage--figma"><div class="design-code-icons"><svg class="design-code-icon design-code-icon--figma" viewBox="0 0 48 72" role="img" aria-label="Figma"><path fill="#F24E1E" d="M24 0h12a12 12 0 0 1 0 24H24z"/><path fill="#A259FF" d="M0 12A12 12 0 0 1 12 0h12v24H12A12 12 0 0 1 0 12z"/><path fill="#1ABCFE" d="M24 24h12a12 12 0 1 1-12 12z"/><path fill="#FF7262" d="M0 36a12 12 0 0 1 12-12h12v24H12A12 12 0 0 1 0 36z"/><path fill="#0ACF83" d="M0 60a12 12 0 0 1 12-12h12v12a12 12 0 1 1-24 0z"/></svg></div><strong>FIGMA</strong><small>UI/UX · Componentes</small></div>
       <span class="design-code-connector" aria-hidden="true"><i></i></span>
@@ -400,14 +437,4 @@
   </a>
 </main>
 
-<div class="licita-image-preview" [class.is-open]="challengePreviewOpen" [attr.aria-hidden]="!challengePreviewOpen"
-  role="dialog" aria-modal="true" aria-label="Preview ampliado da interface Civitas"
-  (pointerdown)="closeChallengePreviewFromBackdrop($event)"
-  (document:keydown.escape)="closeChallengePreview()">
-  @if (challengePreviewSrc) {
-    <div class="licita-image-preview__panel" (pointerdown)="$event.stopPropagation()">
-      <button type="button" class="licita-image-preview__close" aria-label="Fechar preview" (click)="closeChallengePreview()">×</button>
-      <img [src]="challengePreviewSrc" [alt]="challengePreviewAlt">
-    </div>
-  }
-</div>
+<app-case-image-preview />

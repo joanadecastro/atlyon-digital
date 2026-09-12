@@ -1,0 +1,66 @@
+// Shared editor-like presentation for code evidence in every case study.
+@mixin blocks {
+  :host {
+    --case-code-background: #1e1e1e;
+    --case-code-foreground: #ededed;
+    --case-code-label: #aeb2b7;
+    --case-code-divider: rgba(255, 255, 255, .12);
+  }
+
+  :is(.case-code-block, .juh-code, .licita-implementation__code) {
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 22px;
+    border: 0;
+    border-radius: 4px !important;
+    background: var(--case-code-background) !important;
+    box-shadow: none !important;
+    color: var(--case-code-foreground);
+  }
+
+  :is(.case-code-block, .juh-code, .licita-implementation__code)
+    > :is(figcaption, .licita-implementation__source, .case-code-block__label) {
+    margin: 0 0 16px;
+    padding: 0 0 12px;
+    border-bottom: 1px solid var(--case-code-divider);
+    color: var(--case-code-label) !important;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: .07em;
+  }
+
+  :is(.case-code-block, .juh-code, .licita-implementation__code) pre {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    color: var(--case-code-foreground) !important;
+    white-space: pre;
+    overflow-wrap: normal;
+    tab-size: 2;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, .3) transparent;
+  }
+
+  :is(.case-code-block, .juh-code, .licita-implementation__code) code {
+    color: inherit;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 768px) {
+    :is(.case-code-block, .juh-code, .licita-implementation__code) {
+      width: 100%;
+      max-width: 100%;
+      padding: 18px;
+    }
+
+    :is(.case-code-block, .juh-code, .licita-implementation__code) code {
+      font-size: 12px;
+    }
+  }
+}
