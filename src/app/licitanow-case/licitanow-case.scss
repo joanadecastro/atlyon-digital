@@ -4315,6 +4315,10 @@
   display:none;
 }
 
+.licita-challenge__mobile-expand {
+  display:none;
+}
+
 @media (min-width:769px) {
   .licitanow-page .licitanow-story-panel .licita-responsive-chapter > .licita-implementation {
     width:min(90vw,1520px);
@@ -5148,6 +5152,12 @@
 }
 
 @media (max-width:768px) {
+  .licitanow-page .licitanow-story-panel .licita-challenge__mobile-expand.case-expand-affordance {
+    display:grid!important;
+    pointer-events:auto;
+    padding:0;
+  }
+
   .licitanow-page .licitanow-story-panel .licita-responsive-chapter > .licita-implementation > header,
   .licitanow-page .licitanow-story-panel .licita-responsive-chapter > .licita-implementation > header > h3,
   .licitanow-page .licitanow-story-panel .licita-responsive-chapter > .licita-implementation > header > p {
