@@ -1,10 +1,12 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, TemplateRef } from '@angular/core';
 
 export type CaseImagePreviewLegendItem = { number: string; title: string };
 
 @Component({
   selector: 'app-case-image-preview',
   standalone: true,
+  imports: [NgTemplateOutlet],
   template: `
     <div class="case-image-preview" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.attach-close-to-media]="attachCloseToMedia"
       [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" aria-label="Preview ampliado da mockup"
@@ -13,7 +15,13 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
         <div class="case-image-preview__panel" [class.has-legend]="legend.length > 0" (pointerdown)="handlePanelPointerDown($event)">
           <button type="button" class="case-image-preview__close" aria-label="Fechar preview" (click)="close()">×</button>
           <div class="case-image-preview__composition" [class.trim-top-edge]="trimTopEdge">
-            <img [src]="src" [alt]="alt" (load)="onImageLoad($event)">
+            @if (compositionTemplate) {
+              <div [attr.class]="'case-image-preview__template ' + compositionClass">
+                <ng-container [ngTemplateOutlet]="compositionTemplate" [ngTemplateOutletContext]="{ preview: true }" />
+              </div>
+            } @else {
+              <img [src]="src" [alt]="alt" (load)="onImageLoad($event)">
+            }
             @if (trimTopEdge) {
               <span class="case-image-preview__top-edge" [style.background-image]="'url(&quot;' + src + '&quot;)'" aria-hidden="true"></span>
             }
@@ -34,6 +42,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     .case-image-preview.is-open { visibility:visible; opacity:1; pointer-events:auto; transition:opacity 280ms ease; }
     .case-image-preview__panel { position:relative; z-index:1; display:grid; place-items:center; max-width:82vw; max-height:86vh; overflow:visible; }
     .case-image-preview__composition { position:relative; display:grid; place-items:center; max-width:100%; max-height:100%; }
+    .case-image-preview__template { position:relative; width:100%; max-width:100%; }
     img { display:block; width:min(82vw,1500px); max-width:100%; height:auto; max-height:86vh; object-fit:contain; border:0; border-radius:6px; box-shadow:0 24px 70px rgba(0,0,0,.18); opacity:0; transform:scale(.96); transition:transform 700ms cubic-bezier(.22,1,.36,1),opacity 350ms ease; }
     .is-image-entered img { opacity:1; transform:scale(1); }
     .case-image-preview__legend { display:none; }
@@ -58,9 +67,11 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       img { width:auto; max-width:calc(100vw - 32px); max-height:calc(100dvh - 32px); object-fit:contain; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
       .is-image-entered img { transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__panel { width:100%; max-width:none; height:100%; max-height:none; }
-      .is-landscape:not(.is-vertical-landing) .case-image-preview__composition { position:fixed; top:50%; left:50%; display:flex; flex-direction:column; align-items:stretch; gap:10px; width:min(calc(100dvh - 40px),680px); max-width:calc(100dvh - 40px); max-height:calc(100vw - 32px); opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.96); transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__composition { position:fixed; top:50%; left:50%; display:flex; flex-direction:column; align-items:stretch; gap:10px; width:min(calc(100dvh - 40px),680px); max-width:calc(100dvh - 40px); max-height:calc(100vw - 32px); opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.96); transform-origin:center center; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
       .is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { opacity:1; transform:translate(-50%,-50%) rotate(90deg) scale(1); transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) img { position:static; width:100%; max-width:100%; max-height:calc(100vw - 32px); opacity:1; transform:none; transition:none; }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__template { width:100%; max-height:calc(100vw - 32px); }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__composition:has(> .case-image-preview__template.civitas-component-preview.component-crop--indicators) > .case-image-preview__template { position:relative; inset:auto; margin:0; transform:none; transform-origin:center center; }
       .is-landscape:not(.is-vertical-landing) .has-legend img { max-height:calc(100vw - 96px); }
       .case-image-preview__legend { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:0; padding:8px 0 0; border-top:1px solid rgba(255,255,255,.22); color:#fff; list-style:none; }
       .case-image-preview__legend li { display:grid; grid-template-columns:22px minmax(0,1fr); align-items:start; gap:5px; margin:0; padding:0; }
@@ -86,6 +97,8 @@ export class CaseImagePreviewComponent implements OnDestroy {
   isVerticalLanding = false;
   isLandscape = false;
   legend: readonly CaseImagePreviewLegendItem[] = [];
+  compositionTemplate: TemplateRef<unknown> | null = null;
+  compositionClass = '';
   private bodyOverflow = '';
   private cleanupTimer?: number;
   private returnFocus?: HTMLElement;
@@ -93,7 +106,14 @@ export class CaseImagePreviewComponent implements OnDestroy {
 
   constructor(private readonly host: ElementRef<HTMLElement>, private readonly cdr: ChangeDetectorRef) {}
 
-  open(src: string, alt: string, verticalLanding = false, legend: readonly CaseImagePreviewLegendItem[] = []): void {
+  open(
+    src: string,
+    alt: string,
+    verticalLanding = false,
+    legend: readonly CaseImagePreviewLegendItem[] = [],
+    compositionTemplate: TemplateRef<unknown> | null = null,
+    compositionClass = '',
+  ): void {
     const cycle = ++this.previewCycle;
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
     this.isClosing = false;
@@ -102,6 +122,8 @@ export class CaseImagePreviewComponent implements OnDestroy {
     this.isVerticalLanding = verticalLanding;
     this.isLandscape = false;
     this.legend = legend;
+    this.compositionTemplate = compositionTemplate;
+    this.compositionClass = compositionClass;
     this.isImageEntered = false;
     this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
     this.bodyOverflow = document.body.style.overflow;
@@ -140,6 +162,7 @@ export class CaseImagePreviewComponent implements OnDestroy {
     this.cleanupTimer = window.setTimeout(() => {
       if (cycle === this.previewCycle && !this.isOpen) {
         this.src = null; this.alt = ''; this.isVerticalLanding = false; this.isLandscape = false; this.legend = [];
+        this.compositionTemplate = null; this.compositionClass = '';
         this.isClosing = false;
         document.body.style.overflow = this.bodyOverflow;
         this.returnFocus?.focus();

@@ -1,4 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output, TemplateRef, ViewChild } from '@angular/core';
 import { TranslateDirective } from '../i18n/translate.directive';
 import { CaseHeroScrollIndicatorComponent } from './case-hero-scroll-indicator.component';
 import { CaseImagePreviewComponent, CaseImagePreviewLegendItem } from './case-image-preview.component';
@@ -7,22 +8,26 @@ import { bindCaseExpandableMedia } from './case-expandable-media';
 type DemoKey = 'panel' | 'overview' | 'variant';
 type Demo = { key: DemoKey; element: HTMLElement; order: string[] };
 
-@Component({ selector: 'app-project-case', standalone: true, imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent], hostDirectives: [TranslateDirective], templateUrl: './project-case.html', styleUrl: './project-case.scss' })
+@Component({ selector: 'app-project-case', standalone: true, imports: [NgTemplateOutlet, CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent], hostDirectives: [TranslateDirective], templateUrl: './project-case.html', styleUrl: './project-case.scss' })
 export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   @Input() project: any;
   @Output() back = new EventEmitter<void>();
   @ViewChild('panelMockupDemo', { read: ElementRef }) panelRef?: ElementRef<HTMLElement>;
   @ViewChild('overviewMockupDemo', { read: ElementRef }) overviewRef?: ElementRef<HTMLElement>;
   @ViewChild('variantMockupDemo', { read: ElementRef }) variantRef?: ElementRef<HTMLElement>;
+  @ViewChild('panelComposition') panelComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('overviewComposition') overviewComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('variantComposition') variantComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('metricCardsComposition') metricCardsComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('flowIndicatorsComposition') flowIndicatorsComposition?: TemplateRef<{ preview: boolean }>;
   @ViewChild('metricTagsDemo', { read: ElementRef }) metricTagsRef?: ElementRef<HTMLElement>;
   @ViewChild('flowMetricsDemo', { read: ElementRef }) flowMetricsRef?: ElementRef<HTMLElement>;
   @ViewChild('heroFlowOverlay', { read: ElementRef }) heroFlowOverlayRef?: ElementRef<HTMLElement>;
   @ViewChild('heroPanelTags', { read: ElementRef }) heroPanelTagsRef?: ElementRef<HTMLElement>;
-  @ViewChild('challengeFlowOverlay', { read: ElementRef }) challengeFlowOverlayRef?: ElementRef<HTMLElement>;
-  @ViewChild('challengePanelTags', { read: ElementRef }) challengePanelTagsRef?: ElementRef<HTMLElement>;
   @ViewChild('nextProjectNav', { read: ElementRef }) nextProjectNavRef?: ElementRef<HTMLElement>;
   @ViewChild('responsiveMobileDemo', { read: ElementRef }) responsiveMobileDemoRef?: ElementRef<HTMLElement>;
   @ViewChild('responsivePanelDemo', { read: ElementRef }) responsivePanelDemoRef?: ElementRef<HTMLElement>;
+  @ViewChild('responsivePanelComposition') responsivePanelComposition?: TemplateRef<{ preview: boolean }>;
   @ViewChild('userNeedClose', { read: ElementRef }) userNeedCloseRef?: ElementRef<HTMLButtonElement>;
   @ViewChild('userNeedSurface', { read: ElementRef }) userNeedSurfaceRef?: ElementRef<HTMLElement>;
   @ViewChild(CaseImagePreviewComponent) private imagePreview?: CaseImagePreviewComponent;
@@ -32,6 +37,8 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   challengeDepthSwitching = false;
   flowMetricValues = ['0.0 kW', '0%', '0.0 kW', '0.0 kW'];
   responsiveOverviewVariant: 0 | 1 = 0;
+  responsivePanelDesktopMode: 'desktop' | 'mobile' = 'desktop';
+  responsiveOverviewDesktopMode: 'desktop' | 'mobile' = 'desktop';
   openArchitectureGroup: string | null = null;
   openUserNeed: string | null = null;
   isMobileViewport = false;
@@ -91,7 +98,14 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
       { number: '03', title: 'METEOROLOGIA' },
       { number: '04', title: 'PREVISÃO DA PRODUÇÃO' },
     ];
-    this.imagePreview?.open('/projects/civitas/civitas_painel.png', 'Painel completo do Civitas anotado', false, legend);
+    this.imagePreview?.open(
+      '/projects/civitas/civitas_painel.png',
+      'Painel completo do Civitas anotado',
+      false,
+      legend,
+      this.panelComposition ?? null,
+      'story-interface-panel civitas-panel-preview',
+    );
   }
 
   openOverviewPreview(src: string, alt: string, includeQuota: boolean, event: Event): void {
@@ -106,7 +120,119 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
       { number: '04', title: 'CAPITAL' },
       { number: '05', title: 'EVOLUÇÃO' },
     );
-    this.imagePreview?.open(src, alt, false, legend);
+    this.imagePreview?.open(
+      src,
+      alt,
+      false,
+      legend,
+      this.overviewComposition ?? null,
+      'story-structure story-interface-overview civitas-overview-preview',
+    );
+  }
+
+  openVariantPreview(event: Event): void {
+    event.stopPropagation();
+    const legend: readonly CaseImagePreviewLegendItem[] = [
+      { number: '01', title: 'CONTEXTO' },
+      { number: '02', title: 'INDICADORES AO VIVO' },
+      { number: '02A', title: 'QUOTA MÉDIA' },
+      { number: '03', title: 'MÉTRICAS AGREGADAS' },
+      { number: '04', title: 'CAPITAL' },
+      { number: '05', title: 'EVOLUÇÃO' },
+    ];
+    this.imagePreview?.open(
+      '/projects/civitas/Group%201852%20%281%29.png',
+      'Vista Geral Civitas com quatro indicadores ao vivo',
+      false,
+      legend,
+      this.isMobileViewport ? this.variantComposition ?? null : null,
+      this.isMobileViewport ? 'story-structure civitas-variant-preview' : '',
+    );
+  }
+
+  onVariantCompositionImageLoad(event: Event, preview: boolean): void {
+    if (preview) this.imagePreview?.onImageLoad(event);
+  }
+
+  onAnnotatedCompositionImageLoad(event: Event, preview: boolean): void {
+    if (preview) this.imagePreview?.onImageLoad(event);
+  }
+
+  onFlowCompositionImageLoad(event: Event, preview: boolean): void {
+    if (!preview) return;
+    this.imagePreview?.onImageLoad(event);
+    const previewElement = (event.currentTarget as HTMLElement).parentElement;
+    const inlineElement = this.flowMetricsRef?.nativeElement;
+    if (!previewElement || !inlineElement) return;
+
+    const inlineRings = inlineElement.querySelectorAll<SVGCircleElement>('.flow-ring__progress');
+    previewElement.querySelectorAll<SVGCircleElement>('.flow-ring__progress').forEach((ring, index) => {
+      ring.style.strokeDasharray = inlineRings[index]?.style.strokeDasharray ?? '';
+    });
+
+    requestAnimationFrame(() => {
+      const sourceAnimations = inlineElement.getAnimations({ subtree:true });
+      previewElement.getAnimations({ subtree:true }).forEach((animation, index) => {
+        const source = sourceAnimations[index];
+        if (source?.currentTime != null) animation.currentTime = source.currentTime;
+      });
+    });
+  }
+
+  openComponentCompositionPreview(kind: 'cards' | 'flow', event: Event): void {
+    event.stopPropagation();
+    const cards = kind === 'cards';
+    if (!cards) this.flowMetricsStart?.();
+    this.imagePreview?.open(
+      cards
+        ? '/projects/civitas/componentes/civitas_painel%201.png'
+        : '/projects/civitas/componentes/Group%201852%20(1)%201.png',
+      cards ? 'Grelha de oito cards de métrica Civitas' : 'Quatro indicadores ao vivo e fluxo energético Civitas',
+      false,
+      [],
+      cards ? this.metricCardsComposition ?? null : this.flowIndicatorsComposition ?? null,
+      cards
+        ? 'story-components civitas-component-preview component-crop--cards'
+        : 'story-components civitas-component-preview component-crop--indicators',
+    );
+  }
+
+  openResponsivePanelComposition(event: Event): void {
+    event.stopPropagation();
+    this.imagePreview?.open(
+      '/projects/civitas/mockups_fixas/Group%201856.png',
+      'Comparação do Painel Civitas em computador e mobile',
+      false,
+      [],
+      this.responsivePanelComposition ?? null,
+    );
+  }
+
+  setResponsivePanelDesktopMode(mode: 'desktop' | 'mobile'): void {
+    this.responsivePanelDesktopMode = mode;
+  }
+
+  setResponsiveOverviewDesktopMode(mode: 'desktop' | 'mobile'): void {
+    this.responsiveOverviewDesktopMode = mode;
+  }
+
+  openResponsivePanelStatePreview(event: Event): void {
+    event.stopPropagation();
+    const mobile = this.responsivePanelDesktopMode === 'mobile';
+    this.imagePreview?.open(
+      mobile
+        ? '/projects/civitas/mockups_fixas/Overview%20mobile%202%20(1).png'
+        : '/projects/civitas/mockups_fixas/Group%201856.png',
+      mobile ? 'Painel Civitas em mobile' : 'Painel Civitas em computador',
+    );
+  }
+
+  onResponsivePanelCompositionImageLoad(event: Event, preview: boolean): void {
+    if (preview) this.imagePreview?.onImageLoad(event);
+  }
+
+  protectPreviewHotspot(event: Event, preview: boolean): void {
+    if (preview) event.stopPropagation();
   }
 
   closeChallengePreview(): void {
@@ -254,8 +380,6 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
     this.setupFlowMetricsDemo();
     this.setupCompactFlowDemo(this.heroFlowOverlayRef?.nativeElement);
     this.setupCompactFlowDemo(this.heroPanelTagsRef?.nativeElement);
-    this.setupCompactFlowDemo(this.challengePanelTagsRef?.nativeElement);
-    this.setupCompactFlowDemo(this.challengeFlowOverlayRef?.nativeElement);
     this.setupResponsiveGroupReveal(this.responsivePanelDemoRef?.nativeElement, reducedMotion);
     this.setupResponsiveGroupReveal(this.responsiveMobileDemoRef?.nativeElement, reducedMotion);
     this.setupResponsiveVariantDemo(this.responsiveMobileDemoRef?.nativeElement, reducedMotion);
@@ -568,10 +692,12 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
           const progress = this.flowMetricEase(Math.min(1, local / 2400));
           return initial + ((ends[index] - initial) * progress);
         });
-        rings.forEach((ring, index) => {
-          const local = Math.max(0, elapsed - delays[index]);
+        const liveRings = Array.from(this.host.nativeElement.querySelectorAll<SVGCircleElement>('.component-crop--indicators .flow-ring__progress'));
+        liveRings.forEach((ring, index) => {
+          const metricIndex = index % ringFinals.length;
+          const local = Math.max(0, elapsed - delays[metricIndex]);
           const progress = this.flowMetricEase(Math.min(1, local / 2400));
-          const value = ringFinals[index] * progress;
+          const value = ringFinals[metricIndex] * progress;
           ring.style.strokeDasharray = `${value} ${100 - value}`;
         });
         this.flowMetricValues = [
@@ -582,7 +708,10 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
         ];
         this.render();
         if (elapsed >= 2700) {
-          rings.forEach((ring, index) => { ring.style.strokeDasharray = `${ringFinals[index]} ${100 - ringFinals[index]}`; });
+          this.host.nativeElement.querySelectorAll<SVGCircleElement>('.component-crop--indicators .flow-ring__progress').forEach((ring, index) => {
+            const metricIndex = index % ringFinals.length;
+            ring.style.strokeDasharray = `${ringFinals[metricIndex]} ${100 - ringFinals[metricIndex]}`;
+          });
           this.flowMetricValues = finalValues;
           this.flowMetricsFrame = undefined;
           this.render();

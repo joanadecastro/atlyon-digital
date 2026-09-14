@@ -2580,19 +2580,19 @@
 }
 
 /* Second Vista Geral print: markers follow the actual component corners. */
-.story-structure .overview-variant__screen--hotspots .overview-hotspot--context {
+:is(.story-structure .overview-variant__screen--hotspots,.case-preview-variant-composition) .overview-hotspot--context {
   left:51.2%;
   top:6.2%;
   transform:none;
 }
 
-.story-structure .overview-variant__screen--hotspots .overview-hotspot--quota {
+:is(.story-structure .overview-variant__screen--hotspots,.case-preview-variant-composition) .overview-hotspot--quota {
   left:31.2%;
   top:11.2%;
   transform:none;
 }
 
-.story-structure .overview-variant__screen--hotspots .overview-hotspot--quota > button {
+:is(.story-structure .overview-variant__screen--hotspots,.case-preview-variant-composition) .overview-hotspot--quota > button {
   width:auto;
   min-width:40px;
   height:32px;
@@ -2601,7 +2601,7 @@
   font-size:11px;
 }
 
-.story-structure .overview-variant__screen--hotspots .overview-hotspot--evolution {
+:is(.story-structure .overview-variant__screen--hotspots,.case-preview-variant-composition) .overview-hotspot--evolution {
   right:17.6%;
   left:auto;
   top:68.6%;
@@ -3208,7 +3208,160 @@
   animation-play-state:running;
 }
 
+@media (max-width:768px) {
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel {
+    margin-top:32px;
+    padding-bottom:56px;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-compare-groups {
+    margin-top:0;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__screen.is-active {
+    position:relative;
+    inset:auto;
+    margin:0 auto;
+  }
+}
+
+@media (max-width:768px) {
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher-layout {
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    justify-items:center;
+    width:100%;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-overview-switcher-layout > .responsive-desktop-copy {
+    width:min(100%,320px);
+    margin:0 auto 44px;
+    text-align:center;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-overview-switcher-layout > .responsive-desktop-copy :is(strong,p) {
+    text-align:center!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher {
+    position:relative;
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr);
+    gap:18px;
+    width:100%;
+    margin:0 auto;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__controls {
+    display:flex;
+    align-items:center;
+    justify-self:center;
+    gap:6px;
+    min-height:38px;
+    padding:4px;
+    border-radius:999px;
+    background:#20242b;
+    box-shadow:0 5px 14px rgba(25,32,38,.16);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__controls button {
+    display:grid;
+    place-items:center;
+    width:30px;
+    height:30px;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:transparent;
+    color:rgba(255,255,255,.58);
+    cursor:pointer;
+    transition:background 300ms ease,color 300ms ease,transform 300ms cubic-bezier(.22,1,.36,1);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__controls button.is-active {
+    background:#fff;
+    color:#20242b;
+    transform:scale(1.02);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__controls svg {
+    width:16px;
+    height:16px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__controls i {
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:rgba(255,255,255,.5);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__viewport {
+    position:relative;
+    width:100%;
+    height:auto;
+    overflow:visible;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__screen {
+    position:absolute;
+    inset:0;
+    display:block;
+    width:auto;
+    max-width:100%;
+    height:auto;
+    max-height:100%;
+    margin:0 auto;
+    object-fit:contain;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(8px) scale(.985);
+    box-shadow:0 18px 44px rgba(25,32,38,.2),0 3px 10px rgba(25,32,38,.14),0 0 0 1px rgba(25,32,38,.1)!important;
+    transition:opacity 300ms ease,transform 300ms cubic-bezier(.22,1,.36,1);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__screen--desktop {
+    width:100%;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__screen--mobile {
+    right:0;
+    left:0;
+    width:min(58%,210px)!important;
+    max-width:210px!important;
+    height:auto!important;
+    max-height:none!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-switcher__screen.is-active {
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.component-crop--indicators > div.is-preview-flow-running .component-flow i {
+  animation-play-state:running;
+}
+
+.component-crop-preview-media.is-preview-flow-running .component-flow i {
+  animation-play-state:running;
+}
+
 .component-crop--indicators > div.is-flow-metrics-running .component-flow--state-a {
+  animation:componentFlowStateA 6.8s ease-in-out var(--flow-state-delay) infinite both;
+}
+
+.component-crop--indicators > div.is-preview-flow-running .component-flow--state-a {
+  animation:componentFlowStateA 6.8s ease-in-out var(--flow-state-delay) infinite both;
+}
+
+.component-crop-preview-media.is-preview-flow-running .component-flow--state-a {
   animation:componentFlowStateA 6.8s ease-in-out var(--flow-state-delay) infinite both;
 }
 
@@ -3216,11 +3369,19 @@
   animation:componentFlowStateB 6.8s ease-in-out var(--flow-state-delay) infinite both;
 }
 
+.component-crop--indicators > div.is-preview-flow-running .component-flow--state-b {
+  animation:componentFlowStateB 6.8s ease-in-out var(--flow-state-delay) infinite both;
+}
+
+.component-crop-preview-media.is-preview-flow-running .component-flow--state-b {
+  animation:componentFlowStateB 6.8s ease-in-out var(--flow-state-delay) infinite both;
+}
+
 .component-crop--indicators .component-flow i + i {
   margin-left:-6%;
 }
 
-.component-crop--indicators .component-flow--green { color:var(--case-accent); }
+.component-crop--indicators .component-flow--green { color:#45bd78; }
 .component-crop--indicators .component-flow--red { color:#ff1b1b; translate:4% -50%; }
 .component-crop--indicators .component-flow--red i { transform:rotate(135deg); }
 
@@ -4016,7 +4177,7 @@
 .story-design-code.is-entered .design-code-connector:nth-child(2) i { transform:none; transition:none; }
 .story-design-code.is-entered .design-code-stage--frontend { opacity:1; transform:none; transition-delay:1050ms; }
 .story-design-code.is-entered .design-code-connector:nth-child(4) i { transform:none; transition:none; }
-.story-design-code.is-entered .design-code-stage--browser { opacity:1; transform:none; transition-delay:2020ms; }
+.story-design-code.is-entered .design-code-stage--browser { opacity:1; transform:none; transition-delay:1450ms; }
 .story-design-code.is-entered .design-code-connector::after { opacity:1; animation-play-state:running; }
 .story-design-code.is-entered .design-code-connector:nth-child(4)::after { animation-delay:.42s; }
 
@@ -6270,6 +6431,202 @@
   }
 }
 
+@media (min-width:769px) {
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel {
+    width:100%;
+    max-width:none;
+    margin-right:0;
+    margin-left:0;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-challenge .challenge-screen {
+    overflow:hidden;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-challenge .challenge-screen-main {
+    aspect-ratio:5700 / 3228;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-challenge .challenge-screen-detail {
+    aspect-ratio:5700 / 3207;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-challenge .challenge-screen > img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:top;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .civitas-story-panel :is(
+    .story-challenge .challenge-screen,
+    .story-interface-panel .overview-hotspot-visual__screen,
+    .story-interface-overview .overview-hotspot-visual__screen,
+    .story-interface-overview .overview-variant__screen,
+    .story-components .component-crop > div,
+    .story-responsive .responsive-panel-desktop-screen,
+    .story-responsive .responsive-desktop-variants,
+    .story-responsive .responsive-mobile-crop
+  ) {
+    box-shadow:0 18px 44px rgba(25,32,38,.2),0 3px 10px rgba(25,32,38,.14),0 0 0 1px rgba(25,32,38,.1)!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher-layout {
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    justify-items:center;
+    align-items:start;
+    gap:0;
+    width:100%;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-overview-switcher-layout > .responsive-desktop-copy {
+    width:min(100%,760px);
+    margin:0 auto clamp(48px,4vw,64px);
+    text-align:center;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-overview-switcher-layout > .responsive-desktop-copy :is(strong,p) {
+    text-align:center;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-compare-groups {
+    width:min(78%,1150px);
+    max-width:1150px;
+    margin-top:clamp(56px,5vw,76px);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher {
+    position:relative;
+    grid-column:1;
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr);
+    gap:14px;
+    width:100%;
+    margin:0 auto;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__controls {
+    position:relative;
+    z-index:10;
+    display:flex;
+    align-items:center;
+    justify-self:center;
+    gap:8px;
+    min-height:42px;
+    padding:4px;
+    border-radius:999px;
+    background:#20242b;
+    box-shadow:0 5px 14px rgba(25,32,38,.16);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__controls button {
+    position:relative;
+    z-index:1;
+    display:grid;
+    place-items:center;
+    width:34px;
+    height:34px;
+    padding:0;
+    border:0;
+    border-radius:50%;
+    background:transparent;
+    color:rgba(255,255,255,.58);
+    cursor:pointer;
+    touch-action:manipulation;
+    transition:background 300ms ease,color 300ms ease,transform 300ms cubic-bezier(.22,1,.36,1);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__controls button::before {
+    content:"";
+    position:absolute;
+    inset:-4px;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__controls button.is-active {
+    background:#fff;
+    color:#20242b;
+    transform:scale(1.02);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__controls button:focus-visible {
+    outline:2px solid #fff;
+    outline-offset:3px;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__controls svg {
+    width:18px;
+    height:18px;
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.5;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    pointer-events:none;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__controls i {
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:rgba(255,255,255,.5);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__viewport {
+    position:relative;
+    width:100%;
+    height:auto;
+    overflow:visible;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__screen {
+    position:absolute;
+    inset:0;
+    display:block;
+    width:auto;
+    max-width:96%;
+    height:auto;
+    max-height:100%;
+    margin:auto;
+    object-fit:contain;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(8px) scale(.985);
+    box-shadow:0 18px 44px rgba(25,32,38,.2),0 3px 10px rgba(25,32,38,.14),0 0 0 1px rgba(25,32,38,.1)!important;
+    transition:opacity 300ms ease,transform 300ms cubic-bezier(.22,1,.36,1);
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__screen--desktop {
+    inset:0 0 auto;
+    width:100%;
+    max-width:100%;
+    margin:0 auto;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__screen--mobile {
+    inset:0 0 auto;
+    width:clamp(195px,13vw,240px);
+    max-width:none;
+    height:auto;
+    max-height:none;
+    margin:0 auto;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__viewport.is-mobile-active {
+    height:auto;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .responsive-panel-switcher__screen.is-active {
+    position:relative;
+    inset:auto;
+    margin:0 auto;
+    opacity:1;
+    pointer-events:auto;
+    transform:translateY(0) scale(1);
+  }
+
+}
+
 /* Civitas information architecture: compact vertical tree on mobile only. */
 .architecture-group__toggle {
   display:none;
@@ -6660,6 +7017,29 @@
 .civitas-mobile-preview-trigger,
 .challenge-media-expand {
   display:none;
+}
+
+/* Match JUH's 96px desktop rhythm between every section subtitle and its content. */
+@media (min-width:769px) {
+  .case-study-page.civitas-page:not(.licitanow-page) .civitas-story-panel .case-study-section-header > .case-study-section-subtitle {
+    padding-bottom:0!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .civitas-story-panel .case-study-section-header:has(> p) > .case-study-section-subtitle {
+    padding-bottom:57px!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .civitas-story-panel .story-architecture .architecture-intro:has(> p) > .case-study-section-subtitle {
+    padding-bottom:34px!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .civitas-story-panel .case-study-section-header:has(> p) > .case-study-section-subtitle + p {
+    margin-top:30px!important;
+  }
+
+  .case-study-page.civitas-page:not(.licitanow-page) .civitas-story-panel .case-study-section-header:not(:has(> p)) {
+    margin-bottom:96px!important;
+  }
 }
 
 @media (max-width:768px) {
@@ -7061,7 +7441,7 @@
     inset:-8px 0;
     z-index:10002;
     display:grid;
-    place-items:stretch;
+    place-items:start stretch;
     padding:0;
     background:#fff;
     opacity:0;
@@ -7079,12 +7459,14 @@
 
   .civitas-page:not(.licitanow-page) .story-user .user-need-panel__surface {
     width:100%;
-    min-height:100%;
+    height:auto;
+    min-height:0;
+    max-height:none;
     box-sizing:border-box;
     display:flex;
     flex-direction:column;
     justify-content:flex-start;
-    padding:22px 20px 24px;
+    padding:22px 20px 32px;
     border:1px solid rgba(32,36,43,.14);
     border-radius:8px;
     background:#fff;
@@ -7188,6 +7570,15 @@
     border-radius:50%;
     background:var(--case-accent);
   }
+
+  .civitas-page:not(.licitanow-page) .story-user .user-need-panel__pairs li strong {
+    display:block;
+    margin-top:1px;
+    color:rgba(32,36,43,.78);
+    font-size:inherit;
+    font-weight:600;
+    line-height:inherit;
+  }
 }
 
 @media (max-width:768px) and (prefers-reduced-motion:reduce) {
@@ -7234,6 +7625,183 @@
 
 @include case-code.blocks;
 @include case-typography.system;
+
+/* The annotated four-indicator composition is also rendered inside the mobile preview. */
+@media (max-width:768px) {
+  .civitas-page:not(.licitanow-page) .story-components .component-crop-preview-media {
+    position:relative;
+  }
+
+  .civitas-page:not(.licitanow-page) .story-components .component-crop__expand.case-expand-affordance {
+    top:-8px;
+    right:10px;
+    display:grid;
+    pointer-events:auto;
+    cursor:pointer;
+  }
+
+  .component-crop-preview-media.is-preview-composition {
+    position:relative!important;
+    inset:auto!important;
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    margin:0!important;
+    overflow:visible!important;
+  }
+
+  .component-crop-preview-media.is-preview-composition > img {
+    position:static!important;
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:0!important;
+    object-fit:contain!important;
+    transform:none!important;
+  }
+
+  .component-crop-preview-media.is-preview-composition > :is(span,svg) {
+    display:block!important;
+    visibility:visible!important;
+  }
+
+  .component-crop-preview-media.is-preview-composition.component-crop--indicators {
+    transform:none!important;
+    transform-origin:center center!important;
+  }
+
+  .component-crop-preview-media.is-preview-composition.component-crop--indicators .component-flow {
+    display:flex!important;
+    visibility:visible!important;
+  }
+
+  .component-crop-preview-media.is-preview-composition.component-crop--indicators .component-flow i {
+    display:block!important;
+    visibility:visible!important;
+  }
+
+  .is-preview-composition:is(.panel-hotspot-visual__screen,.overview-hotspot-visual__screen) {
+    position:relative!important;
+    inset:auto!important;
+    display:block!important;
+    width:min(100%,calc((100vw - 96px) * 1.7593))!important;
+    max-width:100%!important;
+    height:auto!important;
+    margin:0 auto!important;
+    aspect-ratio:5700 / 3240;
+    overflow:visible!important;
+  }
+
+  .is-preview-composition:is(.panel-hotspot-visual__screen,.overview-hotspot-visual__screen) > img {
+    position:static!important;
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:0!important;
+    object-fit:contain!important;
+    transform:none!important;
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .civitas-panel-preview,
+    .civitas-overview-preview
+  ) .overview-hotspot {
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  .civitas-page:not(.licitanow-page) :is(
+    .civitas-panel-preview .panel-hotspot-visual__screen,
+    .civitas-overview-preview .overview-hotspot-visual__screen
+  ) > :is(span,svg) {
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  .case-preview-variant-composition {
+    position:relative;
+    display:block;
+    width:min(100%,calc((100vw - 96px) * 1.7593));
+    max-width:100%;
+    margin:0;
+    aspect-ratio:5700 / 3240;
+    overflow:visible;
+    background:transparent;
+  }
+
+  .case-preview-variant-composition > img {
+    display:block;
+    width:100%;
+    max-width:100%;
+    height:auto;
+    object-fit:contain;
+  }
+
+  .case-preview-variant-composition .overview-hotspot {
+    display:block!important;
+  }
+
+  .case-preview-variant-composition .overview-hotspot > button {
+    width:22px;
+    height:22px;
+    font-size:7px;
+  }
+
+  .case-preview-variant-composition .overview-hotspot--quota > button {
+    min-width:28px;
+    height:22px;
+    padding-inline:4px;
+    font-size:7px;
+  }
+
+  .case-preview-variant-composition .variant-progress-ring {
+    top:calc(29.9% - 18px);
+    width:36px;
+  }
+
+  .case-preview-variant-composition .variant-flow {
+    width:23px;
+  }
+
+  .case-preview-variant-composition .variant-flow-value {
+    top:calc(29.9% + 21px);
+    font-size:4px;
+  }
+
+  .case-preview-variant-composition .overview-metric-state-tag > span {
+    font-size:3px;
+  }
+
+  .case-preview-variant-composition :is(.overview-hotspot--context,.overview-hotspot--quota) .overview-hotspot__popover {
+    right:auto;
+    left:50%;
+    transform:translate(-50%,6px);
+  }
+
+  .case-preview-variant-composition :is(.overview-hotspot--context,.overview-hotspot--quota):is(:hover,.is-open) .overview-hotspot__popover {
+    transform:translate(-50%,0);
+  }
+
+  .case-preview-variant-composition .overview-hotspot--quota .overview-hotspot__popover {
+    transform:translate(-35%,6px);
+  }
+
+  .case-preview-variant-composition .overview-hotspot--quota:is(:hover,.is-open) .overview-hotspot__popover {
+    transform:translate(-35%,0);
+  }
+
+  .case-preview-variant-composition .overview-hotspot--evolution .overview-hotspot__popover {
+    right:0;
+    left:auto;
+  }
+}
 
 /* Civitas IA mobile: desktop visual language, rearranged as a vertical tree only. */
 @media (max-width:768px) {
@@ -7729,4 +8297,132 @@
     letter-spacing:0 !important;
     white-space:nowrap !important;
   }
+}
+
+@media (max-width:768px) {
+  .civitas-page:not(.licitanow-page) .story-interface-panel > .interface-view-summary {
+    text-align:center!important;
+  }
+
+  .civitas-page:not(.licitanow-page) .story-interface-overview .overview-variant__caption p {
+    width:min(100%,800px);
+    margin-inline:auto;
+    color:rgba(35,39,47,.62);
+    font-size:13px!important;
+    line-height:1.3!important;
+    text-align:center!important;
+  }
+
+  .civitas-page:not(.licitanow-page) .story-components figure.component-crop > figcaption {
+    color:#20242b;
+    font-family:Inter,Arial,sans-serif;
+    font-size:clamp(12px,3.35vw,13px)!important;
+    font-weight:600;
+    line-height:1.35!important;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+
+  .responsive-panel-composition {
+    position:relative;
+    width:100%;
+    max-width:100%;
+    aspect-ratio:1.35;
+    margin:24px auto 0;
+    overflow:visible;
+  }
+
+  .responsive-panel-composition.is-preview {
+    width:min(100%,calc((100vw - 40px) * 1.35));
+    margin:0;
+  }
+
+  .responsive-panel-composition > figure {
+    position:absolute!important;
+    min-width:0;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  .responsive-panel-composition__desktop {
+    top:14%;
+    left:0;
+    z-index:1;
+    width:78%!important;
+    max-width:78%!important;
+  }
+
+  .responsive-panel-composition__mobile {
+    top:7%;
+    right:2%;
+    z-index:2;
+    width:30%!important;
+    max-width:30%!important;
+    height:86%;
+  }
+
+  .responsive-panel-composition figcaption {
+    position:absolute;
+    top:-18px;
+    left:0;
+    width:100%;
+    margin:0!important;
+    color:#20242b;
+    font-family:Inter,Arial,sans-serif;
+    font-size:9px!important;
+    font-weight:600;
+    line-height:1.2!important;
+    letter-spacing:.08em;
+    text-align:center;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+
+  .responsive-panel-composition__desktop > img {
+    display:block;
+    width:100%!important;
+    height:auto!important;
+    max-width:100%!important;
+    object-fit:contain;
+  }
+
+  .responsive-panel-composition__mobile > img {
+    display:block;
+    width:100%!important;
+    height:100%!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    object-fit:contain;
+  }
+
+  .responsive-panel-composition__expand.case-expand-affordance {
+    top:0;
+    right:0;
+    z-index:20;
+    display:grid;
+    pointer-events:auto;
+    cursor:pointer;
+  }
+
+  .civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-composition > figure {
+    position:absolute!important;
+    margin:0!important;
+  }
+
+  .civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-composition__desktop {
+    left:0!important;
+    width:78%!important;
+    max-width:78%!important;
+  }
+
+  .civitas-page:not(.licitanow-page) .story-responsive .responsive-panel-composition__mobile {
+    right:2%!important;
+    left:auto!important;
+    width:30%!important;
+    max-width:30%!important;
+  }
+
 }

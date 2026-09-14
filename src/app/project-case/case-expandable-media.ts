@@ -40,7 +40,8 @@ function addAffordance(wrapper: HTMLElement, trigger?: HTMLButtonElement): void 
   const icon = document.createElement('span');
   icon.className = 'case-expand-affordance';
   icon.setAttribute('aria-hidden', 'true');
-  icon.style.cssText = 'position:absolute;top:10px;right:10px;z-index:20;pointer-events:none;width:34px;height:34px;border:1px solid rgba(32,36,43,.10);border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 2px 6px rgba(0,0,0,.08);display:grid;place-items:center;box-sizing:border-box';
+  const isCivitasComponentCrop = !!wrapper.closest('.civitas-page:not(.licitanow-page) .story-components figure.component-crop');
+  icon.style.cssText = `position:absolute;top:${isCivitasComponentCrop ? '-8px' : '10px'};right:10px;z-index:20;pointer-events:none;width:34px;height:34px;border:1px solid rgba(32,36,43,.10);border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 2px 6px rgba(0,0,0,.08);display:grid;place-items:center;box-sizing:border-box`;
   icon.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2H2v4M10 2h4v4M14 10v4h-4M6 14H2v-4" stroke="#2c3035" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   wrapper.append(icon);
 }

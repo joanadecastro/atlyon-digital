@@ -14,19 +14,23 @@
 
         <div class="case-hero__screens cover-panel" aria-label="Interfaces Civitas">
           <div class="case-hero__stage cover-panel__cycle">
-            <img class="case-hero__screen case-hero__screen--rear cover-panel__desktop cover-panel__desktop--one" src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Dashboard Civitas — vista geral">
-            <div #heroFlowOverlay class="cover-panel__overview-overlay compact-flow-overlay" aria-hidden="true">
-              <div class="hero-indicator-grid">
-                <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="1.8">0.0 kW</span></div>
-                <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="0.9">0.0 kW</span></div>
-                <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="1.5">0.0 kW</span></div>
+            <img class="case-hero__screen case-hero__screen--rear cover-panel__desktop cover-panel__desktop--one" [src]="isMobileViewport ? '/projects/civitas/mockups_fixas/Group%201851.png' : '/projects/civitas/Dashboard%202%20%281%29.png'" alt="Dashboard Civitas — vista geral">
+            @if (!isMobileViewport) {
+              <div #heroFlowOverlay class="cover-panel__overview-overlay compact-flow-overlay" aria-hidden="true">
+                <div class="hero-indicator-grid">
+                  <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="1.8">0.0 kW</span></div>
+                  <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="0.9">0.0 kW</span></div>
+                  <div class="hero-indicator-cell"><svg class="compact-flow-ring" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><span class="compact-flow-value" data-final="1.5">0.0 kW</span></div>
+                </div>
+                <span class="compact-flow-arrow compact-flow-arrow--one compact-flow-arrow--green"><i></i><i></i><i></i></span><span class="compact-flow-arrow compact-flow-arrow--two compact-flow-arrow--red"><i></i><i></i><i></i></span>
               </div>
-              <span class="compact-flow-arrow compact-flow-arrow--one compact-flow-arrow--green"><i></i><i></i><i></i></span><span class="compact-flow-arrow compact-flow-arrow--two compact-flow-arrow--red"><i></i><i></i><i></i></span>
-            </div>
-            <img class="case-hero__screen case-hero__screen--front cover-panel__desktop cover-panel__desktop--two" src="/projects/civitas/civitas_painel.png" alt="Dashboard Civitas — painel">
-            <div #heroPanelTags class="cover-panel__panel-overlay compact-flow-overlay" aria-hidden="true">
-              <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
-            </div>
+            }
+            <img class="case-hero__screen case-hero__screen--front cover-panel__desktop cover-panel__desktop--two" [src]="isMobileViewport ? '/projects/civitas/mockups_fixas/Group%201856.png' : '/projects/civitas/civitas_painel.png'" alt="Dashboard Civitas — painel">
+            @if (!isMobileViewport) {
+              <div #heroPanelTags class="cover-panel__panel-overlay compact-flow-overlay" aria-hidden="true">
+                <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -49,21 +53,12 @@
         </div>
         <div class="challenge-visuals" aria-label="Interfaces Civitas com indicadores, filtros e gráficos">
           <figure class="challenge-screen challenge-screen-main" [class.is-depth-front]="challengeFrontScreen === 'panel'" [class.is-depth-back]="challengeFrontScreen !== 'panel'" [class.is-depth-transitioning]="challengeDepthSwitching" role="button" tabindex="0" (click)="bringChallengeScreenToFront('panel')" (keydown.enter)="bringChallengeScreenToFront('panel')" (keydown.space)="bringChallengeScreenToFront('panel'); $event.preventDefault()">
-          <img src="/projects/civitas/civitas_painel.png" alt="Dashboard Civitas com indicadores e gráficos">
-          <div #challengePanelTags class="challenge-screen-overlay challenge-screen-main-overlay compact-flow-overlay" [class.is-depth-front]="challengeFrontScreen === 'panel'" [class.is-depth-back]="challengeFrontScreen !== 'panel'" [class.is-depth-transitioning]="challengeDepthSwitching" aria-hidden="true">
-            <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag overview-metric-state-tag--panel-seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
-          </div>
-          <button type="button" class="case-expand-affordance challenge-media-expand" aria-label="Ampliar dashboard Civitas com indicadores e gráficos" (click)="openChallengePreview('/projects/civitas/civitas_painel.png', 'Dashboard Civitas com indicadores e gráficos', $event)"></button>
+          <img src="/projects/civitas/mockups_fixas/Group%201851.png" alt="Vista Geral Civitas com quatro indicadores">
+          <button type="button" class="case-expand-affordance challenge-media-expand" aria-label="Ampliar Vista Geral Civitas com quatro indicadores" (click)="openChallengePreview('/projects/civitas/mockups_fixas/Group%201851.png', 'Vista Geral Civitas com quatro indicadores', $event)"></button>
           </figure>
           <figure class="challenge-screen challenge-screen-detail" [class.is-depth-front]="challengeFrontScreen === 'overview'" [class.is-depth-back]="challengeFrontScreen !== 'overview'" [class.is-depth-transitioning]="challengeDepthSwitching" role="button" tabindex="0" (click)="bringChallengeScreenToFront('overview')" (keydown.enter)="bringChallengeScreenToFront('overview')" (keydown.space)="bringChallengeScreenToFront('overview'); $event.preventDefault()">
-          <img src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Vista Civitas com métricas, filtros e estados">
-          <div #challengeFlowOverlay class="challenge-screen-overlay challenge-screen-detail-overlay compact-flow-overlay" [class.is-depth-front]="challengeFrontScreen === 'overview'" [class.is-depth-back]="challengeFrontScreen !== 'overview'" [class.is-depth-transitioning]="challengeDepthSwitching" aria-hidden="true">
-            <svg class="compact-flow-ring compact-flow-ring--one" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><svg class="compact-flow-ring compact-flow-ring--two" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg><svg class="compact-flow-ring compact-flow-ring--three" viewBox="0 0 100 100"><circle class="compact-flow-ring__track" cx="50" cy="50" r="44"/><circle class="compact-flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
-            <span class="compact-flow-arrow compact-flow-arrow--one compact-flow-arrow--green"><i></i><i></i><i></i></span><span class="compact-flow-arrow compact-flow-arrow--two compact-flow-arrow--red"><i></i><i></i><i></i></span>
-            <span class="compact-flow-value compact-flow-value--one" data-final="1.8">0.0 kW</span><span class="compact-flow-value compact-flow-value--two" data-final="0.9">0.0 kW</span><span class="compact-flow-value compact-flow-value--three" data-final="1.5">0.0 kW</span>
-            <span class="overview-metric-state-tag compact-flow-tag compact-flow-tag--one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag compact-flow-tag compact-flow-tag--two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="overview-metric-state-tag compact-flow-tag compact-flow-tag--three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
-          </div>
-          <button type="button" class="case-expand-affordance challenge-media-expand" aria-label="Ampliar vista Civitas com métricas, filtros e estados" (click)="openChallengePreview('/projects/civitas/Dashboard%202%20%281%29.png', 'Vista Civitas com métricas, filtros e estados', $event)"></button>
+          <img src="/projects/civitas/mockups_fixas/Group%201856.png" alt="Painel Civitas em desktop">
+          <button type="button" class="case-expand-affordance challenge-media-expand" aria-label="Ampliar Painel Civitas em desktop" (click)="openChallengePreview('/projects/civitas/mockups_fixas/Group%201856.png', 'Painel Civitas em desktop', $event)"></button>
           </figure>
         </div>
       </div>
@@ -92,10 +87,10 @@
               <div #userNeedSurface class="user-need-panel__surface" (click)="$event.stopPropagation()">
                 <header><h4>{{ userNeedTitle }}</h4><button #userNeedClose type="button" aria-label="Fechar detalhe" (click)="closeUserNeed()">×</button></header>
                 @switch (openUserNeed) {
-                  @case ('goals') { <ul><li>Acompanhar produção, consumo e desempenho</li><li>Comparar períodos e evolução</li><li>Perceber rapidamente o estado da comunidade</li></ul> }
-                  @case ('difficulties') { <ul><li>Grande volume de métricas e contextos</li><li>Relação entre produção, consumo e desempenho pouco imediata</li><li>Necessidade de comparar vários períodos</li></ul> }
-                  @case ('needs') { <ul><li>Informação imediata e bem hierarquizada</li><li>Leitura técnica mais visual e consistente</li><li>Componentes reutilizáveis entre diferentes contextos</li></ul> }
-                  @case ('behavior') { <ul><li>Consulta frequente e comparação de períodos</li><li>Alterna entre diferentes contextos</li><li>Aprofunda informação apenas quando necessário</li></ul> }
+                  @case ('goals') { <ul><li>Acompanhar produção e consumo</li><li>Consultar evolução e desempenho</li><li>Comparar diferentes períodos</li><li>Perceber rapidamente o estado da comunidade</li></ul> }
+                  @case ('difficulties') { <ul><li>Grande volume de métricas</li><li>Diferentes contextos de análise</li><li>Relação entre produção e consumo</li><li>Informação técnica pouco imediata</li><li>Necessidade de comparar vários períodos</li></ul> }
+                  @case ('needs') { <ul class="user-need-panel__pairs"><li><span>Informação imediata</span><strong>→ Hierarquia e segmentação</strong></li><li><span>Informação técnica</span><strong>→ Iconografia e leitura visual</strong></li><li><span>Diferentes contextos</span><strong>→ Filtros consistentes</strong></li><li><span>Consulta frequente</span><strong>→ Componentes reutilizáveis</strong></li></ul> }
+                  @case ('behavior') { <ul><li>Consulta frequente</li><li>Compara períodos</li><li>Alterna entre diferentes contextos</li><li>Procura uma leitura rápida</li><li>Aprofunda informação apenas quando necessário</li></ul> }
                 }
               </div>
             </div>
@@ -162,8 +157,9 @@
       <button type="button" class="panel-mobile-preview-trigger licita-applied-comparison__expand" aria-label="Ampliar Painel Civitas com legenda" (click)="openPanelPreview($event)">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button>
     }
     <div #panelMockupDemo class="overview-hotspot-visual panel-hotspot-visual" aria-label="Painel Civitas com explicações interativas">
-      <figure class="overview-hotspot-visual__screen panel-hotspot-visual__screen" [attr.data-case-native-controls]="isMobileViewport ? '' : null">
-        <img src="/projects/civitas/civitas_painel.png" alt="Painel completo do Civitas anotado">
+      <ng-template #panelComposition let-preview="preview">
+      <figure class="overview-hotspot-visual__screen panel-hotspot-visual__screen" [class.is-preview-composition]="preview" [attr.data-case-native-controls]="isMobileViewport ? '' : null">
+        <img src="/projects/civitas/civitas_painel.png" alt="Painel completo do Civitas anotado" (load)="onAnnotatedCompositionImageLoad($event, preview)">
         <span class="overview-metric-state-tag overview-metric-state-tag--panel-one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
         <span class="overview-metric-state-tag overview-metric-state-tag--panel-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
         <span class="overview-metric-state-tag overview-metric-state-tag--panel-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
@@ -172,27 +168,29 @@
         <span class="overview-metric-state-tag overview-metric-state-tag--panel-six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
         <span class="overview-metric-state-tag overview-metric-state-tag--panel-seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
 
-        <div class="overview-hotspot panel-hotspot--filters" [class.is-open]="activeOverviewHotspot === 'panel-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-1'">
+        <div class="overview-hotspot panel-hotspot--filters" [class.is-open]="activeOverviewHotspot === 'panel-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-1'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Navegação e filtros" aria-describedby="panel-popover-1"
             [attr.aria-expanded]="activeOverviewHotspot === 'panel-1'" (click)="toggleOverviewHotspot('panel-1', $event)">01</button>
           <div class="overview-hotspot__popover" id="panel-popover-1" role="tooltip"><strong>NAVEGAÇÃO E FILTROS</strong><p>Comunidade, entidade e período definem o contexto da análise sem interferir com a leitura principal.</p></div>
         </div>
-        <div class="overview-hotspot panel-hotspot--indicators" [class.is-open]="activeOverviewHotspot === 'panel-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-2'">
+        <div class="overview-hotspot panel-hotspot--indicators" [class.is-open]="activeOverviewHotspot === 'panel-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-2'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Indicadores principais" aria-describedby="panel-popover-2"
             [attr.aria-expanded]="activeOverviewHotspot === 'panel-2'" (click)="toggleOverviewHotspot('panel-2', $event)">02</button>
           <div class="overview-hotspot__popover" id="panel-popover-2" role="tooltip"><strong>INDICADORES PRINCIPAIS</strong><p>Uma grelha consistente permite comparar métricas diferentes. Nos cards, verde assinala uma variação positiva e vermelho uma variação negativa face ao período de referência.</p></div>
         </div>
-        <div class="overview-hotspot panel-hotspot--weather" [class.is-open]="activeOverviewHotspot === 'panel-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-3'">
+        <div class="overview-hotspot panel-hotspot--weather" [class.is-open]="activeOverviewHotspot === 'panel-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-3'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Meteorologia" aria-describedby="panel-popover-3"
             [attr.aria-expanded]="activeOverviewHotspot === 'panel-3'" (click)="toggleOverviewHotspot('panel-3', $event)">03</button>
           <div class="overview-hotspot__popover" id="panel-popover-3" role="tooltip"><strong>METEOROLOGIA</strong><p>Localização e temperatura acrescentam contexto ambiental à leitura da produção energética.</p></div>
         </div>
-        <div class="overview-hotspot panel-hotspot--forecast" [class.is-open]="activeOverviewHotspot === 'panel-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-4'">
+        <div class="overview-hotspot panel-hotspot--forecast" [class.is-open]="activeOverviewHotspot === 'panel-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'panel-4'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Previsão da produção" aria-describedby="panel-popover-4"
             [attr.aria-expanded]="activeOverviewHotspot === 'panel-4'" (click)="toggleOverviewHotspot('panel-4', $event)">04</button>
           <div class="overview-hotspot__popover" id="panel-popover-4" role="tooltip"><strong>PREVISÃO DA PRODUÇÃO</strong><p>A visualização temporal permite acompanhar a evolução prevista da produção ao longo do período selecionado.</p></div>
         </div>
       </figure>
+      </ng-template>
+      <ng-container [ngTemplateOutlet]="panelComposition" [ngTemplateOutletContext]="{ preview: false }" />
       <ol class="civitas-hotspot-index" aria-label="Pontos destacados do Painel Civitas">
         <li><span>01</span><strong>NAVEGA&Ccedil;&Atilde;O E FILTROS</strong></li>
         <li><span>02</span><strong>INDICADORES PRINCIPAIS</strong></li>
@@ -208,11 +206,12 @@
       <div class="interface-view-label">VISTA GERAL &middot; AN&Aacute;LISE DETALHADA</div>
     </div>
       <div #overviewMockupDemo class="overview-hotspot-visual" aria-label="Vista Geral Civitas com explicações interativas">
-      <figure class="overview-hotspot-visual__screen structure-screen structure-screen-main" [attr.data-case-native-controls]="isMobileViewport ? '' : null">
+      <ng-template #overviewComposition let-preview="preview">
+      <figure class="overview-hotspot-visual__screen structure-screen structure-screen-main" [class.is-preview-composition]="preview" [attr.data-case-native-controls]="isMobileViewport ? '' : null">
         @if (!isMobileViewport) {
           <button type="button" class="case-expand-affordance challenge-media-expand" aria-label="Ampliar Vista Geral Civitas com legenda" (click)="openOverviewPreview('/projects/civitas/Dashboard%202%20%281%29.png', 'Vista Geral completa do Civitas', false, $event)"></button>
         }
-        <img src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Vista Geral completa do Civitas">
+        <img src="/projects/civitas/Dashboard%202%20%281%29.png" alt="Vista Geral completa do Civitas" (load)="onAnnotatedCompositionImageLoad($event, preview)">
         <svg class="flow-ring flow-ring--main-one" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
         <svg class="flow-ring flow-ring--main-two" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
         <svg class="flow-ring flow-ring--main-three" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
@@ -225,7 +224,7 @@
         <span class="overview-metric-state-tag overview-metric-state-tag--main-two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
         <span class="overview-metric-state-tag overview-metric-state-tag--main-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
 
-        <div class="overview-hotspot overview-hotspot--context" [class.is-open]="activeOverviewHotspot === 'overview-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-1'">
+        <div class="overview-hotspot overview-hotspot--context" [class.is-open]="activeOverviewHotspot === 'overview-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-1'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Contexto" aria-describedby="overview-popover-1"
             [attr.aria-expanded]="activeOverviewHotspot === 'overview-1'" (click)="toggleOverviewHotspot('overview-1', $event)">01</button>
           <div class="overview-hotspot__popover" id="overview-popover-1" role="tooltip">
@@ -234,7 +233,7 @@
           </div>
         </div>
 
-        <div class="overview-hotspot overview-hotspot--live" [class.is-open]="activeOverviewHotspot === 'overview-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-2'">
+        <div class="overview-hotspot overview-hotspot--live" [class.is-open]="activeOverviewHotspot === 'overview-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-2'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Indicadores ao vivo" aria-describedby="overview-popover-2"
             [attr.aria-expanded]="activeOverviewHotspot === 'overview-2'" (click)="toggleOverviewHotspot('overview-2', $event)">02</button>
           <div class="overview-hotspot__popover" id="overview-popover-2" role="tooltip">
@@ -243,7 +242,7 @@
           </div>
         </div>
 
-        <div class="overview-hotspot overview-hotspot--metrics" [class.is-open]="activeOverviewHotspot === 'overview-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-3'">
+        <div class="overview-hotspot overview-hotspot--metrics" [class.is-open]="activeOverviewHotspot === 'overview-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-3'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Métricas agregadas" aria-describedby="overview-popover-3"
             [attr.aria-expanded]="activeOverviewHotspot === 'overview-3'" (click)="toggleOverviewHotspot('overview-3', $event)">03</button>
           <div class="overview-hotspot__popover" id="overview-popover-3" role="tooltip">
@@ -252,7 +251,7 @@
           </div>
         </div>
 
-        <div class="overview-hotspot overview-hotspot--capital" [class.is-open]="activeOverviewHotspot === 'overview-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-4'">
+        <div class="overview-hotspot overview-hotspot--capital" [class.is-open]="activeOverviewHotspot === 'overview-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-4'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Capital" aria-describedby="overview-popover-4"
             [attr.aria-expanded]="activeOverviewHotspot === 'overview-4'" (click)="toggleOverviewHotspot('overview-4', $event)">04</button>
           <div class="overview-hotspot__popover" id="overview-popover-4" role="tooltip">
@@ -261,7 +260,7 @@
           </div>
         </div>
 
-        <div class="overview-hotspot overview-hotspot--evolution" [class.is-open]="activeOverviewHotspot === 'overview-5'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-5'">
+        <div class="overview-hotspot overview-hotspot--evolution" [class.is-open]="activeOverviewHotspot === 'overview-5'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-5'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explicação: Evolução" aria-describedby="overview-popover-5"
             [attr.aria-expanded]="activeOverviewHotspot === 'overview-5'" (click)="toggleOverviewHotspot('overview-5', $event)">05</button>
           <div class="overview-hotspot__popover" id="overview-popover-5" role="tooltip">
@@ -270,6 +269,8 @@
           </div>
         </div>
       </figure>
+      </ng-template>
+      <ng-container [ngTemplateOutlet]="overviewComposition" [ngTemplateOutletContext]="{ preview: false }" />
       <ol class="civitas-hotspot-index" aria-label="Pontos destacados da Vista Geral Civitas">
         <li><span>01</span><strong>CONTEXTO</strong></li>
         <li><span>02</span><strong>INDICADORES AO VIVO</strong></li>
@@ -284,9 +285,9 @@
         <h3>VARIANTE &mdash; 4 INDICADORES</h3>
         <p>Quando a Quota M&eacute;dia est&aacute; dispon&iacute;vel no contexto selecionado, a &aacute;rea de indicadores ao vivo adapta-se para apresentar uma quarta m&eacute;trica, mantendo a mesma hierarquia e estrutura visual.</p>
       </div>
-      <button type="button" class="civitas-mobile-preview-trigger licita-applied-comparison__expand" aria-label="Ampliar variante da Vista Geral Civitas com legenda" (click)="openOverviewPreview('/projects/civitas/Group%201852%20%281%29.png', 'Vista Geral Civitas com quatro indicadores ao vivo', true, $event)">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button>
-      <figure #variantMockupDemo class="overview-variant__screen overview-variant__screen--hotspots structure-screen structure-screen-main">
-        <img src="/projects/civitas/Group%201852%20%281%29.png" alt="Vista Geral Civitas com quatro indicadores ao vivo">
+      <ng-template #variantComposition let-preview="preview">
+      <figure #variantMockupDemo class="overview-variant__screen overview-variant__screen--hotspots structure-screen structure-screen-main case-preview-variant-composition" [class.is-variant-flow-running]="preview" [attr.data-case-native-controls]="isMobileViewport ? '' : null">
+        <img src="/projects/civitas/Group%201852%20%281%29.png" alt="Vista Geral Civitas com quatro indicadores ao vivo" (load)="onVariantCompositionImageLoad($event, preview)">
         <svg class="variant-progress-ring variant-progress-ring--one" viewBox="0 0 100 100" aria-hidden="true"><circle class="variant-progress-ring__track" cx="50" cy="50" r="44"/><circle class="variant-progress-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
         <svg class="variant-progress-ring variant-progress-ring--two" viewBox="0 0 100 100" aria-hidden="true"><circle class="variant-progress-ring__track" cx="50" cy="50" r="44"/><circle class="variant-progress-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
         <svg class="variant-progress-ring variant-progress-ring--three" viewBox="0 0 100 100" aria-hidden="true"><circle class="variant-progress-ring__track" cx="50" cy="50" r="44"/><circle class="variant-progress-ring__progress" cx="50" cy="50" r="44" pathLength="100"/></svg>
@@ -300,42 +301,42 @@
         <span class="overview-metric-state-tag overview-metric-state-tag--variant-three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
         <span class="overview-metric-state-tag overview-metric-state-tag--variant-four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>
 
-        <div class="overview-hotspot overview-hotspot--context" [class.is-open]="activeOverviewHotspot === 'overview-variant-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-1'">
+        <div class="overview-hotspot overview-hotspot--context" [class.is-open]="activeOverviewHotspot === 'overview-variant-1'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-1'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explica&ccedil;&atilde;o do contexto" aria-describedby="overview-variant-popover-1" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-1'" (click)="toggleOverviewHotspot('overview-variant-1', $event)">01</button>
           <div class="overview-hotspot__popover" id="overview-variant-popover-1" role="tooltip">
             <strong>CONTEXTO</strong>
             <p>Comunidade, consumidor e per&iacute;odo permitem adaptar a an&aacute;lise ao contexto pretendido.</p>
           </div>
         </div>
-        <div class="overview-hotspot overview-hotspot--live" [class.is-open]="activeOverviewHotspot === 'overview-variant-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-2'">
+        <div class="overview-hotspot overview-hotspot--live" [class.is-open]="activeOverviewHotspot === 'overview-variant-2'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-2'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explica&ccedil;&atilde;o dos indicadores ao vivo" aria-describedby="overview-variant-popover-2" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-2'" (click)="toggleOverviewHotspot('overview-variant-2', $event)">02</button>
           <div class="overview-hotspot__popover" id="overview-variant-popover-2" role="tooltip">
             <strong>INDICADORES AO VIVO</strong>
             <p>Produ&ccedil;&atilde;o, consumo e rede tornam imediato o fluxo de energia. As setas verdes indicam energia recebida e as vermelhas energia cedida.</p>
           </div>
         </div>
-        <div class="overview-hotspot overview-hotspot--quota" [class.is-open]="activeOverviewHotspot === 'overview-variant-quota'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-quota'">
+        <div class="overview-hotspot overview-hotspot--quota" [class.is-open]="activeOverviewHotspot === 'overview-variant-quota'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-quota'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explica&ccedil;&atilde;o da Quota M&eacute;dia" aria-describedby="overview-variant-popover-quota" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-quota'" (click)="toggleOverviewHotspot('overview-variant-quota', $event)">02A</button>
           <div class="overview-hotspot__popover" id="overview-variant-popover-quota" role="tooltip">
             <strong>QUOTA M&Eacute;DIA</strong>
             <p>Quando dispon&iacute;vel no contexto selecionado, a Quota M&eacute;dia &eacute; integrada no primeiro n&iacute;vel de leitura, fazendo a grelha adaptar-se de tr&ecirc;s para quatro indicadores sem alterar a hierarquia da interface.</p>
           </div>
         </div>
-        <div class="overview-hotspot overview-hotspot--metrics" [class.is-open]="activeOverviewHotspot === 'overview-variant-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-3'">
+        <div class="overview-hotspot overview-hotspot--metrics" [class.is-open]="activeOverviewHotspot === 'overview-variant-3'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-3'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explica&ccedil;&atilde;o das m&eacute;tricas agregadas" aria-describedby="overview-variant-popover-3" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-3'" (click)="toggleOverviewHotspot('overview-variant-3', $event)">03</button>
           <div class="overview-hotspot__popover" id="overview-variant-popover-3" role="tooltip">
             <strong>M&Eacute;TRICAS AGREGADAS</strong>
             <p>Os valores acumulados acrescentam uma leitura global. Os estados verdes assinalam uma varia&ccedil;&atilde;o positiva e os vermelhos uma varia&ccedil;&atilde;o negativa face ao per&iacute;odo de refer&ecirc;ncia.</p>
           </div>
         </div>
-        <div class="overview-hotspot overview-hotspot--capital" [class.is-open]="activeOverviewHotspot === 'overview-variant-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-4'">
+        <div class="overview-hotspot overview-hotspot--capital" [class.is-open]="activeOverviewHotspot === 'overview-variant-4'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-4'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explica&ccedil;&atilde;o do capital" aria-describedby="overview-variant-popover-4" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-4'" (click)="toggleOverviewHotspot('overview-variant-4', $event)">04</button>
           <div class="overview-hotspot__popover" id="overview-variant-popover-4" role="tooltip">
             <strong>CAPITAL</strong>
             <p>Rendimento e poupan&ccedil;a s&atilde;o separados das m&eacute;tricas energ&eacute;ticas para facilitar a leitura econ&oacute;mica.</p>
           </div>
         </div>
-        <div class="overview-hotspot overview-hotspot--evolution" [class.is-open]="activeOverviewHotspot === 'overview-variant-5'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-5'">
+        <div class="overview-hotspot overview-hotspot--evolution" [class.is-open]="activeOverviewHotspot === 'overview-variant-5'" [class.is-demo-pulsing]="demoPulsingHotspot === 'overview-variant-5'" (pointerdown)="protectPreviewHotspot($event, preview)">
           <button type="button" aria-label="Ver explica&ccedil;&atilde;o da evolu&ccedil;&atilde;o" aria-describedby="overview-variant-popover-5" [attr.aria-expanded]="activeOverviewHotspot === 'overview-variant-5'" (click)="toggleOverviewHotspot('overview-variant-5', $event)">05</button>
           <div class="overview-hotspot__popover" id="overview-variant-popover-5" role="tooltip">
             <strong>EVOLU&Ccedil;&Atilde;O</strong>
@@ -343,6 +344,8 @@
           </div>
         </div>
       </figure>
+      </ng-template>
+      <ng-container [ngTemplateOutlet]="variantComposition" [ngTemplateOutletContext]="{ preview: false }" />
       <ol class="civitas-hotspot-index" aria-label="Pontos destacados da variante da Vista Geral Civitas">
         <li><span>01</span><strong>CONTEXTO</strong></li>
         <li><span>02</span><strong>INDICADORES AO VIVO</strong></li>
@@ -366,11 +369,12 @@
     <div class="components-layout">
       <div class="components-board component-crops">
         <figure class="component-crop component-crop--filters"><figcaption>01 &mdash; FILTROS</figcaption><div><img src="/projects/civitas/componentes/civitas_painel%201%20(2).png" alt="Filtros de comunidade, entidades e intervalo de tempo"></div><p class="component-crop__note">Os filtros mant&ecirc;m a mesma estrutura visual entre diferentes contextos, permitindo alterar comunidade, entidade e per&iacute;odo sem modificar a l&oacute;gica de navega&ccedil;&atilde;o.</p></figure>
-        <figure class="component-crop component-crop--cards"><figcaption>02 &mdash; CARDS DE M&Eacute;TRICA</figcaption><div #metricTagsDemo><img src="/projects/civitas/componentes/civitas_painel%201.png" alt="Grelha de oito cards de m&eacute;trica Civitas"><span class="metric-state-tag metric-state-tag--one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span></div><p class="component-crop__note">Os cards seguem uma estrutura comum de t&iacute;tulo, valor, &iacute;cone e estado, permitindo comparar m&eacute;tricas diferentes atrav&eacute;s da mesma linguagem visual.</p><p class="component-crop__note">As tags de estado permitem identificar rapidamente a evolu&ccedil;&atilde;o de cada m&eacute;trica face ao per&iacute;odo de refer&ecirc;ncia. A cor e a dire&ccedil;&atilde;o da seta distinguem varia&ccedil;&otilde;es positivas e negativas, mantendo a leitura imediata entre diferentes indicadores.</p></figure>
+        <figure class="component-crop component-crop--cards"><figcaption>02 &mdash; CARDS DE M&Eacute;TRICA</figcaption><ng-template #metricCardsComposition let-preview="preview"><div #metricTagsDemo class="component-crop-preview-media component-crop--cards" [class.is-preview-composition]="preview" data-case-native-controls><img src="/projects/civitas/componentes/civitas_painel%201.png" alt="Grelha de oito cards de m&eacute;trica Civitas" (load)="onAnnotatedCompositionImageLoad($event, preview)"><span class="metric-state-tag metric-state-tag--one"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--two"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--three"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--four"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--five"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--six"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span><span class="metric-state-tag metric-state-tag--seven"><span class="metric-state-tag__negative">&#9660; -52.62%</span><span class="metric-state-tag__positive">&#9650; +18.40%</span></span>@if (!preview && isMobileViewport) {<button type="button" class="case-expand-affordance component-crop__expand" aria-label="Ampliar cards de m&eacute;trica Civitas" (click)="openComponentCompositionPreview('cards', $event)"></button>}</div></ng-template><ng-container [ngTemplateOutlet]="metricCardsComposition" [ngTemplateOutletContext]="{ preview: false }" /><p class="component-crop__note">Os cards seguem uma estrutura comum de t&iacute;tulo, valor, &iacute;cone e estado, permitindo comparar m&eacute;tricas diferentes atrav&eacute;s da mesma linguagem visual.</p><p class="component-crop__note">As tags de estado permitem identificar rapidamente a evolu&ccedil;&atilde;o de cada m&eacute;trica face ao per&iacute;odo de refer&ecirc;ncia. A cor e a dire&ccedil;&atilde;o da seta distinguem varia&ccedil;&otilde;es positivas e negativas, mantendo a leitura imediata entre diferentes indicadores.</p></figure>
         <figure class="component-crop component-crop--indicators">
           <figcaption>03 &mdash; INDICADORES E FLUXO</figcaption>
-          <div #flowMetricsDemo>
-            <img src="/projects/civitas/componentes/Group%201852%20(1)%201.png" alt="Quatro indicadores ao vivo e fluxo energ&eacute;tico Civitas">
+          <ng-template #flowIndicatorsComposition let-preview="preview">
+          <div #flowMetricsDemo class="component-crop-preview-media component-crop--indicators" [class.is-preview-composition]="preview" [class.is-preview-flow-running]="preview" data-case-native-controls>
+            <img src="/projects/civitas/componentes/Group%201852%20(1)%201.png" alt="Quatro indicadores ao vivo e fluxo energ&eacute;tico Civitas" (load)="onFlowCompositionImageLoad($event, preview)">
             <svg class="flow-ring flow-ring--green flow-ring--variant-one" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="75 25"/></svg>
             <svg class="flow-ring flow-ring--green flow-ring--variant-two" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="38 62"/></svg>
             <svg class="flow-ring flow-ring--red flow-ring--variant-three" viewBox="0 0 100 100" aria-hidden="true"><circle class="flow-ring__track" cx="50" cy="50" r="44"/><circle class="flow-ring__progress" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="48 52"/></svg>
@@ -385,7 +389,12 @@
             <span class="flow-metric-value flow-metric-value--two">{{ flowMetricValues[1] }}</span>
             <span class="flow-metric-value flow-metric-value--three">{{ flowMetricValues[2] }}</span>
             <span class="flow-metric-value flow-metric-value--four">{{ flowMetricValues[3] }}</span>
+            @if (!preview && isMobileViewport) {
+              <button type="button" class="case-expand-affordance component-crop__expand" aria-label="Ampliar indicadores e fluxo Civitas" (click)="openComponentCompositionPreview('flow', $event)"></button>
+            }
           </div>
+          </ng-template>
+          <ng-container [ngTemplateOutlet]="flowIndicatorsComposition" [ngTemplateOutletContext]="{ preview: false }" />
           <p class="component-crop__note">Os indicadores ao vivo permitem acompanhar a rela&ccedil;&atilde;o entre produ&ccedil;&atilde;o, consumo e rede, mantendo vis&iacute;vel a evolu&ccedil;&atilde;o de cada m&eacute;trica e a dire&ccedil;&atilde;o do fluxo energ&eacute;tico.</p>
           <p class="component-crop__note">As liga&ccedil;&otilde;es adaptam-se ao estado do sistema: a cor e a orienta&ccedil;&atilde;o das setas identificam o sentido da transfer&ecirc;ncia, permitindo distinguir rapidamente energia recebida e energia cedida entre os diferentes pontos da comunidade.</p>
         </figure>
@@ -400,25 +409,59 @@
       <div class="responsive-panel__visual">
         <div class="responsive-compare-groups">
           <section #responsivePanelDemo class="responsive-compare-group" aria-label="Comparação do Painel em desktop e mobile">
-            <div class="responsive-compare-row">
-              <figure class="responsive-compare-desktop"><div class="responsive-desktop-copy"><strong>DO HORIZONTAL AO SEQUENCIAL</strong><p>A estrutura em grelha do desktop transforma-se numa leitura sequencial no mobile,<br>preservando a hierarquia das m&eacute;tricas, filtros e informa&ccedil;&atilde;o temporal.</p></div><div class="responsive-desktop-media"><figcaption>PAINEL · COMPUTADOR</figcaption><span class="responsive-panel-desktop-screen"><img src="/projects/civitas/mockups_fixas/Group%201856.png" alt="Painel Civitas em desktop"></span></div></figure>
-              <span class="responsive-comparison__vs" aria-hidden="true">VS</span>
-              <figure class="responsive-compare-mobile"><figcaption>PAINEL · MÓVEL</figcaption><span class="responsive-mobile-crop"><span class="responsive-mobile-canvas responsive-mobile-canvas--panel"><img src="/projects/civitas/mockups_fixas/Overview%20mobile%202%20(1).png" alt="Painel Civitas em mobile"></span></span></figure>
+            <div class="responsive-panel-switcher-layout">
+                <div class="responsive-panel-switcher" data-case-native-controls>
+                  <div class="responsive-panel-switcher__controls" role="group" aria-label="Alternar visualização do Painel Civitas">
+                    <button type="button" [class.is-active]="responsivePanelDesktopMode === 'desktop'" [attr.aria-pressed]="responsivePanelDesktopMode === 'desktop'" aria-label="Mostrar Painel em computador" (click)="setResponsivePanelDesktopMode('desktop')">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg>
+                    </button>
+                    <i aria-hidden="true"></i>
+                    <button type="button" [class.is-active]="responsivePanelDesktopMode === 'mobile'" [attr.aria-pressed]="responsivePanelDesktopMode === 'mobile'" aria-label="Mostrar Painel em mobile" (click)="setResponsivePanelDesktopMode('mobile')">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M10 5h4M11 19h2"/></svg>
+                    </button>
+                  </div>
+                  <div class="responsive-panel-switcher__viewport" [class.is-mobile-active]="responsivePanelDesktopMode === 'mobile'">
+                    <img class="responsive-panel-switcher__screen responsive-panel-switcher__screen--desktop" [class.is-active]="responsivePanelDesktopMode === 'desktop'" src="/projects/civitas/mockups_fixas/Group%201856.png" alt="Painel Civitas em desktop">
+                    <img class="responsive-panel-switcher__screen responsive-panel-switcher__screen--mobile" [class.is-active]="responsivePanelDesktopMode === 'mobile'" src="/projects/civitas/mockups_fixas/Overview%20mobile%202%20(1).png" alt="Painel Civitas em mobile">
+                  </div>
+                </div>
             </div>
           </section>
 
+          <ng-template #responsivePanelComposition let-preview="preview">
+            <div class="responsive-panel-composition" [class.is-preview]="preview" data-case-native-controls>
+              <figure class="responsive-panel-composition__desktop">
+                <figcaption>PAINEL · COMPUTADOR</figcaption>
+                <img src="/projects/civitas/mockups_fixas/Group%201856.png" alt="Painel Civitas em desktop" (load)="onResponsivePanelCompositionImageLoad($event, preview)">
+              </figure>
+              <figure class="responsive-panel-composition__mobile">
+                <figcaption>PAINEL · MÓVEL</figcaption>
+                <img src="/projects/civitas/mockups_fixas/Overview%20mobile%202%20(1).png" alt="Painel Civitas em mobile">
+              </figure>
+              @if (!preview) {
+                <button type="button" class="case-expand-affordance responsive-panel-composition__expand" aria-label="Ampliar comparação do Painel Civitas em computador e mobile" (click)="openResponsivePanelComposition($event)"></button>
+              }
+            </div>
+          </ng-template>
+
           <section #responsiveMobileDemo class="responsive-compare-group responsive-mobile-demo" aria-label="Comparação da Vista Geral em desktop e mobile">
-            <div class="responsive-compare-row">
-              <figure class="responsive-compare-desktop"><div class="responsive-desktop-copy"><strong>FLUXO HORIZONTAL &rarr; VERTICAL</strong><p>Os indicadores mant&ecirc;m a mesma l&oacute;gica e as rela&ccedil;&otilde;es entre produ&ccedil;&atilde;o, consumo e rede. No mobile,<br>a disposi&ccedil;&atilde;o e a dire&ccedil;&atilde;o do fluxo adaptam-se a uma leitura vertical.</p><p>A estrutura adapta-se tamb&eacute;m &agrave; disponibilidade das m&eacute;tricas, mantendo a mesma hierarquia<br>nas configura&ccedil;&otilde;es de tr&ecirc;s ou quatro indicadores.</p></div><div class="responsive-desktop-media"><figcaption>VISTA GERAL · DESKTOP</figcaption><span class="responsive-desktop-variants"><img class="responsive-variant responsive-variant--three" [class.is-active]="responsiveOverviewVariant === 0" src="/projects/civitas/mockups_fixas/Group%201853%20(1).png" alt="Vista Geral Civitas com tr&ecirc;s indicadores em desktop"><img class="responsive-variant responsive-variant--four" [class.is-active]="responsiveOverviewVariant === 1" src="/projects/civitas/mockups_fixas/Group%201851.png" alt="Vista Geral Civitas com quatro indicadores em desktop"></span></div></figure>
-              <span class="responsive-comparison__vs" aria-hidden="true">VS</span>
-              <figure class="responsive-compare-mobile"><figcaption>VISTA GERAL · MOBILE</figcaption><span class="responsive-mobile-crop"><span class="responsive-mobile-canvas responsive-mobile-canvas--flow">
-              <span class="mobile-variant-layer mobile-variant-layer--three" [class.is-active]="responsiveOverviewVariant === 0">
-                <img src="/projects/civitas/mockups_fixas/Group%201854%20(1).png" alt="Vista Geral mobile Civitas com três indicadores">
-              </span>
-              <span class="mobile-variant-layer mobile-variant-layer--four" [class.is-active]="responsiveOverviewVariant === 1">
-                <img src="/projects/civitas/mockups_fixas/Group%201855.png" alt="Vista Geral mobile Civitas com quatro indicadores">
-              </span>
-              </span></span></figure>
+            <div class="responsive-panel-switcher-layout responsive-overview-switcher-layout">
+                <div class="responsive-desktop-copy"><p>Os indicadores mant&ecirc;m a mesma l&oacute;gica e as rela&ccedil;&otilde;es entre produ&ccedil;&atilde;o, consumo e rede. No mobile,<br>a disposi&ccedil;&atilde;o e a dire&ccedil;&atilde;o do fluxo adaptam-se a uma leitura vertical.</p><p>A estrutura adapta-se tamb&eacute;m &agrave; disponibilidade das m&eacute;tricas, mantendo a mesma hierarquia<br>nas configura&ccedil;&otilde;es de tr&ecirc;s ou quatro indicadores.</p></div>
+                <div class="responsive-panel-switcher" data-case-native-controls>
+                  <div class="responsive-panel-switcher__controls" role="group" aria-label="Alternar visualização da Vista Geral Civitas">
+                    <button type="button" [class.is-active]="responsiveOverviewDesktopMode === 'desktop'" [attr.aria-pressed]="responsiveOverviewDesktopMode === 'desktop'" aria-label="Mostrar Vista Geral em computador" (click)="setResponsiveOverviewDesktopMode('desktop')">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/></svg>
+                    </button>
+                    <i aria-hidden="true"></i>
+                    <button type="button" [class.is-active]="responsiveOverviewDesktopMode === 'mobile'" [attr.aria-pressed]="responsiveOverviewDesktopMode === 'mobile'" aria-label="Mostrar Vista Geral em mobile" (click)="setResponsiveOverviewDesktopMode('mobile')">
+                      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M10 5h4M11 19h2"/></svg>
+                    </button>
+                  </div>
+                  <div class="responsive-panel-switcher__viewport" [class.is-mobile-active]="responsiveOverviewDesktopMode === 'mobile'">
+                    <img class="responsive-panel-switcher__screen responsive-panel-switcher__screen--desktop" [class.is-active]="responsiveOverviewDesktopMode === 'desktop'" [src]="responsiveOverviewVariant === 0 ? '/projects/civitas/mockups_fixas/Group%201853%20(1).png' : '/projects/civitas/mockups_fixas/Group%201851.png'" alt="Vista Geral Civitas em desktop">
+                    <img class="responsive-panel-switcher__screen responsive-panel-switcher__screen--mobile" [class.is-active]="responsiveOverviewDesktopMode === 'mobile'" [src]="responsiveOverviewVariant === 0 ? '/projects/civitas/mockups_fixas/Group%201854%20(1).png' : '/projects/civitas/mockups_fixas/Group%201855.png'" alt="Vista Geral Civitas em mobile">
+                  </div>
+                </div>
             </div>
           </section>
         </div>
