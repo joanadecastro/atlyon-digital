@@ -6432,6 +6432,10 @@
 }
 
 @media (min-width:769px) {
+  .case-study-page.civitas-page:not(.licitanow-page) .story-responsive + .story-design-code {
+    margin-top:clamp(170px,10vw,200px);
+  }
+
   .case-study-page.civitas-page:not(.licitanow-page) .story-responsive .responsive-panel {
     width:100%;
     max-width:none;
