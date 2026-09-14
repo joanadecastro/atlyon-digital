@@ -182,7 +182,31 @@
       width: calc(100vw - 28px) !important; max-width: calc(100vw - 28px) !important;
     }
     :is(.licita-image-preview, .licita-video-preview) :is(.licita-image-preview__close, .licita-video-preview__close) {
-      top: 8px !important; right: 8px !important;
+      display:none !important;
+    }
+    .licita-video-preview.is-closing {
+      visibility:visible !important;
+      opacity:0 !important;
+      pointer-events:auto !important;
+    }
+    .licita-video-preview .licita-video-preview__panel {
+      position:fixed !important;
+      top:50% !important;
+      left:50% !important;
+      width:min(calc(100dvh - 40px),calc((100vw - 32px) * 16 / 9)) !important;
+      max-width:none !important;
+      max-height:calc(100vw - 32px) !important;
+      transform:translate(-50%,-50%) rotate(90deg);
+      transform-origin:center center;
+    }
+    .licita-video-preview .licita-video-preview__media,
+    .licita-video-preview video {
+      width:100% !important;
+      max-width:100% !important;
+      height:auto !important;
+      max-height:calc(100vw - 32px) !important;
+      margin:0 !important;
+      object-fit:contain !important;
     }
 
     /* Shared mobile structure for expandable case-study media. */

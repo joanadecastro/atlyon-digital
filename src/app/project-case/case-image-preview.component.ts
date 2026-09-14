@@ -1,5 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, TemplateRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, TemplateRef } from '@angular/core';
+import { isMobileCasePreview } from './case-preview-mobile';
 
 export type CaseImagePreviewLegendItem = { number: string; title: string };
 
@@ -86,7 +87,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     @media (max-width:768px) and (prefers-reduced-motion:reduce) { .is-landscape:not(.is-vertical-landing) .case-image-preview__composition,.is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { transform:translate(-50%,-50%) rotate(90deg); } }
   `,
 })
-export class CaseImagePreviewComponent implements OnDestroy {
+export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
   @Input() trimTopEdge = false;
   @Input() attachCloseToMedia = false;
   src: string | null = null;
@@ -103,8 +104,19 @@ export class CaseImagePreviewComponent implements OnDestroy {
   private cleanupTimer?: number;
   private returnFocus?: HTMLElement;
   private previewCycle = 0;
+  private readonly mobileCaptureClose = (event: PointerEvent): void => {
+    if (this.isOpen && !this.isClosing && isMobileCasePreview()) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.close();
+    }
+  };
 
   constructor(private readonly host: ElementRef<HTMLElement>, private readonly cdr: ChangeDetectorRef) {}
+
+  ngAfterViewInit(): void {
+    this.host.nativeElement.addEventListener('pointerdown', this.mobileCaptureClose, { capture: true });
+  }
 
   open(
     src: string,
@@ -176,7 +188,7 @@ export class CaseImagePreviewComponent implements OnDestroy {
       event.stopPropagation();
       return;
     }
-    if (matchMedia('(max-width: 768px)').matches) {
+    if (isMobileCasePreview()) {
       this.close();
       event.stopPropagation();
       return;
@@ -189,7 +201,7 @@ export class CaseImagePreviewComponent implements OnDestroy {
       event.stopPropagation();
       return;
     }
-    if (matchMedia('(max-width: 768px)').matches || event.target === event.currentTarget) this.close();
+    if (isMobileCasePreview() || event.target === event.currentTarget) this.close();
   }
   @HostListener('document:keydown', ['$event']) onKeydown(event: KeyboardEvent): void {
     if (!this.isOpen) return;
@@ -199,5 +211,5 @@ export class CaseImagePreviewComponent implements OnDestroy {
       this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
     }
   }
-  ngOnDestroy(): void { if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); if (this.isOpen) document.body.style.overflow = this.bodyOverflow; }
+  ngOnDestroy(): void { this.host.nativeElement.removeEventListener('pointerdown', this.mobileCaptureClose, { capture: true }); if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); if (this.isOpen) document.body.style.overflow = this.bodyOverflow; }
 }

@@ -72,7 +72,8 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   const sync = (): void => {
     for (const [wrapper] of actions) {
       const trigger = triggerByMedia.get(wrapper);
-      const expandable = mobile.matches || wrapper.hasAttribute('data-case-expand-desktop');
+      const mobileExpansionDisabled = mobile.matches && wrapper.hasAttribute('data-case-no-mobile-expand');
+      const expandable = !mobileExpansionDisabled && (mobile.matches || wrapper.hasAttribute('data-case-expand-desktop'));
       wrapper.classList.toggle('case-expandable-media', expandable);
       if (expandable) {
         if (mobile.matches) addAffordance(wrapper, trigger);
@@ -94,7 +95,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
     if (!(event.target instanceof Element)) return;
     const wrapper = event.target.closest<HTMLElement>('.case-expandable-media');
     const action = wrapper ? actions.get(wrapper) : undefined;
-    if (!wrapper || !action || (!mobile.matches && !wrapper.hasAttribute('data-case-expand-desktop')) || event.target.closest('a,button,video[controls]')) return;
+    if (!wrapper || !action || (mobile.matches && wrapper.hasAttribute('data-case-no-mobile-expand')) || (!mobile.matches && !wrapper.hasAttribute('data-case-expand-desktop')) || event.target.closest('a,button,video[controls]')) return;
     if (event.type === 'click' && event.target.matches('[data-case-expand-desktop] img')) return;
     if (event instanceof KeyboardEvent) {
       if (event.target !== wrapper || !['Enter', ' '].includes(event.key)) return;

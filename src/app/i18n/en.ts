@@ -616,5 +616,8 @@ export const EN: Readonly<Record<string, string>> = {
   ', mantendo a navegação circular e atualizando': ', maintaining circular navigation and updating',
   'Baseado no template Arsha da BootstrapMade, utilizado como ponto de partida estrutural para a implementação front-end.': 'Based on the Arsha template by BootstrapMade, used as the structural starting point for the front-end implementation.',
   'assets/css/main.css · linhas ~4763–4768': 'assets/css/main.css · lines ~4763–4768',
-  'index.html · linhas ~719–737': 'index.html · lines ~719–737'
+  'index.html · linhas ~719–737': 'index.html · lines ~719–737',
+  '01 — HERO & NAVEGAÇÃO': '01 — HERO & NAVIGATION',
+  '02 — CARROSSEL DE PRINCÍPIOS': '02 — PRINCIPLES CAROUSEL',
+  '03 — FORMULÁRIO': '03 — FORM'
 };
