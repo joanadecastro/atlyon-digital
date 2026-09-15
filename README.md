@@ -69,38 +69,34 @@ Mobile was designed as a distinct composition rather than a scaled-down desktop 
 The mobile navigation uses a dedicated drawer with language controls, direct contact access and touch-oriented closing. A subtle drag handle adds a gesture cue without replacing the conventional close control.
 
 <p align="center">
-  <img src="./public/projects/readmeGithub/menu.png" width="360" alt="Atlyon touch-oriented mobile navigation">
+  <img src="./public/projects/readmeGithub/menu_shadow.png" width="300" alt="Atlyon touch-oriented mobile navigation">
 </p>
 
 ### Responsive Information Architecture
 
 Complex information structures are reorganised vertically on smaller screens while preserving hierarchy and relationships between information levels.
 
-<table>
-  <tr>
-    <td width="50%" align="center"><img src="./public/projects/readmeGithub/diagramacivitas.png" width="300" alt="Civitas information architecture on mobile, first view"></td>
-    <td width="50%" align="center"><img src="./public/projects/readmeGithub/diagramacivitas2.png" width="300" alt="Civitas information architecture on mobile, second view"></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="./public/projects/readmeGithub/diagramacivitas_shadow.png" width="270" alt="Civitas information architecture on mobile, first view">&nbsp;&nbsp;
+  <img src="./public/projects/readmeGithub/diagramacivitas2_shadow.png" width="270" alt="Civitas information architecture on mobile, second view">
+</p>
 
 ### Selective Horizontal Navigation
 
 Dense mobile sequences become swipe-based only where this improves scanning. Partial visibility of the next item and pagination dots reveal additional content without requiring instructions.
 
 <p align="center">
-  <img src="./public/projects/readmeGithub/licitapeek.png" width="360" alt="LicitaNow mobile carousel with next-item preview and pagination">
+  <img src="./public/projects/readmeGithub/licitapeek_shadow.png" width="300" alt="LicitaNow mobile carousel with next-item preview and pagination">
 </p>
 
 ### Technical Content on Small Screens
 
 Code examples remain horizontally explorable in context and can be expanded into a landscape presentation when additional reading space is useful.
 
-<table>
-  <tr>
-    <td width="50%" align="center"><img src="./public/projects/readmeGithub/juh_codigo.png" width="300" alt="JUH code snippet in its mobile context"></td>
-    <td width="50%" align="center"><img src="./public/projects/readmeGithub/juh_codigoampliado.png" width="300" alt="JUH code snippet expanded in landscape"></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="./public/projects/readmeGithub/juh_codigo_shadow.png" width="300" alt="JUH code snippet in its mobile context">&nbsp;&nbsp;
+  <img src="./public/projects/readmeGithub/juh_codigoampliado.png" width="480" alt="JUH code snippet expanded in landscape">
+</p>
 
 ---
 
@@ -166,7 +162,7 @@ Key areas:
 - Technical validation and tests
 
 <p align="center">
-  <img src="./public/projects/readmeGithub/juhdiagrama.png" width="720" alt="JUH Angular e-commerce product flow">
+  <img src="./public/projects/readmeGithub/juhdiagrama_shadow.png" width="320" alt="JUH Angular e-commerce product flow">
 </p>
 
 🌐 **Case study:** https://atlyon.pt/case-studies/juh<br>
@@ -179,7 +175,7 @@ Key areas:
 Contact is part of the product experience. Rather than relying only on a static form, Atlyon directs different visitor intents — including recruiters, collaborations and project enquiries — towards relevant information or contact paths.
 
 <p align="center">
-  <img src="./public/projects/readmeGithub/chat.png" width="380" alt="Atlyon guided contact experience">
+  <img src="./public/projects/readmeGithub/chat.png" width="300" alt="Atlyon guided contact experience">
 </p>
 
 ---
