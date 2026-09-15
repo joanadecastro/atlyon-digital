@@ -4550,6 +4550,7 @@
 .next-case.next-case--licitanow {
   min-height:clamp(140px,11vw,180px);
   background:#fff;
+  font-weight:700;
   cursor:pointer;
 }
 
@@ -4581,11 +4582,17 @@
   gap:18px;
   color:var(--atlyon-accent);
   font-size:10px;
-  font-weight:760;
+  font-weight:inherit;
   line-height:1.2;
   letter-spacing:.18em;
   white-space:nowrap;
   transition:transform 220ms ease,opacity 220ms ease;
+}
+
+@media (min-width:769px) {
+  .next-case.next-case--licitanow .next-case__simple > span {
+    font-weight:800;
+  }
 }
 
 .next-case--licitanow .next-case__simple b {

@@ -1,54 +1,41 @@
 # Atlyon — UI/UX & Front-end Portfolio
 
-Atlyon is my personal **UI/UX and Front-end portfolio**, designed and developed to present selected digital products, interfaces and case studies through a single cohesive experience.
+Atlyon is my latest end-to-end UI/UX and front-end project — a portfolio designed and developed from scratch as a digital product in its own right.
 
-The project reflects the way I work across **design and development** — from strategy and visual direction to interface design, responsive implementation and interaction.
+It brings together product design, visual direction and Angular development in a responsive bilingual experience built around real case studies. Rather than treating mobile as a reduced desktop layout, the interface uses breakpoint-specific composition, interaction and navigation decisions to preserve hierarchy, context and usability across screen sizes.
 
-🌐 **Live website:** https://atlyon.pt
+🌐 **Live Portfolio:** https://atlyon.pt
 
----
-
-## Overview
-
-The portfolio was designed around a simple objective: **present design and implementation as part of the same process**.
-
-Rather than functioning as a traditional project gallery, Atlyon combines:
-
-- UI/UX and Product Design
-- Front-end Development
-- Digital Product Case Studies
-- Responsive Design
-- Information Architecture
-- Design Systems and reusable components
-- Branding and Visual Communication
-- Interactive and guided contact experiences
-- AI-assisted design and development workflows
-
-The interface itself is part of the work being presented — combining visual direction, usability, responsive behaviour and front-end implementation.
+<img src="./public/projects/readmeGithub/hero_atlyon_shadow.png" width="100%" alt="Atlyon UI/UX and front-end portfolio homepage">
 
 ---
 
-## Portfolio Experience
+## At a Glance
 
-### Homepage
-
-The homepage introduces the core positioning — **UI/UX & Front-end** — through a minimal, editorial interface designed to keep the focus on the work.
-
-<img src="./public/projects/readmeGithub/hero_atlyon_shadow.png" width="100%" alt="Atlyon UI/UX and Front-end portfolio homepage">
-
----
-
-### Selected Projects
-
-Projects link directly to detailed case studies. A consistent visual system gives each product its own identity.
-
-<img src="./public/projects/readmeGithub/portfolio_atlyon_shadow.png" width="100%" alt="Atlyon selected projects">
+**Role** — UI/UX Design · Front-end Development<br>
+**Design** — Figma<br>
+**Development** — Angular · TypeScript · SCSS<br>
+**Experience** — Desktop · Mobile · PT/EN<br>
+**Focus** — Product Design · Responsive UX · Design-to-Code<br>
+**Release** — v1.0.0 · Ongoing
 
 ---
 
-### Process
+## Why I Built It
 
-The portfolio also presents the workflow behind each project:
+Atlyon was created to present design and development as parts of the same process rather than separate disciplines.
+
+The portfolio itself became an opportunity to explore information architecture, visual hierarchy, responsive behaviour, interaction design and front-end implementation while building a system capable of supporting different types of case studies.
+
+---
+
+## The Experience
+
+The homepage establishes the positioning and leads into detailed case studies through a coherent visual system that preserves each product's identity.
+
+<img src="./public/projects/readmeGithub/portfolio_atlyon_shadow.png" width="100%" alt="Selected projects in the Atlyon portfolio">
+
+The process communicates the connection between strategy, design, development and validation:
 
 **Context & Objectives → Strategy & Direction → Design & Development → Validation & Delivery**
 
@@ -56,33 +43,85 @@ The portfolio also presents the workflow behind each project:
 
 ---
 
+## Design Decisions → Implementation
+
+Atlyon was refined through decisions that connect interface behaviour with implementation. Responsive adaptation was treated as a design problem, not only a CSS breakpoint problem.
+
+| UX / Design decision | Implementation |
+| --- | --- |
+| Preserve narrative on mobile without excessive vertical scroll | Breakpoint-specific carousels with swipe, peek and pagination cues |
+| Keep technical code readable on small screens | Horizontal code exploration with optional landscape expansion |
+| Preserve context in before / after comparisons | Responsive comparison patterns tailored to each case study |
+| Communicate additional horizontal content without instructions | Partial next-slide visibility and pagination cues |
+| Make mobile navigation more touch-oriented | Mobile drawer with gesture support and alternative close controls |
+| Maintain motion without compromising user preferences | Reduced-motion handling for animated interactions |
+| Keep case studies visually coherent | Shared typography, spacing and reusable interaction patterns |
+| Support different audiences | PT / EN interface and content states |
+
+---
+
+## Responsive UX in Practice
+
+Mobile was designed as a distinct composition rather than a scaled-down desktop interface. Content remains vertical when sequence is important and becomes swipe-based selectively when horizontal exploration reduces density without compromising context.
+
+### Touch-oriented Navigation
+
+The mobile navigation uses a dedicated drawer with language controls, direct contact access and touch-oriented closing. A subtle drag handle adds a gesture cue without replacing the conventional close control.
+
+<p align="center">
+  <img src="./public/projects/readmeGithub/menu.png" width="360" alt="Atlyon touch-oriented mobile navigation">
+</p>
+
+### Responsive Information Architecture
+
+Complex information structures are reorganised vertically on smaller screens while preserving hierarchy and relationships between information levels.
+
+<table>
+  <tr>
+    <td width="50%" align="center"><img src="./public/projects/readmeGithub/diagramacivitas.png" width="300" alt="Civitas information architecture on mobile, first view"></td>
+    <td width="50%" align="center"><img src="./public/projects/readmeGithub/diagramacivitas2.png" width="300" alt="Civitas information architecture on mobile, second view"></td>
+  </tr>
+</table>
+
+### Selective Horizontal Navigation
+
+Dense mobile sequences become swipe-based only where this improves scanning. Partial visibility of the next item and pagination dots reveal additional content without requiring instructions.
+
+<p align="center">
+  <img src="./public/projects/readmeGithub/licitapeek.png" width="360" alt="LicitaNow mobile carousel with next-item preview and pagination">
+</p>
+
+### Technical Content on Small Screens
+
+Code examples remain horizontally explorable in context and can be expanded into a landscape presentation when additional reading space is useful.
+
+<table>
+  <tr>
+    <td width="50%" align="center"><img src="./public/projects/readmeGithub/juh_codigo.png" width="300" alt="JUH code snippet in its mobile context"></td>
+    <td width="50%" align="center"><img src="./public/projects/readmeGithub/juh_codigoampliado.png" width="300" alt="JUH code snippet expanded in landscape"></td>
+  </tr>
+</table>
+
+---
+
 ## Featured Case Studies
 
 ### Civitas — Energy Management Platform
 
-UI/UX and front-end development for an **energy-management SaaS platform**.
+A SaaS product experience for energy management, translating production, consumption and performance data into structured dashboards and reusable interface patterns.
 
-The project transforms energy production, consumption and performance data into clear and usable interfaces, connecting product-design decisions with implementation.
+**Focus** — Product UI/UX · SaaS Dashboards · Information Architecture · Design-to-Code
 
 Key areas:
 
-- SaaS dashboard design
-- Information architecture
+- Dashboard architecture
+- Information hierarchy
 - Data visualisation
-- Reusable UI components
-- Responsive interfaces
-- Desktop and mobile experiences
+- Reusable components
+- Desktop/mobile adaptation
 - Design-to-code workflow
 
-**UI/UX · Front-end**
-
 <img src="./public/projects/readmeGithub/civitasHero_atlyon_shadow.png" width="100%" alt="Civitas energy management platform case study">
-
-### Information Architecture
-
-The product architecture was structured to organise multiple levels of information across dashboards, metrics, management and analysis contexts.
-
-<img src="./public/projects/readmeGithub/diagramaCivitas_atlyon_shadow.png" width="100%" alt="Civitas information architecture diagram">
 
 🌐 **Case study:** https://atlyon.pt/case-studies/civitas
 
@@ -90,104 +129,77 @@ The product architecture was structured to organise multiple levels of informati
 
 ### LicitaNow — Landing Page Redesign
 
-Redesign of a digital platform for the construction sector, focused on creating a clearer hierarchy, stronger user journey and more distinctive digital experience.
+A redesign project focused on clarifying hierarchy, strengthening the user journey and creating a more distinctive digital experience for a construction-sector platform.
+
+**Focus** — UX Analysis · Visual Hierarchy · Responsive Redesign · Front-end
 
 Key areas:
 
 - UX analysis
-- Visual hierarchy
-- User journey
 - Information prioritisation
-- Interface redesign
-- Responsive design
+- Visual direction
+- Before/after evaluation
+- Responsive adaptation
 - Front-end implementation
 
-**UI/UX · Front-end**
-
-<img src="./public/projects/readmeGithub/heroLicita_atlyon_shadow.png" width="100%" alt="LicitaNow landing page redesign before and after">
-
-### Redesign Overview
-
-The redesign brings together the decisions made throughout the process into a clearer and more cohesive landing-page experience.
-
-<img src="./public/projects/readmeGithub/overviewLicita_atlyon_shadow.png" width="100%" alt="LicitaNow redesign overview">
-
-### Problems & Solutions
-
-The case study documents the main experience problems identified in the original landing page and the design decisions used to address them.
-
-<img src="./public/projects/readmeGithub/problemasLicita_atlyon_shadow.png" width="100%" alt="LicitaNow UX problems and solutions">
+<img src="./public/projects/readmeGithub/heroLicita_atlyon_shadow.png" width="100%" alt="LicitaNow landing page redesign">
 
 🌐 **Case study:** https://atlyon.pt/case-studies/licitanow
 
 ---
 
-### Smart Charging — EV Charging Management
+### JUH — Angular E-commerce
 
-Digital product work for a SaaS platform focused on electric-vehicle charging management.
+An Angular e-commerce demonstration built around a complete product flow, connecting interface decisions with reactive state, routing, variant handling, persistence, validation and responsive behaviour.
 
-**UI/UX · Front-end**
+**Focus** — Angular · Front-end Architecture · State · Routing · Validation · Responsive UX
 
-**Case study coming soon.**
+Key areas:
 
----
+- Product flow
+- Angular state management
+- Cart persistence
+- Product variants
+- Routing
+- Reactive Forms validation
+- Responsive behaviour
+- Technical validation and tests
 
-## Responsive Experience
+<p align="center">
+  <img src="./public/projects/readmeGithub/juhdiagrama.png" width="720" alt="JUH Angular e-commerce product flow">
+</p>
 
-The mobile version was designed as an experience in its own right, rather than a scaled-down desktop interface.
-
-Navigation, content hierarchy, project presentation, process and contact interactions were specifically adapted for smaller screens.
-
-<table>
-  <tr>
-    <td align="center"><strong>Hero</strong></td>
-    <td align="center"><strong>Projects</strong></td>
-    <td align="center"><strong>Process</strong></td>
-    <td align="center"><strong>Navigation</strong></td>
-    <td align="center"><strong>Chat</strong></td>
-  </tr>
-  <tr>
-    <td><img src="./public/projects/readmeGithub/heroMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile hero"></td>
-    <td><img src="./public/projects/readmeGithub/projetosMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile projects"></td>
-    <td><img src="./public/projects/readmeGithub/processoMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile process"></td>
-    <td><img src="./public/projects/readmeGithub/menuMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile navigation"></td>
-    <td><img src="./public/projects/readmeGithub/chatMobile_atlyon_shadow.png" width="180" alt="Atlyon mobile chat interface"></td>
-  </tr>
-</table>
+🌐 **Case study:** https://atlyon.pt/case-studies/juh<br>
+💻 **Source code:** https://github.com/joanadecastro/juh-angular-ecommerce
 
 ---
 
-## Design & Development
+## Guided Contact Experience
 
-Atlyon was designed and developed from scratch, with particular attention to maintaining consistency between the **visual system, user experience and implementation**.
+Contact is part of the product experience. Rather than relying only on a static form, Atlyon directs different visitor intents — including recruiters, collaborations and project enquiries — towards relevant information or contact paths.
 
-### UI/UX & Product Design
+<p align="center">
+  <img src="./public/projects/readmeGithub/chat.png" width="380" alt="Atlyon guided contact experience">
+</p>
 
-- Figma
-- Interface Design
-- User Experience
-- Responsive Design
-- Design Systems
-- Information Architecture
-- Visual Hierarchy
-- Interaction Design
-- Digital Product Design
+---
 
-### Front-end Development
+## Architecture & Front-end
 
-- Angular
-- TypeScript
-- JavaScript
-- HTML5
-- SCSS / CSS
-- Responsive Web Development
-- Component-based Interfaces
-- Reusable UI Components
-- Git / GitHub
+Atlyon is implemented as an Angular single-page application with shared interface patterns, case-study-specific experiences, multilingual content and responsive behaviour managed within the same front-end project.
+
+- Angular / TypeScript application
+- Component-based interface structure
+- Shared typography and spacing system
+- Reusable interaction patterns
+- Case-study-specific responsive behaviour
+- PT / EN content states
+- Static project and portfolio assets
+- Netlify deployment
 
 ### AI-Assisted Workflow
 
-AI tools are integrated into the design and development workflow to support **exploration, implementation and iteration**, while keeping UX, visual direction and implementation decisions under direct control.
+AI-assisted tools supported exploration, implementation and iteration throughout the project. UX direction, visual decisions, architecture and validation remained directly controlled throughout the design and development process.
 
 - Claude Code
 - OpenAI Codex
@@ -195,149 +207,58 @@ AI tools are integrated into the design and development workflow to support **ex
 
 ---
 
-## Key Features
+## Interaction & Accessibility
 
-The current portfolio includes:
-
-- Responsive desktop and mobile layouts
-- PT / EN multilingual experience
-- Interactive project cards
-- Detailed case-study pages
-- Responsive case-study layouts
-- Animated process presentation
-- Information-architecture visualisations
-- Before / after project comparisons
-- Contextual project navigation
-- Fixed social/contact actions
-- Guided contact experience
-- Recruiter-specific contact path
-- Project enquiry and budget flow
-- Email delivery for project enquiries
-- Reusable interface patterns and components
-
----
-
-## Guided Contact Experience
-
-The portfolio includes a custom guided contact interface designed around different visitor intents.
-
-Visitors can explore paths for:
-
-- Portfolio
-- Experience
-- Services
-- Project / Collaboration
-- Recruiter enquiries
-- Project quotes
-
-The enquiry form collects the project type, objective, budget, name and email before the visitor submits the request.
-
-<p align="center">
-  <img src="./public/projects/readmeGithub/chatMobile_atlyon_shadow.png" width="380" alt="Atlyon guided chat with visitor options">
-</p>
-
----
-
-## Architecture
-
-Atlyon is built as an **Angular single-page application**, with the portfolio, case studies, reusable interface behaviour and multilingual content managed within the same front-end project.
-
-The application separates:
-
-- Main portfolio experience
-- Case-study experiences
-- Reusable UI behaviour
-- Internationalised content
-- Static project assets
-- CV and portfolio resources
-
----
-
-## Project Structure
-
-```txt
-atlyon-digital/
-│
-├── src/
-│   └── app/
-│       ├── i18n/
-│       ├── project-case/
-│       ├── licitanow-case/
-│       ├── app.ts
-│       ├── app.html
-│       └── app.scss
-│
-├── public/
-│   ├── cv/
-│   └── projects/
-│       ├── civitas/
-│       ├── licita/
-│       ├── smartcharging/
-│       ├── readmeGithub/
-│       └── ...
-│
-├── angular.json
-├── netlify.toml
-├── package.json
-└── README.md
-```
+- Touch and swipe interactions on mobile
+- Responsive navigation
+- Keyboard and focus handling where implemented
+- Reduced-motion handling for animated interactions
+- Media expansion and lightbox behaviour
+- Interaction cues such as pagination and partial next-item visibility
 
 ---
 
 ## Tech Stack
 
 | Area | Technologies |
-|---|---|
-| **Framework** | Angular |
-| **Languages** | TypeScript · JavaScript · HTML5 |
-| **Styling** | SCSS · CSS |
-| **UI/UX** | Figma · Responsive Design · Design Systems |
-| **Architecture** | Component-based UI · Reusable Interfaces |
-| **Version Control** | Git · GitHub |
-| **AI-Assisted Workflow** | Claude Code · OpenAI Codex · Google Stitch |
-| **Deployment** | Netlify |
+| --- | --- |
+| Framework | Angular |
+| Languages | TypeScript · JavaScript · HTML5 |
+| Styling | SCSS · CSS |
+| UI/UX | Figma · Responsive Design · Design Systems |
+| Architecture | Component-based UI · Reusable Interfaces |
+| Testing | Vitest · Angular TestBed |
+| Version Control | Git · GitHub |
+| Deployment | Netlify |
+| AI-Assisted Workflow | Claude Code · OpenAI Codex · Google Stitch |
 
 ---
 
 ## Development
 
-Install dependencies:
-
 ```bash
 npm install
-```
-
-Run the development server:
-
-```bash
 ng serve
-```
-
-Open the local address shown in the terminal.
-
-Create a production build:
-
-```bash
 npm run build
 ```
 
 ---
 
-## Live Portfolio
+## Version & Evolution
 
-The complete portfolio and case studies are available at:
+**Current release: v1.0.0**
 
-🌐 **https://atlyon.pt**
+This release represents the first complete public version of Atlyon. The portfolio will continue to evolve through new case studies, interaction refinements and improvements informed by use and feedback.
 
 ---
 
 ## Author
 
-**Joana Castro**  
+**Joana Castro**<br>
 UI/UX Designer & Front-end Developer
 
-🌐 Portfolio — https://atlyon.pt  
-💼 LinkedIn — https://www.linkedin.com/in/joanadecastro/  
+🌐 Portfolio — https://atlyon.pt<br>
+💼 LinkedIn — https://www.linkedin.com/in/joanadecastro/<br>
 💻 GitHub — https://github.com/joanadecastro
 
 ---

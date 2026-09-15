@@ -70,6 +70,10 @@ export class App implements AfterViewInit, OnDestroy {
   private mobileMenuCloseTimeout?: ReturnType<typeof setTimeout>;
   private mobileMenuOpenRaf?: number;
   private mobileMenuSecondOpenRaf?: number;
+  isMobileMenuDragging = false;
+  mobileMenuDragOffset = 0;
+  private mobileMenuDragStartY = 0;
+  private mobileMenuDragPointerId?: number;
   readonly serviceIconPaths = [
     'M12 3l1.1 3.4L16.5 7.5l-3.4 1.1L12 12l-1.1-3.4L7.5 7.5l3.4-1.1L12 3zM18.5 13l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2zM5 14l.9 2.6L8.5 17l-2.6.9L5 20.5l-.9-2.6L1.5 17l2.6-.4L5 14z',
     'M4 5h16v11H4zM8 20h8M12 16v4',
@@ -1038,6 +1042,7 @@ export class App implements AfterViewInit, OnDestroy {
     this.desktopMenuHoverCloseTimeout = undefined;
     if (window.innerWidth <= 768 && this.isMenuMounted && !this.isMenuClosing) {
       this.cancelMobileMenuOpenFrames();
+      this.resetMobileMenuDrag();
       this.isMenuClosing = true;
       this.isMenuOpen = false;
       this.changeDetectorRef.detectChanges();
@@ -1069,6 +1074,7 @@ export class App implements AfterViewInit, OnDestroy {
     this.isMenuOpen = false;
     this.isMenuMounted = false;
     this.isMenuClosing = false;
+    this.resetMobileMenuDrag();
     this.syncMobileMenuState();
     this.changeDetectorRef.detectChanges();
   }
@@ -1078,6 +1084,59 @@ export class App implements AfterViewInit, OnDestroy {
     if (this.mobileMenuSecondOpenRaf !== undefined) cancelAnimationFrame(this.mobileMenuSecondOpenRaf);
     this.mobileMenuOpenRaf = undefined;
     this.mobileMenuSecondOpenRaf = undefined;
+  }
+
+  startMobileMenuDrag(event: PointerEvent): void {
+    if (window.innerWidth > 768 || !this.isMenuOpen || this.isMenuClosing || event.pointerType === 'mouse') return;
+    const zone = event.currentTarget as HTMLElement;
+    this.mobileMenuDragPointerId = event.pointerId;
+    this.mobileMenuDragStartY = event.clientY;
+    this.mobileMenuDragOffset = 0;
+    this.isMobileMenuDragging = true;
+    zone.closest('nav')?.classList.add('menu-dragging');
+    zone.setPointerCapture(event.pointerId);
+    event.preventDefault();
+  }
+
+  moveMobileMenuDrag(event: PointerEvent): void {
+    if (!this.isMobileMenuDragging || event.pointerId !== this.mobileMenuDragPointerId) return;
+    this.mobileMenuDragOffset = Math.min(140, Math.max(0, this.mobileMenuDragStartY - event.clientY));
+    const nav = (event.currentTarget as HTMLElement).closest('nav');
+    nav?.style.setProperty('--mobile-menu-drag-offset', `${this.mobileMenuDragOffset}px`);
+    nav?.style.setProperty('transform', `translateY(-${this.mobileMenuDragOffset}px)`, 'important');
+    nav?.style.setProperty('transition', 'none', 'important');
+    event.preventDefault();
+  }
+
+  endMobileMenuDrag(event: PointerEvent): void {
+    if (!this.isMobileMenuDragging || event.pointerId !== this.mobileMenuDragPointerId) return;
+    const shouldClose = this.mobileMenuDragOffset >= 64;
+    this.releaseMobileMenuDrag(event);
+    if (shouldClose) this.closeMenu();
+  }
+
+  cancelMobileMenuDrag(event: PointerEvent): void {
+    if (event.pointerId !== this.mobileMenuDragPointerId) return;
+    this.releaseMobileMenuDrag(event);
+  }
+
+  private releaseMobileMenuDrag(event: PointerEvent): void {
+    const zone = event.currentTarget as HTMLElement;
+    if (zone.hasPointerCapture(event.pointerId)) zone.releasePointerCapture(event.pointerId);
+    const nav = zone.closest('nav');
+    nav?.classList.remove('menu-dragging');
+    nav?.style.removeProperty('--mobile-menu-drag-offset');
+    nav?.style.removeProperty('transform');
+    nav?.style.removeProperty('transition');
+    this.isMobileMenuDragging = false;
+    this.mobileMenuDragPointerId = undefined;
+    this.mobileMenuDragOffset = 0;
+  }
+
+  private resetMobileMenuDrag(): void {
+    this.isMobileMenuDragging = false;
+    this.mobileMenuDragPointerId = undefined;
+    this.mobileMenuDragOffset = 0;
   }
 
   private syncMobileMenuState(): void {
@@ -1152,8 +1211,6 @@ export class App implements AfterViewInit, OnDestroy {
       name: 'LicitaNow',
       category: 'Digital Platform',
       description: 'Plataforma digital com interface editorial e foco em clareza operacional.',
-      image: 'projects/image_hero.png',
-      thumbnail: 'projects/MacBook Pro 16.png',
       accent: '#315CFF',
       accentColor: '#315CFF',
       buttonColor: '#4a4d53',
@@ -1162,8 +1219,6 @@ export class App implements AfterViewInit, OnDestroy {
       name: 'Smart Charging',
       category: 'Enterprise Platform',
       description: 'Dashboard operacional para processos complexos e dados em tempo real.',
-      image: 'projects/image_hero.png',
-      thumbnail: 'projects/iPhone Air.png',
       accent: '#315CFF',
       accentColor: '#2d6cdf',
       buttonColor: '#4a4d53',
@@ -1172,8 +1227,6 @@ export class App implements AfterViewInit, OnDestroy {
       name: 'EstateFlow',
       category: 'SaaS Product',
       description: 'Preview editorial temporario para plataforma de gestao imobiliaria.',
-      image: 'projects/image_hero.png',
-      thumbnail: 'projects/iPad Pro (2022).png',
       accent: '#315CFF',
       accentColor: '#6a6f5f',
       buttonColor: '#4a4d53',
@@ -1182,8 +1235,6 @@ export class App implements AfterViewInit, OnDestroy {
       name: 'E-commerce',
       category: 'Digital Commerce',
       description: 'Experiencia de compra digital com foco em produto e conversao.',
-      image: 'projects/image_hero.png',
-      thumbnail: 'projects/eccomerce.png',
       accent: '#315CFF',
       accentColor: '#8b5f4f',
       buttonColor: '#4a4d53',
@@ -1192,8 +1243,6 @@ export class App implements AfterViewInit, OnDestroy {
       name: 'Email Marketing',
       category: 'Marketing Product',
       description: 'Preview editorial temporario para sistema de campanhas digitais.',
-      image: 'projects/image_hero.png',
-      thumbnail: 'projects/mercado_bistro_study.png',
       accent: '#315CFF',
       accentColor: '#b45b48',
       buttonColor: '#4a4d53',
@@ -1348,9 +1397,6 @@ export class App implements AfterViewInit, OnDestroy {
       description:
         'Plataforma de monitorização energética desenhada para simplificar dados complexos e tornar mais clara a leitura de produção, consumo e desempenho.',
       desktop: 'projects/civitas/civitas_painel.png',
-      mobile: 'projects/civitas/civitasmobile_vistageralcompleta1.png',
-      study: 'projects/civitas/civitas_vistageral1.png',
-      background: 'projects/civitas/civitas_vistageral2.png',
       caseTitle: 'Energia clara, decisões melhores',
       caseText:
         'A landing page foi concebida para transmitir uma imagem forte, moderna e profissional através de uma linguagem visual minimalista e de elevado contraste. A combinação entre tons escuros e apontamentos em verde foi utilizada para reforçar a identidade da marca, criar destaque visual e conduzir naturalmente a atenção do utilizador pelos elementos mais importantes da página. Toda a estrutura foi desenhada com foco na clareza da informação e na fluidez da navegação. A hierarquia visual, a gestão do espaço e a organização do conteúdo permitem uma leitura intuitiva, facilitando a compreensão da mensagem desde o primeiro contacto.',
@@ -1379,7 +1425,6 @@ export class App implements AfterViewInit, OnDestroy {
       desktop: 'projects/licita_desktop.png',
       mobile: 'projects/licita_desktop.png',
       study: 'projects/licita_desktop.png',
-      background: 'projects/licita_background.jpg',
       accent: '#ff6534',
       bg: '#0d0f10',
       surface: '#171a1b',
@@ -1397,8 +1442,6 @@ export class App implements AfterViewInit, OnDestroy {
       mobile: '/projects/smart_charging.png',
       study: '/projects/hero/hero_smartcharging.png',
       background: '/projects/smart_charging.png',
-      desktop2: 'projects/shopdesktop_eccomerce.jpg',
-      mobile2: 'projects/shopmobile_eccomerce.jpg',
       caseTitle: 'Uma experiência de comércio editorial para uma marca premium',
       caseText:
         'VAULT foi concebida como uma experiência digital que vai além da venda de produtos: a interface encapsula a alma da marca através de uma linguagem editorial, sofisticada e rigorosa. A homepage privilegia pureza visual, brancos generosos e uma hierarquia tipográfica precisa, criando um ambiente onde cada peça assume o protagonismo absoluto.',
@@ -1693,13 +1736,16 @@ export class App implements AfterViewInit, OnDestroy {
 
   preloadProjectImages() {
     this.projects.forEach((project) => {
+      const optionalMedia = project as typeof project & {
+        mobile?: string;
+        study?: string;
+        background?: string;
+      };
       [
         project.desktop,
-        project.mobile,
-        project.study,
-        project.background,
-        project.desktop2,
-        project.mobile2,
+        optionalMedia.mobile,
+        optionalMedia.study,
+        optionalMedia.background,
       ].forEach((src) => {
         if (!src) return;
 
@@ -2135,37 +2181,6 @@ export class App implements AfterViewInit, OnDestroy {
     }
 
     document.documentElement.classList.remove('process-reveal-enabled');
-  }
-
-  openActiveHeroProject() {
-    const existingProject = this.projects.find(
-      (project) =>
-        project.name.toLowerCase() === this.activeHeroProject.name.toLowerCase() ||
-        project.category.toLowerCase() === this.activeHeroProject.category.toLowerCase()
-    );
-
-    this.openProject(existingProject || {
-      name: this.activeHeroProject.name,
-      category: this.activeHeroProject.category,
-      description: this.activeHeroProject.description,
-      desktop: this.activeHeroProject.image,
-      mobile: this.activeHeroProject.image,
-      study: this.activeHeroProject.image,
-      background: this.activeHeroProject.image,
-      caseTitle: this.activeHeroProject.name,
-      caseText: this.activeHeroProject.description,
-      caseText2: 'Case study completo a preparar.',
-      primaryFont: 'Inter',
-      secondaryFont: 'Inter',
-      accent: this.activeHeroProject.accent,
-      bg: '#F7F5F2',
-      surface: '#ffffff',
-      colors: [
-        { name: 'Atlyon Blue', hex: this.activeHeroProject.accent, role: 'Accent' },
-        { name: 'Warm Off White', hex: '#F7F5F2', role: 'Background' },
-        { name: 'Ink', hex: '#111111', role: 'Text' },
-      ],
-    });
   }
 
   scrollToPortfolio(): void {

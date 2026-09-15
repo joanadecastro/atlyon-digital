@@ -3,6 +3,9 @@ import { JUH_SNIPPETS } from './juh-snippets';
 import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scroll-indicator.component';
 import { CaseImagePreviewComponent } from '../project-case/case-image-preview.component';
 import { bindCaseExpandableMedia } from '../project-case/case-expandable-media';
+import { bindCaseExpandableCode } from '../project-case/case-expandable-code';
+import { isMobileCasePreview, isNativeVideoControlPointer } from '../project-case/case-preview-mobile';
+import { LanguageService } from '../i18n/language.service';
 
 @Component({
   selector: 'app-juh-case',
@@ -14,27 +17,78 @@ import { bindCaseExpandableMedia } from '../project-case/case-expandable-media';
 export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   readonly github = 'https://github.com/joanadecastro/juh-angular-ecommerce';
   readonly snippets = JUH_SNIPPETS;
+  mobileGallerySlide = 0;
   private readonly checkoutClipStart = 18.7;
   private readonly checkoutClipEnd = 27.6;
   private readonly element: ElementRef<HTMLElement> = inject(ElementRef);
+  private readonly language = inject(LanguageService);
   private observer?: IntersectionObserver;
   private resultsObserver?: IntersectionObserver;
+  private codeOverflowObserver?: ResizeObserver;
   private resultsCounterRafId?: number;
   private unbindExpandableMedia?: () => void;
+  private unbindExpandableCode?: () => void;
   videoPreviewSrc: string | null = null;
   videoPreviewLabel = '';
   videoPreviewOpen = false;
+  videoPreviewClosing = false;
   private videoPreviewUsesCheckoutClip = false;
   private bodyOverflowBeforePreview = '';
   private bodyScrollLocked = false;
+  private videoPreviewCloseTimer?: number;
+  private mobileGalleryPointerStart: { x: number; y: number; slide: number } | null = null;
   @ViewChild(CaseImagePreviewComponent) private imagePreview?: CaseImagePreviewComponent;
 
-  openImagePreview(src: string, alt: string): void { this.imagePreview?.open(src, alt); }
+  openImagePreview(src: string, alt: string): void {
+    const trimMobileRightEdge = src.endsWith('/projects/juh/hero_desktop.png');
+    this.imagePreview?.open(src, this.language.translate(alt), false, [], null, '', trimMobileRightEdge);
+  }
+
+  onMobileGalleryScroll(event: Event): void {
+    const rail = event.currentTarget;
+    if (!(rail instanceof HTMLElement)) return;
+    const slides = Array.from(rail.children).filter((child): child is HTMLElement => child instanceof HTMLElement);
+    if (!slides.length) return;
+    const railLeft = rail.getBoundingClientRect().left;
+    this.mobileGallerySlide = slides.reduce((nearest, slide, index) => {
+      const distance = Math.abs(slide.getBoundingClientRect().left - railLeft);
+      return distance < nearest.distance ? { index, distance } : nearest;
+    }, { index: 0, distance: Number.POSITIVE_INFINITY }).index;
+  }
+
+  setMobileGallerySlide(slide: number): void {
+    const rail = this.element.nativeElement.querySelector<HTMLElement>('.juh-mobile-gallery');
+    const target = rail?.children.item(slide);
+    if (!rail || !(target instanceof HTMLElement)) return;
+    const left = target.getBoundingClientRect().left - rail.getBoundingClientRect().left + rail.scrollLeft;
+    rail.scrollTo({ left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    this.mobileGallerySlide = slide;
+  }
+
+  startMobileGalleryPointer(event: PointerEvent): void {
+    if (!isMobileCasePreview()) return;
+    this.mobileGalleryPointerStart = { x: event.clientX, y: event.clientY, slide: this.mobileGallerySlide };
+  }
+
+  endMobileGalleryPointer(event: PointerEvent): void {
+    const start = this.mobileGalleryPointerStart;
+    this.mobileGalleryPointerStart = null;
+    if (!start || !isMobileCasePreview()) return;
+    const deltaX = event.clientX - start.x;
+    const deltaY = event.clientY - start.y;
+    if (Math.abs(deltaX) < 36 || Math.abs(deltaX) <= Math.abs(deltaY)) return;
+    this.setMobileGallerySlide(Math.max(0, Math.min(2, start.slide + (deltaX < 0 ? 1 : -1))));
+  }
+
+  cancelMobileGalleryPointer(): void {
+    this.mobileGalleryPointerStart = null;
+  }
 
   openVideoPreview(src: string, label: string): void {
+    if (this.videoPreviewClosing) return;
     this.videoPreviewUsesCheckoutClip = false;
     this.videoPreviewSrc = src;
-    this.videoPreviewLabel = label;
+    this.videoPreviewLabel = this.language.translate(label);
     if (!this.bodyScrollLocked) {
       this.bodyOverflowBeforePreview = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
@@ -44,9 +98,10 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   openCheckoutVideoPreview(): void {
+    if (this.videoPreviewClosing) return;
     this.videoPreviewUsesCheckoutClip = true;
     this.videoPreviewSrc = '/projects/juh/video_juhecommerce.mp4';
-    this.videoPreviewLabel = 'Micro-demo de checkout e validação do JUH';
+    this.videoPreviewLabel = this.language.translate('Micro-demo de checkout e validação do JUH');
     if (!this.bodyScrollLocked) {
       this.bodyOverflowBeforePreview = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
@@ -56,18 +111,42 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   closeVideoPreview(): void {
-    this.videoPreviewOpen = false;
-    this.videoPreviewSrc = null;
-    this.videoPreviewLabel = '';
-    this.videoPreviewUsesCheckoutClip = false;
-    if (this.bodyScrollLocked) {
-      document.body.style.overflow = this.bodyOverflowBeforePreview;
-      this.bodyScrollLocked = false;
+    if (this.videoPreviewClosing || !this.videoPreviewOpen) return;
+    if (!isMobileCasePreview()) {
+      this.videoPreviewOpen = false;
+      this.videoPreviewSrc = null;
+      this.videoPreviewLabel = '';
+      this.videoPreviewUsesCheckoutClip = false;
+      if (this.bodyScrollLocked) {
+        document.body.style.overflow = this.bodyOverflowBeforePreview;
+        this.bodyScrollLocked = false;
+      }
+      return;
     }
+    this.videoPreviewClosing = true;
+    this.videoPreviewOpen = false;
+    if (this.videoPreviewCloseTimer !== undefined) window.clearTimeout(this.videoPreviewCloseTimer);
+    this.videoPreviewCloseTimer = window.setTimeout(() => {
+      this.videoPreviewSrc = null;
+      this.videoPreviewLabel = '';
+      this.videoPreviewUsesCheckoutClip = false;
+      this.videoPreviewClosing = false;
+      if (this.bodyScrollLocked) {
+        document.body.style.overflow = this.bodyOverflowBeforePreview;
+        this.bodyScrollLocked = false;
+      }
+    }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 550);
   }
 
   closeVideoPreviewFromBackdrop(event: Event): void {
-    if (event.target === event.currentTarget) this.closeVideoPreview();
+    if (this.videoPreviewClosing) { event.stopPropagation(); return; }
+    if (isMobileCasePreview() || event.target === event.currentTarget) this.closeVideoPreview();
+  }
+
+  handleVideoPreviewPanelPointer(event: PointerEvent): void {
+    event.stopPropagation();
+    if (this.videoPreviewClosing || !isMobileCasePreview() || isNativeVideoControlPointer(event)) return;
+    this.closeVideoPreview();
   }
 
   setFlowVideoRate(event: Event): void {
@@ -135,6 +214,8 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.unbindExpandableMedia = bindCaseExpandableMedia(this.element.nativeElement, (src, alt) => this.imagePreview?.open(src, alt));
+    this.unbindExpandableCode = bindCaseExpandableCode(this.element.nativeElement, (label, code) => this.imagePreview?.openCode(label, code));
+    this.initCodeOverflowDetection();
     this.initResultsCounter();
     const hero = this.element.nativeElement.querySelector<HTMLElement>('.case-hero');
     if (!hero) return;
@@ -153,8 +234,10 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.closeVideoPreview();
     this.unbindExpandableMedia?.();
+    this.unbindExpandableCode?.();
     this.observer?.disconnect();
     this.resultsObserver?.disconnect();
+    this.codeOverflowObserver?.disconnect();
     if (this.resultsCounterRafId !== undefined) cancelAnimationFrame(this.resultsCounterRafId);
   }
 
@@ -172,6 +255,19 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
       this.animateResultsCounters(results);
     }, { threshold:.3, rootMargin:'0px 0px -8% 0px' });
     this.resultsObserver.observe(results);
+  }
+
+  private initCodeOverflowDetection(): void {
+    const snippets = Array.from(this.element.nativeElement.querySelectorAll<HTMLElement>('.juh-code pre'));
+    const update = (snippet: HTMLElement): void => {
+      snippet.classList.toggle('has-horizontal-code-overflow', snippet.scrollWidth > snippet.clientWidth + 1);
+    };
+    snippets.forEach(update);
+    if (typeof ResizeObserver === 'undefined') return;
+    this.codeOverflowObserver = new ResizeObserver((entries) => {
+      entries.forEach((entry) => update(entry.target as HTMLElement));
+    });
+    snippets.forEach((snippet) => this.codeOverflowObserver?.observe(snippet));
   }
 
   private animateResultsCounters(results: HTMLElement): void {

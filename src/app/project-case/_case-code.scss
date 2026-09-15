@@ -8,6 +8,7 @@
   }
 
   :is(.case-code-block, .juh-code, .licita-implementation__code) {
+    position: relative;
     box-sizing: border-box;
     min-width: 0;
     padding: 22px;
@@ -16,6 +17,10 @@
     background: var(--case-code-background) !important;
     box-shadow: none !important;
     color: var(--case-code-foreground);
+  }
+
+  .case-code-expand {
+    display: none !important;
   }
 
   :is(.case-code-block, .juh-code, .licita-implementation__code)
@@ -61,6 +66,15 @@
 
     :is(.case-code-block, .juh-code, .licita-implementation__code) code {
       font-size: 12px;
+    }
+
+    :is(.case-code-block, .juh-code, .licita-implementation__code) > :is(figcaption, .licita-implementation__source) {
+      padding-right: 44px;
+    }
+
+    .case-code-expand.case-expand-affordance {
+      display: grid !important;
+      pointer-events: auto;
     }
   }
 }

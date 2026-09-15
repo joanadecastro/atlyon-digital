@@ -9,14 +9,19 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
   standalone: true,
   imports: [NgTemplateOutlet],
   template: `
-    <div class="case-image-preview" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.attach-close-to-media]="attachCloseToMedia"
-      [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" aria-label="Preview ampliado da mockup"
+    <div class="case-image-preview" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.is-code-preview]="isCodePreview" [class.trim-mobile-right-edge]="trimMobileRightEdge" [class.attach-close-to-media]="attachCloseToMedia"
+      [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" [attr.aria-label]="isCodePreview ? 'Snippet de código ampliado' : 'Preview ampliado da mockup'"
       (pointerdown)="closeFromBackdrop($event)">
-      @if (src) {
+      @if (src || isCodePreview) {
         <div class="case-image-preview__panel" [class.has-legend]="legend.length > 0" (pointerdown)="handlePanelPointerDown($event)">
           <button type="button" class="case-image-preview__close" aria-label="Fechar preview" (click)="close()">×</button>
           <div class="case-image-preview__composition" [class.trim-top-edge]="trimTopEdge">
-            @if (compositionTemplate) {
+            @if (isCodePreview) {
+              <figure class="case-image-preview__code">
+                <figcaption>{{ codeLabel }}</figcaption>
+                <pre class="case-image-preview__code-scroll"><code>{{ codeContent }}</code></pre>
+              </figure>
+            } @else if (compositionTemplate) {
               <div [attr.class]="'case-image-preview__template ' + compositionClass">
                 <ng-container [ngTemplateOutlet]="compositionTemplate" [ngTemplateOutletContext]="{ preview: true }" />
               </div>
@@ -48,6 +53,13 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     .is-image-entered img { opacity:1; transform:scale(1); }
     .case-image-preview__legend { display:none; }
     .case-image-preview__top-edge { display:none; }
+    .case-image-preview__code { box-sizing:border-box; width:100%; height:100%; margin:0; padding:22px; overflow:hidden; border-radius:4px; background:#1e1e1e; color:#ededed; box-shadow:0 24px 70px rgba(0,0,0,.18); }
+    .case-image-preview__code figcaption { margin:0 0 16px; padding:0 0 12px; border-bottom:1px solid rgba(255,255,255,.12); color:#aeb2b7; font:500 11px/1.5 Inter,Arial,sans-serif; letter-spacing:.07em; text-transform:uppercase; }
+    .case-image-preview__code-scroll { box-sizing:border-box; width:100%; height:calc(100% - 45px); margin:0; padding:0 0 12px; overflow:auto; overscroll-behavior:contain; color:#ededed; white-space:pre; scrollbar-color:#f2f2f2 #363636; scrollbar-width:thin; scrollbar-gutter:stable; }
+    .case-image-preview__code-scroll code { font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .case-image-preview__code-scroll::-webkit-scrollbar { width:6px; height:6px; }
+    .case-image-preview__code-scroll::-webkit-scrollbar-track { border-radius:999px; background:#363636; }
+    .case-image-preview__code-scroll::-webkit-scrollbar-thumb { border-radius:999px; background:#f2f2f2; }
     @media (min-width:769px) {
       .case-image-preview__composition.trim-top-edge .case-image-preview__top-edge { position:absolute; top:0; right:0; left:0; z-index:1; display:block; height:2px; border-radius:6px 6px 0 0; background-repeat:no-repeat; background-position:center -2px; background-size:100% auto; pointer-events:none; }
     }
@@ -72,8 +84,12 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       .is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { opacity:1; transform:translate(-50%,-50%) rotate(90deg) scale(1); transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) img { position:static; width:100%; max-width:100%; max-height:calc(100vw - 32px); opacity:1; transform:none; transition:none; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__template { width:100%; max-height:calc(100vw - 32px); }
+      .is-code-preview.is-landscape:not(.is-vertical-landing) .case-image-preview__composition { height:calc(100vw - 32px); }
+      .is-code-preview .case-image-preview__code { padding:18px; }
+      .is-code-preview .case-image-preview__code-scroll code { font-size:14px; line-height:1.65; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__composition:has(> .case-image-preview__template.civitas-component-preview.component-crop--indicators) > .case-image-preview__template { position:relative; inset:auto; margin:0; transform:none; transform-origin:center center; }
       .is-landscape:not(.is-vertical-landing) .has-legend img { max-height:calc(100vw - 96px); }
+      .trim-mobile-right-edge:not(.is-vertical-landing) img { clip-path:inset(0 1px 0 0); }
       .case-image-preview__legend { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; margin:0; padding:8px 0 0; border-top:1px solid rgba(255,255,255,.22); color:#fff; list-style:none; }
       .case-image-preview__legend li { display:grid; grid-template-columns:22px minmax(0,1fr); align-items:start; gap:5px; margin:0; padding:0; }
       .case-image-preview__legend span { color:#b9d4e7; font:700 10px/1.25 Inter,Arial,sans-serif; letter-spacing:.05em; }
@@ -97,15 +113,22 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
   isImageEntered = false;
   isVerticalLanding = false;
   isLandscape = false;
+  isCodePreview = false;
+  codeLabel = '';
+  codeContent = '';
+  trimMobileRightEdge = false;
   legend: readonly CaseImagePreviewLegendItem[] = [];
   compositionTemplate: TemplateRef<unknown> | null = null;
   compositionClass = '';
   private bodyOverflow = '';
   private cleanupTimer?: number;
   private returnFocus?: HTMLElement;
+  private pageScrollX = 0;
+  private pageScrollY = 0;
   private previewCycle = 0;
   private readonly mobileCaptureClose = (event: PointerEvent): void => {
     if (this.isOpen && !this.isClosing && isMobileCasePreview()) {
+      if (this.isCodePreview && event.target instanceof Element && event.target.closest('.case-image-preview__code')) return;
       event.preventDefault();
       event.stopPropagation();
       this.close();
@@ -125,10 +148,12 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
     legend: readonly CaseImagePreviewLegendItem[] = [],
     compositionTemplate: TemplateRef<unknown> | null = null,
     compositionClass = '',
+    trimMobileRightEdge = false,
   ): void {
     const cycle = ++this.previewCycle;
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
     this.isClosing = false;
+    this.isCodePreview = false;
     this.src = src;
     this.alt = alt;
     this.isVerticalLanding = verticalLanding;
@@ -136,8 +161,11 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
     this.legend = legend;
     this.compositionTemplate = compositionTemplate;
     this.compositionClass = compositionClass;
+    this.trimMobileRightEdge = trimMobileRightEdge;
     this.isImageEntered = false;
     this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
+    this.pageScrollX = window.scrollX;
+    this.pageScrollY = window.scrollY;
     this.bodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     this.cdr.detectChanges();
@@ -146,6 +174,36 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
       this.isOpen = true;
       this.cdr.detectChanges();
       this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
+    }));
+  }
+
+  openCode(label: string, code: string): void {
+    const cycle = ++this.previewCycle;
+    if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
+    this.isClosing = false;
+    this.src = null;
+    this.alt = '';
+    this.isVerticalLanding = false;
+    this.isLandscape = true;
+    this.isCodePreview = true;
+    this.codeLabel = label;
+    this.codeContent = code;
+    this.legend = [];
+    this.compositionTemplate = null;
+    this.compositionClass = '';
+    this.trimMobileRightEdge = false;
+    this.isImageEntered = false;
+    this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
+    this.pageScrollX = window.scrollX;
+    this.pageScrollY = window.scrollY;
+    this.bodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    this.cdr.detectChanges();
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (cycle !== this.previewCycle) return;
+      this.isOpen = true;
+      this.isImageEntered = true;
+      this.cdr.detectChanges();
     }));
   }
 
@@ -173,11 +231,12 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
     this.cleanupTimer = window.setTimeout(() => {
       if (cycle === this.previewCycle && !this.isOpen) {
-        this.src = null; this.alt = ''; this.isVerticalLanding = false; this.isLandscape = false; this.legend = [];
+        this.src = null; this.alt = ''; this.isVerticalLanding = false; this.isLandscape = false; this.isCodePreview = false; this.codeLabel = ''; this.codeContent = ''; this.legend = [];
         this.compositionTemplate = null; this.compositionClass = '';
         this.isClosing = false;
         document.body.style.overflow = this.bodyOverflow;
-        this.returnFocus?.focus();
+        window.scrollTo(this.pageScrollX, this.pageScrollY);
+        this.returnFocus?.focus({ preventScroll: true });
         this.cdr.detectChanges();
       }
     }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 140 : matchMedia('(max-width: 768px)').matches ? 900 : 720);
@@ -188,7 +247,7 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
       event.stopPropagation();
       return;
     }
-    if (isMobileCasePreview()) {
+    if (isMobileCasePreview() && !this.isCodePreview) {
       this.close();
       event.stopPropagation();
       return;

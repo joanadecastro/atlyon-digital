@@ -3,6 +3,7 @@ import { TranslateDirective } from '../i18n/translate.directive';
 import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scroll-indicator.component';
 import { CaseImagePreviewComponent } from '../project-case/case-image-preview.component';
 import { bindCaseExpandableMedia } from '../project-case/case-expandable-media';
+import { bindCaseExpandableCode } from '../project-case/case-expandable-code';
 import { isMobileCasePreview, isNativeVideoControlPointer } from '../project-case/case-preview-mobile';
 
 type DecisionCarousel = 'hero' | 'process' | 'principles' | 'about' | 'references' | 'composition' | 'illustration' | 'palette';
@@ -46,6 +47,7 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   private bodyScrollLocked = false;
   private videoPreviewCloseTimer?: number;
   private unbindExpandableMedia?: () => void;
+  private unbindExpandableCode?: () => void;
   private decisionSwipeStart: { carousel: DecisionCarousel; x: number; y: number } | null = null;
   private implementationPointerStart: {
     x: number;
@@ -326,6 +328,7 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
       (src, alt) => this.imagePreview?.open(src, alt),
       (src, label) => this.openVideoPreview(src, label),
     );
+    this.unbindExpandableCode = bindCaseExpandableCode(this.host.nativeElement, (label, code) => this.imagePreview?.openCode(label, code));
     this.desktopCarouselMedia = matchMedia('(min-width: 769px)');
     this.syncDesktopCarousels();
     this.desktopCarouselMedia.addEventListener('change', this.handleDesktopCarouselChange);
@@ -388,6 +391,7 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.unbindExpandableMedia?.();
+    this.unbindExpandableCode?.();
     this.videoPreviewSrc = null;
     this.restoreBodyScroll();
     this.observer?.disconnect();

@@ -20,7 +20,8 @@
     <span></span>
   </button>
 
-  <nav id="site-navigation" [class.mobile-open]="isMenuMounted" [class.panel-open]="isMenuOpen" (click)="$event.stopPropagation()"
+  <nav id="site-navigation" [class.mobile-open]="isMenuMounted" [class.panel-open]="isMenuOpen"
+    (click)="$event.stopPropagation()"
     (mouseenter)="keepDesktopMenuHoverOpen()" (transitionend)="finishMobileMenuClose($event)">
     <button type="button" class="mobile-menu-close" aria-label="Fechar menu" (click)="closeMenu()">&times;</button>
     <a href="#home" class="mobile-menu-logo" aria-label="Atlyon Digital" (click)="navigateToSection($event, 'home')">
@@ -44,6 +45,14 @@
         <a class="mobile-social-circle" href="mailto:joanacastro.webdeveloper@gmail.com" aria-label="Enviar email" (click)="closeMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></svg></a>
         <a class="mobile-social-circle" href="https://www.linkedin.com/company/atlyon-digital/" target="_blank" rel="noopener" aria-label="LinkedIn" (click)="closeMenu()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 8.5H3.5V20h3V8.5zm-1.5-5A1.75 1.75 0 105 7a1.75 1.75 0 000-3.5zM9 8.5V20h3v-6.4c0-1.7.3-3.3 2.4-3.3 2 0 2.1 1.9 2.1 3.4V20h3v-7c0-3.4-.7-6-4.7-6-1.9 0-3.2 1.1-3.7 2.1h-.1V8.5H9z" /></svg></a>
       </div>
+    </div>
+    <div class="mobile-menu-drag-zone" aria-hidden="true"
+      (click)="$event.stopPropagation()"
+      (pointerdown)="startMobileMenuDrag($event)"
+      (pointermove)="moveMobileMenuDrag($event)"
+      (pointerup)="endMobileMenuDrag($event)"
+      (pointercancel)="cancelMobileMenuDrag($event)">
+      <span class="mobile-menu-drag-handle"></span>
     </div>
   </nav>
 </header>

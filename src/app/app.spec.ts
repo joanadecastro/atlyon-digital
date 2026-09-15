@@ -14,10 +14,13 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render title', async () => {
+  it('should render the portfolio title', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
+    fixture.componentInstance.activeSection = 'home';
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, atlyon-digital');
+    expect(compiled.querySelector('h1')?.textContent).toContain(
+      'Da estratégia ao design e desenvolvimento front-end.',
+    );
   });
 });

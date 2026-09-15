@@ -16443,7 +16443,7 @@ body {
   .navbar.menu-open > nav.mobile-open.panel-open,
   .navbar.is-scrolled.menu-open > nav.mobile-open.panel-open,
   .navbar:not(.is-scrolled).menu-open > nav.mobile-open.panel-open {
-    transform:translateY(0)!important;
+    transform:translateY(calc(0px - var(--mobile-menu-drag-offset, 0px)))!important;
     visibility:visible!important;
     pointer-events:auto!important;
     transition:
@@ -16454,6 +16454,41 @@ body {
   .navbar.menu-open.menu-closing > nav.mobile-open {
     transform:translateY(-101%)!important;
     pointer-events:none!important;
+  }
+
+  .navbar.menu-open > nav.mobile-open.panel-open.menu-dragging {
+    transition:none!important;
+  }
+
+  .navbar.menu-open > nav.mobile-open .mobile-menu-drag-zone {
+    position:fixed;
+    right:0;
+    bottom:0;
+    left:0;
+    z-index:10008;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    box-sizing:border-box;
+    height:52px;
+    padding-bottom:max(14px,calc(env(safe-area-inset-bottom) + 8px));
+    cursor:grab;
+    touch-action:none;
+    -webkit-user-select:none;
+    user-select:none;
+  }
+
+  .navbar.menu-open > nav.mobile-open.menu-dragging .mobile-menu-drag-zone {
+    cursor:grabbing;
+  }
+
+  .navbar.menu-open > nav.mobile-open .mobile-menu-drag-handle {
+    display:block;
+    width:30px;
+    height:2px;
+    border-radius:999px;
+    background:#315cff;
+    pointer-events:none;
   }
 
   .navbar.menu-open > nav.mobile-open:not(.panel-open) {
@@ -16499,6 +16534,12 @@ body {
   .navbar.menu-open > nav.mobile-open {
     transition-duration:1ms!important;
     transition-delay:0s!important;
+  }
+}
+
+@media (min-width:769px) {
+  .mobile-menu-drag-zone {
+    display:none!important;
   }
 }
 
