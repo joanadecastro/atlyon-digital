@@ -895,13 +895,7 @@ export class App implements AfterViewInit, OnDestroy {
       this.projectChatStep = 1;
     } else if (action === 'case-studies') {
       this.closeProjectChat();
-      requestAnimationFrame(() => {
-        const section = document.getElementById('portfolio');
-        if (!section) return;
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        section.setAttribute('tabindex', '-1');
-        section.focus({ preventScroll: true });
-      });
+      this.scrollToPortfolio();
     } else if (action === 'expertise') {
       this.closeProjectChat();
       requestAnimationFrame(() => {
@@ -2231,10 +2225,6 @@ export class App implements AfterViewInit, OnDestroy {
     }
 
     setTimeout(() => {
-      document
-        .getElementById('portfolio')
-        ?.scrollIntoView({ behavior: 'smooth' });
-
       this.preloadProjectImages();
       this.initRevealAnimations();
       this.initPortfolioTextReveal();
@@ -2242,6 +2232,7 @@ export class App implements AfterViewInit, OnDestroy {
       this.initProcessReveal();
       this.initServicesScene();
       this.onWindowScroll();
+      this.scrollToPortfolio();
     }, 100);
   }
 
@@ -2271,6 +2262,7 @@ export class App implements AfterViewInit, OnDestroy {
 
     if (this.selectedProject) {
       this.closeProject();
+      if (sectionId === 'portfolio') return;
       setTimeout(scrollToTarget, 300);
       return;
     }
