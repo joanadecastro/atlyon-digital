@@ -1,6 +1,7 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, TemplateRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, TemplateRef, inject } from '@angular/core';
 import { isMobileCasePreview } from './case-preview-mobile';
+import { LanguageService } from '../i18n/language.service';
 
 export type CaseImagePreviewLegendItem = { number: string; title: string };
 
@@ -10,12 +11,12 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
   imports: [NgTemplateOutlet],
   template: `
     <div class="case-image-preview" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.is-code-preview]="isCodePreview" [class.trim-mobile-right-edge]="trimMobileRightEdge" [class.attach-close-to-media]="attachCloseToMedia"
-      [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" [attr.aria-label]="isCodePreview ? 'Snippet de código ampliado' : 'Preview ampliado da mockup'"
+      [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" [attr.aria-label]="language.translate(isCodePreview ? 'Snippet de código ampliado' : 'Preview ampliado da mockup')"
       (pointerdown)="closeFromBackdrop($event)">
       @if (src || isCodePreview) {
         <div class="case-image-preview__panel" [class.has-legend]="legend.length > 0" (pointerdown)="handlePanelPointerDown($event)">
-          <button type="button" class="case-image-preview__close" aria-label="Fechar preview" (click)="close()">×</button>
           <div class="case-image-preview__composition" [class.trim-top-edge]="trimTopEdge">
+            <button type="button" class="case-image-preview__close" [attr.aria-label]="language.translate('Fechar preview')" (click)="close()">×</button>
             @if (isCodePreview) {
               <figure class="case-image-preview__code">
                 <figcaption>{{ codeLabel }}</figcaption>
@@ -75,12 +76,13 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       .case-image-preview { padding:16px; transition:opacity 550ms ease,visibility 0s linear 900ms; }
       .case-image-preview.is-open { transition:opacity 380ms ease; }
       .case-image-preview.is-closing { visibility:visible; pointer-events:auto; }
-      .case-image-preview__close { display:none; }
+      .case-image-preview__close { display:grid; }
       .case-image-preview__panel { width:calc(100vw - 32px); max-width:calc(100vw - 32px); height:calc(100dvh - 32px); max-height:calc(100dvh - 32px); }
       img { width:auto; max-width:calc(100vw - 32px); max-height:calc(100dvh - 32px); object-fit:contain; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
       .is-image-entered img { transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__panel { width:100%; max-width:none; height:100%; max-height:none; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__composition { position:fixed; top:50%; left:50%; display:flex; flex-direction:column; align-items:stretch; gap:10px; width:min(calc(100dvh - 40px),680px); max-width:calc(100dvh - 40px); max-height:calc(100vw - 32px); opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.96); transform-origin:center center; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__close { top:0; right:0; transform:translate(50%,-50%) rotate(-90deg); }
       .is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { opacity:1; transform:translate(-50%,-50%) rotate(90deg) scale(1); transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) img { position:static; width:100%; max-width:100%; max-height:calc(100vw - 32px); opacity:1; transform:none; transition:none; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__template { width:100%; max-height:calc(100vw - 32px); }
@@ -103,7 +105,8 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     @media (max-width:768px) and (prefers-reduced-motion:reduce) { .is-landscape:not(.is-vertical-landing) .case-image-preview__composition,.is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { transform:translate(-50%,-50%) rotate(90deg); } }
   `,
 })
-export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
+export class CaseImagePreviewComponent implements OnDestroy {
+  readonly language = inject(LanguageService);
   @Input() trimTopEdge = false;
   @Input() attachCloseToMedia = false;
   src: string | null = null;
@@ -126,20 +129,7 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
   private pageScrollX = 0;
   private pageScrollY = 0;
   private previewCycle = 0;
-  private readonly mobileCaptureClose = (event: PointerEvent): void => {
-    if (this.isOpen && !this.isClosing && isMobileCasePreview()) {
-      if (this.isCodePreview && event.target instanceof Element && event.target.closest('.case-image-preview__code')) return;
-      event.preventDefault();
-      event.stopPropagation();
-      this.close();
-    }
-  };
-
   constructor(private readonly host: ElementRef<HTMLElement>, private readonly cdr: ChangeDetectorRef) {}
-
-  ngAfterViewInit(): void {
-    this.host.nativeElement.addEventListener('pointerdown', this.mobileCaptureClose, { capture: true });
-  }
 
   open(
     src: string,
@@ -247,11 +237,6 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
       event.stopPropagation();
       return;
     }
-    if (isMobileCasePreview() && !this.isCodePreview) {
-      this.close();
-      event.stopPropagation();
-      return;
-    }
     event.stopPropagation();
   }
 
@@ -260,7 +245,7 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
       event.stopPropagation();
       return;
     }
-    if (isMobileCasePreview() || event.target === event.currentTarget) this.close();
+    if (event.target === event.currentTarget) this.close();
   }
   @HostListener('document:keydown', ['$event']) onKeydown(event: KeyboardEvent): void {
     if (!this.isOpen) return;
@@ -270,5 +255,5 @@ export class CaseImagePreviewComponent implements AfterViewInit, OnDestroy {
       this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
     }
   }
-  ngOnDestroy(): void { this.host.nativeElement.removeEventListener('pointerdown', this.mobileCaptureClose, { capture: true }); if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); if (this.isOpen) document.body.style.overflow = this.bodyOverflow; }
+  ngOnDestroy(): void { if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); if (this.isOpen) document.body.style.overflow = this.bodyOverflow; }
 }

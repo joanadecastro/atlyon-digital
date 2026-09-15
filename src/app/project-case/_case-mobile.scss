@@ -182,7 +182,7 @@
       width: calc(100vw - 28px) !important; max-width: calc(100vw - 28px) !important;
     }
     :is(.licita-image-preview, .licita-video-preview) :is(.licita-image-preview__close, .licita-video-preview__close) {
-      display:none !important;
+      display:grid !important;
     }
     .licita-video-preview.is-closing {
       visibility:visible !important;
@@ -198,6 +198,9 @@
       max-height:calc(100vw - 32px) !important;
       transform:translate(-50%,-50%) rotate(90deg);
       transform-origin:center center;
+    }
+    .licita-video-preview .licita-video-preview__close {
+      transform:rotate(-90deg);
     }
     .licita-video-preview .licita-video-preview__media,
     .licita-video-preview video {

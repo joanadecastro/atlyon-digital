@@ -4,8 +4,10 @@ import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scro
 import { CaseImagePreviewComponent } from '../project-case/case-image-preview.component';
 import { bindCaseExpandableMedia } from '../project-case/case-expandable-media';
 import { bindCaseExpandableCode } from '../project-case/case-expandable-code';
-import { isMobileCasePreview, isNativeVideoControlPointer } from '../project-case/case-preview-mobile';
+import { isMobileCasePreview } from '../project-case/case-preview-mobile';
 import { LanguageService } from '../i18n/language.service';
+import { CASE_STUDY_NEXT } from '../case-study-navigation';
+import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case-viewport-video';
 
 @Component({
   selector: 'app-juh-case',
@@ -15,19 +17,21 @@ import { LanguageService } from '../i18n/language.service';
   styleUrl: './juh-case.scss',
 })
 export class JuhCaseComponent implements AfterViewInit, OnDestroy {
+  readonly nextProject = CASE_STUDY_NEXT.juh;
   readonly github = 'https://github.com/joanadecastro/juh-angular-ecommerce';
   readonly snippets = JUH_SNIPPETS;
   mobileGallerySlide = 0;
   private readonly checkoutClipStart = 18.7;
   private readonly checkoutClipEnd = 27.6;
   private readonly element: ElementRef<HTMLElement> = inject(ElementRef);
-  private readonly language = inject(LanguageService);
+  readonly language = inject(LanguageService);
   private observer?: IntersectionObserver;
   private resultsObserver?: IntersectionObserver;
   private codeOverflowObserver?: ResizeObserver;
   private resultsCounterRafId?: number;
   private unbindExpandableMedia?: () => void;
   private unbindExpandableCode?: () => void;
+  private unbindViewportVideos?: () => void;
   videoPreviewSrc: string | null = null;
   videoPreviewLabel = '';
   videoPreviewOpen = false;
@@ -95,6 +99,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
       this.bodyScrollLocked = true;
     }
     this.videoPreviewOpen = true;
+    this.autoplayVideoPreview();
   }
 
   openCheckoutVideoPreview(): void {
@@ -108,6 +113,18 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
       this.bodyScrollLocked = true;
     }
     this.videoPreviewOpen = true;
+    this.autoplayVideoPreview();
+  }
+
+  private autoplayVideoPreview(): void {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    requestAnimationFrame(() => {
+      const previewVideo = this.element.nativeElement.querySelector<HTMLVideoElement>('.juh-video-preview video');
+      if (previewVideo) {
+        configureCaseVideo(previewVideo, true);
+        void previewVideo.play().catch(() => undefined);
+      }
+    });
   }
 
   closeVideoPreview(): void {
@@ -140,13 +157,11 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
 
   closeVideoPreviewFromBackdrop(event: Event): void {
     if (this.videoPreviewClosing) { event.stopPropagation(); return; }
-    if (isMobileCasePreview() || event.target === event.currentTarget) this.closeVideoPreview();
+    if (event.target === event.currentTarget) this.closeVideoPreview();
   }
 
   handleVideoPreviewPanelPointer(event: PointerEvent): void {
     event.stopPropagation();
-    if (this.videoPreviewClosing || !isMobileCasePreview() || isNativeVideoControlPointer(event)) return;
-    this.closeVideoPreview();
   }
 
   setFlowVideoRate(event: Event): void {
@@ -161,7 +176,6 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     video.playbackRate = 1.25;
     video.defaultMuted = true;
     video.muted = true;
-    void video.play().catch(() => undefined);
   }
 
   configureCheckoutDemo(event: Event): void {
@@ -171,14 +185,12 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     video.defaultMuted = true;
     video.muted = true;
     video.currentTime = this.checkoutClipStart;
-    void video.play().catch(() => undefined);
   }
 
   limitCheckoutDemo(event: Event): void {
     const video = event.currentTarget as HTMLVideoElement;
     if (video.currentTime < this.checkoutClipEnd) return;
-    video.pause();
-    video.currentTime = this.checkoutClipEnd;
+    video.currentTime = this.checkoutClipStart;
   }
 
   restartCheckoutDemo(event: Event): void {
@@ -215,6 +227,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.unbindExpandableMedia = bindCaseExpandableMedia(this.element.nativeElement, (src, alt) => this.imagePreview?.open(src, alt));
     this.unbindExpandableCode = bindCaseExpandableCode(this.element.nativeElement, (label, code) => this.imagePreview?.openCode(label, code));
+    this.unbindViewportVideos = bindCaseViewportVideos(this.element.nativeElement);
     this.initCodeOverflowDetection();
     this.initResultsCounter();
     const hero = this.element.nativeElement.querySelector<HTMLElement>('.case-hero');
@@ -235,6 +248,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.closeVideoPreview();
     this.unbindExpandableMedia?.();
     this.unbindExpandableCode?.();
+    this.unbindViewportVideos?.();
     this.observer?.disconnect();
     this.resultsObserver?.disconnect();
     this.codeOverflowObserver?.disconnect();

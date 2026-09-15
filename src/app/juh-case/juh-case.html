@@ -36,7 +36,7 @@
       <figure class="juh-challenge-video-frame">
         <div class="juh-comparison__meta juh-challenge-video__meta"><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar vídeo demonstrativo do JUH" (click)="openVideoPreview('/projects/juh/video_juhecommerce.mp4', 'Vídeo demonstrativo completo do JUH')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div>
         <div class="juh-challenge-video__media">
-          <video class="juh-flow-video juh-challenge-video" src="/projects/juh/video_juhecommerce.mp4" controls autoplay muted playsinline preload="metadata" data-case-native-controls (loadedmetadata)="configureFlowVideo($event)"></video>
+          <video class="juh-flow-video juh-challenge-video" src="/projects/juh/video_juhecommerce.mp4" controls muted loop playsinline preload="metadata" data-case-native-controls data-case-viewport-video (loadedmetadata)="configureFlowVideo($event)"></video>
           <button type="button" class="juh-challenge-video__mobile-expand case-expand-affordance" aria-label="Ampliar vídeo demonstrativo do JUH" (click)="openVideoPreview('/projects/juh/video_juhecommerce.mp4', 'Vídeo demonstrativo completo do JUH')"></button>
         </div>
       </figure>
@@ -88,7 +88,7 @@
         <figure class="juh-challenge-video-frame juh-checkout-demo-frame">
           <div class="juh-comparison__meta juh-challenge-video__meta"><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar micro-demo de checkout e validação" (click)="openCheckoutVideoPreview()">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div>
           <div class="juh-challenge-video__media">
-            <video class="juh-flow-video juh-checkout-demo" src="/projects/juh/video_juhecommerce.mp4" controls autoplay muted playsinline preload="metadata" data-case-native-controls (loadedmetadata)="configureCheckoutDemo($event)" (timeupdate)="limitCheckoutDemo($event)" (play)="restartCheckoutDemo($event)" (seeked)="keepCheckoutDemoInRange($event)"></video>
+            <video class="juh-flow-video juh-checkout-demo" src="/projects/juh/video_juhecommerce.mp4" controls muted loop playsinline preload="metadata" data-case-native-controls data-case-viewport-video (loadedmetadata)="configureCheckoutDemo($event)" (timeupdate)="limitCheckoutDemo($event)" (play)="restartCheckoutDemo($event)" (seeked)="keepCheckoutDemoInRange($event)"></video>
             <button type="button" class="juh-challenge-video__mobile-expand case-expand-affordance" aria-label="Ampliar micro-demo de checkout e validação" (click)="openCheckoutVideoPreview()"></button>
           </div>
         </figure>
@@ -130,7 +130,7 @@
       </div>
     </section>
   </div>
-  <a class="next-case next-case--licitanow is-visible" href="/case-studies/civitas" aria-label="Ver o case study Civitas">
+  <a class="next-case next-case--licitanow is-visible" [href]="nextProject.route" [attr.aria-label]="nextProject.ariaLabel">
     <span class="case-shell next-case__simple">
       <span>PRÓXIMO PROJETO <b class="cta-arrow" aria-hidden="true"></b></span>
     </span>
@@ -142,9 +142,9 @@
 <div class="licita-video-preview" [class.is-open]="videoPreviewOpen" [class.is-closing]="videoPreviewClosing" [attr.aria-hidden]="!videoPreviewOpen" role="dialog" aria-modal="true" [attr.aria-label]="videoPreviewLabel" (pointerdown)="closeVideoPreviewFromBackdrop($event)" (document:keydown.escape)="closeVideoPreview()">
   @if (videoPreviewSrc) {
     <div class="licita-video-preview__panel" (pointerdown)="handleVideoPreviewPanelPointer($event)">
-      <button type="button" class="licita-video-preview__close" aria-label="Fechar preview" (click)="closeVideoPreview()">×</button>
+      <button type="button" class="licita-video-preview__close" [attr.aria-label]="language.translate('Fechar preview')" (click)="closeVideoPreview()">×</button>
       <div class="licita-video-preview__media">
-        <video [src]="videoPreviewSrc" controls muted playsinline (loadedmetadata)="configureVideoPreview($event)" (timeupdate)="limitVideoPreview($event)" (play)="restartVideoPreview($event)" (seeked)="keepVideoPreviewInRange($event)"></video>
+        <video [src]="videoPreviewSrc" controls muted loop playsinline (loadedmetadata)="configureVideoPreview($event)" (timeupdate)="limitVideoPreview($event)" (play)="restartVideoPreview($event)" (seeked)="keepVideoPreviewInRange($event)"></video>
       </div>
     </div>
   }

@@ -4,9 +4,12 @@ import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scro
 import { CaseImagePreviewComponent } from '../project-case/case-image-preview.component';
 import { bindCaseExpandableMedia } from '../project-case/case-expandable-media';
 import { bindCaseExpandableCode } from '../project-case/case-expandable-code';
-import { isMobileCasePreview, isNativeVideoControlPointer } from '../project-case/case-preview-mobile';
+import { isMobileCasePreview } from '../project-case/case-preview-mobile';
+import { CASE_STUDY_NEXT } from '../case-study-navigation';
+import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case-viewport-video';
 
 type DecisionCarousel = 'hero' | 'process' | 'principles' | 'about' | 'references' | 'composition' | 'illustration' | 'palette';
+type BeforeAfterCarousel = 'hero' | 'process' | 'principles' | 'about' | 'final';
 
 @Component({
   selector: 'app-licitanow-case',
@@ -17,10 +20,12 @@ type DecisionCarousel = 'hero' | 'process' | 'principles' | 'about' | 'reference
   styleUrl: './licitanow-case.scss',
 })
 export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
+  readonly nextProject = CASE_STUDY_NEXT.licitanow;
   openSolution: number | null = null;
   responsiveMockupSlide = 0;
   implementationSlide = 0;
   globalViewSlide = 0;
+  beforeAfterSlides: Record<BeforeAfterCarousel, number> = { hero: 0, process: 0, principles: 0, about: 0, final: 0 };
   decisionSlides: Record<DecisionCarousel, number> = {
     hero: 0,
     process: 0,
@@ -35,14 +40,12 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   videoPreviewLabel = '';
   videoPreviewOpen = false;
   videoPreviewClosing = false;
-  @ViewChild('challengeVideo', { static: true }) private challengeVideoRef!: ElementRef<HTMLVideoElement>;
   @ViewChild(CaseImagePreviewComponent) private imagePreview?: CaseImagePreviewComponent;
   @ViewChild('nextProjectNav', { read: ElementRef }) private nextProjectNavRef?: ElementRef<HTMLElement>;
 
   private observer?: IntersectionObserver;
-  private videoObserver?: IntersectionObserver;
   private nextProjectObserver?: IntersectionObserver;
-  private videos: HTMLVideoElement[] = [];
+  private unbindViewportVideos?: () => void;
   private bodyOverflowBeforePreview = '';
   private bodyScrollLocked = false;
   private videoPreviewCloseTimer?: number;
@@ -117,6 +120,27 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
 
   cancelDecisionSwipe(): void {
     this.decisionSwipeStart = null;
+  }
+
+  onBeforeAfterScroll(carousel: BeforeAfterCarousel, event: Event): void {
+    const rail = event.currentTarget;
+    if (!(rail instanceof HTMLElement)) return;
+    const slides = Array.from(rail.querySelectorAll<HTMLElement>(':scope > figure'));
+    if (!slides.length) return;
+    const railLeft = rail.getBoundingClientRect().left;
+    this.beforeAfterSlides[carousel] = slides.reduce((nearest, slide, index) => {
+      const distance = Math.abs(slide.getBoundingClientRect().left - railLeft);
+      return distance < nearest.distance ? { index, distance } : nearest;
+    }, { index: 0, distance: Number.POSITIVE_INFINITY }).index;
+  }
+
+  setBeforeAfterSlide(carousel: BeforeAfterCarousel, slide: number): void {
+    const rail = this.host.nativeElement.querySelector<HTMLElement>(`[data-before-after="${carousel}"]`);
+    const target = rail?.querySelectorAll<HTMLElement>(':scope > figure').item(slide);
+    if (!rail || !target) return;
+    const left = target.getBoundingClientRect().left - rail.getBoundingClientRect().left + rail.scrollLeft;
+    rail.scrollTo({ left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    this.beforeAfterSlides[carousel] = slide;
   }
 
   onResponsiveMockupScroll(event: Event): void {
@@ -286,7 +310,10 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       requestAnimationFrame(() => {
         const previewVideo = document.querySelector<HTMLVideoElement>('.licita-video-preview video');
-        if (previewVideo) void previewVideo.play().catch(() => undefined);
+        if (previewVideo) {
+          configureCaseVideo(previewVideo, true);
+          void previewVideo.play().catch(() => undefined);
+        }
       });
     }
   }
@@ -313,13 +340,11 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
 
   closeVideoPreviewFromBackdrop(event: Event): void {
     if (this.videoPreviewClosing) { event.stopPropagation(); return; }
-    if (isMobileCasePreview() || event.target === event.currentTarget) this.closeVideoPreview();
+    if (event.target === event.currentTarget) this.closeVideoPreview();
   }
 
   handleVideoPreviewPanelPointer(event: PointerEvent): void {
     event.stopPropagation();
-    if (this.videoPreviewClosing || !isMobileCasePreview() || isNativeVideoControlPointer(event)) return;
-    this.closeVideoPreview();
   }
 
   ngAfterViewInit(): void {
@@ -332,19 +357,7 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     this.desktopCarouselMedia = matchMedia('(min-width: 769px)');
     this.syncDesktopCarousels();
     this.desktopCarouselMedia.addEventListener('change', this.handleDesktopCarouselChange);
-    const challengeVideo = this.challengeVideoRef.nativeElement;
-    challengeVideo.muted = true;
-    challengeVideo.defaultMuted = true;
-    challengeVideo.autoplay = true;
-    challengeVideo.loop = true;
-    challengeVideo.playsInline = true;
-
-    const playChallengeVideo = (): void => {
-      void challengeVideo.play().catch(() => undefined);
-    };
-
-    if (challengeVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) playChallengeVideo();
-    else challengeVideo.addEventListener('canplay', playChallengeVideo, { once: true });
+    this.unbindViewportVideos = bindCaseViewportVideos(this.host.nativeElement);
 
     const hero = document.querySelector<HTMLElement>('.licitanow-page .civitas-hero');
     const items = Array.from(document.querySelectorAll<HTMLElement>('.licitanow-page .civitas-reveal'));
@@ -353,25 +366,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobileViewport = matchMedia('(max-width: 768px)').matches;
     this.setupNextProjectReveal(prefersReducedMotion);
-    this.videos = Array.from(document.querySelectorAll<HTMLVideoElement>('.licitanow-page video[data-viewport-video]'));
-    this.videos.forEach((video) => {
-      video.muted = true;
-      video.defaultMuted = true;
-      video.loop = true;
-      video.playsInline = true;
-      video.pause();
-    });
-    if (this.videos.length && !prefersReducedMotion) {
-      if (typeof IntersectionObserver === 'undefined') this.videos.forEach((video) => void video.play().catch(() => undefined));
-      else {
-        this.videoObserver = new IntersectionObserver((entries) => entries.forEach((entry) => {
-          const video = entry.target as HTMLVideoElement;
-          if (entry.isIntersecting && entry.intersectionRatio >= .2) void video.play().catch(() => undefined);
-          else video.pause();
-        }), { threshold: [0, .2, .5] });
-        this.videos.forEach((video) => this.videoObserver?.observe(video));
-      }
-    }
     if (prefersReducedMotion || typeof IntersectionObserver === 'undefined') {
       hero?.classList.add('is-entered'); items.forEach((item) => item.classList.add('is-visible')); chapters.forEach((item) => item.classList.add('is-entered'));
       return;
@@ -395,11 +389,10 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewSrc = null;
     this.restoreBodyScroll();
     this.observer?.disconnect();
-    this.videoObserver?.disconnect();
+    this.unbindViewportVideos?.();
     this.nextProjectObserver?.disconnect();
     this.desktopCarouselMedia?.removeEventListener('change', this.handleDesktopCarouselChange);
     this.decisionCarouselTimers.forEach((timer) => window.clearTimeout(timer));
-    this.videos.forEach((video) => video.pause());
   }
 
   private setupNextProjectReveal(reducedMotion: boolean): void {

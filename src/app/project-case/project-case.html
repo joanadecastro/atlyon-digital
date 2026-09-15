@@ -481,7 +481,7 @@
     </div>
   </section>
 
-  <a #nextProjectNav class="next-case next-case--licitanow" href="/case-studies/licitanow" aria-label="Ver o case study LicitaNow">
+  <a #nextProjectNav class="next-case next-case--licitanow" [href]="nextProject.route" [attr.aria-label]="nextProject.ariaLabel">
     <span class="case-shell next-case__simple">
       <span>PRÓXIMO PROJETO <b class="cta-arrow" aria-hidden="true"></b></span>
     </span>

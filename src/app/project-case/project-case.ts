@@ -4,12 +4,14 @@ import { TranslateDirective } from '../i18n/translate.directive';
 import { CaseHeroScrollIndicatorComponent } from './case-hero-scroll-indicator.component';
 import { CaseImagePreviewComponent, CaseImagePreviewLegendItem } from './case-image-preview.component';
 import { bindCaseExpandableMedia } from './case-expandable-media';
+import { CASE_STUDY_NEXT } from '../case-study-navigation';
 
 type DemoKey = 'panel' | 'overview' | 'variant';
 type Demo = { key: DemoKey; element: HTMLElement; order: string[] };
 
 @Component({ selector: 'app-project-case', standalone: true, imports: [NgTemplateOutlet, CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent], hostDirectives: [TranslateDirective], templateUrl: './project-case.html', styleUrl: './project-case.scss' })
 export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
+  readonly nextProject = CASE_STUDY_NEXT.civitas;
   @Input() project: any;
   @Output() back = new EventEmitter<void>();
   @ViewChild('panelMockupDemo', { read: ElementRef }) panelRef?: ElementRef<HTMLElement>;

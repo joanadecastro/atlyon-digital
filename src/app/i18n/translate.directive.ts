@@ -21,10 +21,16 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
     this.observer = new MutationObserver(records => {
       for (const record of records) {
         for (const node of Array.from(record.addedNodes)) this.capture(node);
+        if (record.type === 'attributes') this.capture(record.target);
       }
       this.applyTranslations();
     });
-    this.observer.observe(this.host.nativeElement, { childList: true, subtree: true });
+    this.observer.observe(this.host.nativeElement, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['aria-label', 'title', 'placeholder', 'alt', 'data-process-text'],
+    });
   }
 
   ngOnDestroy(): void {
@@ -41,7 +47,7 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
         if (!this.originalText.has(text) && text.data.trim()) this.originalText.set(text, text.data);
       } else if (node instanceof Element) {
         const values = new Map<string, string>();
-        for (const name of ['aria-label', 'title', 'placeholder', 'alt']) {
+        for (const name of ['aria-label', 'title', 'placeholder', 'alt', 'data-process-text']) {
           const value = node.getAttribute(name);
           if (value) values.set(name, value);
         }
@@ -66,7 +72,10 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
       } else if (node instanceof Element) {
         const element = node;
         const values = this.originalAttributes.get(element);
-        values?.forEach((value, name) => element.setAttribute(name, this.language.translate(value)));
+        values?.forEach((value, name) => {
+          const translated = this.language.translate(value);
+          if (element.getAttribute(name) !== translated) element.setAttribute(name, translated);
+        });
       }
       node = walker.nextNode();
     }

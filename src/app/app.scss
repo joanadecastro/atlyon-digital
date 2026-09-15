@@ -6863,7 +6863,10 @@ body .project-chat__composer button:hover { background:transparent; color:#315cf
   }
 
   .sticky-section--portfolio {
-    --sticky-panel-top: calc(var(--section-transition-space) + 100px);
+    /* Centre the complete project frame before wheel input is handed to the
+       horizontal strip. The measured height keeps this valid across desktop
+       viewport heights without tying the composition to one screenshot. */
+    --sticky-panel-top: max(24px, calc((100vh - var(--portfolio-panel-height, 660px)) / 2));
     min-height: 180vh !important;
     overflow: visible !important;
   }

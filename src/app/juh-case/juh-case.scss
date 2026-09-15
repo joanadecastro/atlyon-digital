@@ -1186,6 +1186,8 @@
   max-height:90vh;
   overflow:hidden;
   overflow-y:hidden;
+  border:0;
+  outline:0;
   border-radius:inherit;
   scrollbar-width:none;
 }
@@ -1202,7 +1204,10 @@
   max-height:90vh;
   max-width:none;
   object-fit:contain;
-  border-radius:8px;
+  border:0;
+  outline:0;
+  border-radius:0;
+  box-shadow:none;
 }
 
 .licita-video-preview__close {

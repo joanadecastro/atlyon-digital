@@ -10,6 +10,11 @@
 .case-shell { width:calc(100% - (var(--site-content-gutter,106px) * 2)); margin-inline:auto; }
 .civitas-hero { width:100%; padding-bottom:60px; background:#fff; }
 .civitas-hero__surface { position:relative; height:calc(100svh - 60px); min-height:680px; overflow:hidden; background:var(--civitas-hero-green); color:var(--ink); box-shadow:0 8px 24px rgba(0,0,0,.04); }
+@media (min-width:901px) {
+  .civitas-hero { position:relative; }
+  .civitas-hero::after { content:""; position:absolute; z-index:30; inset:0 0 60px; box-shadow:0 8px 24px rgba(0,0,0,.04); pointer-events:none; }
+  .civitas-hero__surface { box-shadow:none; }
+}
 .civitas-hero__surface::before { content:""; position:absolute; left:0; right:0; bottom:0; height:0; z-index:10; background:none; pointer-events:none; }
 .civitas-hero__surface::after { content:none; display:none; }
 .civitas-hero__inner { position:relative; z-index:1; width:82%; height:100%; display:grid; grid-template-columns:minmax(330px,.74fr) minmax(0,1.36fr); gap:clamp(72px,7vw,116px); align-items:center; padding-top:clamp(105px,12vh,138px); padding-bottom:clamp(58px,7vh,82px); }
@@ -6010,13 +6015,17 @@
 
   /* Preserve the two intentional four-item indicator rows. */
   .civitas-page:not(.licitanow-page) .architecture-group--indicators .architecture-items {
-    display:grid;
-    grid-template-columns:repeat(4,max-content);
-    flex-wrap:nowrap;
+    display:flex;
+    flex-wrap:wrap;
+    column-gap:12px;
+    /* The zero-height forced-break occupies its own flex line. Two 5px row
+       gaps preserve the existing 10px distance between the chip rows. */
+    row-gap:5px;
   }
 
   .civitas-page:not(.licitanow-page) .architecture-group--indicators .architecture-items__break {
-    display:none;
+    display:block;
+    flex:0 0 100%;
   }
 
   /* Four-pill logical rows remain indivisible. */

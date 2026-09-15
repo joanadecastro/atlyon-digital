@@ -193,12 +193,12 @@ export class App implements AfterViewInit, OnDestroy {
     afterNextRender(() => {
       const caseRoute = window.location.pathname.replace(/\/$/, '');
       if (caseRoute === '/case-studies/civitas' || caseRoute === '/case-studies/licitanow' || caseRoute === '/case-studies/smart-charging' || caseRoute === '/case-studies/juh') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
         this.selectedProject = caseRoute.endsWith('/juh') ? this.juhProject : caseRoute.endsWith('/licitanow')
           ? this.projects[1]
           : caseRoute.endsWith('/smart-charging') ? this.projects[2] : this.projects[0];
         this.changeDetectorRef.detectChanges();
         this.scheduleCaseStudyChatObserver();
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
       }
       this.initServicesScene();
       this.updateActiveSection();
@@ -209,6 +209,7 @@ export class App implements AfterViewInit, OnDestroy {
   onBrowserHistoryChange(): void {
     this.closeProjectChat();
     const caseRoute = window.location.pathname.replace(/\/$/, '');
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     this.selectedProject = caseRoute === '/case-studies/civitas'
       ? this.projects[0]
       : caseRoute === '/case-studies/licitanow'
@@ -217,7 +218,6 @@ export class App implements AfterViewInit, OnDestroy {
           : caseRoute === '/case-studies/juh' ? this.juhProject : null;
     this.changeDetectorRef.detectChanges();
     this.scheduleCaseStudyChatObserver();
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }
 
   @HostListener('window:scroll')
@@ -624,6 +624,7 @@ export class App implements AfterViewInit, OnDestroy {
   @HostListener('window:resize')
   onWindowResize() {
     this.updateProjectNavigation();
+    this.updatePortfolioStickyGeometry();
     this.scheduleHeroStackUpdate();
     this.updateDesktopMenuContrast();
     this.scheduleCaseStudyChatObserver();
@@ -1358,7 +1359,37 @@ export class App implements AfterViewInit, OnDestroy {
   @ViewChild('projectStrip')
   set projectStrip(ref: ElementRef<HTMLElement> | undefined) {
     this.projectStripElement = ref?.nativeElement;
-    if (ref) requestAnimationFrame(() => this.updateProjectNavigation());
+    if (ref) requestAnimationFrame(() => {
+      this.updateProjectNavigation();
+      this.updatePortfolioStickyGeometry();
+    });
+  }
+
+  private updatePortfolioStickyGeometry(): void {
+    if (window.innerWidth <= 768) return;
+    const panel = this.projectStripElement?.closest<HTMLElement>('.sticky-section__panel');
+    const section = panel?.closest<HTMLElement>('.sticky-section--portfolio');
+    if (!panel || !section) return;
+    section.style.setProperty('--portfolio-panel-height', `${panel.getBoundingClientRect().height}px`);
+  }
+
+  private isPortfolioHorizontalPhaseReady(strip: HTMLElement): boolean {
+    if (window.innerWidth <= 768) return true;
+    const panel = strip.closest<HTMLElement>('.sticky-section__panel');
+    const frame = strip.closest<HTMLElement>('.portfolio-scroll-frame');
+    if (!panel || !frame) return false;
+
+    const panelStyle = getComputedStyle(panel);
+    if (panelStyle.position !== 'sticky') return true;
+
+    const stickyTop = parseFloat(panelStyle.top) || 0;
+    const panelRect = panel.getBoundingClientRect();
+    const frameRect = frame.getBoundingClientRect();
+    const viewportBottomSpace = 16;
+    const stickyTolerance = 2;
+
+    return Math.abs(panelRect.top - stickyTop) <= stickyTolerance &&
+      frameRect.bottom <= window.innerHeight - viewportBottomSpace + stickyTolerance;
   }
 
   updateProjectNavigation(): void {
@@ -1382,6 +1413,7 @@ export class App implements AfterViewInit, OnDestroy {
   scrollProjects(event: WheelEvent): void {
     if (event.ctrlKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
     const strip = event.currentTarget as HTMLElement;
+    if (!this.isPortfolioHorizontalPhaseReady(strip)) return;
     const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? strip.clientWidth : 1);
     const maxScroll = strip.scrollWidth - strip.clientWidth;
     if (maxScroll <= 0 || (delta < 0 && strip.scrollLeft <= 1) ||
@@ -1648,6 +1680,7 @@ export class App implements AfterViewInit, OnDestroy {
       stack?.style.removeProperty('--hero-main-offset');
       stack?.style.removeProperty('--hero-layer-height');
       stack?.style.removeProperty('--hero-reveal-progress');
+      stack?.style.removeProperty('--hero-about-start-offset');
       return;
     }
 
@@ -1693,6 +1726,7 @@ export class App implements AfterViewInit, OnDestroy {
     );
     stack.style.setProperty('--hero-layer-height', `${heroHeight}px`);
     stack.style.setProperty('--hero-reveal-progress', `${progress}`);
+    stack.style.setProperty('--hero-about-start-offset', `${revealDistance}px`);
 
     const menuToggle = document.querySelector<HTMLElement>('.navbar .menu-toggle');
     if (menuToggle) {
@@ -2110,6 +2144,10 @@ export class App implements AfterViewInit, OnDestroy {
   openProject(project: any) {
     this.closeMenu();
     this.closeProjectChat();
+    // Establish the case-study viewport before Angular mounts its observers.
+    // Otherwise a fast production render can observe lower chapters at the
+    // homepage's previous scroll position and leave one-shot reveals completed.
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     this.selectedProject = project;
     this.scheduleCaseStudyChatObserver();
 
@@ -2121,15 +2159,6 @@ export class App implements AfterViewInit, OnDestroy {
       window.history.pushState({}, '', project.route);
     }
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        window.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: 'auto',
-        });
-      });
-    });
   }
 
   private initProcessReveal(): void {
@@ -2184,10 +2213,12 @@ export class App implements AfterViewInit, OnDestroy {
   }
 
   scrollToPortfolio(): void {
-    document.getElementById('portfolio')?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    const top = this.getProjectsStartY();
+    if (top === null) return;
+    // Reset while the catalogue is still off-screen so the destination is
+    // rendered directly at the first project, without a post-scroll jump.
+    this.projectStripElement?.scrollTo({ left: 0, behavior: 'instant' });
+    window.scrollTo({ top, behavior: 'smooth' });
   }
 
   closeProject() {
@@ -2249,11 +2280,27 @@ export class App implements AfterViewInit, OnDestroy {
 
   private menuScrollCleanup?: () => void;
 
+  private getProjectsStartY(): number | null {
+    const section = document.getElementById('portfolio');
+    if (!section) return null;
+    const sectionTop = window.scrollY + section.getBoundingClientRect().top;
+    if (window.innerWidth <= 768) return Math.max(0, sectionTop);
+
+    const panel = section.querySelector<HTMLElement>('.sticky-section__panel');
+    if (!panel) return Math.max(0, sectionTop);
+    const sectionStyle = getComputedStyle(section);
+    const panelStyle = getComputedStyle(panel);
+    const naturalPanelTop = sectionTop + (parseFloat(sectionStyle.paddingTop) || 0);
+    const stickyTop = panelStyle.position === 'sticky' ? (parseFloat(panelStyle.top) || 0) : 0;
+    return Math.max(0, naturalPanelTop - stickyTop);
+  }
+
   private getMenuSectionTop(sectionId: string): number | null {
     const section = document.getElementById(sectionId);
     if (!section) return null;
     // #home also contains About: never use a descendant heading as its destination.
     if (sectionId === 'home') return 0;
+    if (sectionId === 'portfolio') return this.getProjectsStartY();
     const sectionTop = window.scrollY + section.getBoundingClientRect().top;
     const heading = section.querySelector<HTMLElement>('.editorial-section-header');
     if (!heading) return Math.max(0, sectionTop);
@@ -2279,6 +2326,18 @@ export class App implements AfterViewInit, OnDestroy {
       const layeredAbout = sectionId === 'sobre' && container.classList.contains('is-layered');
       const pinnedTitleTop = (parseFloat(panelStyle.top) || 0) + titleInset;
 
+      // On desktop the About panel is layered underneath the hero. Its real
+      // beginning is the end of the hero reveal, before the extra hold distance
+      // that lets the About narrative play while pinned.
+      if (layeredAbout && window.innerWidth > 768) {
+        const aboutStartOffset = parseFloat(
+          containerStyle.getPropertyValue('--hero-about-start-offset')
+        );
+        if (Number.isFinite(aboutStartOffset)) {
+          return Math.max(0, containerTop + aboutStartOffset);
+        }
+      }
+
       // A pinned title cannot move above its sticky inset until the panel releases.
       // Target that real position rather than changing the section's composition.
       if (layeredAbout || (panelStyle.position === 'sticky' && pinnedTitleTop > gutter)) {
@@ -2300,6 +2359,9 @@ export class App implements AfterViewInit, OnDestroy {
     this.updateHeroStack();
     const top = this.getMenuSectionTop(sectionId);
     if (top === null) return;
+    if (sectionId === 'portfolio') {
+      this.projectStripElement?.scrollTo({ left: 0, behavior: 'instant' });
+    }
 
     const cleanup = () => {
       window.clearTimeout(timeout);
@@ -2311,6 +2373,7 @@ export class App implements AfterViewInit, OnDestroy {
     };
     const settle = () => {
       cleanup();
+      if (window.innerWidth > 768) return;
       // The mobile hero changes height during its reveal. Measure its final layout.
       this.updateHeroStack();
       const finalTop = this.getMenuSectionTop(sectionId);
