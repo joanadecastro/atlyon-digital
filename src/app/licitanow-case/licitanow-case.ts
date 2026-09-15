@@ -47,8 +47,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   private observer?: IntersectionObserver;
   private nextProjectObserver?: IntersectionObserver;
   private unbindViewportVideos?: () => void;
-  private bodyOverflowBeforePreview = '';
-  private bodyScrollLocked = false;
   private videoPreviewCloseTimer?: number;
   private unbindExpandableMedia?: () => void;
   private unbindExpandableCode?: () => void;
@@ -302,11 +300,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     if (this.videoPreviewClosing) return;
     this.videoPreviewSrc = src;
     this.videoPreviewLabel = label;
-    if (!this.bodyScrollLocked) {
-      this.bodyOverflowBeforePreview = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      this.bodyScrollLocked = true;
-    }
     this.videoPreviewOpen = true;
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       requestAnimationFrame(() => {
@@ -325,7 +318,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
       this.videoPreviewOpen = false;
       this.videoPreviewSrc = null;
       this.videoPreviewLabel = '';
-      this.restoreBodyScroll();
       return;
     }
     this.videoPreviewClosing = true;
@@ -335,7 +327,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
       this.videoPreviewSrc = null;
       this.videoPreviewLabel = '';
       this.videoPreviewClosing = false;
-      this.restoreBodyScroll();
     }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 550);
   }
 
@@ -385,7 +376,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     if (this.videoPreviewCloseTimer !== undefined) window.clearTimeout(this.videoPreviewCloseTimer);
     this.videoPreviewCloseTimer = undefined;
     this.videoPreviewSrc = null;
-    this.restoreBodyScroll();
     this.observer?.disconnect();
     this.unbindViewportVideos?.();
     this.nextProjectObserver?.disconnect();
@@ -436,9 +426,4 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private restoreBodyScroll(): void {
-    if (!this.bodyScrollLocked) return;
-    document.body.style.overflow = this.bodyOverflowBeforePreview;
-    this.bodyScrollLocked = false;
-  }
 }

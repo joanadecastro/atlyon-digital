@@ -38,8 +38,6 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   videoPreviewOpen = false;
   videoPreviewClosing = false;
   private videoPreviewUsesCheckoutClip = false;
-  private bodyOverflowBeforePreview = '';
-  private bodyScrollLocked = false;
   private videoPreviewCloseTimer?: number;
   private mobileGalleryPointerStart: { x: number; y: number; slide: number } | null = null;
   @ViewChild(CaseImagePreviewComponent) private imagePreview?: CaseImagePreviewComponent;
@@ -94,11 +92,6 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewUsesCheckoutClip = false;
     this.videoPreviewSrc = src;
     this.videoPreviewLabel = this.language.translate(label);
-    if (!this.bodyScrollLocked) {
-      this.bodyOverflowBeforePreview = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      this.bodyScrollLocked = true;
-    }
     this.videoPreviewOpen = true;
     this.autoplayVideoPreview();
   }
@@ -108,11 +101,6 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewUsesCheckoutClip = true;
     this.videoPreviewSrc = '/projects/juh/video_juhecommerce.mp4';
     this.videoPreviewLabel = this.language.translate('Micro-demo de checkout e validação do JUH');
-    if (!this.bodyScrollLocked) {
-      this.bodyOverflowBeforePreview = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      this.bodyScrollLocked = true;
-    }
     this.videoPreviewOpen = true;
     this.autoplayVideoPreview();
   }
@@ -135,10 +123,6 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
       this.videoPreviewSrc = null;
       this.videoPreviewLabel = '';
       this.videoPreviewUsesCheckoutClip = false;
-      if (this.bodyScrollLocked) {
-        document.body.style.overflow = this.bodyOverflowBeforePreview;
-        this.bodyScrollLocked = false;
-      }
       return;
     }
     this.videoPreviewClosing = true;
@@ -149,10 +133,6 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
       this.videoPreviewLabel = '';
       this.videoPreviewUsesCheckoutClip = false;
       this.videoPreviewClosing = false;
-      if (this.bodyScrollLocked) {
-        document.body.style.overflow = this.bodyOverflowBeforePreview;
-        this.bodyScrollLocked = false;
-      }
     }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 550);
   }
 
@@ -246,10 +226,6 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewSrc = null;
     this.videoPreviewOpen = false;
     this.videoPreviewClosing = false;
-    if (this.bodyScrollLocked) {
-      document.body.style.overflow = this.bodyOverflowBeforePreview;
-      this.bodyScrollLocked = false;
-    }
     this.unbindExpandableMedia?.();
     this.unbindExpandableCode?.();
     this.unbindViewportVideos?.();

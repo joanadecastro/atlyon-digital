@@ -51,7 +51,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     .case-image-preview__panel { position:relative; z-index:1; display:grid; place-items:center; max-width:82vw; max-height:86vh; overflow:visible; }
     .case-image-preview__composition { position:relative; display:grid; place-items:center; max-width:100%; max-height:100%; }
     .case-image-preview__template { position:relative; width:100%; max-width:100%; }
-    img { display:block; width:min(82vw,1500px); max-width:100%; height:auto; max-height:86vh; object-fit:contain; border:0; border-radius:6px; box-shadow:0 24px 70px rgba(0,0,0,.18); opacity:0; transform:scale(.96); transition:transform 700ms cubic-bezier(.22,1,.36,1),opacity 350ms ease; }
+    img { display:block; width:auto; max-width:min(82vw,1500px); height:auto; max-height:86vh; object-fit:contain; border:0; border-radius:6px; box-shadow:0 24px 70px rgba(0,0,0,.18); opacity:0; transform:scale(.96); transition:transform 700ms cubic-bezier(.22,1,.36,1),opacity 350ms ease; }
     .is-image-entered img { opacity:1; transform:scale(1); }
     .case-image-preview__legend { display:none; }
     .case-image-preview__top-edge { display:none; }
@@ -123,11 +123,8 @@ export class CaseImagePreviewComponent implements OnDestroy {
   legend: readonly CaseImagePreviewLegendItem[] = [];
   compositionTemplate: TemplateRef<unknown> | null = null;
   compositionClass = '';
-  private bodyOverflow = '';
   private cleanupTimer?: number;
   private returnFocus?: HTMLElement;
-  private pageScrollX = 0;
-  private pageScrollY = 0;
   private previewCycle = 0;
   constructor(private readonly host: ElementRef<HTMLElement>, private readonly cdr: ChangeDetectorRef) {}
 
@@ -154,10 +151,6 @@ export class CaseImagePreviewComponent implements OnDestroy {
     this.trimMobileRightEdge = trimMobileRightEdge;
     this.isImageEntered = false;
     this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
-    this.pageScrollX = window.scrollX;
-    this.pageScrollY = window.scrollY;
-    this.bodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     this.cdr.detectChanges();
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (cycle !== this.previewCycle) return;
@@ -184,10 +177,6 @@ export class CaseImagePreviewComponent implements OnDestroy {
     this.trimMobileRightEdge = false;
     this.isImageEntered = false;
     this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
-    this.pageScrollX = window.scrollX;
-    this.pageScrollY = window.scrollY;
-    this.bodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     this.cdr.detectChanges();
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (cycle !== this.previewCycle) return;
@@ -224,8 +213,6 @@ export class CaseImagePreviewComponent implements OnDestroy {
         this.src = null; this.alt = ''; this.isVerticalLanding = false; this.isLandscape = false; this.isCodePreview = false; this.codeLabel = ''; this.codeContent = ''; this.legend = [];
         this.compositionTemplate = null; this.compositionClass = '';
         this.isClosing = false;
-        document.body.style.overflow = this.bodyOverflow;
-        window.scrollTo(this.pageScrollX, this.pageScrollY);
         this.returnFocus?.focus({ preventScroll: true });
         this.cdr.detectChanges();
       }
@@ -247,5 +234,5 @@ export class CaseImagePreviewComponent implements OnDestroy {
       this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
     }
   }
-  ngOnDestroy(): void { if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); if (this.isOpen) document.body.style.overflow = this.bodyOverflow; }
+  ngOnDestroy(): void { if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); }
 }

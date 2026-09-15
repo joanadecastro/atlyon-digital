@@ -15,8 +15,14 @@ describe('Case lightbox close behavior', () => {
     const host = document.createElement('div');
     const directive = new CaseLightboxCloseDirective(new ElementRef(host));
     const close = vi.fn();
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
     directive.caseLightboxClose.subscribe(close);
     directive.caseLightboxOpen = true;
+    directive.ngOnChanges({ caseLightboxOpen: new SimpleChange(false, true, true) });
+
+    expect(document.documentElement.style.overflow).toBe('hidden');
+    expect(document.body.style.position).toBe('fixed');
+    expect(document.body.style.overflow).toBe('hidden');
 
     directive.closeFromBackdrop({ target: host, currentTarget: host } as unknown as PointerEvent);
     directive.closeFromBackdrop({ target: document.createElement('img'), currentTarget: host } as unknown as PointerEvent);
@@ -27,6 +33,14 @@ describe('Case lightbox close behavior', () => {
     directive.closeFromBackdrop({ target: host, currentTarget: host } as unknown as PointerEvent);
     directive.closeFromEscape();
     expect(close).toHaveBeenCalledTimes(2);
+    directive.caseLightboxOpen = false;
+    directive.ngOnChanges({ caseLightboxOpen: new SimpleChange(true, false, false) });
+
+    expect(document.documentElement.style.overflow).toBe('');
+    expect(document.body.style.position).toBe('');
+    expect(document.body.style.overflow).toBe('');
+    expect(scrollTo).toHaveBeenCalledTimes(1);
+    directive.ngOnDestroy();
   });
 
   it('cancels pending image-preview cleanup during teardown without a late scroll', () => {
