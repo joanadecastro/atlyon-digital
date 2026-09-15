@@ -52,11 +52,11 @@ describe('Chat services', () => {
 
   it.each([null, { route: '/case-studies/civitas' }])('reuses section navigation for projects from %j', project => {
     app.selectedProject = project;
-    const navigate = vi.spyOn(app, 'navigateToSection').mockImplementation(() => {});
+    const navigate = vi.spyOn(app, 'navigateToProjectsStart').mockImplementation(() => {});
     const close = vi.spyOn(app, 'closeProjectChat').mockImplementation(() => {});
-    app.handleProjectChatAction('service-projects');
+    app.handleProjectChatAction('case-studies');
     expect(close).toHaveBeenCalledOnce();
-    expect(navigate).toHaveBeenCalledWith(expect.any(Event), 'portfolio');
+    expect(navigate).toHaveBeenCalledOnce();
   });
 });
 

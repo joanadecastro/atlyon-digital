@@ -895,7 +895,7 @@ export class App implements AfterViewInit, OnDestroy {
       this.projectChatStep = 1;
     } else if (action === 'case-studies') {
       this.closeProjectChat();
-      this.scrollToPortfolio();
+      this.navigateToProjectsStart();
     } else if (action === 'expertise') {
       this.closeProjectChat();
       requestAnimationFrame(() => {
@@ -2206,41 +2206,74 @@ export class App implements AfterViewInit, OnDestroy {
     document.documentElement.classList.remove('process-reveal-enabled');
   }
 
-  scrollToPortfolio(): void {
-    const top = this.getProjectsStartY();
-    if (top === null) return;
-    // Reset while the catalogue is still off-screen so the destination is
-    // rendered directly at the first project, without a post-scroll jump.
-    this.projectStripElement?.scrollTo({ left: 0, behavior: 'instant' });
-    window.scrollTo({ top, behavior: 'smooth' });
+  private projectsNavigationId = 0;
+
+  navigateToProjectsStart(): void {
+    const navigationId = ++this.projectsNavigationId;
+    const returningFromProject = !!this.selectedProject;
+    this.closeMenu();
+    this.closeProjectChat();
+    if (returningFromProject) {
+      this.leaveProjectRoute();
+      this.changeDetectorRef.detectChanges();
+    }
+
+    const waitForStableProjectsLayout = (previousTop: number | null = null, stableFrames = 0) => {
+      if (navigationId !== this.projectsNavigationId) return;
+      const fontsReady = !document.fonts || document.fonts.status === 'loaded';
+      const top = this.getProjectsStartY();
+      const strip = this.projectStripElement;
+      if (!fontsReady || top === null || !strip) {
+        requestAnimationFrame(() => waitForStableProjectsLayout());
+        return;
+      }
+
+      strip.scrollTo({ left: 0, behavior: 'instant' });
+      const nextStableFrames = previousTop !== null && Math.abs(top - previousTop) <= 0.5
+        ? stableFrames + 1
+        : 0;
+      if (nextStableFrames < 2) {
+        requestAnimationFrame(() => waitForStableProjectsLayout(top, nextStableFrames));
+        return;
+      }
+
+      window.scrollTo({ top, behavior: 'smooth' });
+      this.updateProjectNavigation();
+    };
+
+    requestAnimationFrame(() => waitForStableProjectsLayout());
+    if (returningFromProject) this.restoreHomepageFeatures();
   }
 
-  closeProject() {
-    this.closeProjectChat();
+  closeProject(): void {
+    this.navigateToProjectsStart();
+  }
+
+  private leaveProjectRoute(): void {
     this.cleanupCaseStudyChatObserver();
     this.selectedProject = null;
-
     if (window.location.pathname.replace(/\/$/, '').startsWith('/case-studies/')) {
       window.history.pushState({}, '', '/');
     }
+  }
 
-    setTimeout(() => {
-      this.preloadProjectImages();
-      this.initRevealAnimations();
-      this.initPortfolioTextReveal();
-      this.initServicesGridReveal();
-      this.initProcessReveal();
-      this.initServicesScene();
-      this.onWindowScroll();
-      this.scrollToPortfolio();
-    }, 100);
+  private restoreHomepageFeatures(): void {
+    this.preloadProjectImages();
+    this.initRevealAnimations();
+    this.initPortfolioTextReveal();
+    this.initServicesGridReveal();
+    this.initProcessReveal();
+    this.initServicesScene();
+    this.onWindowScroll();
   }
 
   navigateFromProject(event: Event, sectionId: string): void {
     if (!this.selectedProject) return;
     event.preventDefault();
     this.closeMenu();
-    this.closeProject();
+    this.leaveProjectRoute();
+    this.changeDetectorRef.detectChanges();
+    this.restoreHomepageFeatures();
 
     setTimeout(() => {
       if (sectionId === 'top') {
@@ -2256,13 +2289,19 @@ export class App implements AfterViewInit, OnDestroy {
     event.stopPropagation();
     this.closeMenu();
 
+    if (sectionId === 'portfolio') {
+      this.navigateToProjectsStart();
+      return;
+    }
+
     const scrollToTarget = () => {
       this.scrollToMenuSection(sectionId);
     };
 
     if (this.selectedProject) {
-      this.closeProject();
-      if (sectionId === 'portfolio') return;
+      this.leaveProjectRoute();
+      this.changeDetectorRef.detectChanges();
+      this.restoreHomepageFeatures();
       setTimeout(scrollToTarget, 300);
       return;
     }

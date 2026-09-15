@@ -971,7 +971,6 @@ export class ProjectCaseComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.unbindExpandableMedia?.();
     this.unbindUserNeedOutsidePointer();
-    this.closeChallengePreview();
     if (this.heroFrame !== undefined) cancelAnimationFrame(this.heroFrame);
     if (this.scrollFrame !== undefined) cancelAnimationFrame(this.scrollFrame);
     if (this.flowMetricsFrame !== undefined) cancelAnimationFrame(this.flowMetricsFrame);

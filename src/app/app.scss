@@ -16931,3 +16931,18 @@ body {
   background: #afbeca !important;
   background-image: none !important;
 }
+
+/* Footer LinkedIn keeps the rail's standalone "in" glyph on every viewport. */
+.site-footer__resources .site-footer__linkedin.mobile-social-circle {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: #111217 !important;
+  box-shadow: none !important;
+}
+
+.site-footer__resources .site-footer__linkedin.mobile-social-circle svg {
+  color: #111217 !important;
+  fill: currentColor !important;
+  stroke: none !important;
+}
