@@ -839,7 +839,7 @@ export class App implements AfterViewInit, OnDestroy {
         'assistant',
         'Estou disponível para novas oportunidades em UI/UX Design, Product Design, Digital Design e Front-end Development.',
         [
-          { id: 'recruiter-linkedin', label: 'LinkedIn', action: 'other', href: 'https://www.linkedin.com/in/joanadecastro/' },
+          { id: 'recruiter-linkedin', label: 'LinkedIn', action: 'other', href: 'https://www.linkedin.com/in/joanacastrowebdeveloper/' },
           { id: 'cv', label: 'Download CV', action: 'cv', href: '/cv/Cv_UiFrontend_JoanaCastro.pdf', download: true },
         ]
       );
