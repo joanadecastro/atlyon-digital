@@ -94,8 +94,8 @@ Dense mobile sequences become swipe-based only where this improves scanning. Par
 Code examples remain horizontally explorable in context and can be expanded into a landscape presentation when additional reading space is useful.
 
 <p align="center">
-  <img src="./public/projects/readmeGithub/juh_codigo_shadow.png" width="280" alt="JUH code snippet in its mobile context">&nbsp;&nbsp;
-  <img src="./public/projects/readmeGithub/juh_codigoampliado.png" width="360" alt="JUH code snippet expanded in landscape">
+  <img src="./public/projects/readmeGithub/juh_codigo_shadow.png" width="300" alt="JUH code snippet in its mobile context">&nbsp;&nbsp;
+  <img src="./public/projects/readmeGithub/juh_codigoampliado.png" width="300" alt="JUH code snippet expanded in landscape">
 </p>
 
 ---
