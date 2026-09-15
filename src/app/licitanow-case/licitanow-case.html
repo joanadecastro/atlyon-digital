@@ -325,14 +325,15 @@
 
 <app-case-image-preview />
 
-<div class="licita-video-preview" [class.is-open]="videoPreviewOpen" [class.is-closing]="videoPreviewClosing" [attr.aria-hidden]="!videoPreviewOpen"
+<div class="licita-video-preview" caseLightboxClose [caseLightboxOpen]="videoPreviewOpen" [caseLightboxClosing]="videoPreviewClosing" (caseLightboxClose)="closeVideoPreview()" [class.is-open]="videoPreviewOpen" [class.is-closing]="videoPreviewClosing" [attr.aria-hidden]="!videoPreviewOpen"
   role="dialog" aria-modal="true" [attr.aria-label]="videoPreviewLabel"
-  (pointerdown)="closeVideoPreviewFromBackdrop($event)"
-  (document:keydown.escape)="closeVideoPreview()">
+  >
   @if (videoPreviewSrc) {
     <div class="licita-video-preview__panel" (pointerdown)="handleVideoPreviewPanelPointer($event)">
-      <button type="button" class="licita-video-preview__close" aria-label="Fechar preview" (click)="closeVideoPreview()">×</button>
-      <video [src]="videoPreviewSrc" controls muted loop playsinline></video>
+      <div class="case-lightbox-media-frame">
+        <button type="button" class="licita-video-preview__close" aria-label="Fechar preview" (click)="closeVideoPreview()">×</button>
+        <video [src]="videoPreviewSrc" controls muted loop playsinline></video>
+      </div>
     </div>
   }
 </div>

@@ -1082,6 +1082,16 @@
   box-shadow: 0 24px 70px rgba(0, 0, 0, .2);
 }
 
+.case-lightbox-media-frame {
+  position: relative;
+  width: 100%;
+}
+
+.licita-video-preview .case-lightbox-media-frame .licita-video-preview__close {
+  top: 8px !important;
+  right: 8px !important;
+}
+
 .licita-video-preview video {
   display: block;
   width: 100%;

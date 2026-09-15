@@ -8,11 +8,12 @@ import { isMobileCasePreview } from '../project-case/case-preview-mobile';
 import { LanguageService } from '../i18n/language.service';
 import { CASE_STUDY_NEXT } from '../case-study-navigation';
 import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case-viewport-video';
+import { CaseLightboxCloseDirective } from '../project-case/case-lightbox-close.directive';
 
 @Component({
   selector: 'app-juh-case',
   standalone: true,
-  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent],
+  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective],
   templateUrl: './juh-case.html',
   styleUrl: './juh-case.scss',
 })
@@ -155,11 +156,6 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 550);
   }
 
-  closeVideoPreviewFromBackdrop(event: Event): void {
-    if (this.videoPreviewClosing) { event.stopPropagation(); return; }
-    if (event.target === event.currentTarget) this.closeVideoPreview();
-  }
-
   handleVideoPreviewPanelPointer(event: PointerEvent): void {
     event.stopPropagation();
   }
@@ -245,7 +241,15 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.closeVideoPreview();
+    if (this.videoPreviewCloseTimer !== undefined) window.clearTimeout(this.videoPreviewCloseTimer);
+    this.videoPreviewCloseTimer = undefined;
+    this.videoPreviewSrc = null;
+    this.videoPreviewOpen = false;
+    this.videoPreviewClosing = false;
+    if (this.bodyScrollLocked) {
+      document.body.style.overflow = this.bodyOverflowBeforePreview;
+      this.bodyScrollLocked = false;
+    }
     this.unbindExpandableMedia?.();
     this.unbindExpandableCode?.();
     this.unbindViewportVideos?.();

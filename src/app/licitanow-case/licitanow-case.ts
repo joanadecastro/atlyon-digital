@@ -7,6 +7,7 @@ import { bindCaseExpandableCode } from '../project-case/case-expandable-code';
 import { isMobileCasePreview } from '../project-case/case-preview-mobile';
 import { CASE_STUDY_NEXT } from '../case-study-navigation';
 import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case-viewport-video';
+import { CaseLightboxCloseDirective } from '../project-case/case-lightbox-close.directive';
 
 type DecisionCarousel = 'hero' | 'process' | 'principles' | 'about' | 'references' | 'composition' | 'illustration' | 'palette';
 type BeforeAfterCarousel = 'hero' | 'process' | 'principles' | 'about' | 'final';
@@ -14,7 +15,7 @@ type BeforeAfterCarousel = 'hero' | 'process' | 'principles' | 'about' | 'final'
 @Component({
   selector: 'app-licitanow-case',
   standalone: true,
-  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent],
+  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective],
   hostDirectives: [TranslateDirective],
   templateUrl: './licitanow-case.html',
   styleUrl: './licitanow-case.scss',
@@ -338,11 +339,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 550);
   }
 
-  closeVideoPreviewFromBackdrop(event: Event): void {
-    if (this.videoPreviewClosing) { event.stopPropagation(); return; }
-    if (event.target === event.currentTarget) this.closeVideoPreview();
-  }
-
   handleVideoPreviewPanelPointer(event: PointerEvent): void {
     event.stopPropagation();
   }
@@ -386,6 +382,8 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.unbindExpandableMedia?.();
     this.unbindExpandableCode?.();
+    if (this.videoPreviewCloseTimer !== undefined) window.clearTimeout(this.videoPreviewCloseTimer);
+    this.videoPreviewCloseTimer = undefined;
     this.videoPreviewSrc = null;
     this.restoreBodyScroll();
     this.observer?.disconnect();

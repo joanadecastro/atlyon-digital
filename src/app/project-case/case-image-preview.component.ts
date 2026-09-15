@@ -2,17 +2,18 @@ import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnDestroy, TemplateRef, inject } from '@angular/core';
 import { isMobileCasePreview } from './case-preview-mobile';
 import { LanguageService } from '../i18n/language.service';
+import { CaseLightboxCloseDirective } from './case-lightbox-close.directive';
 
 export type CaseImagePreviewLegendItem = { number: string; title: string };
 
 @Component({
   selector: 'app-case-image-preview',
   standalone: true,
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, CaseLightboxCloseDirective],
   template: `
-    <div class="case-image-preview" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.is-code-preview]="isCodePreview" [class.trim-mobile-right-edge]="trimMobileRightEdge" [class.attach-close-to-media]="attachCloseToMedia"
+    <div class="case-image-preview" caseLightboxClose [caseLightboxOpen]="isOpen" [caseLightboxClosing]="isClosing" (caseLightboxClose)="close()" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.is-code-preview]="isCodePreview" [class.trim-mobile-right-edge]="trimMobileRightEdge"
       [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" [attr.aria-label]="language.translate(isCodePreview ? 'Snippet de código ampliado' : 'Preview ampliado da mockup')"
-      (pointerdown)="closeFromBackdrop($event)">
+      >
       @if (src || isCodePreview) {
         <div class="case-image-preview__panel" [class.has-legend]="legend.length > 0" (pointerdown)="handlePanelPointerDown($event)">
           <div class="case-image-preview__composition" [class.trim-top-edge]="trimTopEdge">
@@ -65,8 +66,8 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       .case-image-preview__composition.trim-top-edge .case-image-preview__top-edge { position:absolute; top:0; right:0; left:0; z-index:1; display:block; height:2px; border-radius:6px 6px 0 0; background-repeat:no-repeat; background-position:center -2px; background-size:100% auto; pointer-events:none; }
     }
     .case-image-preview__close { position:absolute; top:-14px; right:-14px; z-index:2; display:grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid rgba(0,0,0,.10); border-radius:50%; background:rgba(255,255,255,.94); color:#25282b; box-shadow:0 3px 12px rgba(0,0,0,.10); font:400 24px/1 Arial,sans-serif; cursor:pointer; }
-    .attach-close-to-media:not(.is-vertical-landing) .case-image-preview__panel { width:max-content; height:max-content; }
-    .attach-close-to-media:not(.is-vertical-landing) .case-image-preview__close { top:0; right:0; transform:translate(50%,-50%); }
+    .case-image-preview:not(.is-vertical-landing) .case-image-preview__panel { width:max-content; height:max-content; }
+    .case-image-preview:not(.is-vertical-landing) .case-image-preview__close { top:8px; right:8px; transform:none; }
     .is-vertical-landing { display:block; padding:0; overflow:hidden; -webkit-backdrop-filter:blur(5px); backdrop-filter:blur(5px); }
     .is-vertical-landing .case-image-preview__panel { position:fixed; top:6vh; left:50%; display:block; width:min(88vw,1400px); max-width:none; height:88vh; max-height:none; overflow:auto; transform:translateX(-50%); overscroll-behavior:contain; }
     .is-vertical-landing .case-image-preview__composition { display:block; max-width:none; max-height:none; }
@@ -82,7 +83,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       .is-image-entered img { transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__panel { width:100%; max-width:none; height:100%; max-height:none; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__composition { position:fixed; top:50%; left:50%; display:flex; flex-direction:column; align-items:stretch; gap:10px; width:min(calc(100dvh - 40px),680px); max-width:calc(100dvh - 40px); max-height:calc(100vw - 32px); opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.96); transform-origin:center center; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
-      .is-landscape:not(.is-vertical-landing) .case-image-preview__close { top:0; right:0; transform:translate(50%,-50%) rotate(-90deg); }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__close { top:8px; right:auto; left:8px; transform:rotate(-90deg); }
       .is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { opacity:1; transform:translate(-50%,-50%) rotate(90deg) scale(1); transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) img { position:static; width:100%; max-width:100%; max-height:calc(100vw - 32px); opacity:1; transform:none; transition:none; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__template { width:100%; max-height:calc(100vw - 32px); }
@@ -96,9 +97,9 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       .case-image-preview__legend li { display:grid; grid-template-columns:22px minmax(0,1fr); align-items:start; gap:5px; margin:0; padding:0; }
       .case-image-preview__legend span { color:#b9d4e7; font:700 10px/1.25 Inter,Arial,sans-serif; letter-spacing:.05em; }
       .case-image-preview__legend strong { color:rgba(255,255,255,.9); font:650 10px/1.25 Inter,Arial,sans-serif; letter-spacing:.08em; }
-      .case-image-preview__close { position:fixed; top:max(16px,env(safe-area-inset-top)); right:max(16px,env(safe-area-inset-right)); }
-      .attach-close-to-media:not(.is-landscape):not(.is-vertical-landing) .case-image-preview__panel { width:max-content; max-width:calc(100vw - 32px); height:max-content; max-height:calc(100dvh - 32px); }
-      .attach-close-to-media:not(.is-landscape):not(.is-vertical-landing) .case-image-preview__close { position:absolute; top:0; right:0; transform:translate(50%,-50%); }
+      .case-image-preview:not(.is-landscape):not(.is-vertical-landing) .case-image-preview__panel { width:max-content; max-width:calc(100vw - 32px); height:max-content; max-height:calc(100dvh - 32px); }
+      .case-image-preview:not(.is-vertical-landing) .case-image-preview__close { position:absolute; top:8px; right:8px; transform:none; }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__close { right:auto; left:8px; transform:rotate(-90deg); }
       .is-vertical-landing .case-image-preview__panel { width:calc(100vw - 28px); max-width:calc(100vw - 28px); }
     }
     @media (prefers-reduced-motion:reduce) { .case-image-preview,img,.case-image-preview__composition { transition-duration:120ms; transition-property:opacity,visibility; } }
@@ -108,7 +109,6 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
 export class CaseImagePreviewComponent implements OnDestroy {
   readonly language = inject(LanguageService);
   @Input() trimTopEdge = false;
-  @Input() attachCloseToMedia = false;
   src: string | null = null;
   alt = '';
   isOpen = false;
@@ -240,16 +240,8 @@ export class CaseImagePreviewComponent implements OnDestroy {
     event.stopPropagation();
   }
 
-  closeFromBackdrop(event: Event): void {
-    if (this.isClosing) {
-      event.stopPropagation();
-      return;
-    }
-    if (event.target === event.currentTarget) this.close();
-  }
   @HostListener('document:keydown', ['$event']) onKeydown(event: KeyboardEvent): void {
     if (!this.isOpen) return;
-    if (event.key === 'Escape') this.close();
     if (event.key === 'Tab') {
       event.preventDefault();
       this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();

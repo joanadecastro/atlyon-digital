@@ -137,14 +137,16 @@
   </a>
 </main>
 
-<app-case-image-preview [attachCloseToMedia]="true" />
+<app-case-image-preview />
 
-<div class="licita-video-preview" [class.is-open]="videoPreviewOpen" [class.is-closing]="videoPreviewClosing" [attr.aria-hidden]="!videoPreviewOpen" role="dialog" aria-modal="true" [attr.aria-label]="videoPreviewLabel" (pointerdown)="closeVideoPreviewFromBackdrop($event)" (document:keydown.escape)="closeVideoPreview()">
+<div class="licita-video-preview" caseLightboxClose [caseLightboxOpen]="videoPreviewOpen" [caseLightboxClosing]="videoPreviewClosing" (caseLightboxClose)="closeVideoPreview()" [class.is-open]="videoPreviewOpen" [class.is-closing]="videoPreviewClosing" [attr.aria-hidden]="!videoPreviewOpen" role="dialog" aria-modal="true" [attr.aria-label]="videoPreviewLabel">
   @if (videoPreviewSrc) {
     <div class="licita-video-preview__panel" (pointerdown)="handleVideoPreviewPanelPointer($event)">
-      <button type="button" class="licita-video-preview__close" [attr.aria-label]="language.translate('Fechar preview')" (click)="closeVideoPreview()">×</button>
-      <div class="licita-video-preview__media">
-        <video [src]="videoPreviewSrc" controls muted loop playsinline (loadedmetadata)="configureVideoPreview($event)" (timeupdate)="limitVideoPreview($event)" (play)="restartVideoPreview($event)" (seeked)="keepVideoPreviewInRange($event)"></video>
+      <div class="case-lightbox-media-frame">
+        <button type="button" class="licita-video-preview__close" [attr.aria-label]="language.translate('Fechar preview')" (click)="closeVideoPreview()">×</button>
+        <div class="licita-video-preview__media">
+          <video [src]="videoPreviewSrc" controls muted loop playsinline (loadedmetadata)="configureVideoPreview($event)" (timeupdate)="limitVideoPreview($event)" (play)="restartVideoPreview($event)" (seeked)="keepVideoPreviewInRange($event)"></video>
+        </div>
       </div>
     </div>
   }

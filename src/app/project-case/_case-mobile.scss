@@ -200,6 +200,9 @@
       transform-origin:center center;
     }
     .licita-video-preview .licita-video-preview__close {
+      top:8px !important;
+      right:auto !important;
+      left:8px !important;
       transform:rotate(-90deg);
     }
     .licita-video-preview .licita-video-preview__media,
