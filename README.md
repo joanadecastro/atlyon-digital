@@ -94,8 +94,8 @@ Dense mobile sequences become swipe-based only where this improves scanning. Par
 Code examples remain horizontally explorable in context and can be expanded into a landscape presentation when additional reading space is useful.
 
 <p align="center">
-  <img src="./public/projects/readmeGithub/juh_codigo_shadow.png" width="300" alt="JUH code snippet in its mobile context">&nbsp;&nbsp;
-  <img src="./public/projects/readmeGithub/juh_codigoampliado.png" width="480" alt="JUH code snippet expanded in landscape">
+  <img src="./public/projects/readmeGithub/juh_codigo_shadow.png" width="280" alt="JUH code snippet in its mobile context">&nbsp;&nbsp;
+  <img src="./public/projects/readmeGithub/juh_codigoampliado.png" width="360" alt="JUH code snippet expanded in landscape">
 </p>
 
 ---
@@ -175,7 +175,7 @@ Key areas:
 Contact is part of the product experience. Rather than relying only on a static form, Atlyon directs different visitor intents — including recruiters, collaborations and project enquiries — towards relevant information or contact paths.
 
 <p align="center">
-  <img src="./public/projects/readmeGithub/chat.png" width="300" alt="Atlyon guided contact experience">
+  <img src="./public/projects/readmeGithub/chat_shadow.png" width="300" alt="Atlyon guided contact experience">
 </p>
 
 ---
