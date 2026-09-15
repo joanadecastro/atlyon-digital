@@ -106,7 +106,7 @@ export class App implements AfterViewInit, OnDestroy {
   private aboutCounterRafId?: number;
   private aboutMetricsRunning = false;
   private aboutMetricsGeneration = 0;
-  private aboutMobileMetricsCompleted = false;
+  private aboutMetricsCompleted = false;
   private projectChatMessageId = 1;
   projectChatMessages: ProjectChatMessage[] = [
     {
@@ -492,9 +492,6 @@ export class App implements AfterViewInit, OnDestroy {
 
     const crossedMetricsForward =
       previousPhase < metricsPhase && currentPhase >= metricsPhase;
-    const crossedMetricsBackward =
-      previousPhase >= metricsPhase && currentPhase < metricsPhase;
-
     if (window.innerWidth <= 768) {
       const metricsBlock = section.querySelector<HTMLElement>('.about-editorial-metrics');
       const metricsRect = metricsBlock?.getBoundingClientRect();
@@ -502,16 +499,12 @@ export class App implements AfterViewInit, OnDestroy {
         && metricsRect.top <= viewportHeight * 0.88
         && metricsRect.bottom >= 0;
 
-      if (metricsAreVisible && !this.aboutMobileMetricsCompleted) {
+      if (currentPhase >= metricsPhase && metricsAreVisible && !this.aboutMetricsCompleted) {
         this.startAboutMetrics(section);
       }
     } else {
       if (crossedMetricsForward) {
         this.startAboutMetrics(section);
-      }
-
-      if (crossedMetricsBackward) {
-        this.stopAboutMetrics();
       }
     }
 
@@ -519,7 +512,7 @@ export class App implements AfterViewInit, OnDestroy {
   }
 
   private startAboutMetrics(section: HTMLElement): void {
-    if (this.aboutMetricsRunning) return;
+    if (this.aboutMetricsRunning || this.aboutMetricsCompleted) return;
 
     this.aboutMetricsRunning = true;
     const generation = ++this.aboutMetricsGeneration;
@@ -546,9 +539,10 @@ export class App implements AfterViewInit, OnDestroy {
       metric.querySelector<HTMLElement>('.about-section__metric-number')
     );
     const targets = metrics.map((metric) => Number(metric.dataset['countTarget'] ?? 0));
+    const durations = metrics.map((metric) => Number(metric.dataset['countDuration'] ?? 1000));
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const easeOutCubic = (value: number): number => 1 - Math.pow(1 - value, 3);
-    const duration = 2800;
+    const totalDuration = Math.max(...durations, 0);
 
     const finishCounting = (): void => {
       if (!this.isCurrentAboutCycle(generation)) return;
@@ -557,9 +551,7 @@ export class App implements AfterViewInit, OnDestroy {
       });
       this.aboutCounterRafId = undefined;
       this.aboutMetricsRunning = false;
-      if (window.innerWidth <= 768) {
-        this.aboutMobileMetricsCompleted = true;
-      }
+      this.aboutMetricsCompleted = true;
     };
 
     if (reduceMotion) {
@@ -571,13 +563,13 @@ export class App implements AfterViewInit, OnDestroy {
     const renderFrame = (now: number): void => {
       if (!this.isCurrentAboutCycle(generation)) return;
 
-      const progress = Math.min(1, (now - startedAt) / duration);
-      const easedProgress = easeOutCubic(progress);
+      const elapsed = now - startedAt;
       numberElements.forEach((element, index) => {
-        if (element) element.textContent = String(Math.round(targets[index] * easedProgress));
+        const progress = Math.min(1, Math.max(0, elapsed / durations[index]));
+        if (element) element.textContent = String(Math.round(targets[index] * easeOutCubic(progress)));
       });
 
-      if (progress < 1) {
+      if (elapsed < totalDuration) {
         this.aboutCounterRafId = requestAnimationFrame(renderFrame);
       } else {
         finishCounting();
@@ -1873,8 +1865,8 @@ export class App implements AfterViewInit, OnDestroy {
           });
         },
         {
-          threshold: 0.16,
-          rootMargin: '0px 0px -10% 0px',
+          threshold: 0.1,
+          rootMargin: '0px 0px -6% 0px',
         }
       );
 

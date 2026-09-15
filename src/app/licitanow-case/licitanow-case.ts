@@ -10,7 +10,6 @@ import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case
 import { CaseLightboxCloseDirective } from '../project-case/case-lightbox-close.directive';
 
 type DecisionCarousel = 'hero' | 'process' | 'principles' | 'about' | 'references' | 'composition' | 'illustration' | 'palette';
-type BeforeAfterCarousel = 'hero' | 'process' | 'principles' | 'about' | 'final';
 
 @Component({
   selector: 'app-licitanow-case',
@@ -26,7 +25,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   responsiveMockupSlide = 0;
   implementationSlide = 0;
   globalViewSlide = 0;
-  beforeAfterSlides: Record<BeforeAfterCarousel, number> = { hero: 0, process: 0, principles: 0, about: 0, final: 0 };
   decisionSlides: Record<DecisionCarousel, number> = {
     hero: 0,
     process: 0,
@@ -119,27 +117,6 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
 
   cancelDecisionSwipe(): void {
     this.decisionSwipeStart = null;
-  }
-
-  onBeforeAfterScroll(carousel: BeforeAfterCarousel, event: Event): void {
-    const rail = event.currentTarget;
-    if (!(rail instanceof HTMLElement)) return;
-    const slides = Array.from(rail.querySelectorAll<HTMLElement>(':scope > figure'));
-    if (!slides.length) return;
-    const railLeft = rail.getBoundingClientRect().left;
-    this.beforeAfterSlides[carousel] = slides.reduce((nearest, slide, index) => {
-      const distance = Math.abs(slide.getBoundingClientRect().left - railLeft);
-      return distance < nearest.distance ? { index, distance } : nearest;
-    }, { index: 0, distance: Number.POSITIVE_INFINITY }).index;
-  }
-
-  setBeforeAfterSlide(carousel: BeforeAfterCarousel, slide: number): void {
-    const rail = this.host.nativeElement.querySelector<HTMLElement>(`[data-before-after="${carousel}"]`);
-    const target = rail?.querySelectorAll<HTMLElement>(':scope > figure').item(slide);
-    if (!rail || !target) return;
-    const left = target.getBoundingClientRect().left - rail.getBoundingClientRect().left + rail.scrollLeft;
-    rail.scrollTo({ left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-    this.beforeAfterSlides[carousel] = slide;
   }
 
   onResponsiveMockupScroll(event: Event): void {

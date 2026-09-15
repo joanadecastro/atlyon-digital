@@ -182,7 +182,8 @@
       width: calc(100vw - 28px) !important; max-width: calc(100vw - 28px) !important;
     }
     :is(.licita-image-preview, .licita-video-preview) :is(.licita-image-preview__close, .licita-video-preview__close) {
-      display:grid !important;
+      display:none !important;
+      pointer-events:none !important;
     }
     .licita-video-preview.is-closing {
       visibility:visible !important;

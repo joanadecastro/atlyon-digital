@@ -77,7 +77,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       .case-image-preview { padding:16px; transition:opacity 550ms ease,visibility 0s linear 900ms; }
       .case-image-preview.is-open { transition:opacity 380ms ease; }
       .case-image-preview.is-closing { visibility:visible; pointer-events:auto; }
-      .case-image-preview__close { display:grid; }
+      .case-image-preview__close { display:none; pointer-events:none; }
       .case-image-preview__panel { width:calc(100vw - 32px); max-width:calc(100vw - 32px); height:calc(100dvh - 32px); max-height:calc(100dvh - 32px); }
       img { width:auto; max-width:calc(100vw - 32px); max-height:calc(100dvh - 32px); object-fit:contain; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
       .is-image-entered img { transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
@@ -156,7 +156,9 @@ export class CaseImagePreviewComponent implements OnDestroy {
       if (cycle !== this.previewCycle) return;
       this.isOpen = true;
       this.cdr.detectChanges();
-      this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
+      if (!isMobileCasePreview()) {
+        this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
+      }
     }));
   }
 

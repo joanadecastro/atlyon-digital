@@ -50,7 +50,7 @@
         <div class="licita-applied-comparisons">
           <article class="licita-applied-comparison licita-applied-comparison--hero">
             <header><h4>Secção “Hero”</h4><p>Da sobreposição de mensagens para uma proposta de valor mais focada, com ação principal claramente destacada.</p></header>
-            <div class="licita-applied-comparison__visual hero-comparison licita-before-after" data-before-after="hero" (scroll)="onBeforeAfterScroll('hero', $event)">
+            <div class="licita-applied-comparison__visual hero-comparison">
               <figure class="licita-applied-comparison__before"><div class="licita-applied-comparison__meta"><figcaption>ANTES</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar hero anterior">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-applied-comparison__media" (click)="openHeroPreviousPreview($event)"><img src="/projects/licita/Frame 9 (2).png" alt="Hero da landing anterior do LicitaNow" loading="eager"></div></figure>
               <span aria-hidden="true">→</span>
               <figure class="licita-applied-comparison__after"><div class="licita-applied-comparison__meta"><figcaption>DEPOIS</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar hero redesenhado">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-applied-comparison__media"><img src="/projects/licita/Frame 10 (5).png" alt="Hero da landing redesenhada do LicitaNow" loading="eager"></div></figure>
@@ -69,12 +69,11 @@
               </div>
               <button type="button" class="licita-decisions-carousel__arrow licita-decisions-carousel__arrow--next" aria-label="Mostrar decisão seguinte" (click)="setDecisionSlide('hero', decisionSlides.hero + 1)">›</button>
             </div>
-            <div class="licita-before-after__dots" role="group" aria-label="Selecionar comparação do Hero">@for (slide of [0, 1]; track slide) {<button type="button" [class.is-active]="beforeAfterSlides.hero === slide" [attr.aria-pressed]="beforeAfterSlides.hero === slide" [attr.aria-label]="'Mostrar ' + (slide === 0 ? 'antes' : 'depois')" (click)="setBeforeAfterSlide('hero', slide)"></button>}</div>
           </article>
 
           <article class="licita-applied-comparison licita-applied-comparison--process">
             <header><h4>Secção “Como Funciona”</h4><p>O processo passa de uma sequência visual pouco diferenciada para quatro passos claramente hierarquizados.</p></header>
-            <div class="licita-applied-comparison__visual licita-before-after" data-before-after="process" (scroll)="onBeforeAfterScroll('process', $event)">
+            <div class="licita-applied-comparison__visual">
               <figure class="licita-applied-comparison__before"><div class="licita-applied-comparison__meta"><figcaption>ANTES</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar Como Funciona anterior">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-applied-comparison__media"><img src="/projects/licita/Frame 9 (3).png" alt="Como funciona na landing anterior do LicitaNow" loading="eager"></div></figure>
               <span aria-hidden="true">→</span>
               <figure class="licita-applied-comparison__after"><div class="licita-applied-comparison__meta"><figcaption>DEPOIS</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar Como Funciona redesenhado">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-applied-comparison__media"><img src="/projects/licita/Frame 10 (3).png" alt="Como funciona na landing redesenhada do LicitaNow" loading="eager"></div></figure>
@@ -89,12 +88,11 @@
               <div class="licita-hero-decisions-carousel__dots" role="group" aria-label="Selecionar decisão aplicada à apresentação do processo">@for (slide of [0, 1, 2]; track slide) {<button type="button" [class.is-active]="decisionSlides.process === slide" [attr.aria-pressed]="decisionSlides.process === slide" [attr.aria-label]="'Mostrar decisão ' + (slide + 1)" (click)="setDecisionSlide('process', slide)"></button>}</div>
               <button type="button" class="licita-decisions-carousel__arrow licita-decisions-carousel__arrow--next" aria-label="Mostrar decisão seguinte" (click)="setDecisionSlide('process', decisionSlides.process + 1)">›</button>
             </div>
-            <div class="licita-before-after__dots" role="group" aria-label="Selecionar comparação de Como Funciona">@for (slide of [0, 1]; track slide) {<button type="button" [class.is-active]="beforeAfterSlides.process === slide" [attr.aria-pressed]="beforeAfterSlides.process === slide" [attr.aria-label]="'Mostrar ' + (slide === 0 ? 'antes' : 'depois')" (click)="setBeforeAfterSlide('process', slide)"></button>}</div>
           </article>
 
           <article class="licita-applied-comparison licita-applied-comparison--principles">
             <header><h4>Secção “Princípios”</h4><p>A grelha estática dá lugar a um carrossel que destaca um princípio de cada vez, reduzindo a densidade visual e criando uma leitura mais progressiva.</p></header>
-            <div class="licita-applied-comparison__visual licita-before-after" data-before-after="principles" (scroll)="onBeforeAfterScroll('principles', $event)">
+            <div class="licita-applied-comparison__visual">
               <figure class="licita-applied-comparison__before"><div class="licita-applied-comparison__meta"><figcaption>ANTES</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar Princípios anterior">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-applied-comparison__media"><img src="/projects/licita/Frame 9 (4).png" alt="Princípios na landing anterior do LicitaNow" loading="eager"></div></figure>
               <span aria-hidden="true">→</span>
               <figure class="licita-applied-comparison__after"><div class="licita-applied-comparison__meta"><figcaption>DEPOIS</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar Princípios redesenhado">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-applied-comparison__media"><img src="/projects/licita/Frame 10 (4).png" alt="Princípios na landing redesenhada do LicitaNow" loading="eager"></div></figure>
@@ -109,12 +107,11 @@
             <div class="licita-hero-decisions-carousel__dots" role="group" aria-label="Selecionar decisão aplicada à apresentação dos princípios">@for (slide of [0, 1, 2]; track slide) {<button type="button" [class.is-active]="decisionSlides.principles === slide" [attr.aria-pressed]="decisionSlides.principles === slide" [attr.aria-label]="'Mostrar decisão ' + (slide + 1)" (click)="setDecisionSlide('principles', slide)"></button>}</div>
             <button type="button" class="licita-decisions-carousel__arrow licita-decisions-carousel__arrow--next" aria-label="Mostrar princípio seguinte" (click)="setDecisionSlide('principles', decisionSlides.principles + 1)">›</button>
             </div>
-            <div class="licita-before-after__dots" role="group" aria-label="Selecionar comparação de Princípios">@for (slide of [0, 1]; track slide) {<button type="button" [class.is-active]="beforeAfterSlides.principles === slide" [attr.aria-pressed]="beforeAfterSlides.principles === slide" [attr.aria-label]="'Mostrar ' + (slide === 0 ? 'antes' : 'depois')" (click)="setBeforeAfterSlide('principles', slide)"></button>}</div>
           </article>
 
           <article class="licita-applied-comparison licita-applied-comparison--about">
             <header><h4>Secção “Sobre a LicitaNow”</h4><p>A informação institucional foi reorganizada para melhorar a leitura, destacar os principais indicadores e integrar a apresentação da marca de forma mais consistente com o restante percurso.</p></header>
-            <div class="licita-applied-comparison__visual licita-before-after" data-before-after="about" (scroll)="onBeforeAfterScroll('about', $event)">
+            <div class="licita-applied-comparison__visual">
               <figure class="licita-applied-comparison__before"><div class="licita-applied-comparison__meta"><figcaption>ANTES</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar secção Sobre anterior">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-applied-comparison__media"><img src="/projects/licita/Frame 9 (5).png" alt="Secção Sobre na landing anterior do LicitaNow" loading="eager"></div></figure>
               <span aria-hidden="true">→</span>
               <figure class="licita-applied-comparison__after"><div class="licita-applied-comparison__meta"><figcaption>DEPOIS</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar secção Sobre redesenhada">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-applied-comparison__media"><img src="/projects/licita/Frame 10 (7).png" alt="Secção Sobre na landing redesenhada do LicitaNow" loading="eager"></div></figure>
@@ -129,7 +126,6 @@
             <div class="licita-hero-decisions-carousel__dots" role="group" aria-label="Selecionar decisão aplicada à secção Sobre">@for (slide of [0, 1, 2]; track slide) {<button type="button" [class.is-active]="decisionSlides.about === slide" [attr.aria-pressed]="decisionSlides.about === slide" [attr.aria-label]="'Mostrar decisão ' + (slide + 1)" (click)="setDecisionSlide('about', slide)"></button>}</div>
             <button type="button" class="licita-decisions-carousel__arrow licita-decisions-carousel__arrow--next" aria-label="Mostrar decisão seguinte" (click)="setDecisionSlide('about', decisionSlides.about + 1)">›</button>
             </div>
-            <div class="licita-before-after__dots" role="group" aria-label="Selecionar comparação de Sobre a LicitaNow">@for (slide of [0, 1]; track slide) {<button type="button" [class.is-active]="beforeAfterSlides.about === slide" [attr.aria-pressed]="beforeAfterSlides.about === slide" [attr.aria-label]="'Mostrar ' + (slide === 0 ? 'antes' : 'depois')" (click)="setBeforeAfterSlide('about', slide)"></button>}</div>
           </article>
         </div>
         </div>
@@ -219,12 +215,11 @@
       <header class="story-chapter-header case-study-section-header editorial-section-header"><span class="case-study-section-number">04.</span><h2 class="story-chapter-title case-study-section-title section-heading-title">Landing Redesenhada</h2><div class="story-chapter-subtitle case-study-section-subtitle editorial-section-subtitle">Da hierarquia à experiência final.</div></header>
       <div class="licita-final-experience">
         <header class="licita-final-experience__header"><h3>Experiência Final</h3><p>As decisões desenvolvidas ao longo do processo convergem aqui numa experiência mais clara, progressiva e consistente. A comparação em movimento permite perceber não apenas a mudança visual, mas também a diferença de ritmo, hierarquia e percurso entre as duas versões.</p></header>
-        <div class="licita-final-comparison licita-before-after" data-before-after="final" aria-label="Comparação em movimento entre a landing anterior e a landing redesenhada" (scroll)="onBeforeAfterScroll('final', $event)">
+        <div class="licita-final-comparison" aria-label="Comparação em movimento entre a landing anterior e a landing redesenhada">
           <figure class="licita-final-comparison__column civitas-reveal"><div class="licita-applied-comparison__meta"><figcaption class="licita-applied-comparison__label">LANDING ANTERIOR</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar vídeo da landing anterior" (click)="openVideoPreview('/projects/licita/licita_antigo.mp4', 'Landing anterior')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-final-comparison__media"><video data-case-viewport-video muted loop playsinline preload="auto"><source src="/projects/licita/licita_antigo.mp4" type="video/mp4">O seu browser não suporta vídeo HTML5.</video></div></figure>
           <span class="licita-final-comparison__arrow" aria-hidden="true">→</span>
           <figure class="licita-final-comparison__column licita-final-comparison__column--after civitas-reveal"><div class="licita-applied-comparison__meta"><figcaption class="licita-applied-comparison__label licita-applied-comparison__label--after">LANDING REDESENHADA</figcaption><button type="button" class="licita-applied-comparison__expand" aria-label="Ampliar vídeo da landing redesenhada" (click)="openVideoPreview('/projects/licita/licita_monitorPortatil.mp4', 'Landing redesenhada')">Ampliar <span class="cta-arrow" aria-hidden="true"></span></button></div><div class="licita-final-comparison__media"><video data-case-viewport-video muted loop playsinline preload="auto" poster="/projects/licita/monitorGrande.png"><source src="/projects/licita/licita_monitorPortatil.mp4" type="video/mp4">O seu browser não suporta vídeo HTML5.</video></div></figure>
         </div>
-        <div class="licita-before-after__dots" role="group" aria-label="Selecionar comparação final">@for (slide of [0, 1]; track slide) {<button type="button" [class.is-active]="beforeAfterSlides.final === slide" [attr.aria-pressed]="beforeAfterSlides.final === slide" [attr.aria-label]="'Mostrar ' + (slide === 0 ? 'antes' : 'depois')" (click)="setBeforeAfterSlide('final', slide)"></button>}</div>
       </div>
     </div>
 

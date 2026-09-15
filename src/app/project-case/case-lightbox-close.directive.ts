@@ -1,4 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
+import { isMobileCasePreview } from './case-preview-mobile';
 import { lockCaseLightboxScroll, unlockCaseLightboxScroll } from './case-lightbox-scroll-lock';
 
 @Directive({
@@ -11,8 +12,15 @@ export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
   @Output() readonly caseLightboxClose = new EventEmitter<void>();
   private returnFocus?: HTMLElement;
   private readonly scrollLockOwner = {};
+  private readonly closeFromAnyMobilePointer = (event: PointerEvent): void => {
+    if (!isMobileCasePreview() || !this.caseLightboxOpen || this.caseLightboxClosing) return;
+    event.preventDefault();
+    this.caseLightboxClose.emit();
+  };
 
-  constructor(private readonly host: ElementRef<HTMLElement>) {}
+  constructor(private readonly host: ElementRef<HTMLElement>) {
+    this.host.nativeElement.addEventListener('pointerdown', this.closeFromAnyMobilePointer, { capture: true });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     const openChange = changes['caseLightboxOpen'];
@@ -20,7 +28,9 @@ export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
     if (openChange.currentValue && !openChange.previousValue) {
       lockCaseLightboxScroll(this.scrollLockOwner);
       this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
-      requestAnimationFrame(() => this.host.nativeElement.querySelector<HTMLButtonElement>('button[class$="__close"]')?.focus());
+      if (!isMobileCasePreview()) {
+        requestAnimationFrame(() => this.host.nativeElement.querySelector<HTMLButtonElement>('button[class$="__close"]')?.focus());
+      }
     } else if (!openChange.currentValue && openChange.previousValue) {
       unlockCaseLightboxScroll(this.scrollLockOwner);
       this.returnFocus?.focus({ preventScroll: true });
@@ -41,6 +51,7 @@ export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.host.nativeElement.removeEventListener('pointerdown', this.closeFromAnyMobilePointer, { capture: true });
     unlockCaseLightboxScroll(this.scrollLockOwner, false);
   }
 }
