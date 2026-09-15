@@ -123,7 +123,7 @@
           <svg class="about-showcase-cv__icon about-resource-link__github" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.63-.2.63-.44v-1.8c-2.57.56-3.11-1.09-3.11-1.09-.42-1.07-1.03-1.35-1.03-1.35-.84-.58.06-.57.06-.57.93.07 1.42.96 1.42.96.83 1.41 2.17 1 2.7.76.08-.6.32-1 .59-1.23-2.05-.23-4.2-1.02-4.2-4.57 0-1.01.36-1.84.95-2.49-.1-.23-.41-1.17.09-2.45 0 0 .78-.25 2.54.95A8.84 8.84 0 0 1 12 7.1c.79 0 1.57.1 2.31.31 1.77-1.2 2.54-.95 2.54-.95.51 1.28.19 2.22.1 2.45.59.65.95 1.48.95 2.49 0 3.56-2.16 4.33-4.22 4.56.33.29.63.85.63 1.72v2.66c0 .24.17.53.64.44A9.25 9.25 0 0 0 12 2.75Z"/></svg>
           <span class="cta-arrow" aria-hidden="true"></span>
         </a>
-        <a class="about-resource-link" href="/cv/Cv_JoanaCastro.pdf" download="Cv_JoanaCastro.pdf" aria-label="Descarregar CV">
+        <a class="about-resource-link" href="/cv/Cv_UiFrontend_JoanaCastro.pdf" download="Cv_UiFrontend_JoanaCastro.pdf" aria-label="Descarregar CV">
         <svg class="about-showcase-cv__icon" viewBox="0 0 20 20" aria-hidden="true">
           <path d="M5.5 2.5h5.8l3.2 3.2v11.8h-9z"/>
           <path d="M11.3 2.5v3.2h3.2M7.5 10h5M7.5 13h4"/>
@@ -594,7 +594,7 @@
       </div>
       <div class="site-footer__actions">
       <a class="site-footer__source" href="https://github.com/joanadecastro/atlyon-digital" target="_blank" rel="noopener noreferrer"><svg class="site-footer__source-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.63-.2.63-.44v-1.8c-2.57.56-3.11-1.09-3.11-1.09-.42-1.07-1.03-1.35-1.03-1.35-.84-.58.06-.57.06-.57.93.07 1.42.96 1.42.96.83 1.41 2.17 1 2.7.76.08-.6.32-1 .59-1.23-2.05-.23-4.2-1.02-4.2-4.57 0-1.01.36-1.84.95-2.49-.1-.23-.41-1.17.09-2.45 0 0 .78-.25 2.54.95A8.84 8.84 0 0 1 12 7.1c.79 0 1.57.1 2.31.31 1.77-1.2 2.54-.95 2.54-.95.51 1.28.19 2.22.1 2.45.59.65.95 1.48.95 2.49 0 3.56-2.16 4.33-4.22 4.56.33.29.63.85.63 1.72v2.66c0 .24.17.53.64.44A9.25 9.25 0 0 0 12 2.75Z" /></svg><span class="site-footer__source-label site-footer__source-label--desktop">VER C&Oacute;DIGO DESTE SITE</span><span class="site-footer__source-label site-footer__source-label--mobile">C&Oacute;DIGO DO SITE</span><span class="cta-arrow" aria-hidden="true"></span></a>
-      <a class="site-footer__cv" href="/cv/Cv_JoanaCastro.pdf" download="Cv_JoanaCastro.pdf">DESCARREGAR CV <span class="cta-arrow" aria-hidden="true"></span></a>
+      <a class="site-footer__cv" href="/cv/Cv_UiFrontend_JoanaCastro.pdf" download="Cv_UiFrontend_JoanaCastro.pdf">DESCARREGAR CV <span class="cta-arrow" aria-hidden="true"></span></a>
       </div>
     </div>
   </div>
@@ -679,7 +679,7 @@
                     [class.project-chat-suggestions--initial]="message.intro">
                     @for (action of message.actions; track action.id) {
                       @if (action.href) {
-                        <a class="project-chat-suggestion" [href]="action.href" [attr.aria-label]="action.href.startsWith('mailto:') ? 'Enviar email' : null" [attr.download]="action.download ? 'Cv_JoanaCastro.pdf' : null" [attr.target]="action.href.startsWith('http') ? '_blank' : null" [attr.rel]="action.href.startsWith('http') ? 'noopener noreferrer' : null">{{ action.label }}@if (action.download) {<span class="cta-arrow" aria-hidden="true"></span>}</a>
+                        <a class="project-chat-suggestion" [href]="action.href" [attr.aria-label]="action.href.startsWith('mailto:') ? 'Enviar email' : null" [attr.download]="action.download ? 'Cv_UiFrontend_JoanaCastro.pdf' : null" [attr.target]="action.href.startsWith('http') ? '_blank' : null" [attr.rel]="action.href.startsWith('http') ? 'noopener noreferrer' : null">{{ action.label }}@if (action.download) {<span class="cta-arrow" aria-hidden="true"></span>}</a>
                       } @else {
                         <button
                           type="button"
