@@ -4365,36 +4365,13 @@
     margin-top: 0 !important;
   }
 
-  .licitanow-page figure.case-hero__screen--rear {
-    height: 100% !important;
-    max-height: 100% !important;
-    align-self: end;
-    transform-origin: left bottom;
+  .licitanow-page figure.licitanow-cover__screen--before {
+    aspect-ratio:3736 / 1742;
   }
-
-  @media (max-width:480px) {
-    .licitanow-page figure.licitanow-cover__screen {
-      width:96% !important;
-      height:auto !important;
-      max-width:96% !important;
-      max-height:none !important;
-      align-self:start;
-    }
-
-    .licitanow-page figure.licitanow-cover__screen--before {
-      aspect-ratio:3736 / 1742;
-      justify-self:start;
-      margin-left:8% !important;
-    }
-    .licitanow-page figure.licitanow-cover__screen--after {
-      aspect-ratio:3736 / 2384;
-      justify-self:start;
-      margin-top:40px !important;
-      margin-left:24% !important;
-      margin-right:0 !important;
-    }
-    .licitanow-cover__screen picture { display:block; width:100%; height:100%; }
+  .licitanow-page figure.licitanow-cover__screen--after {
+    aspect-ratio:3736 / 2384;
   }
+  .licitanow-cover__screen picture { display:block; width:100%; height:100%; }
 
   .licita-responsive-implementation {
     margin-top: 0;
@@ -4521,27 +4498,29 @@
 
   .licitanow-page .case-hero__stage--portrait {
     position:relative !important;
-    // Fit the existing landscape pair inside the height-adaptive hero frame.
-    width:min(100%, calc(100cqh * 1.72)) !important;
+    // Scale from useful width; the existing surface crops short viewports.
+    width:100% !important;
     margin-inline:auto;
   }
 
   .licitanow-page figure.licitanow-cover__screen--before {
     position:absolute !important;
-    inset:auto auto min(clamp(82px,22vw,94px), 31.72cqh) 0 !important;
+    inset:auto auto min(23.8cqw, calc(100cqh - 40.1cqw)) 0 !important;
     justify-self:auto !important;
-    width:min(96%, calc(86% + var(--case-hero-extra-presence, 0px))) !important;
-    max-width:min(96%, calc(86% + var(--case-hero-extra-presence, 0px))) !important;
+    width:86% !important;
+    max-width:86% !important;
+    max-height:none !important;
     height:auto !important;
     margin:0 !important;
   }
 
   .licitanow-page figure.licitanow-cover__screen--after {
     position:absolute !important;
-    inset:auto 0 -32px auto !important;
+    inset:auto 0 min(-8.864cqw, calc(100cqh - 53.6cqw)) auto !important;
     justify-self:auto !important;
-    width:min(94%, calc(84% + var(--case-hero-extra-presence, 0px))) !important;
-    max-width:min(94%, calc(84% + var(--case-hero-extra-presence, 0px))) !important;
+    width:84% !important;
+    max-width:84% !important;
+    max-height:none !important;
     height:auto !important;
     margin:0 !important;
   }

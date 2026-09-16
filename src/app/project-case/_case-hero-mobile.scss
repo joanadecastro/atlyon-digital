@@ -6,7 +6,6 @@
   @media (max-width: 768px) {
     .case-study-page {
       --case-hero-gutter: var(--mobile-gutter, 16px);
-      --case-hero-screen-height: clamp(210px, 32svh, 300px);
       --case-hero-white-band-height: 50px;
       .case-hero {
         position: relative;
@@ -73,8 +72,8 @@
         position: relative !important; inset: auto !important;
         grid-row: 3;
         align-self: end; justify-self: center;
-        width: 100% !important; max-width: 520px;
-        height: var(--case-hero-screen-height) !important; min-height: 0 !important;
+        width: 100% !important; max-width: 100%;
+        height: 100% !important; min-height: 0 !important;
         margin: 0 !important; transform: none !important;
       }
       .case-hero__stage {
@@ -85,17 +84,19 @@
       }
       .case-hero__screen {
         position: relative !important; inset: auto !important; grid-area: 1 / 1;
-        width: auto !important; height: auto !important;
-        max-width: 84% !important; max-height: 86% !important;
+        width: 84% !important; height: auto !important;
+        max-width: 84% !important; max-height: none !important;
         margin: 0 !important; min-height: 0;
         object-fit: contain; object-position: center;
         transform: none !important; animation: none !important;
       }
       .case-hero__screen--rear { align-self: start; justify-self: start; z-index: 1; }
-      .case-hero__screen--front { align-self: end; justify-self: end; z-index: 2; }
+      // On short tracks, retain width/presence and crop below rather than
+      // shrinking the pair or letting the front screen overflow above it.
+      .case-hero__screen--front { align-self: safe end; justify-self: end; z-index: 2; }
       // Portrait landing captures use their asset ratio, with the same overlap/motion.
-      .case-hero__stage--portrait { width: min(100%, calc(var(--case-hero-screen-height) * 1.05)); margin-inline: auto; }
-      figure.case-hero__screen { height: 86% !important; aspect-ratio: var(--case-hero-screen-ratio); }
+      .case-hero__stage--portrait { width: 100%; margin-inline: auto; }
+      figure.case-hero__screen { height: auto !important; aspect-ratio: var(--case-hero-screen-ratio); }
       .case-hero__screen img {
         position: static !important; display: block;
         width: 100% !important; height: 100% !important;
@@ -116,10 +117,9 @@
       }
     }
 
-    // Reserve the white band first; only the media track may shrink on short
-    // viewports. Copy retains its intrinsic height and the approved gaps.
+    // Reserve the white band first. The media track can shorten, but screen
+    // scale stays width-based: short viewports crop rather than shrink assets.
     .civitas-page {
-      --case-hero-screen-height: 272.64px;
       --case-hero-content-media-gap: 67.42px;
 
       .case-hero__inner {
@@ -128,30 +128,22 @@
         box-sizing: border-box;
         grid-template-rows: auto minmax(0, 1fr);
         row-gap: var(--case-hero-content-media-gap) !important;
+        container-type: inline-size;
       }
 
       .case-hero__screens {
         grid-row: 2;
         align-self: end;
         height: 100% !important;
-        max-height: var(--case-hero-screen-height) !important;
+        // Composition depth follows useful width, not a reference phone's
+        // height. cqw resolves against the inner content box above.
+        max-height: 75.5cqw !important;
         container-type: size;
         margin: 0 !important;
       }
 
       .case-hero__stage--portrait {
-        width: min(100%, calc(100cqh * 1.05));
-      }
-    }
-
-    .civitas-page:not(.juh-page) {
-      // Keep the approved 852px composition on shorter viewports. Allocate
-      // additional usable height to media instead of enlarging the empty gap.
-      --case-hero-extra-presence: max(0px, calc(100svh - 852px));
-      --case-hero-screen-height: calc(272.64px + var(--case-hero-extra-presence));
-
-      &:not(.licitanow-page) .case-hero__screen {
-        max-width: min(94%, calc(84% + var(--case-hero-extra-presence))) !important;
+        width: 100%;
       }
     }
 
