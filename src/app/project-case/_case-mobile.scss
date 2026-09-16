@@ -324,6 +324,11 @@
     @include case-hero-mobile.layout;
   }
   @media (max-width: 768px) {
+    // Structural breathing room after the approved hero, not inside its band.
+    .case-study-page.civitas-page > .case-hero {
+      margin-bottom: 16px !important;
+    }
+
     .case-study-page .case-hero__copy {
       h1 {
         font-size: var(--mobile-title) !important;

@@ -54,16 +54,22 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   const actions = new Map<HTMLElement, () => void>();
   const triggerByMedia = new Map<HTMLElement, HTMLButtonElement>();
   const videoTapAreas = new Map<HTMLVideoElement, { button: HTMLButtonElement; parent: HTMLElement; position: string }>();
+  const videoTapActions = new Map<HTMLElement, () => void>();
+  let handledVideoTap: HTMLElement | undefined;
   let gesture: { x: number; y: number; moved: boolean } | undefined;
   const startGesture = (event: PointerEvent): void => {
-    gesture = mobile.matches && event.target instanceof Element && !!event.target.closest('.case-expandable-media')
+    handledVideoTap = undefined;
+    gesture = mobile.matches && event.target instanceof Element &&
+      (!!event.target.closest('.case-expandable-media') ||
+        videoTapActions.has(event.target.closest<HTMLElement>('button')!))
       ? { x: event.clientX, y: event.clientY, moved: false } : undefined;
   };
   const trackGesture = (event: PointerEvent): void => {
     if (gesture && Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 10) gesture.moved = true;
   };
   const filterSwipeClick = (event: MouseEvent): void => {
-    if (mobile.matches && gesture?.moved && event.detail !== 0) {
+    if (mobile.matches && event.detail !== 0 && (gesture?.moved ||
+      (event.target instanceof Node && handledVideoTap?.contains(event.target)))) {
       event.preventDefault();
       event.stopImmediatePropagation();
     }
@@ -106,6 +112,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
         parent.style.position = position;
       });
       videoTapAreas.clear();
+      videoTapActions.clear();
     }
     for (const [wrapper] of actions) {
       const trigger = triggerByMedia.get(wrapper);
@@ -129,6 +136,8 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
     if (mobile.matches && host.matches('app-licitanow-case,app-juh-case')) {
       for (const [wrapper, action] of actions) {
         const video = wrapper instanceof HTMLVideoElement ? wrapper : wrapper.querySelector<HTMLVideoElement>('video');
+        const trigger = triggerByMedia.get(wrapper);
+        if (video && trigger) videoTapActions.set(trigger, action);
         if (!video || video.closest('[hidden]') || videoTapAreas.has(video) || !wrapper.classList.contains('case-expandable-media')) continue;
         const parent = video.parentElement;
         if (!parent) continue;
@@ -140,10 +149,22 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
         button.setAttribute('aria-label', wrapper.getAttribute('aria-label') || 'Ampliar vídeo');
         button.style.cssText = 'position:absolute;inset:0;z-index:19;display:block;width:100%;height:100%;padding:0;margin:0;border:0;background:transparent;touch-action:pan-x pan-y';
         button.addEventListener('click', action);
+        videoTapActions.set(button, action);
         parent.append(button);
         videoTapAreas.set(video, { button, parent, position });
       }
     }
+  };
+
+  const endVideoTap = (event: PointerEvent): void => {
+    trackGesture(event);
+    if (!mobile.matches || event.pointerType === 'mouse' || !event.isPrimary ||
+      !gesture || gesture.moved || !(event.target instanceof Element)) return;
+    const target = event.target.closest<HTMLElement>('.case-video-tap-area,.licita-applied-comparison__expand,.licita-challenge__mobile-expand,.juh-challenge-video__mobile-expand');
+    const action = target ? videoTapActions.get(target) : undefined;
+    if (!target || !action) return;
+    handledVideoTap = target;
+    action();
   };
 
   const activate = (event: Event): void => {
@@ -162,7 +183,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   sync();
   host.addEventListener('pointerdown', startGesture, true);
   host.addEventListener('pointermove', trackGesture, true);
-  host.addEventListener('pointerup', trackGesture, true);
+  host.addEventListener('pointerup', endVideoTap, true);
   host.addEventListener('pointercancel', trackGesture, true);
   host.addEventListener('click', filterSwipeClick, true);
   host.addEventListener('click', activate);
@@ -176,7 +197,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
     videoTapAreas.clear();
     host.removeEventListener('pointerdown', startGesture, true);
     host.removeEventListener('pointermove', trackGesture, true);
-    host.removeEventListener('pointerup', trackGesture, true);
+    host.removeEventListener('pointerup', endVideoTap, true);
     host.removeEventListener('pointercancel', trackGesture, true);
     host.removeEventListener('click', filterSwipeClick, true);
     host.removeEventListener('click', activate);

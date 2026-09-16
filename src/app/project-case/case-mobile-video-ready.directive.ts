@@ -6,12 +6,20 @@ export class CaseMobileVideoReadyDirective implements AfterViewInit, OnDestroy {
   @Output() readonly caseMobileVideoReady = new EventEmitter<void>();
   private readonly video = inject<ElementRef<HTMLVideoElement>>(ElementRef).nativeElement;
   private panel?: HTMLElement;
+  private overlay?: HTMLElement;
+  private previousTransition = '';
   private revealFrame?: number;
   private revealed = false;
 
   ngAfterViewInit(): void {
     if (!matchMedia('(max-width: 768px)').matches) return;
     this.panel = this.video.closest<HTMLElement>('.licita-video-preview__panel') ?? undefined;
+    this.overlay = this.panel?.closest<HTMLElement>('.licita-video-preview') ?? undefined;
+    if (this.overlay) {
+      this.previousTransition = this.overlay.style.transition;
+      // The decoded frame is the opening gate; do not add a 300ms fade after it.
+      this.overlay.style.transition = 'none';
+    }
     this.panel?.style.setProperty('visibility', 'hidden');
     this.prepareGeometry();
   }
@@ -39,5 +47,6 @@ export class CaseMobileVideoReadyDirective implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.revealFrame !== undefined) cancelAnimationFrame(this.revealFrame);
+    if (this.overlay) this.overlay.style.transition = this.previousTransition;
   }
 }

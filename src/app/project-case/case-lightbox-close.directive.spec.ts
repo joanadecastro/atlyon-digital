@@ -11,6 +11,35 @@ describe('Case lightbox close behavior', () => {
     vi.restoreAllMocks();
   });
 
+  it('makes a closing mobile dialog inert and consumes only the closing tap click', () => {
+    vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true } as MediaQueryList);
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+    const host = document.createElement('div');
+    const preview = document.createElement('button');
+    document.body.append(host, preview);
+    const activate = vi.fn();
+    preview.addEventListener('click', activate);
+    const directive = new CaseLightboxCloseDirective(new ElementRef(host));
+    directive.caseLightboxOpen = true;
+    directive.ngOnChanges({ caseLightboxOpen: new SimpleChange(false, true, true) });
+    expect(host.inert).toBe(false);
+    directive.caseLightboxClose.subscribe(() => {
+      directive.caseLightboxOpen = false;
+      directive.caseLightboxClosing = true;
+      directive.ngOnChanges({ caseLightboxOpen: new SimpleChange(true, false, false) });
+    });
+    host.dispatchEvent(new Event('pointerdown', { bubbles: true, cancelable: true }));
+    expect(host.inert).toBe(true);
+    preview.dispatchEvent(new MouseEvent('click', { detail: 1, bubbles: true, cancelable: true }));
+    expect(activate).not.toHaveBeenCalled();
+    preview.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+    preview.dispatchEvent(new MouseEvent('click', { detail: 1, bubbles: true }));
+    expect(activate).toHaveBeenCalledTimes(1);
+    directive.ngOnDestroy();
+    host.remove();
+    preview.remove();
+  });
+
   it('closes from backdrop and Escape but not from media content', () => {
     const host = document.createElement('div');
     const directive = new CaseLightboxCloseDirective(new ElementRef(host));

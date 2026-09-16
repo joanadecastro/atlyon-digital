@@ -109,6 +109,7 @@ export class App implements AfterViewInit, OnDestroy {
   private aboutMetricsGeneration = 0;
   private aboutMetricsCompleted = false;
   private mobileAboutMetricsObserver?: IntersectionObserver;
+  private observedMobileAboutMetrics?: HTMLElement;
   private projectChatMessageId = 1;
   projectChatMessages: ProjectChatMessage[] = [
     {
@@ -451,6 +452,7 @@ export class App implements AfterViewInit, OnDestroy {
   private updateAboutPhase(): void {
     const section = document.getElementById('sobre');
     if (!section) return;
+    if (window.innerWidth <= 768) this.initMobileAboutMetricsObserver();
     const metricsPhase = 7;
 
     const rect = section.getBoundingClientRect();
@@ -1006,13 +1008,29 @@ export class App implements AfterViewInit, OnDestroy {
     const section = document.getElementById('sobre');
     const metrics = section?.querySelector<HTMLElement>('.about-editorial-metrics');
     if (!section || !metrics) return;
+    if (metrics === this.observedMobileAboutMetrics) return;
+    this.mobileAboutMetricsObserver?.disconnect();
+    this.observedMobileAboutMetrics = metrics;
+    this.stopAboutMetrics();
+    this.aboutMetricsCompleted = false;
 
     this.mobileAboutMetricsObserver = new IntersectionObserver(([entry]) => {
-      if (window.innerWidth > 768 || !entry.isIntersecting || entry.intersectionRatio < 0.5) return;
+      if (window.innerWidth > 768 || !metrics.isConnected || !entry.isIntersecting || entry.intersectionRatio < 0.25) return;
+      // Safari may deliver a queued intersection from before the layered layout
+      // changed. Confirm the current metrics box against the useful viewport.
+      const rect = metrics.getBoundingClientRect();
+      const viewport = window.visualViewport;
+      const viewportTop = viewport?.offsetTop ?? 0;
+      const viewportBottom = viewportTop + Math.min(window.innerHeight, viewport?.height ?? window.innerHeight);
+      const visibleHeight = Math.min(rect.bottom, viewportBottom) - Math.max(rect.top, viewportTop);
+      if (rect.height <= 0 || visibleHeight < rect.height * 0.25) return;
       this.startAboutMetrics(section);
       this.mobileAboutMetricsObserver?.disconnect();
-    }, { threshold: 0.5, rootMargin: '0px 0px -8% 0px' });
-    this.mobileAboutMetricsObserver.observe(metrics);
+    }, { threshold: 0.25, rootMargin: '0px' });
+    const observer = this.mobileAboutMetricsObserver;
+    requestAnimationFrame(() => {
+      if (metrics.isConnected && this.observedMobileAboutMetrics === metrics) observer.observe(metrics);
+    });
   }
 
   toggleDesktopMenu() {

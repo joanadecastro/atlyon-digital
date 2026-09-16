@@ -12,9 +12,24 @@ export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
   @Output() readonly caseLightboxClose = new EventEmitter<void>();
   private returnFocus?: HTMLElement;
   private readonly scrollLockOwner = {};
+  private readonly clearClosingTapClick = (): void => {
+    document.removeEventListener('click', this.consumeClosingTapClick, true);
+    document.removeEventListener('pointerdown', this.clearClosingTapClick, true);
+  };
+  private readonly consumeClosingTapClick = (event: MouseEvent): void => {
+    if (event.detail === 0) return;
+    this.clearClosingTapClick();
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  };
   private readonly closeFromAnyMobilePointer = (event: PointerEvent): void => {
     if (!isMobileCasePreview() || !this.caseLightboxOpen || this.caseLightboxClosing) return;
     event.preventDefault();
+    // Closing removes the dialog from hit testing. Consume this gesture's
+    // compatibility click so it cannot activate the preview underneath.
+    this.clearClosingTapClick();
+    document.addEventListener('click', this.consumeClosingTapClick, true);
+    document.addEventListener('pointerdown', this.clearClosingTapClick, { capture: true, once: true });
     this.caseLightboxClose.emit();
   };
 
@@ -23,6 +38,9 @@ export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    // A closed mobile dialog must leave hit testing immediately, even while
+    // its existing visual teardown animation is still running.
+    this.host.nativeElement.inert = isMobileCasePreview() && !this.caseLightboxOpen;
     const openChange = changes['caseLightboxOpen'];
     if (!openChange) return;
     if (openChange.currentValue && !openChange.previousValue) {
@@ -51,6 +69,7 @@ export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.clearClosingTapClick();
     this.host.nativeElement.removeEventListener('pointerdown', this.closeFromAnyMobilePointer, { capture: true });
     unlockCaseLightboxScroll(this.scrollLockOwner, false);
   }

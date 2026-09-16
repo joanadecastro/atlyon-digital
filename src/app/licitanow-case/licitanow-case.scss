@@ -5024,8 +5024,15 @@
 
   .licitanow-page .licitanow-story-panel .licita-responsive-implementation__screens {
     @include case-mobile.compact-preview-carousel;
-    width:80%;
-    max-width:80%;
+    width:100%;
+    max-width:100%;
+
+    // Preserve the approved media size: 88% of the previous 80% rail.
+    > figure {
+      flex-basis:70.4%;
+      width:70.4%!important;
+      max-width:70.4%!important;
+    }
   }
 
   .licitanow-page .licitanow-story-panel .licita-responsive-implementation__dots {
@@ -5175,6 +5182,14 @@
     touch-action:pan-x pan-y;
     overscroll-behavior-y:contain;
     -webkit-overflow-scrolling:touch;
+  }
+
+  .licitanow-page .licita-implementation__blocks .licita-implementation__code:has(> .case-code-vertical-scroll-indicator) pre {
+    scrollbar-width:none;
+  }
+
+  .licitanow-page .licita-implementation__blocks .licita-implementation__code:has(> .case-code-vertical-scroll-indicator) pre::-webkit-scrollbar {
+    display:none;
   }
 
   .licitanow-page .licitanow-story-panel .licita-hero-decisions-carousel__viewport {
