@@ -8264,7 +8264,17 @@
     box-sizing:border-box;
     flex:0 0 auto;
     max-width:100%;
-    white-space:nowrap!important;
+    white-space:normal!important;
+    overflow-wrap:break-word;
+  }
+}
+
+// Normal-page screenshots must follow their image height, not the older
+// 210px structure-screen-main preview frame. Keep lightbox templates untouched.
+@media (max-width:768px) {
+  .civitas-page:not(.licitanow-page) > .civitas-story-panel .story-interface-overview
+    :is(.overview-hotspot-visual__screen,.overview-variant__screen).structure-screen-main {
+    height:auto;
   }
 }
 

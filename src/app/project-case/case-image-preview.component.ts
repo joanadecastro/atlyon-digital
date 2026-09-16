@@ -142,7 +142,12 @@ export class CaseImagePreviewComponent implements OnDestroy {
   private cleanupTimer?: number;
   private returnFocus?: HTMLElement;
   private previewCycle = 0;
+  private preparedMobileImage = false;
   constructor(private readonly host: ElementRef<HTMLElement>, private readonly cdr: ChangeDetectorRef) {}
+
+  openPreparedImage(image: HTMLImageElement, verticalLanding: boolean): void {
+    this.open(image.currentSrc || image.src, image.alt, verticalLanding, [], null, '', false, image);
+  }
 
   open(
     src: string,
@@ -152,6 +157,7 @@ export class CaseImagePreviewComponent implements OnDestroy {
     compositionTemplate: TemplateRef<unknown> | null = null,
     compositionClass = '',
     trimMobileRightEdge = false,
+    preparedImage?: HTMLImageElement,
   ): void {
     const cycle = ++this.previewCycle;
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
@@ -166,8 +172,19 @@ export class CaseImagePreviewComponent implements OnDestroy {
     this.compositionClass = compositionClass;
     this.trimMobileRightEdge = trimMobileRightEdge;
     this.isImageEntered = false;
+    this.preparedMobileImage = isMobileCasePreview() && !!preparedImage?.complete &&
+      preparedImage.naturalWidth > 0 && preparedImage.naturalHeight > 0;
     this.returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : undefined;
     this.cdr.detectChanges();
+    // The visible preview already owns the asset and dimensions. Reveal on the
+    // mounted image's load, without racing two independent opening RAF chains.
+    const mountedImage = this.host.nativeElement.querySelector<HTMLImageElement>('.case-image-preview__composition img');
+    const loadedImage = mountedImage?.complete && mountedImage.naturalWidth > 0 && mountedImage.naturalHeight > 0 &&
+      mountedImage.src === new URL(src, document.baseURI).href ? mountedImage : undefined;
+    if (this.preparedMobileImage) {
+      if (loadedImage) this.enterLoadedImage(loadedImage);
+      return;
+    }
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (cycle !== this.previewCycle) return;
       this.isOpen = true;
@@ -176,9 +193,13 @@ export class CaseImagePreviewComponent implements OnDestroy {
         this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
       }
     }));
+    // Reopening during the closing fade retains the same loaded <img>.
+    // Its src does not change, so no new load event will restart the reveal.
+    if (loadedImage) this.enterLoadedImage(loadedImage);
   }
 
   openCode(label: string, code: string): void {
+    this.preparedMobileImage = false;
     const cycle = ++this.previewCycle;
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
     this.isClosing = false;
@@ -220,9 +241,19 @@ export class CaseImagePreviewComponent implements OnDestroy {
   }
 
   onImageLoad(event: Event): void {
+    if (this.isClosing || !this.src) return;
+    this.enterLoadedImage(event.currentTarget as HTMLImageElement);
+  }
+
+  private enterLoadedImage(image: HTMLImageElement): void {
     const cycle = this.previewCycle;
-    const image = event.currentTarget as HTMLImageElement;
     this.isLandscape = !this.isVerticalLanding && image.naturalWidth > image.naturalHeight;
+    if (this.preparedMobileImage) {
+      this.isOpen = true;
+      this.isImageEntered = true;
+      this.cdr.detectChanges();
+      return;
+    }
     this.isImageEntered = false;
     this.cdr.detectChanges();
     requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -267,5 +298,5 @@ export class CaseImagePreviewComponent implements OnDestroy {
       this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
     }
   }
-  ngOnDestroy(): void { if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); }
+  ngOnDestroy(): void { ++this.previewCycle; if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); }
 }

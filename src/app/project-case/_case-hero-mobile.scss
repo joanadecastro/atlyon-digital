@@ -144,6 +144,17 @@
       }
     }
 
+    .civitas-page:not(.juh-page) {
+      // Keep the approved 852px composition on shorter viewports. Allocate
+      // additional usable height to media instead of enlarging the empty gap.
+      --case-hero-extra-presence: max(0px, calc(100svh - 852px));
+      --case-hero-screen-height: calc(272.64px + var(--case-hero-extra-presence));
+
+      &:not(.licitanow-page) .case-hero__screen {
+        max-width: min(94%, calc(84% + var(--case-hero-extra-presence))) !important;
+      }
+    }
+
     .civitas-page.juh-page {
       --case-hero-content-media-gap: 49.61px;
     }

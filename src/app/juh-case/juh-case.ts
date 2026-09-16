@@ -10,11 +10,12 @@ import { CASE_STUDY_NEXT } from '../case-study-navigation';
 import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case-viewport-video';
 import { CaseLightboxCloseDirective } from '../project-case/case-lightbox-close.directive';
 import { CaseMobileVideoReadyDirective } from '../project-case/case-mobile-video-ready.directive';
+import { CaseMobileVideoReuseDirective, findCasePreviewVideo } from '../project-case/case-mobile-video-reuse.directive';
 
 @Component({
   selector: 'app-juh-case',
   standalone: true,
-  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective, CaseMobileVideoReadyDirective],
+  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective, CaseMobileVideoReadyDirective, CaseMobileVideoReuseDirective],
   templateUrl: './juh-case.html',
   styleUrl: './juh-case.scss',
 })
@@ -40,6 +41,8 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   videoPreviewLabel = '';
   videoPreviewOpen = false;
   videoPreviewClosing = false;
+  mobileVideoElement: HTMLVideoElement | null = null;
+  @ViewChild(CaseMobileVideoReuseDirective) private reusedVideo?: CaseMobileVideoReuseDirective;
   private videoPreviewUsesCheckoutClip = false;
   private videoPreviewCloseTimer?: number;
   private mobileGalleryPointerStart: { x: number; y: number; slide: number } | null = null;
@@ -94,8 +97,18 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.mobileGalleryPointerStart = null;
   }
 
-  openVideoPreview(src: string, label: string): void {
+  openVideoPreview(src: string, label: string, event?: Event): void {
     if (this.videoPreviewClosing) return;
+    const original = isMobileCasePreview() ? findCasePreviewVideo(this.element.nativeElement, src, event) : undefined;
+    if (original) {
+      this.videoPreviewUsesCheckoutClip = false;
+      this.mobileVideoElement = original;
+      this.videoPreviewSrc = src;
+      this.videoPreviewLabel = this.language.translate(label);
+      this.videoPreviewOpen = original.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !!original.videoWidth && !original.seeking;
+      this.videoPreviewCdr.detectChanges();
+      return;
+    }
     this.videoPreviewUsesCheckoutClip = false;
     this.videoPreviewSrc = src;
     this.videoPreviewLabel = this.language.translate(label);
@@ -104,8 +117,18 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.autoplayVideoPreview();
   }
 
-  openCheckoutVideoPreview(): void {
+  openCheckoutVideoPreview(event?: Event): void {
     if (this.videoPreviewClosing) return;
+    const original = isMobileCasePreview() ? findCasePreviewVideo(this.element.nativeElement, '/projects/juh/video_juhecommerce.mp4', event) : undefined;
+    if (original) {
+      this.videoPreviewUsesCheckoutClip = true;
+      this.mobileVideoElement = original;
+      this.videoPreviewSrc = '/projects/juh/video_juhecommerce.mp4';
+      this.videoPreviewLabel = this.language.translate('Micro-demo de checkout e validação do JUH');
+      this.videoPreviewOpen = original.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !!original.videoWidth && !original.seeking;
+      this.videoPreviewCdr.detectChanges();
+      return;
+    }
     this.videoPreviewUsesCheckoutClip = true;
     this.videoPreviewSrc = '/projects/juh/video_juhecommerce.mp4';
     this.videoPreviewLabel = this.language.translate('Micro-demo de checkout e validação do JUH');
@@ -115,7 +138,10 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   revealMobileVideoPreview(): void {
-    if (isMobileCasePreview() && this.videoPreviewSrc && !this.videoPreviewClosing) this.videoPreviewOpen = true;
+    if (isMobileCasePreview() && this.videoPreviewSrc && !this.videoPreviewClosing && !this.videoPreviewOpen) {
+      this.videoPreviewOpen = true;
+      this.videoPreviewCdr.detectChanges();
+    }
   }
 
   private autoplayVideoPreview(): void {
@@ -141,10 +167,12 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.videoPreviewClosing = true;
+    this.reusedVideo?.restore();
     this.videoPreviewOpen = false;
     if (this.videoPreviewCloseTimer !== undefined) window.clearTimeout(this.videoPreviewCloseTimer);
     this.videoPreviewCloseTimer = window.setTimeout(() => {
       this.videoPreviewSrc = null;
+      this.mobileVideoElement = null;
       this.videoPreviewLabel = '';
       this.videoPreviewUsesCheckoutClip = false;
       this.videoPreviewClosing = false;

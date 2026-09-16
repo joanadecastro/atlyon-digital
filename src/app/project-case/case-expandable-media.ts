@@ -160,6 +160,17 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
     trackGesture(event);
     if (!mobile.matches || event.pointerType === 'mouse' || !event.isPrimary ||
       !gesture || gesture.moved || !(event.target instanceof Element)) return;
+    // The full landing comparison is not a carousel: acknowledge its valid
+    // touch release directly, then consume only the compatibility click.
+    const comparison = host.matches('app-licitanow-case')
+      ? event.target.closest<HTMLElement>('.licita-global-view__column') : null;
+    const comparisonMedia = comparison?.querySelector<HTMLElement>('.licita-applied-comparison__media');
+    const comparisonAction = comparisonMedia ? actions.get(comparisonMedia) : undefined;
+    if (comparison && comparisonAction) {
+      handledVideoTap = comparison;
+      comparisonAction();
+      return;
+    }
     const target = event.target.closest<HTMLElement>('.case-video-tap-area,.licita-applied-comparison__expand,.licita-challenge__mobile-expand,.juh-challenge-video__mobile-expand');
     const action = target ? videoTapActions.get(target) : undefined;
     if (!target || !action) return;

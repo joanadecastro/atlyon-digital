@@ -15089,7 +15089,7 @@ body {
     width:100%!important;
     max-width:none!important;
     height:auto!important;
-    max-height:82dvh!important;
+    max-height:calc(100dvh - 16px)!important;
     margin:0!important;
     border-radius:18px 18px 0 0!important;
     opacity:0!important;

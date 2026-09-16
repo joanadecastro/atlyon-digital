@@ -9,13 +9,14 @@ import { CASE_STUDY_NEXT } from '../case-study-navigation';
 import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case-viewport-video';
 import { CaseLightboxCloseDirective } from '../project-case/case-lightbox-close.directive';
 import { CaseMobileVideoReadyDirective } from '../project-case/case-mobile-video-ready.directive';
+import { CaseMobileVideoReuseDirective, findCasePreviewVideo } from '../project-case/case-mobile-video-reuse.directive';
 
 type DecisionCarousel = 'hero' | 'process' | 'principles' | 'about' | 'references' | 'composition' | 'illustration' | 'palette';
 
 @Component({
   selector: 'app-licitanow-case',
   standalone: true,
-  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective, CaseMobileVideoReadyDirective],
+  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective, CaseMobileVideoReadyDirective, CaseMobileVideoReuseDirective],
   hostDirectives: [TranslateDirective],
   templateUrl: './licitanow-case.html',
   styleUrl: './licitanow-case.scss',
@@ -41,6 +42,8 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   videoPreviewLabel = '';
   videoPreviewOpen = false;
   videoPreviewClosing = false;
+  mobileVideoElement: HTMLVideoElement | null = null;
+  @ViewChild(CaseMobileVideoReuseDirective) private reusedVideo?: CaseMobileVideoReuseDirective;
   @ViewChild(CaseImagePreviewComponent) private imagePreview?: CaseImagePreviewComponent;
   @ViewChild('nextProjectNav', { read: ElementRef }) private nextProjectNavRef?: ElementRef<HTMLElement>;
 
@@ -261,6 +264,10 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     const image = trigger?.closest('figure')?.querySelector<HTMLImageElement>('.licita-applied-comparison__media img');
     if (!trigger || !image) return;
 
+    if (isMobileCasePreview() && image.classList.contains('licita-global-view__image')) {
+      this.imagePreview?.openPreparedImage(image, true);
+      return;
+    }
     this.imagePreview?.open(image.currentSrc || image.src, image.alt, image.classList.contains('licita-global-view__image'));
   }
 
@@ -279,8 +286,17 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     if (event.target === event.currentTarget) this.closeComparisonPreview();
   }
 
-  openVideoPreview(src: string, label: string): void {
+  openVideoPreview(src: string, label: string, event?: Event): void {
     if (this.videoPreviewClosing) return;
+    const original = isMobileCasePreview() ? findCasePreviewVideo(this.host.nativeElement, src, event) : undefined;
+    if (original) {
+      this.mobileVideoElement = original;
+      this.videoPreviewSrc = src;
+      this.videoPreviewLabel = label;
+      this.videoPreviewOpen = original.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA && !!original.videoWidth && !original.seeking;
+      this.videoPreviewCdr.detectChanges();
+      return;
+    }
     this.videoPreviewSrc = src;
     this.videoPreviewLabel = label;
     this.videoPreviewOpen = !isMobileCasePreview();
@@ -297,7 +313,10 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   revealMobileVideoPreview(): void {
-    if (isMobileCasePreview() && this.videoPreviewSrc && !this.videoPreviewClosing) this.videoPreviewOpen = true;
+    if (isMobileCasePreview() && this.videoPreviewSrc && !this.videoPreviewClosing && !this.videoPreviewOpen) {
+      this.videoPreviewOpen = true;
+      this.videoPreviewCdr.detectChanges();
+    }
   }
 
   closeVideoPreview(): void {
@@ -309,10 +328,12 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
       return;
     }
     this.videoPreviewClosing = true;
+    this.reusedVideo?.restore();
     this.videoPreviewOpen = false;
     if (this.videoPreviewCloseTimer !== undefined) window.clearTimeout(this.videoPreviewCloseTimer);
     this.videoPreviewCloseTimer = window.setTimeout(() => {
       this.videoPreviewSrc = null;
+      this.mobileVideoElement = null;
       this.videoPreviewLabel = '';
       this.videoPreviewClosing = false;
       this.videoPreviewCdr.markForCheck();

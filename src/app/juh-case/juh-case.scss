@@ -1302,6 +1302,11 @@
   .juh-page .juh-mobile-gallery {
     @include case-mobile.compact-preview-carousel;
     @include case-mobile.gutter-free-preview-carousel(0.88, 0.84);
+
+    > figure:first-child {
+      margin-inline-start:16px!important;
+      scroll-margin-inline-start:16px;
+    }
   }
 
   .juh-page .juh-mobile-gallery__dots {
