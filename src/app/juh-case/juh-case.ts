@@ -9,11 +9,12 @@ import { LanguageService } from '../i18n/language.service';
 import { CASE_STUDY_NEXT } from '../case-study-navigation';
 import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case-viewport-video';
 import { CaseLightboxCloseDirective } from '../project-case/case-lightbox-close.directive';
+import { CaseMobileVideoReadyDirective } from '../project-case/case-mobile-video-ready.directive';
 
 @Component({
   selector: 'app-juh-case',
   standalone: true,
-  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective],
+  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective, CaseMobileVideoReadyDirective],
   templateUrl: './juh-case.html',
   styleUrl: './juh-case.scss',
 })
@@ -29,6 +30,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   private observer?: IntersectionObserver;
   private resultsObserver?: IntersectionObserver;
   private codeOverflowObserver?: ResizeObserver;
+  private cleanupCodeScrollIndicators?: () => void;
   private resultsCounterRafId?: number;
   private unbindExpandableMedia?: () => void;
   private unbindExpandableCode?: () => void;
@@ -112,7 +114,9 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
   private autoplayVideoPreview(): void {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     requestAnimationFrame(() => {
-      const previewVideo = this.element.nativeElement.querySelector<HTMLVideoElement>('.juh-video-preview video');
+      const previewVideo = this.element.nativeElement.querySelector<HTMLVideoElement>(
+        isMobileCasePreview() ? '.licita-video-preview video' : '.juh-video-preview video',
+      );
       if (previewVideo) {
         configureCaseVideo(previewVideo, true);
         void previewVideo.play().catch(() => undefined);
@@ -236,6 +240,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.observer?.disconnect();
     this.resultsObserver?.disconnect();
     this.codeOverflowObserver?.disconnect();
+    this.cleanupCodeScrollIndicators?.();
     if (this.resultsCounterRafId !== undefined) cancelAnimationFrame(this.resultsCounterRafId);
   }
 
@@ -257,15 +262,60 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
 
   private initCodeOverflowDetection(): void {
     const snippets = Array.from(this.element.nativeElement.querySelectorAll<HTMLElement>('.juh-code pre'));
+    const mobile = matchMedia('(max-width: 768px)');
+    const indicators = new Map<HTMLElement, HTMLElement>();
     const update = (snippet: HTMLElement): void => {
-      snippet.classList.toggle('has-horizontal-code-overflow', snippet.scrollWidth > snippet.clientWidth + 1);
+      const overflow = snippet.scrollWidth > snippet.clientWidth + 1;
+      snippet.classList.toggle('has-horizontal-code-overflow', overflow);
+      if (!mobile.matches || !overflow) {
+        indicators.get(snippet)?.remove();
+        indicators.delete(snippet);
+        return;
+      }
+      let indicator = indicators.get(snippet);
+      if (!indicator) {
+        indicator = document.createElement('span');
+        indicator.className = 'juh-code-scroll-indicator';
+        indicator.setAttribute('aria-hidden', 'true');
+        indicator.appendChild(document.createElement('span'));
+        snippet.parentElement?.appendChild(indicator);
+        indicators.set(snippet, indicator);
+      }
+      const trackWidth = Math.max(0, snippet.clientWidth - 16);
+      const thumbWidth = trackWidth * snippet.clientWidth / snippet.scrollWidth;
+      const progress = Math.max(0, Math.min(1, snippet.scrollLeft / (snippet.scrollWidth - snippet.clientWidth)));
+      indicator.style.left = `${snippet.offsetLeft + 8}px`;
+      indicator.style.top = `${snippet.offsetTop + snippet.clientHeight - 6}px`;
+      indicator.style.width = `${trackWidth}px`;
+      const thumb = indicator.firstElementChild as HTMLElement;
+      thumb.style.width = `${thumbWidth}px`;
+      thumb.style.transform = `translateX(${(trackWidth - thumbWidth) * progress}px)`;
+    };
+    const listeners = snippets.map(snippet => {
+      const onScroll = () => update(snippet);
+      snippet.addEventListener('scroll', onScroll, { passive: true });
+      return () => snippet.removeEventListener('scroll', onScroll);
+    });
+    const sync = () => snippets.forEach(update);
+    mobile.addEventListener('change', sync);
+    this.cleanupCodeScrollIndicators = () => {
+      mobile.removeEventListener('change', sync);
+      listeners.forEach(cleanup => cleanup());
+      indicators.forEach(indicator => indicator.remove());
     };
     snippets.forEach(update);
     if (typeof ResizeObserver === 'undefined') return;
     this.codeOverflowObserver = new ResizeObserver((entries) => {
-      entries.forEach((entry) => update(entry.target as HTMLElement));
+      entries.forEach((entry) => {
+        const snippet = entry.target.matches('pre') ? entry.target : entry.target.closest('pre');
+        if (snippet instanceof HTMLElement) update(snippet);
+      });
     });
-    snippets.forEach((snippet) => this.codeOverflowObserver?.observe(snippet));
+    snippets.forEach((snippet) => {
+      this.codeOverflowObserver?.observe(snippet);
+      const code = snippet.querySelector('code');
+      if (code) this.codeOverflowObserver?.observe(code);
+    });
   }
 
   private animateResultsCounters(results: HTMLElement): void {

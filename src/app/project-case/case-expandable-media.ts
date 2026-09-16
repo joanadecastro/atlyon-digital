@@ -53,6 +53,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   const mobile = matchMedia('(max-width: 768px)');
   const actions = new Map<HTMLElement, () => void>();
   const triggerByMedia = new Map<HTMLElement, HTMLButtonElement>();
+  const videoTapAreas = new Map<HTMLVideoElement, { button: HTMLButtonElement; parent: HTMLElement; position: string }>();
   let gesture: { x: number; y: number; moved: boolean } | undefined;
   const startGesture = (event: PointerEvent): void => {
     gesture = mobile.matches && event.target instanceof Element && !!event.target.closest('.case-expandable-media')
@@ -76,6 +77,17 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
     actions.set(media, () => trigger.click());
   }
 
+  if (mobile.matches && host.matches('app-licitanow-case,app-juh-case')) {
+    for (const trigger of host.querySelectorAll<HTMLButtonElement>('.licita-challenge__mobile-expand,.juh-challenge-video__mobile-expand')) {
+      const media = trigger.parentElement?.querySelector<HTMLVideoElement>('video');
+      if (!media) continue;
+      const wrapper = wrapperFor(media);
+      if (!wrapper) continue;
+      triggerByMedia.set(wrapper, trigger);
+      actions.set(wrapper, () => trigger.click());
+    }
+  }
+
   for (const media of host.querySelectorAll<HTMLImageElement | HTMLVideoElement>(EDITORIAL_MEDIA_SELECTOR)) {
     if (media.closest(EXCLUDED_MEDIA_SELECTOR)) continue;
     if (media instanceof HTMLVideoElement && media.controls) continue;
@@ -88,6 +100,13 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   }
 
   const sync = (): void => {
+    if (!mobile.matches) {
+      videoTapAreas.forEach(({ button, parent, position }) => {
+        button.remove();
+        parent.style.position = position;
+      });
+      videoTapAreas.clear();
+    }
     for (const [wrapper] of actions) {
       const trigger = triggerByMedia.get(wrapper);
       const mobileExpansionDisabled = mobile.matches && wrapper.hasAttribute('data-case-no-mobile-expand') && !trigger;
@@ -105,6 +124,24 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
         wrapper.removeAttribute('role');
         wrapper.removeAttribute('tabindex');
         wrapper.removeAttribute('aria-label');
+      }
+    }
+    if (mobile.matches && host.matches('app-licitanow-case,app-juh-case')) {
+      for (const [wrapper, action] of actions) {
+        const video = wrapper instanceof HTMLVideoElement ? wrapper : wrapper.querySelector<HTMLVideoElement>('video');
+        if (!video || video.closest('[hidden]') || videoTapAreas.has(video) || !wrapper.classList.contains('case-expandable-media')) continue;
+        const parent = video.parentElement;
+        if (!parent) continue;
+        const position = parent.style.position;
+        if (getComputedStyle(parent).position === 'static') parent.style.position = 'relative';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'case-expandable-media case-video-tap-area';
+        button.setAttribute('aria-label', wrapper.getAttribute('aria-label') || 'Ampliar vídeo');
+        button.style.cssText = 'position:absolute;inset:0;z-index:19;display:block;width:100%;height:100%;padding:0;margin:0;border:0;background:transparent;touch-action:pan-x pan-y';
+        button.addEventListener('click', action);
+        parent.append(button);
+        videoTapAreas.set(video, { button, parent, position });
       }
     }
   };
@@ -132,6 +169,11 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   host.addEventListener('keydown', activate);
   mobile.addEventListener('change', sync);
   return () => {
+    videoTapAreas.forEach(({ button, parent, position }) => {
+      button.remove();
+      parent.style.position = position;
+    });
+    videoTapAreas.clear();
     host.removeEventListener('pointerdown', startGesture, true);
     host.removeEventListener('pointermove', trackGesture, true);
     host.removeEventListener('pointerup', trackGesture, true);

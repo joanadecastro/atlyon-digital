@@ -8,13 +8,14 @@ import { isMobileCasePreview } from '../project-case/case-preview-mobile';
 import { CASE_STUDY_NEXT } from '../case-study-navigation';
 import { bindCaseViewportVideos, configureCaseVideo } from '../project-case/case-viewport-video';
 import { CaseLightboxCloseDirective } from '../project-case/case-lightbox-close.directive';
+import { CaseMobileVideoReadyDirective } from '../project-case/case-mobile-video-ready.directive';
 
 type DecisionCarousel = 'hero' | 'process' | 'principles' | 'about' | 'references' | 'composition' | 'illustration' | 'palette';
 
 @Component({
   selector: 'app-licitanow-case',
   standalone: true,
-  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective],
+  imports: [CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent, CaseLightboxCloseDirective, CaseMobileVideoReadyDirective],
   hostDirectives: [TranslateDirective],
   templateUrl: './licitanow-case.html',
   styleUrl: './licitanow-case.scss',

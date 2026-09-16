@@ -579,7 +579,25 @@
   }
 
   .juh-page .juh-code {
+    position:relative;
     overflow:hidden;
+  }
+
+  :host ::ng-deep .juh-code-scroll-indicator {
+    display:block;
+    position:absolute;
+    z-index:2;
+    height:6px;
+    border-radius:999px;
+    background:#363636;
+    pointer-events:none;
+  }
+
+  :host ::ng-deep .juh-code-scroll-indicator > span {
+    display:block;
+    height:100%;
+    border-radius:inherit;
+    background:#f2f2f2;
   }
 
   .juh-state-implementation__column > .juh-code {
