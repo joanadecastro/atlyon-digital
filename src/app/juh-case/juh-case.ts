@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild, inject } from '@angular/core';
 import { JUH_SNIPPETS } from './juh-snippets';
 import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scroll-indicator.component';
 import { CaseImagePreviewComponent } from '../project-case/case-image-preview.component';
@@ -19,6 +19,7 @@ import { CaseMobileVideoReadyDirective } from '../project-case/case-mobile-video
   styleUrl: './juh-case.scss',
 })
 export class JuhCaseComponent implements AfterViewInit, OnDestroy {
+  private readonly videoPreviewCdr = inject(ChangeDetectorRef);
   readonly nextProject = CASE_STUDY_NEXT.juh;
   readonly github = 'https://github.com/joanadecastro/juh-angular-ecommerce';
   readonly snippets = JUH_SNIPPETS;
@@ -98,7 +99,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewUsesCheckoutClip = false;
     this.videoPreviewSrc = src;
     this.videoPreviewLabel = this.language.translate(label);
-    this.videoPreviewOpen = true;
+    this.videoPreviewOpen = !isMobileCasePreview();
     this.autoplayVideoPreview();
   }
 
@@ -107,8 +108,12 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewUsesCheckoutClip = true;
     this.videoPreviewSrc = '/projects/juh/video_juhecommerce.mp4';
     this.videoPreviewLabel = this.language.translate('Micro-demo de checkout e validação do JUH');
-    this.videoPreviewOpen = true;
+    this.videoPreviewOpen = !isMobileCasePreview();
     this.autoplayVideoPreview();
+  }
+
+  revealMobileVideoPreview(): void {
+    if (isMobileCasePreview() && this.videoPreviewSrc && !this.videoPreviewClosing) this.videoPreviewOpen = true;
   }
 
   private autoplayVideoPreview(): void {
@@ -141,6 +146,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
       this.videoPreviewLabel = '';
       this.videoPreviewUsesCheckoutClip = false;
       this.videoPreviewClosing = false;
+      this.videoPreviewCdr.markForCheck();
     }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 550);
   }
 

@@ -4362,7 +4362,7 @@
   }
 
   .licitanow-page .case-hero__screens.licitanow-cover {
-    margin-top: -37px !important;
+    margin-top: 0 !important;
   }
 
   .licitanow-page figure.case-hero__screen--rear {
@@ -5005,6 +5005,10 @@
     width:100%;
     max-width:100%;
     height:auto;
+  }
+
+  .licitanow-page .licitanow-story-panel .licita-responsive-implementation__screens {
+    @include case-mobile.compact-preview-carousel;
   }
 
   .licitanow-page .licitanow-story-panel .licita-responsive-implementation__dots {

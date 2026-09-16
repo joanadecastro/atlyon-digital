@@ -1299,6 +1299,10 @@
     object-fit:contain;
   }
 
+  .juh-page .juh-mobile-gallery {
+    @include case-mobile.compact-preview-carousel;
+  }
+
   .juh-page .juh-mobile-gallery__dots {
     display:flex;
     align-items:center;

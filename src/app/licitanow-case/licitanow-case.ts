@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild, inject } from '@angular/core';
 import { TranslateDirective } from '../i18n/translate.directive';
 import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scroll-indicator.component';
 import { CaseImagePreviewComponent } from '../project-case/case-image-preview.component';
@@ -21,6 +21,7 @@ type DecisionCarousel = 'hero' | 'process' | 'principles' | 'about' | 'reference
   styleUrl: './licitanow-case.scss',
 })
 export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
+  private readonly videoPreviewCdr = inject(ChangeDetectorRef);
   readonly nextProject = CASE_STUDY_NEXT.licitanow;
   openSolution: number | null = null;
   responsiveMockupSlide = 0;
@@ -282,7 +283,7 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     if (this.videoPreviewClosing) return;
     this.videoPreviewSrc = src;
     this.videoPreviewLabel = label;
-    this.videoPreviewOpen = true;
+    this.videoPreviewOpen = !isMobileCasePreview();
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       requestAnimationFrame(() => {
         const previewVideo = document.querySelector<HTMLVideoElement>('.licita-video-preview video');
@@ -292,6 +293,10 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
         }
       });
     }
+  }
+
+  revealMobileVideoPreview(): void {
+    if (isMobileCasePreview() && this.videoPreviewSrc && !this.videoPreviewClosing) this.videoPreviewOpen = true;
   }
 
   closeVideoPreview(): void {
@@ -309,6 +314,7 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
       this.videoPreviewSrc = null;
       this.videoPreviewLabel = '';
       this.videoPreviewClosing = false;
+      this.videoPreviewCdr.markForCheck();
     }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 120 : 550);
   }
 

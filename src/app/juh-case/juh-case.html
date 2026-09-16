@@ -145,7 +145,7 @@
       <div class="case-lightbox-media-frame">
         <button type="button" class="licita-video-preview__close" [attr.aria-label]="language.translate('Fechar preview')" (click)="closeVideoPreview()">×</button>
         <div class="licita-video-preview__media">
-          <video caseMobileVideoReady [src]="videoPreviewSrc" controls muted loop playsinline (loadedmetadata)="configureVideoPreview($event)" (timeupdate)="limitVideoPreview($event)" (play)="restartVideoPreview($event)" (seeked)="keepVideoPreviewInRange($event)"></video>
+          <video caseMobileVideoReady (caseMobileVideoReady)="revealMobileVideoPreview()" [src]="videoPreviewSrc" controls muted loop playsinline (loadedmetadata)="configureVideoPreview($event)" (timeupdate)="limitVideoPreview($event)" (play)="restartVideoPreview($event)" (seeked)="keepVideoPreviewInRange($event)"></video>
         </div>
       </div>
     </div>

@@ -327,7 +327,7 @@
     <div class="licita-video-preview__panel" (pointerdown)="handleVideoPreviewPanelPointer($event)">
       <div class="case-lightbox-media-frame">
         <button type="button" class="licita-video-preview__close" aria-label="Fechar preview" (click)="closeVideoPreview()">×</button>
-        <video caseMobileVideoReady [src]="videoPreviewSrc" controls muted loop playsinline></video>
+        <video caseMobileVideoReady (caseMobileVideoReady)="revealMobileVideoPreview()" [src]="videoPreviewSrc" controls muted loop playsinline></video>
       </div>
     </div>
   }

@@ -115,6 +115,30 @@
         .case-hero__copy, .case-hero__screen { opacity: 1 !important; transform: none !important; }
       }
     }
+
+    // Keep the 852px reference media frame, without redistributing content when
+    // browser chrome changes the viewport height. JUH is intentionally excluded.
+    .civitas-page:not(.juh-page) {
+      --case-hero-screen-height: 272.64px;
+      --case-hero-content-media-gap: 67.42px;
+
+      .case-hero__inner {
+        min-height: 0 !important;
+        grid-template-rows: auto auto;
+        row-gap: var(--case-hero-content-media-gap) !important;
+      }
+
+      .case-hero__screens {
+        grid-row: 2;
+        align-self: start;
+        margin: 0 !important;
+      }
+    }
+
+    .civitas-page.licitanow-page {
+      // Preserve the reference's free grid space, not its negative media margin.
+      --case-hero-content-media-gap: 35.02px;
+    }
     @keyframes caseMobileScreenRearReveal {
       from { translate: 0 260px; scale: .975; }
       to { translate: 0 0; scale: .975; }
