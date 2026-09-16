@@ -116,23 +116,36 @@
       }
     }
 
-    // Keep the 852px reference media frame, without redistributing content when
-    // browser chrome changes the viewport height. JUH is intentionally excluded.
-    .civitas-page:not(.juh-page) {
+    // Reserve the white band first; only the media track may shrink on short
+    // viewports. Copy retains its intrinsic height and the approved gaps.
+    .civitas-page {
       --case-hero-screen-height: 272.64px;
       --case-hero-content-media-gap: 67.42px;
 
       .case-hero__inner {
         min-height: 0 !important;
-        grid-template-rows: auto auto;
+        height: calc(100svh - var(--case-hero-white-band-height)) !important;
+        box-sizing: border-box;
+        grid-template-rows: auto minmax(0, 1fr);
         row-gap: var(--case-hero-content-media-gap) !important;
       }
 
       .case-hero__screens {
         grid-row: 2;
-        align-self: start;
+        align-self: end;
+        height: 100% !important;
+        max-height: var(--case-hero-screen-height) !important;
+        container-type: size;
         margin: 0 !important;
       }
+
+      .case-hero__stage--portrait {
+        width: min(100%, calc(100cqh * 1.05));
+      }
+    }
+
+    .civitas-page.juh-page {
+      --case-hero-content-media-gap: 49.61px;
     }
 
     .civitas-page.licitanow-page {
