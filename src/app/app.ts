@@ -193,7 +193,8 @@ export class App implements AfterViewInit, OnDestroy {
   private readonly servicesSceneResizeHandler = () => this.scheduleServicesSceneUpdate();
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef, readonly language: LanguageService) {
-    if (window.innerWidth <= 768 && window.location.pathname.startsWith('/case-studies/')) {
+    // Case entry owns scroll before render, including desktop refresh restoration.
+    if (window.location.pathname.startsWith('/case-studies/')) {
       this.disableMobileCaseScrollRestoration();
     }
     afterNextRender(() => {

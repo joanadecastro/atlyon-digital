@@ -1301,6 +1301,7 @@
 
   .juh-page .juh-mobile-gallery {
     @include case-mobile.compact-preview-carousel;
+    @include case-mobile.gutter-free-preview-carousel(0.88, 0.84);
   }
 
   .juh-page .juh-mobile-gallery__dots {

@@ -4,7 +4,7 @@
 @use '../project-case/case-code';
 @use '../project-case/case-typography';
 
-:host{--licita-accent:#85b400;--licita-project-bg:#c9d99f;display:block}.licitanow-page{--case-accent:var(--licita-accent);--civitas-green:var(--licita-project-bg);--civitas-hero-green:var(--licita-project-bg);overflow:clip}.licitanow-page img[src^="/projects/licita"]{filter:none}.licitanow-story-panel{overflow:clip}.licitanow-hero .civitas-hero__surface{background:var(--licita-project-bg)}.licitanow-hero .civitas-hero__surface::after{background:linear-gradient(180deg,rgba(74,98,27,.08) 0%,transparent 24%,transparent 69%,rgba(74,98,27,.115) 100%),linear-gradient(90deg,rgba(74,98,27,.1) 0%,transparent 18%,transparent 80%,rgba(74,98,27,.105) 100%)}.licitanow-hero .civitas-hero__glow{background:radial-gradient(ellipse 55% 70% at 41% 59%,rgba(237,244,215,.7) 0%,rgba(223,235,185,.45) 25%,rgba(206,223,147,.22) 48%,rgba(186,210,105,.085) 65%,transparent 82%)}
+:host{--licita-accent:#78A800;--licita-project-bg:#c9d99f;display:block}.licitanow-page{--case-accent:var(--licita-accent);--civitas-green:var(--licita-project-bg);--civitas-hero-green:var(--licita-project-bg);overflow:clip}.licitanow-page img[src^="/projects/licita"]{filter:none}.licitanow-story-panel{overflow:clip}.licitanow-hero .civitas-hero__surface{background:var(--licita-project-bg)}.licitanow-hero .civitas-hero__surface::after{background:linear-gradient(180deg,rgba(74,98,27,.08) 0%,transparent 24%,transparent 69%,rgba(74,98,27,.115) 100%),linear-gradient(90deg,rgba(74,98,27,.1) 0%,transparent 18%,transparent 80%,rgba(74,98,27,.105) 100%)}.licitanow-hero .civitas-hero__glow{background:radial-gradient(ellipse 55% 70% at 41% 59%,rgba(237,244,215,.7) 0%,rgba(223,235,185,.45) 25%,rgba(206,223,147,.22) 48%,rgba(186,210,105,.085) 65%,transparent 82%)}
 .licitanow-cover__screen{position:absolute;margin:0;overflow:visible;will-change:transform}.licitanow-cover__screen figcaption{position:absolute;left:0;bottom:calc(100% + 10px);color:rgba(32,36,43,.6);font-size:10px;font-weight:750;line-height:1;letter-spacing:.16em}.licitanow-cover__screen img{position:relative;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:top}.licitanow-cover__screen--before{z-index:1;left:-1%;top:5%;width:76%;height:68%;transform:translate3d(0,260px,0) scale(.92);transform-origin:center}.licitanow-cover__screen--before img{box-shadow:0 9px 18px rgba(28,34,32,.11),0 3px 6px rgba(28,34,32,.07)}.licitanow-cover__screen--after{z-index:2;left:19%;top:32%;width:82%;height:62%;transform:translate3d(0,340px,0)}.licitanow-cover__screen--after img{box-shadow:0 16px 28px rgba(28,34,32,.19),0 5px 10px rgba(28,34,32,.1)}.licitanow-hero.is-entered .licitanow-cover__screen--before{animation:heroScreenRearReveal 3s cubic-bezier(.22,1,.36,1) 100ms both}.licitanow-hero.is-entered .licitanow-cover__screen--after{animation:heroScreenFrontReveal 3.2s cubic-bezier(.22,1,.36,1) 750ms both}.licitanow-story-panel.civitas-story-panel--green-test{background:linear-gradient(180deg,rgba(74,98,27,.08) 0%,transparent 24%,transparent 69%,rgba(74,98,27,.115) 100%),linear-gradient(90deg,rgba(74,98,27,.1) 0%,transparent 18%,transparent 80%,rgba(74,98,27,.105) 100%),var(--licita-project-bg)}.licitanow-story-panel.civitas-story-panel--green-test::before{inset:-8%;background:radial-gradient(ellipse 55% 70% at 41% 59%,rgba(237,244,215,.7) 0%,rgba(223,235,185,.45) 25%,rgba(206,223,147,.22) 48%,rgba(186,210,105,.085) 65%,transparent 82%)}
 .licitanow-page :is(.story-label,.story-chapter-subtitle,.interface-view-label){color:rgba(32,36,43,.62)}.licitanow-page .story-chapter-title{color:#20242b}.licitanow-page :is(.story-copy p,.story-chapter-header>p,.interface-view-summary){color:rgba(32,36,43,.68)}.licitanow-challenge-visuals .challenge-screen img{object-fit:cover;object-position:top}.licitanow-challenge-visuals .challenge-screen-main img{height:100%}.licitanow-user-grid{grid-template-areas:"goals goals goals" "needs person difficulties"}.licitanow-user-person{background:var(--licita-accent)!important}.licitanow-user-person span{color:#fff;font-size:12px;font-weight:750;letter-spacing:.12em}.licitanow-page .story-user .user-need li::before{background:var(--licita-accent)}
 .identity-comparison{display:grid;grid-template-columns:minmax(0,1fr) 90px minmax(0,1fr);gap:clamp(24px,3vw,46px);align-items:center;margin-top:clamp(68px,7vw,104px)}.identity-comparison article{min-height:300px;display:grid;place-content:center;gap:18px;border:1px solid rgba(35,45,42,.16);background:rgba(255,255,255,.42);box-shadow:var(--shadow-level-1);text-align:center}.identity-comparison small,.identity-comparison article>span{color:rgba(32,36,43,.52);font-size:10px;font-weight:700;letter-spacing:.14em}.identity-comparison>i{color:var(--licita-accent);font-size:28px;font-style:normal;text-align:center}.identity-logo{font-size:clamp(30px,4vw,54px);font-weight:700;letter-spacing:-.055em}.identity-logo--old{color:#85b400}.identity-logo--new{color:var(--licita-accent)}
@@ -360,7 +360,7 @@
 
 /* LicitaNow inherits the finished Civitas editorial system. */
 .licitanow-page {
-  --case-accent:#85b400;
+  --case-accent:var(--licita-accent);
 }
 
 .licitanow-page .case-study-section-number {
@@ -5033,6 +5033,8 @@
       width:70.4%!important;
       max-width:70.4%!important;
     }
+
+    @include case-mobile.gutter-free-preview-carousel(0.704);
   }
 
   .licitanow-page .licitanow-story-panel .licita-responsive-implementation__dots {
@@ -5184,12 +5186,14 @@
     -webkit-overflow-scrolling:touch;
   }
 
-  .licitanow-page .licita-implementation__blocks .licita-implementation__code:has(> .case-code-vertical-scroll-indicator) pre {
-    scrollbar-width:none;
+  .licitanow-page .licita-implementation__blocks .licita-implementation__code > pre {
+    scrollbar-width:none!important;
   }
 
-  .licitanow-page .licita-implementation__blocks .licita-implementation__code:has(> .case-code-vertical-scroll-indicator) pre::-webkit-scrollbar {
-    display:none;
+  .licitanow-page .licita-implementation__blocks .licita-implementation__code > pre::-webkit-scrollbar {
+    display:none!important;
+    width:0!important;
+    height:0!important;
   }
 
   .licitanow-page .licitanow-story-panel .licita-hero-decisions-carousel__viewport {

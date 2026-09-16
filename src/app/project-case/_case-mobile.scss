@@ -29,6 +29,29 @@
     object-fit:contain;
   }
 }
+// Cancel only the measured section gutter; keep the approved screenshot width.
+@mixin gutter-free-preview-carousel($screen-ratio, $reference-ratio: 1) {
+  width:calc(100% + 2 * var(--mobile-text-gutter));
+  max-width:calc(100% + 2 * var(--mobile-text-gutter));
+  margin-inline:calc(-1 * var(--mobile-text-gutter));
+
+  > figure {
+    $ratio: $screen-ratio * $reference-ratio;
+    flex-basis:calc((100% - 2 * var(--mobile-text-gutter)) * #{$ratio});
+    width:calc((100% - 2 * var(--mobile-text-gutter)) * #{$ratio})!important;
+    max-width:calc((100% - 2 * var(--mobile-text-gutter)) * #{$ratio})!important;
+
+    @if $reference-ratio != 1 {
+      // Retain the original two-stage layout rounding (84% rail, 88% slide).
+      @supports (width:round(down, 1px, 0.015625px)) {
+        $locked-width: calc(round(down, calc((100% - 2 * var(--mobile-text-gutter)) * #{$reference-ratio}), 0.015625px) * #{$screen-ratio});
+        flex-basis:$locked-width;
+        width:$locked-width!important;
+        max-width:$locked-width!important;
+      }
+    }
+  }
+}
 // Shared mobile system for all case studies. Keep project exceptions explicit.
 @mixin layout($include-hero: true) {
   @media (max-width: 768px) {
@@ -326,7 +349,7 @@
   @media (max-width: 768px) {
     // Structural breathing room after the approved hero, not inside its band.
     .case-study-page.civitas-page > .case-hero {
-      margin-bottom: 16px !important;
+      margin-bottom: 32px !important;
     }
 
     .case-study-page .case-hero__copy {
