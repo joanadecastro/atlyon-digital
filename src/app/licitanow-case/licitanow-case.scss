@@ -4438,29 +4438,42 @@
 
   .licitanow-page .licita-global-view__comparison {
     box-sizing:border-box;
-    display:flex!important;
-    grid-template-columns:none!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
     gap:8px!important;
     width:100%!important;
     max-width:100%!important;
     min-width:0;
     margin:0!important;
-    overflow-x:auto;
-    overflow-y:hidden;
+    height:auto!important;
+    min-height:0!important;
+    overflow:visible;
     overscroll-behavior-inline:contain;
     scroll-behavior:smooth;
-    scroll-snap-type:x mandatory;
-    touch-action:pan-x pan-y;
+    scroll-snap-type:none;
+    touch-action:pan-y;
     scrollbar-width:none;
     -webkit-overflow-scrolling:touch;
   }
 
   .licitanow-page .licita-global-view__comparison::-webkit-scrollbar { display:none; }
 
+  .licitanow-page .licita-global-view__comparison .licita-applied-comparison__meta {
+    min-width:0;
+    flex-wrap:wrap;
+  }
+
+  .licitanow-page .licita-global-view__comparison .licita-applied-comparison__label {
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+  }
+
   .licitanow-page .licita-global-view__comparison > figure {
-    flex:0 0 88%;
-    width:88%!important;
-    max-width:88%!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
     min-width:0;
     margin:0!important;
     scroll-snap-align:start;
@@ -4476,7 +4489,7 @@
   }
 
   .licitanow-page .licita-global-view__dots {
-    display:flex;
+    display:none;
     justify-content:center;
     margin:18px auto 0;
   }
@@ -5011,6 +5024,8 @@
 
   .licitanow-page .licitanow-story-panel .licita-responsive-implementation__screens {
     @include case-mobile.compact-preview-carousel;
+    width:80%;
+    max-width:80%;
   }
 
   .licitanow-page .licitanow-story-panel .licita-responsive-implementation__dots {

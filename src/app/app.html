@@ -22,7 +22,10 @@
 
   <nav id="site-navigation" [class.mobile-open]="isMenuMounted" [class.panel-open]="isMenuOpen"
     (click)="$event.stopPropagation()"
-    (mouseenter)="keepDesktopMenuHoverOpen()" (transitionend)="finishMobileMenuClose($event)">
+    (mouseenter)="keepDesktopMenuHoverOpen()" (transitionend)="finishMobileMenuClose($event)"
+    [style.touch-action]="isMenuMounted ? 'pan-x' : null"
+    (pointerdown)="startMobileMenuDrag($event)" (pointermove)="moveMobileMenuDrag($event)"
+    (pointerup)="endMobileMenuDrag($event)" (pointercancel)="cancelMobileMenuDrag($event)">
     <button type="button" class="mobile-menu-close" aria-label="Fechar menu" (click)="closeMenu()">&times;</button>
     <a href="#home" class="mobile-menu-logo" aria-label="Atlyon Digital" (click)="navigateToSection($event, 'home')">
       <img src="/projects/logo/Group 7.png" alt="Atlyon Digital">
@@ -47,11 +50,7 @@
       </div>
     </div>
     <div class="mobile-menu-drag-zone" aria-hidden="true"
-      (click)="$event.stopPropagation()"
-      (pointerdown)="startMobileMenuDrag($event)"
-      (pointermove)="moveMobileMenuDrag($event)"
-      (pointerup)="endMobileMenuDrag($event)"
-      (pointercancel)="cancelMobileMenuDrag($event)">
+      (click)="$event.stopPropagation()">
       <span class="mobile-menu-drag-handle"></span>
     </div>
   </nav>

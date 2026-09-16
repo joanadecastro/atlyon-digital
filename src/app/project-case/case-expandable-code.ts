@@ -7,6 +7,56 @@ export function bindCaseExpandableCode(root: HTMLElement, open: CaseCodePreviewO
   const blocks = Array.from(root.querySelectorAll<HTMLElement>(CODE_BLOCK_SELECTOR));
   const buttons = new Map<HTMLElement, HTMLButtonElement>();
   const tapCleanups = new Map<HTMLElement, () => void>();
+  const verticalIndicatorCleanups = new Map<HTMLElement, () => void>();
+
+  const addVerticalIndicator = (block: HTMLElement): void => {
+    if (verticalIndicatorCleanups.has(block)) return;
+    const pre = block.querySelector<HTMLElement>('pre');
+    if (!pre) return;
+    let indicator: HTMLElement | undefined;
+    let disposed = false;
+    const update = (): void => {
+      if (disposed) return;
+      const scrollable = ['auto', 'scroll'].includes(getComputedStyle(pre).overflowY);
+      const overflow = pre.scrollHeight - pre.clientHeight;
+      if (!mobile.matches || !scrollable || overflow <= 1 || pre.clientHeight <= 16) {
+        indicator?.remove();
+        indicator = undefined;
+        return;
+      }
+      if (!indicator) {
+        indicator = document.createElement('span');
+        indicator.className = 'case-code-vertical-scroll-indicator';
+        indicator.setAttribute('aria-hidden', 'true');
+        indicator.style.cssText = 'position:absolute;right:6px;z-index:2;width:6px;border-radius:999px;background:#363636;pointer-events:none';
+        const thumb = document.createElement('span');
+        thumb.style.cssText = 'display:block;width:100%;border-radius:inherit;background:#f2f2f2;pointer-events:none';
+        indicator.appendChild(thumb);
+        block.appendChild(indicator);
+      }
+      const trackHeight = pre.clientHeight - 16;
+      const thumbHeight = trackHeight * pre.clientHeight / pre.scrollHeight;
+      const progress = Math.max(0, Math.min(1, pre.scrollTop / overflow));
+      indicator.style.top = `${pre.offsetTop + 8}px`;
+      indicator.style.height = `${trackHeight}px`;
+      const thumb = indicator.firstElementChild as HTMLElement;
+      thumb.style.height = `${thumbHeight}px`;
+      thumb.style.transform = `translateY(${(trackHeight - thumbHeight) * progress}px)`;
+    };
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(update);
+    observer?.observe(pre);
+    const code = pre.querySelector('code');
+    if (code) observer?.observe(code);
+    pre.addEventListener('scroll', update, { passive: true });
+    update();
+    void document.fonts?.ready.then(update);
+    verticalIndicatorCleanups.set(block, () => {
+      disposed = true;
+      observer?.disconnect();
+      pre.removeEventListener('scroll', update);
+      indicator?.remove();
+    });
+  };
 
   const addButton = (block: HTMLElement): void => {
     if (buttons.has(block)) return;
@@ -63,8 +113,13 @@ export function bindCaseExpandableCode(root: HTMLElement, open: CaseCodePreviewO
   };
 
   const sync = (): void => {
-    if (mobile.matches) blocks.forEach(addButton);
+    if (mobile.matches) {
+      blocks.forEach(addButton);
+      blocks.forEach(addVerticalIndicator);
+    }
     else {
+      verticalIndicatorCleanups.forEach(cleanup => cleanup());
+      verticalIndicatorCleanups.clear();
       tapCleanups.forEach((cleanup) => cleanup());
       tapCleanups.clear();
       buttons.forEach((button) => button.remove());
@@ -76,6 +131,8 @@ export function bindCaseExpandableCode(root: HTMLElement, open: CaseCodePreviewO
   mobile.addEventListener('change', sync);
 
   return () => {
+    verticalIndicatorCleanups.forEach(cleanup => cleanup());
+    verticalIndicatorCleanups.clear();
     tapCleanups.forEach((cleanup) => cleanup());
     tapCleanups.clear();
     mobile.removeEventListener('change', sync);

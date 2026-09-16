@@ -284,6 +284,7 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewSrc = src;
     this.videoPreviewLabel = label;
     this.videoPreviewOpen = !isMobileCasePreview();
+    if (isMobileCasePreview()) this.videoPreviewCdr.markForCheck();
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
       requestAnimationFrame(() => {
         const previewVideo = document.querySelector<HTMLVideoElement>('.licita-video-preview video');

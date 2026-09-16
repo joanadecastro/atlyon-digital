@@ -100,6 +100,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewSrc = src;
     this.videoPreviewLabel = this.language.translate(label);
     this.videoPreviewOpen = !isMobileCasePreview();
+    if (isMobileCasePreview()) this.videoPreviewCdr.markForCheck();
     this.autoplayVideoPreview();
   }
 
@@ -109,6 +110,7 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
     this.videoPreviewSrc = '/projects/juh/video_juhecommerce.mp4';
     this.videoPreviewLabel = this.language.translate('Micro-demo de checkout e validação do JUH');
     this.videoPreviewOpen = !isMobileCasePreview();
+    if (isMobileCasePreview()) this.videoPreviewCdr.markForCheck();
     this.autoplayVideoPreview();
   }
 

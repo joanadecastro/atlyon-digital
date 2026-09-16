@@ -73,6 +73,7 @@ export class App implements AfterViewInit, OnDestroy {
   isMobileMenuDragging = false;
   mobileMenuDragOffset = 0;
   private mobileMenuDragStartY = 0;
+  private mobileMenuDragStartX = 0;
   private mobileMenuDragPointerId?: number;
   readonly serviceIconPaths = [
     'M12 3l1.1 3.4L16.5 7.5l-3.4 1.1L12 12l-1.1-3.4L7.5 7.5l3.4-1.1L12 3zM18.5 13l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2zM5 14l.9 2.6L8.5 17l-2.6.9L5 20.5l-.9-2.6L1.5 17l2.6-.4L5 14z',
@@ -191,6 +192,9 @@ export class App implements AfterViewInit, OnDestroy {
   private readonly servicesSceneResizeHandler = () => this.scheduleServicesSceneUpdate();
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef, readonly language: LanguageService) {
+    if (window.innerWidth <= 768 && window.location.pathname.startsWith('/case-studies/')) {
+      this.disableMobileCaseScrollRestoration();
+    }
     afterNextRender(() => {
       const caseRoute = window.location.pathname.replace(/\/$/, '');
       if (caseRoute === '/case-studies/civitas' || caseRoute === '/case-studies/licitanow' || caseRoute === '/case-studies/smart-charging' || caseRoute === '/case-studies/juh') {
@@ -1083,17 +1087,26 @@ export class App implements AfterViewInit, OnDestroy {
   startMobileMenuDrag(event: PointerEvent): void {
     if (window.innerWidth > 768 || !this.isMenuOpen || this.isMenuClosing || event.pointerType === 'mouse') return;
     const zone = event.currentTarget as HTMLElement;
+    const links = zone.querySelector('.mobile-menu-links');
+    if (!links || event.clientY < links.getBoundingClientRect().bottom) return;
     this.mobileMenuDragPointerId = event.pointerId;
     this.mobileMenuDragStartY = event.clientY;
+    this.mobileMenuDragStartX = event.clientX;
     this.mobileMenuDragOffset = 0;
-    this.isMobileMenuDragging = true;
-    zone.closest('nav')?.classList.add('menu-dragging');
-    zone.setPointerCapture(event.pointerId);
-    event.preventDefault();
+    this.isMobileMenuDragging = false;
   }
 
   moveMobileMenuDrag(event: PointerEvent): void {
-    if (!this.isMobileMenuDragging || event.pointerId !== this.mobileMenuDragPointerId) return;
+    if (event.pointerId !== this.mobileMenuDragPointerId) return;
+    const upward = this.mobileMenuDragStartY - event.clientY;
+    const horizontal = Math.abs(event.clientX - this.mobileMenuDragStartX);
+    if (!this.isMobileMenuDragging) {
+      if (upward < 12 || upward <= horizontal) return;
+      this.isMobileMenuDragging = true;
+      const zone = event.currentTarget as HTMLElement;
+      zone.classList.add('menu-dragging');
+      zone.setPointerCapture(event.pointerId);
+    }
     this.mobileMenuDragOffset = Math.min(140, Math.max(0, this.mobileMenuDragStartY - event.clientY));
     const nav = (event.currentTarget as HTMLElement).closest('nav');
     nav?.style.setProperty('--mobile-menu-drag-offset', `${this.mobileMenuDragOffset}px`);
@@ -1103,8 +1116,11 @@ export class App implements AfterViewInit, OnDestroy {
   }
 
   endMobileMenuDrag(event: PointerEvent): void {
-    if (!this.isMobileMenuDragging || event.pointerId !== this.mobileMenuDragPointerId) return;
-    const shouldClose = this.mobileMenuDragOffset >= 64;
+    if (event.pointerId !== this.mobileMenuDragPointerId) return;
+    const upward = this.mobileMenuDragStartY - event.clientY;
+    const shouldClose = this.isMobileMenuDragging && upward >= 64
+      && upward > Math.abs(event.clientX - this.mobileMenuDragStartX);
+    if (this.isMobileMenuDragging) event.preventDefault();
     this.releaseMobileMenuDrag(event);
     if (shouldClose) this.closeMenu();
   }
@@ -2158,19 +2174,34 @@ export class App implements AfterViewInit, OnDestroy {
   }
 
   private enterMobileCaseAtTop(project: any): void {
-    const navigationId = ++this.projectsNavigationId;
+    this.disableMobileCaseScrollRestoration();
+    ++this.projectsNavigationId;
+    this.cancelMobileMenuOpenFrames();
+    clearTimeout(this.mobileMenuCloseTimeout);
+    this.mobileMenuCloseTimeout = undefined;
+    this.isMenuMounted = false;
+    this.isMenuOpen = false;
+    this.isMenuClosing = false;
+    this.resetMobileMenuDrag();
+    this.syncMobileMenuState();
+    if (this.projectChatCloseTimeout !== undefined) clearTimeout(this.projectChatCloseTimeout);
+    this.projectChatCloseTimeout = undefined;
+    this.projectChatOpen = false;
+    this.projectChatClosing = false;
+    this.projectChatDragging = false;
+    this.projectChatDragOffset = 0;
+    document.documentElement.style.removeProperty('overflow');
+    document.body.style.removeProperty('overflow');
     this.changeDetectorRef.detectChanges();
     // `auto` inherits the document's smooth scrolling; `instant` cancels it.
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    const finishEntry = () => {
-      if (navigationId !== this.projectsNavigationId || this.selectedProject !== project) return;
-      if (this.projectChatClosing || this.projectChatCloseTimeout !== undefined || document.fonts?.status === 'loading') {
-        requestAnimationFrame(finishEntry);
-        return;
-      }
-      if (window.scrollY !== 0) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    };
-    requestAnimationFrame(finishEntry);
+  }
+
+  private mobileCaseScrollRestoration?: ScrollRestoration;
+
+  private disableMobileCaseScrollRestoration(): void {
+    this.mobileCaseScrollRestoration ??= window.history.scrollRestoration;
+    window.history.scrollRestoration = 'manual';
   }
 
   private initProcessReveal(): void {
@@ -2281,6 +2312,10 @@ export class App implements AfterViewInit, OnDestroy {
   }
 
   private leaveProjectRoute(): void {
+    if (this.mobileCaseScrollRestoration !== undefined) {
+      window.history.scrollRestoration = this.mobileCaseScrollRestoration;
+      this.mobileCaseScrollRestoration = undefined;
+    }
     this.cleanupCaseStudyChatObserver();
     this.selectedProject = null;
     if (window.location.pathname.replace(/\/$/, '').startsWith('/case-studies/')) {
