@@ -4509,7 +4509,7 @@
   .licitanow-page .case-hero__stage--portrait {
     position:relative !important;
     // Fit the existing landscape pair inside the height-adaptive hero frame.
-    width:min(100%, calc(100cqh * 1.59)) !important;
+    width:min(100%, calc(100cqh * 1.72)) !important;
     margin-inline:auto;
   }
 
@@ -4527,8 +4527,8 @@
     position:absolute !important;
     inset:auto 0 0 auto !important;
     justify-self:auto !important;
-    width:75.56% !important;
-    max-width:75.56% !important;
+    width:84% !important;
+    max-width:84% !important;
     height:auto !important;
     margin:0 !important;
   }

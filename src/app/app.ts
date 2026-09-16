@@ -194,11 +194,12 @@ export class App implements AfterViewInit, OnDestroy {
     afterNextRender(() => {
       const caseRoute = window.location.pathname.replace(/\/$/, '');
       if (caseRoute === '/case-studies/civitas' || caseRoute === '/case-studies/licitanow' || caseRoute === '/case-studies/smart-charging' || caseRoute === '/case-studies/juh') {
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        if (window.innerWidth > 768) window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
         this.selectedProject = caseRoute.endsWith('/juh') ? this.juhProject : caseRoute.endsWith('/licitanow')
           ? this.projects[1]
           : caseRoute.endsWith('/smart-charging') ? this.projects[2] : this.projects[0];
         this.changeDetectorRef.detectChanges();
+        if (window.innerWidth <= 768) this.enterMobileCaseAtTop(this.selectedProject);
         this.scheduleCaseStudyChatObserver();
       }
       this.initServicesScene();
@@ -210,7 +211,9 @@ export class App implements AfterViewInit, OnDestroy {
   onBrowserHistoryChange(): void {
     this.closeProjectChat();
     const caseRoute = window.location.pathname.replace(/\/$/, '');
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    if (window.innerWidth > 768 || !caseRoute.startsWith('/case-studies/')) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
     this.selectedProject = caseRoute === '/case-studies/civitas'
       ? this.projects[0]
       : caseRoute === '/case-studies/licitanow'
@@ -218,6 +221,7 @@ export class App implements AfterViewInit, OnDestroy {
         : caseRoute === '/case-studies/smart-charging' ? this.projects[2]
           : caseRoute === '/case-studies/juh' ? this.juhProject : null;
     this.changeDetectorRef.detectChanges();
+    if (window.innerWidth <= 768 && this.selectedProject) this.enterMobileCaseAtTop(this.selectedProject);
     this.scheduleCaseStudyChatObserver();
   }
 
@@ -2138,8 +2142,9 @@ export class App implements AfterViewInit, OnDestroy {
     // Establish the case-study viewport before Angular mounts its observers.
     // Otherwise a fast production render can observe lower chapters at the
     // homepage's previous scroll position and leave one-shot reveals completed.
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    if (window.innerWidth > 768) window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
     this.selectedProject = project;
+    if (window.innerWidth <= 768) this.enterMobileCaseAtTop(project);
     this.scheduleCaseStudyChatObserver();
 
     if (project === this.projects[0] && window.location.pathname !== '/case-studies/civitas') {
@@ -2150,6 +2155,22 @@ export class App implements AfterViewInit, OnDestroy {
       window.history.pushState({}, '', project.route);
     }
 
+  }
+
+  private enterMobileCaseAtTop(project: any): void {
+    const navigationId = ++this.projectsNavigationId;
+    this.changeDetectorRef.detectChanges();
+    // `auto` inherits the document's smooth scrolling; `instant` cancels it.
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    const finishEntry = () => {
+      if (navigationId !== this.projectsNavigationId || this.selectedProject !== project) return;
+      if (this.projectChatClosing || this.projectChatCloseTimeout !== undefined || document.fonts?.status === 'loading') {
+        requestAnimationFrame(finishEntry);
+        return;
+      }
+      if (window.scrollY !== 0) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    };
+    requestAnimationFrame(finishEntry);
   }
 
   private initProcessReveal(): void {

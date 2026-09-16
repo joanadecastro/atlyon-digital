@@ -150,7 +150,7 @@
 
     .civitas-page.licitanow-page {
       // Preserve the reference's free grid space, not its negative media margin.
-      --case-hero-content-media-gap: 35.02px;
+      --case-hero-content-media-gap: 24px;
     }
     @keyframes caseMobileScreenRearReveal {
       from { translate: 0 260px; scale: .975; }
