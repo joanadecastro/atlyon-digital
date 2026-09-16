@@ -82,12 +82,14 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       img { width:auto; max-width:calc(100vw - 32px); max-height:calc(100dvh - 32px); object-fit:contain; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
       .is-image-entered img { transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__panel { width:100%; max-width:none; height:100%; max-height:none; }
-      .is-landscape:not(.is-vertical-landing) .case-image-preview__composition { position:fixed; top:50%; left:50%; display:flex; flex-direction:column; align-items:stretch; gap:10px; width:min(calc(100dvh - 40px),680px); max-width:calc(100dvh - 40px); max-height:calc(100vw - 32px); opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.96); transform-origin:center center; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__composition { position:fixed; top:50%; left:50%; display:flex; flex-direction:column; align-items:stretch; gap:10px; width:max-content; max-width:min(calc(100dvh - 40px),680px); max-height:calc(100vw - 32px); opacity:0; transform:translate(-50%,-50%) rotate(0deg) scale(.96); transform-origin:center center; transition:transform 850ms cubic-bezier(.22,1,.36,1),opacity 600ms ease; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__close { top:8px; right:auto; left:8px; transform:rotate(-90deg); }
       .is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { opacity:1; transform:translate(-50%,-50%) rotate(90deg) scale(1); transition:transform 800ms cubic-bezier(.22,1,.36,1),opacity 450ms ease; }
-      .is-landscape:not(.is-vertical-landing) img { position:static; width:100%; max-width:100%; max-height:calc(100vw - 32px); opacity:1; transform:none; transition:none; }
+      .is-landscape:not(.is-vertical-landing) img { position:static; width:auto; max-width:min(calc(100dvh - 40px),680px); max-height:calc(100vw - 32px); opacity:1; transform:none; transition:none; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__template { width:100%; max-height:calc(100vw - 32px); }
+      .is-landscape:not(.is-vertical-landing) .case-image-preview__composition:has(> .case-image-preview__template) { width:min(calc(100dvh - 40px),680px); }
       .is-code-preview.is-landscape:not(.is-vertical-landing) .case-image-preview__composition { height:calc(100vw - 32px); }
+      .is-code-preview.is-landscape:not(.is-vertical-landing) .case-image-preview__composition { width:min(calc(100dvh - 40px),680px); }
       .is-code-preview .case-image-preview__code { padding:18px; }
       .is-code-preview .case-image-preview__code-scroll code { font-size:14px; line-height:1.65; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__composition:has(> .case-image-preview__template.civitas-component-preview.component-crop--indicators) > .case-image-preview__template { position:relative; inset:auto; margin:0; transform:none; transform-origin:center center; }
@@ -100,7 +102,21 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       .case-image-preview:not(.is-landscape):not(.is-vertical-landing) .case-image-preview__panel { width:max-content; max-width:calc(100vw - 32px); height:max-content; max-height:calc(100dvh - 32px); }
       .case-image-preview:not(.is-vertical-landing) .case-image-preview__close { position:absolute; top:8px; right:8px; transform:none; }
       .is-landscape:not(.is-vertical-landing) .case-image-preview__close { right:auto; left:8px; transform:rotate(-90deg); }
-      .is-vertical-landing .case-image-preview__panel { width:calc(100vw - 28px); max-width:calc(100vw - 28px); }
+      .is-vertical-landing { display:grid; place-items:center; padding:16px; }
+      .is-vertical-landing .case-image-preview__panel { position:relative; inset:auto; width:max-content; max-width:calc(100vw - 32px); height:max-content; max-height:calc(100dvh - 32px); overflow:visible; transform:none; }
+      .is-vertical-landing img { width:auto; max-width:calc(100vw - 32px); max-height:calc(100dvh - 32px); object-fit:contain; }
+      .case-image-preview.is-code-preview.is-landscape .case-image-preview__composition {
+        width:max-content; max-width:none; height:max-content; max-height:none; gap:0;
+        transform:translate(-50%,-50%) rotate(90deg) scale(var(--case-code-fit-scale,1));
+      }
+      .case-image-preview.is-code-preview .case-image-preview__code {
+        width:max-content; height:max-content; max-width:none; max-height:none; overflow:visible;
+      }
+      .case-image-preview.is-code-preview .case-image-preview__code-scroll {
+        width:max-content; height:auto; max-width:none; max-height:none;
+        overflow:visible; white-space:pre; scrollbar-width:none; scrollbar-gutter:auto;
+      }
+      .case-image-preview.is-code-preview .case-image-preview__code-scroll::-webkit-scrollbar { display:none; }
     }
     @media (prefers-reduced-motion:reduce) { .case-image-preview,img,.case-image-preview__composition { transition-duration:120ms; transition-property:opacity,visibility; } }
     @media (max-width:768px) and (prefers-reduced-motion:reduce) { .is-landscape:not(.is-vertical-landing) .case-image-preview__composition,.is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { transform:translate(-50%,-50%) rotate(90deg); } }
@@ -183,9 +199,24 @@ export class CaseImagePreviewComponent implements OnDestroy {
     requestAnimationFrame(() => requestAnimationFrame(() => {
       if (cycle !== this.previewCycle) return;
       this.isOpen = true;
+      this.fitMobileCodePreview();
       this.isImageEntered = true;
       this.cdr.detectChanges();
     }));
+  }
+
+  @HostListener('window:resize')
+  protected fitMobileCodePreview(): void {
+    if (!this.isCodePreview || !isMobileCasePreview()) return;
+    const overlay = this.host.nativeElement.querySelector<HTMLElement>('.case-image-preview');
+    const composition = overlay?.querySelector<HTMLElement>('.case-image-preview__composition');
+    const code = composition?.querySelector<HTMLElement>('.case-image-preview__code');
+    if (!overlay || !composition || !code) return;
+    const viewport = overlay.getBoundingClientRect();
+    // After the 90-degree rotation, natural width consumes viewport height.
+    const scale = Math.min(1, Math.max(0, viewport.height - 40) / code.offsetWidth,
+      Math.max(0, viewport.width - 32) / code.offsetHeight);
+    composition.style.setProperty('--case-code-fit-scale', String(scale));
   }
 
   onImageLoad(event: Event): void {

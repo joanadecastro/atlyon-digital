@@ -4404,7 +4404,7 @@
 
   .licita-implementation {
     margin-top: 88px;
-    &__blocks { display:flex; grid-template-columns:none; align-items:stretch; gap:6px; width:100%; max-width:100%; min-width:0; overflow-x:auto; overflow-y:hidden; overscroll-behavior-inline:contain; scroll-behavior:smooth; scroll-snap-type:x mandatory; touch-action:pan-y; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+    &__blocks { display:flex; grid-template-columns:none; align-items:stretch; gap:6px; width:100%; max-width:100%; min-width:0; overflow-x:auto; overflow-y:hidden; overscroll-behavior-inline:contain; scroll-behavior:smooth; scroll-snap-type:x mandatory; touch-action:pan-x pan-y; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
     &__blocks::after { content:""; flex:0 0 8%; }
     &__blocks::-webkit-scrollbar { display:none; }
     &__row { box-sizing:border-box; flex:0 0 92%; grid-template-columns:minmax(0,1fr); grid-template-rows:16px 470px minmax(0,1fr); align-content:start; gap:20px; width:92%; max-width:92%; min-width:0; padding-left:8px; scroll-snap-align:start; scroll-snap-stop:always; }
@@ -4450,7 +4450,7 @@
     overscroll-behavior-inline:contain;
     scroll-behavior:smooth;
     scroll-snap-type:x mandatory;
-    touch-action:pan-y;
+    touch-action:pan-x pan-y;
     scrollbar-width:none;
     -webkit-overflow-scrolling:touch;
   }
@@ -5125,6 +5125,35 @@
     min-width:0!important;
     height:auto!important;
     object-fit:contain!important;
+  }
+
+  .licitanow-page .licitanow-story-panel .licita-applied-comparison--principles .licita-applied-comparison__media {
+    width:84%!important;
+    max-width:84%!important;
+    margin-inline:auto!important;
+  }
+
+  .licitanow-page .licita-implementation__blocks .licita-implementation__code {
+    display:flex;
+    flex-direction:column;
+    overflow:visible;
+    touch-action:pan-x pan-y;
+  }
+
+  .licitanow-page .licita-implementation__blocks .licita-implementation__source { flex:none; }
+
+  .licitanow-page .licita-implementation__blocks .licita-implementation__code pre {
+    flex:1;
+    min-width:0;
+    max-width:100%;
+    min-height:0;
+    overflow-x:hidden;
+    overflow-y:auto;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    touch-action:pan-x pan-y;
+    overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch;
   }
 
   .licitanow-page .licitanow-story-panel .licita-hero-decisions-carousel__viewport {

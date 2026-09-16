@@ -1245,17 +1245,17 @@
     display:flex;
     grid-template-columns:none;
     gap:8px;
-    width:100%;
-    max-width:100%;
+    width:84%;
+    max-width:84%;
     min-width:0;
-    margin-right:0;
-    margin-left:0;
+    margin-right:auto;
+    margin-left:auto;
     overflow-x:auto;
     overflow-y:hidden;
     overscroll-behavior-inline:contain;
     scroll-behavior:smooth;
     scroll-snap-type:x mandatory;
-    touch-action:pan-y;
+    touch-action:pan-x pan-y;
     scrollbar-width:none;
     -webkit-overflow-scrolling:touch;
   }

@@ -194,8 +194,8 @@
       position:fixed !important;
       top:50% !important;
       left:50% !important;
-      width:min(calc(100dvh - 40px),calc((100vw - 32px) * 16 / 9)) !important;
-      max-width:none !important;
+      width:max-content !important;
+      max-width:calc(100dvh - 40px) !important;
       max-height:calc(100vw - 32px) !important;
       transform:translate(-50%,-50%) rotate(90deg);
       transform-origin:center center;
@@ -208,8 +208,8 @@
     }
     .licita-video-preview .licita-video-preview__media,
     .licita-video-preview video {
-      width:100% !important;
-      max-width:100% !important;
+      width:auto !important;
+      max-width:calc(100dvh - 40px) !important;
       height:auto !important;
       max-height:calc(100vw - 32px) !important;
       margin:0 !important;

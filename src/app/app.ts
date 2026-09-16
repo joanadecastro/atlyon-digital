@@ -107,6 +107,7 @@ export class App implements AfterViewInit, OnDestroy {
   private aboutMetricsRunning = false;
   private aboutMetricsGeneration = 0;
   private aboutMetricsCompleted = false;
+  private mobileAboutMetricsObserver?: IntersectionObserver;
   private projectChatMessageId = 1;
   projectChatMessages: ProjectChatMessage[] = [
     {
@@ -492,20 +493,8 @@ export class App implements AfterViewInit, OnDestroy {
 
     const crossedMetricsForward =
       previousPhase < metricsPhase && currentPhase >= metricsPhase;
-    if (window.innerWidth <= 768) {
-      const metricsBlock = section.querySelector<HTMLElement>('.about-editorial-metrics');
-      const metricsRect = metricsBlock?.getBoundingClientRect();
-      const metricsAreVisible = !!metricsRect
-        && metricsRect.top <= viewportHeight * 0.88
-        && metricsRect.bottom >= 0;
-
-      if (currentPhase >= metricsPhase && metricsAreVisible && !this.aboutMetricsCompleted) {
-        this.startAboutMetrics(section);
-      }
-    } else {
-      if (crossedMetricsForward) {
-        this.startAboutMetrics(section);
-      }
+    if (window.innerWidth > 768 && crossedMetricsForward) {
+      this.startAboutMetrics(section);
     }
 
     this.previousAboutPhase = currentPhase;
@@ -862,7 +851,7 @@ export class App implements AfterViewInit, OnDestroy {
     }
 
     if (action === 'service-projects') {
-      this.closeProjectChat();
+      if (window.innerWidth > 768) this.closeProjectChat();
       this.navigateToSection(new Event('click'), 'portfolio');
       return;
     }
@@ -886,7 +875,7 @@ export class App implements AfterViewInit, OnDestroy {
       this.addProjectChatMessage('user', 'Pedir estimativa');
       this.projectChatStep = 1;
     } else if (action === 'case-studies') {
-      this.closeProjectChat();
+      if (window.innerWidth > 768) this.closeProjectChat();
       this.navigateToProjectsStart();
     } else if (action === 'expertise') {
       this.closeProjectChat();
@@ -1002,6 +991,20 @@ export class App implements AfterViewInit, OnDestroy {
         this.changeDetectorRef.detectChanges();
       });
     });
+  }
+
+  private initMobileAboutMetricsObserver(): void {
+    if (window.innerWidth > 768 || typeof IntersectionObserver === 'undefined') return;
+    const section = document.getElementById('sobre');
+    const metrics = section?.querySelector<HTMLElement>('.about-editorial-metrics');
+    if (!section || !metrics) return;
+
+    this.mobileAboutMetricsObserver = new IntersectionObserver(([entry]) => {
+      if (window.innerWidth > 768 || !entry.isIntersecting || entry.intersectionRatio < 0.5) return;
+      this.startAboutMetrics(section);
+      this.mobileAboutMetricsObserver?.disconnect();
+    }, { threshold: 0.5, rootMargin: '0px 0px -8% 0px' });
+    this.mobileAboutMetricsObserver.observe(metrics);
   }
 
   toggleDesktopMenu() {
@@ -1492,9 +1495,11 @@ export class App implements AfterViewInit, OnDestroy {
     // Apply the mobile layered geometry before the first paint.
     if (window.innerWidth <= 768) this.updateHeroStack();
     else this.scheduleHeroStackUpdate();
+    this.initMobileAboutMetricsObserver();
   }
 
   ngOnDestroy(): void {
+    this.mobileAboutMetricsObserver?.disconnect();
     this.menuScrollCleanup?.();
     this.mobileHeroResizeObserver?.disconnect();
     window.visualViewport?.removeEventListener('resize', this.refreshMobileHeroLayout);
@@ -2210,8 +2215,20 @@ export class App implements AfterViewInit, OnDestroy {
       this.changeDetectorRef.detectChanges();
     }
 
+    let previousViewport: string | null = null;
     const waitForStableProjectsLayout = (previousTop: number | null = null, stableFrames = 0) => {
       if (navigationId !== this.projectsNavigationId) return;
+      const mobile = window.innerWidth <= 768;
+      if (mobile && (this.projectChatClosing || this.projectChatCloseTimeout !== undefined)) {
+        requestAnimationFrame(() => waitForStableProjectsLayout());
+        return;
+      }
+      const viewport = window.visualViewport;
+      const viewportGeometry = mobile
+        ? `${window.innerHeight}:${viewport?.width}:${viewport?.height}:${viewport?.offsetTop}`
+        : null;
+      const viewportStable = !mobile || viewportGeometry === previousViewport;
+      previousViewport = viewportGeometry;
       const fontsReady = !document.fonts || document.fonts.status === 'loaded';
       const top = this.getProjectsStartY();
       const strip = this.projectStripElement;
@@ -2221,7 +2238,7 @@ export class App implements AfterViewInit, OnDestroy {
       }
 
       strip.scrollTo({ left: 0, behavior: 'instant' });
-      const nextStableFrames = previousTop !== null && Math.abs(top - previousTop) <= 0.5
+      const nextStableFrames = viewportStable && previousTop !== null && Math.abs(top - previousTop) <= 0.5
         ? stableFrames + 1
         : 0;
       if (nextStableFrames < 2) {
@@ -2229,7 +2246,8 @@ export class App implements AfterViewInit, OnDestroy {
         return;
       }
 
-      window.scrollTo({ top, behavior: 'smooth' });
+      if (mobile) this.scrollToMenuSection('portfolio');
+      else window.scrollTo({ top, behavior: 'smooth' });
       this.updateProjectNavigation();
     };
 

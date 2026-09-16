@@ -164,6 +164,10 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
 
   startImplementationPointer(event: PointerEvent): void {
     if (!isMobileCasePreview()) return;
+    if (event.pointerType === 'touch') {
+      this.implementationPointerStart = null;
+      return;
+    }
     const target = event.target instanceof Element ? event.target : null;
     const snippet = target?.closest<HTMLElement>('.licita-implementation__code') ?? null;
     this.implementationPointerStart = {

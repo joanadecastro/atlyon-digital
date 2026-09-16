@@ -13,13 +13,16 @@ const ESTABLISHED_WRAPPER_SELECTOR = [
 function mediaForTrigger(trigger: HTMLButtonElement): HTMLElement | null {
   const figureMedia = trigger.closest('figure')?.querySelector<HTMLElement>(ESTABLISHED_WRAPPER_SELECTOR);
   if (figureMedia) return figureMedia;
+  const figureVideo = trigger.closest('figure')?.querySelector<HTMLVideoElement>('video');
+  if (matchMedia('(max-width: 768px)').matches && figureVideo) return figureVideo;
   if (trigger.classList.contains('challenge-screen-expand--main')) return trigger.parentElement?.querySelector<HTMLElement>('.challenge-screen-main') ?? null;
   if (trigger.classList.contains('challenge-screen-expand--detail')) return trigger.parentElement?.querySelector<HTMLElement>('.challenge-screen-detail') ?? null;
   return null;
 }
 
 function wrapperFor(media: HTMLElement): HTMLElement | null {
-  return media.closest<HTMLElement>(ESTABLISHED_WRAPPER_SELECTOR) ?? (media.matches('.challenge-screen') ? media : media.parentElement);
+  const wrapper = media.closest<HTMLElement>(ESTABLISHED_WRAPPER_SELECTOR) ?? (media.matches('.challenge-screen') ? media : media.parentElement);
+  return matchMedia('(max-width: 768px)').matches && wrapper && wrapper.querySelectorAll('img,video').length > 1 ? media : wrapper;
 }
 
 function sourceFor(media: HTMLImageElement | HTMLVideoElement): string {
@@ -50,6 +53,21 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   const mobile = matchMedia('(max-width: 768px)');
   const actions = new Map<HTMLElement, () => void>();
   const triggerByMedia = new Map<HTMLElement, HTMLButtonElement>();
+  let gesture: { x: number; y: number; moved: boolean } | undefined;
+  const startGesture = (event: PointerEvent): void => {
+    gesture = mobile.matches && event.target instanceof Element && !!event.target.closest('.case-expandable-media')
+      ? { x: event.clientX, y: event.clientY, moved: false } : undefined;
+  };
+  const trackGesture = (event: PointerEvent): void => {
+    if (gesture && Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 10) gesture.moved = true;
+  };
+  const filterSwipeClick = (event: MouseEvent): void => {
+    if (mobile.matches && gesture?.moved && event.detail !== 0) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+    }
+    gesture = undefined;
+  };
 
   for (const trigger of host.querySelectorAll<HTMLButtonElement>('.licita-applied-comparison__expand')) {
     const media = mediaForTrigger(trigger);
@@ -72,7 +90,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   const sync = (): void => {
     for (const [wrapper] of actions) {
       const trigger = triggerByMedia.get(wrapper);
-      const mobileExpansionDisabled = mobile.matches && wrapper.hasAttribute('data-case-no-mobile-expand');
+      const mobileExpansionDisabled = mobile.matches && wrapper.hasAttribute('data-case-no-mobile-expand') && !trigger;
       const expandable = !mobileExpansionDisabled && (mobile.matches || wrapper.hasAttribute('data-case-expand-desktop'));
       wrapper.classList.toggle('case-expandable-media', expandable);
       if (expandable) {
@@ -95,7 +113,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
     if (!(event.target instanceof Element)) return;
     const wrapper = event.target.closest<HTMLElement>('.case-expandable-media');
     const action = wrapper ? actions.get(wrapper) : undefined;
-    if (!wrapper || !action || (mobile.matches && wrapper.hasAttribute('data-case-no-mobile-expand')) || (!mobile.matches && !wrapper.hasAttribute('data-case-expand-desktop')) || event.target.closest('a,button,video[controls]')) return;
+    if (!wrapper || !action || (mobile.matches && wrapper.hasAttribute('data-case-no-mobile-expand') && !triggerByMedia.has(wrapper)) || (!mobile.matches && !wrapper.hasAttribute('data-case-expand-desktop')) || event.target.closest('a,button') || (event.target.closest('video[controls]') && (!mobile.matches || !triggerByMedia.has(wrapper)))) return;
     if (event.type === 'click' && event.target.matches('[data-case-expand-desktop] img')) return;
     if (event instanceof KeyboardEvent) {
       if (event.target !== wrapper || !['Enter', ' '].includes(event.key)) return;
@@ -105,10 +123,20 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   };
 
   sync();
+  host.addEventListener('pointerdown', startGesture, true);
+  host.addEventListener('pointermove', trackGesture, true);
+  host.addEventListener('pointerup', trackGesture, true);
+  host.addEventListener('pointercancel', trackGesture, true);
+  host.addEventListener('click', filterSwipeClick, true);
   host.addEventListener('click', activate);
   host.addEventListener('keydown', activate);
   mobile.addEventListener('change', sync);
   return () => {
+    host.removeEventListener('pointerdown', startGesture, true);
+    host.removeEventListener('pointermove', trackGesture, true);
+    host.removeEventListener('pointerup', trackGesture, true);
+    host.removeEventListener('pointercancel', trackGesture, true);
+    host.removeEventListener('click', filterSwipeClick, true);
     host.removeEventListener('click', activate);
     host.removeEventListener('keydown', activate);
     mobile.removeEventListener('change', sync);

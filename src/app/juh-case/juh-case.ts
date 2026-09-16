@@ -70,6 +70,10 @@ export class JuhCaseComponent implements AfterViewInit, OnDestroy {
 
   startMobileGalleryPointer(event: PointerEvent): void {
     if (!isMobileCasePreview()) return;
+    if (event.pointerType === 'touch') {
+      this.mobileGalleryPointerStart = null;
+      return;
+    }
     this.mobileGalleryPointerStart = { x: event.clientX, y: event.clientY, slide: this.mobileGallerySlide };
   }
 

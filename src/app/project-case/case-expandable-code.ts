@@ -6,6 +6,7 @@ export function bindCaseExpandableCode(root: HTMLElement, open: CaseCodePreviewO
   const mobile = matchMedia('(max-width: 768px)');
   const blocks = Array.from(root.querySelectorAll<HTMLElement>(CODE_BLOCK_SELECTOR));
   const buttons = new Map<HTMLElement, HTMLButtonElement>();
+  const tapCleanups = new Map<HTMLElement, () => void>();
 
   const addButton = (block: HTMLElement): void => {
     if (buttons.has(block)) return;
@@ -27,11 +28,45 @@ export function bindCaseExpandableCode(root: HTMLElement, open: CaseCodePreviewO
     button.addEventListener('click', handleClick);
     block.appendChild(button);
     buttons.set(block, button);
+    if (block.matches('.licita-implementation__code')) {
+      let gesture: { x: number; y: number; moved: boolean } | undefined;
+      const start = (event: PointerEvent): void => { gesture = { x: event.clientX, y: event.clientY, moved: false }; };
+      const move = (event: PointerEvent): void => {
+        if (gesture && Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 10) gesture.moved = true;
+      };
+      const cancel = (): void => { if (gesture) gesture.moved = true; };
+      const tap = (event: MouseEvent): void => {
+        if (!mobile.matches) return;
+        const moved = gesture?.moved;
+        gesture = undefined;
+        if (moved && event.detail !== 0) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return;
+        }
+        if (event.target instanceof Element && event.target.closest('button,a')) return;
+        handleClick(event);
+      };
+      block.addEventListener('pointerdown', start, true);
+      block.addEventListener('pointermove', move, true);
+      block.addEventListener('pointerup', move, true);
+      block.addEventListener('pointercancel', cancel, true);
+      block.addEventListener('click', tap, true);
+      tapCleanups.set(block, () => {
+        block.removeEventListener('pointerdown', start, true);
+        block.removeEventListener('pointermove', move, true);
+        block.removeEventListener('pointerup', move, true);
+        block.removeEventListener('pointercancel', cancel, true);
+        block.removeEventListener('click', tap, true);
+      });
+    }
   };
 
   const sync = (): void => {
     if (mobile.matches) blocks.forEach(addButton);
     else {
+      tapCleanups.forEach((cleanup) => cleanup());
+      tapCleanups.clear();
       buttons.forEach((button) => button.remove());
       buttons.clear();
     }
@@ -41,6 +76,8 @@ export function bindCaseExpandableCode(root: HTMLElement, open: CaseCodePreviewO
   mobile.addEventListener('change', sync);
 
   return () => {
+    tapCleanups.forEach((cleanup) => cleanup());
+    tapCleanups.clear();
     mobile.removeEventListener('change', sync);
     buttons.forEach((button) => button.remove());
     buttons.clear();
