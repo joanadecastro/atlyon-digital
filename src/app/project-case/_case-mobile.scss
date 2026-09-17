@@ -271,7 +271,8 @@
 
     /* Shared mobile structure for expandable case-study media. */
     :is(.licita-applied-comparison__visual, .licita-global-view__comparison, .licita-final-comparison, .juh-screen-pair)
-      > figure:has(> :is(.licita-applied-comparison__meta, .juh-comparison__meta)) {
+      > figure:has(> :is(.licita-applied-comparison__meta, .juh-comparison__meta)),
+    figure[data-case-screenshot-toolbar]:has(> img):has(> .licita-applied-comparison__meta) {
       display:grid !important;
       grid-template-columns:minmax(0,1fr) !important;
     }

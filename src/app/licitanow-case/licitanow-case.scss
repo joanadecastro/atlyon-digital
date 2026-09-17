@@ -1,3 +1,4 @@
+@use '../project-case/case-screenshots';
 @use '../project-case/case-mobile';
 @use '../project-case/project-case.scss';
 @use '../project-case/case-media-shadow';
@@ -66,24 +67,24 @@
 .licita-experience__comparison figure{min-width:0;margin:0}
 .licita-experience__comparison figcaption{margin:0 0 14px;color:rgba(32,36,43,.58);font-size:10px;font-weight:800;line-height:1;letter-spacing:.14em}
 .licita-experience__comparison img{display:block;width:100%;height:auto;border-radius:6px;box-shadow:0 5px 18px rgba(0,0,0,.035)}
-.licita-applied-decisions{margin-top:clamp(110px,11vw,170px)}
+@include case-screenshots.stage-1;
 .licita-applied-decisions__header{text-align:center}
 .licita-applied-decisions__header h3,.licita-global-view>h3{margin:0;color:#20242b;font-size:clamp(18px,1.45vw,24px);font-weight:750;line-height:1.2;letter-spacing:.05em}
 .licita-applied-decisions__header p{width:min(90%,700px);margin:18px auto 0;color:rgba(32,36,43,.68);font-size:var(--body-copy-font-size);line-height:var(--body-copy-line-height)}
-.licita-applied-comparisons{display:grid;gap:clamp(90px,10vw,150px);margin-top:clamp(70px,8vw,112px)}
-.licita-applied-comparison{padding-top:22px;border-top:1px solid rgba(32,36,43,.18)}
-.licita-applied-comparison>header{display:grid;gap:10px;margin-bottom:30px}
-.licita-applied-comparison h4{margin:0;color:#20242b;font-size:13px;font-weight:800;line-height:1.2;letter-spacing:.08em}
-.licita-applied-comparison>header p{max-width:700px;margin:0;color:rgba(32,36,43,.68);font-size:var(--body-copy-font-size);line-height:var(--body-copy-line-height)}
-.licita-applied-comparison__visual{display:grid;grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);gap:clamp(16px,2vw,30px);align-items:center}
-.licita-applied-comparison__visual figure{min-width:0;margin:0;opacity:0;transition:opacity .7s ease,transform .85s cubic-bezier(.22,1,.36,1)}
-.licita-applied-comparison__visual figure:first-child{transform:translateX(-28px)}
-.licita-applied-comparison__visual figure:last-child{transform:translateX(28px)}
-.licita-applied-comparison.is-entered .licita-applied-comparison__visual figure{opacity:1;transform:none}
-.licita-applied-comparison__visual figcaption{margin:0 0 14px;color:rgba(32,36,43,.58);font-size:11px;font-weight:800;line-height:1;letter-spacing:.14em}
-.licita-applied-comparison__visual figure:last-child figcaption{color:var(--licita-accent)}
-.licita-applied-comparison__visual img{display:block;width:100%;height:clamp(270px,30vw,440px);object-fit:cover;object-position:top;border-radius:6px;box-shadow:0 5px 18px rgba(0,0,0,.045)}
-.licita-applied-comparison__visual>span{color:rgba(32,36,43,.46);font-size:24px;text-align:center}
+@include case-screenshots.stage-2;
+@include case-screenshots.stage-3;
+@include case-screenshots.stage-4;
+@include case-screenshots.stage-5;
+@include case-screenshots.stage-6;
+@include case-screenshots.stage-7;
+@include case-screenshots.stage-8;
+@include case-screenshots.stage-9;
+@include case-screenshots.stage-10;
+@include case-screenshots.stage-11;
+@include case-screenshots.stage-12;
+@include case-screenshots.stage-13;
+@include case-screenshots.stage-14;
+@include case-screenshots.stage-15;
 .licita-global-view{margin-top:clamp(120px,12vw,180px)}
 .licita-global-view>h3{text-align:center}
 .licita-global-view .licita-experience__comparison{margin-top:clamp(52px,6vw,84px)}
@@ -228,8 +229,8 @@
 .licitanow-story-panel .case-study-section-header>.case-study-section-subtitle{padding-bottom:0!important}
 .licitanow-story-panel :is(.licita-experience__intro,.licita-direction__intro,.licita-proposal__intro){margin-top:0!important;margin-bottom:0!important}
 .licitanow-story-panel .licita-problem-solution{margin-top:64px}
-.licitanow-story-panel .licita-applied-decisions{margin-top:130px}
-.licitanow-story-panel .licita-applied-comparisons{gap:120px;margin-top:70px}
+@include case-screenshots.stage-16;
+@include case-screenshots.stage-17;
 .licitanow-story-panel .licita-global-view{margin-top:130px}
 .licitanow-story-panel .licita-direction-editorial{gap:130px;margin-top:60px}
 .licitanow-story-panel .licita-direction-block>header{margin-bottom:60px}
@@ -328,11 +329,11 @@
   .licita-problem-solution__items,.licita-problem-solution__card ul{grid-template-columns:1fr}
   .licita-problem-solution__pair.is-open .licita-problem-solution__drawer{max-height:700px}
   .licita-experience__comparison{grid-template-columns:1fr}
-  .licita-applied-comparison__visual{grid-template-columns:1fr}
-  .licita-applied-comparison__visual>span{transform:rotate(90deg)}
+  @include case-screenshots.stage-18;
+  @include case-screenshots.stage-19;
 }
 
-@media(prefers-reduced-motion:reduce){.licita-problem-solution__card{opacity:1;transform:none;transition:none}.licita-problem-solution__drawer,.licita-problem-solution__toggle::before,.licita-problem-solution__toggle::after{transition:none}.licita-applied-comparison__visual figure{opacity:1;transform:none;transition:none}}
+@media(prefers-reduced-motion:reduce){.licita-problem-solution__card{opacity:1;transform:none;transition:none}.licita-problem-solution__drawer,.licita-problem-solution__toggle::before,.licita-problem-solution__toggle::after{transition:none}@include case-screenshots.stage-20;}
 @media(max-width:900px){
   .licitanow-hero .licitanow-cover{left:auto;transform:translateX(3%)}
   .licitanow-cover__screen--before{left:2%;top:5%;width:58%;height:auto}
@@ -584,20 +585,9 @@
 }
 
 /* Acabamento global das mockups Antes / Depois em Decisões Aplicadas. */
-.licitanow-story-panel .licita-applied-decisions,
-.licitanow-story-panel .licita-applied-decisions__center,
-.licitanow-story-panel .licita-applied-comparisons,
-.licitanow-story-panel .licita-applied-comparison,
-.licitanow-story-panel .licita-applied-comparison__visual,
-.licitanow-story-panel .licita-applied-comparison__visual figure {
-  overflow:visible;
-}
+@include case-screenshots.stage-21;
 
-.licitanow-story-panel .licita-applied-decisions .licita-applied-comparison__visual img {
-  border:0;
-  border-radius:5px;
-  box-shadow:0 10px 32px rgba(0,0,0,.14);
-}
+@include case-screenshots.stage-22;
 
 .licitanow-story-panel :is(
   .licita-challenge__video video,
@@ -991,9 +981,7 @@
   overflow: visible;
 }
 
-.licita-final-comparison .licita-applied-comparison__meta {
-  margin-bottom: 16px;
-}
+@include case-screenshots.stage-23;
 
 .licita-final-comparison__media {
   width: 100%;
@@ -1178,16 +1166,15 @@
   .licitanow-story-panel :is(p,.licita-challenge__copy,.licita-experience__intro,.licita-direction__intro,.licita-proposal__intro,.licita-applied-decisions__header p) { font-size:16px!important; line-height:1.6!important; }
   .licitanow-story-panel :is(figure,img,video),.licita-global-view :is(figure,img,video) { max-width:100%; }
   .licitanow-story-panel :is(figure img,figure video),.licita-global-view :is(figure img,figure video) { display:block; width:100%; height:auto; }
-  .licitanow-page :is(figcaption,.licita-applied-comparison__label,.licita-challenge__metadata,.story-label) { font-size:clamp(12px,3.35vw,13px)!important; line-height:1.35!important; }
-  .licitanow-page :is(.licita-applied-comparison__expand,.next-case) { font-size:clamp(13px,3.6vw,14px)!important; font-weight:700!important; }
+  @include case-screenshots.stage-24;
+  @include case-screenshots.stage-25;
 }
 
 @media (max-width:768px) {
   :host { --mobile-text-gutter:16px; --mobile-media-gutter:4px; }
   .case-shell,.civitas-hero__inner,.licitanow-story-panel,.licitanow-direction-panel > .licita-direction { padding-left:16px!important; padding-right:16px!important; }
-  .licitanow-story-panel :is(.licita-challenge__video,.licita-applied-comparison__visual,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison,.licita-composition-gallery,.licita-wireframes,.licita-process-asset,.visual-process-media),
-  .licitanow-story-panel figure,.licita-global-view figure { box-sizing:border-box; width:100vw!important; max-width:none!important; margin-left:calc((100% - 100vw) / 2)!important; margin-right:0!important; }
-  .licitanow-story-panel :is(.licita-applied-comparison__visual,.hero-comparison,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison,.illustration-evolution,.licita-wireframes,.licita-composition-gallery) { grid-template-columns:minmax(0,1fr)!important; }
+  @include case-screenshots.stage-26;
+  @include case-screenshots.stage-27;
   .licitanow-story-panel :is(figure img,figure video),.licita-global-view :is(figure img,figure video) { display:block; width:100%!important; max-width:none!important; height:auto!important; }
 }
 
@@ -1195,8 +1182,7 @@
 @media (max-width:768px) {
   :host { --mobile-text-gutter:14px; --mobile-media-gutter:0px; }
   .case-shell,.civitas-hero__inner,.licitanow-story-panel,.licitanow-direction-panel > .licita-direction { padding-left:14px!important; padding-right:14px!important; }
-  .licitanow-story-panel :is(.licita-challenge__video,.licita-applied-comparison__visual,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison,.licita-composition-gallery,.licita-wireframes,.licita-process-asset,.visual-process-media),
-  .licitanow-story-panel figure,.licita-global-view figure { width:100vw!important; max-width:none!important; margin-left:calc((100% - 100vw) / 2)!important; margin-right:0!important; }
+  @include case-screenshots.stage-28;
 }
 
 /* LicitaNow: near-edge-to-edge media without widening the text column. */
@@ -1208,29 +1194,9 @@
     padding-right:var(--mobile-text-gutter)!important;
   }
 
-  .licitanow-story-panel :is(
-    .licita-challenge__video,
-    .licita-applied-comparison__visual,
-    .licita-global-view__comparison,
-    .licita-final-comparison,
-    .licita-illustration-comparison,
-    .licita-composition-gallery,
-    .licita-wireframes,
-    .licita-process-asset,
-    .visual-process-media
-  ),
-  .licitanow-story-panel figure,
-  .licita-global-view figure {
-    box-sizing:border-box;
-    width:calc(100vw - (var(--mobile-media-gutter) * 2))!important;
-    max-width:none!important;
-    margin-left:calc((100% - 100vw) / 2 + var(--mobile-media-gutter))!important;
-    margin-right:0!important;
-  }
+  @include case-screenshots.stage-29;
 
-  .licitanow-story-panel :is(.licita-applied-comparison__visual,.hero-comparison,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison,.illustration-evolution,.licita-wireframes,.licita-composition-gallery) {
-    grid-template-columns:minmax(0,1fr)!important;
-  }
+  @include case-screenshots.stage-30;
 
   .licitanow-story-panel :is(figure img,figure video),
   .licita-global-view :is(figure img,figure video) {
@@ -1252,13 +1218,13 @@
   .licita-problem-solution__card { padding:24px 20px; }
   .licita-problem-solution__card header { display:grid; grid-template-columns:1fr auto; gap:12px; }
   .licita-problem-solution__items,.licita-problem-solution__card ul { grid-template-columns:1fr; }
-  :is(.licita-applied-comparison__visual,.hero-comparison,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison,.illustration-evolution) { grid-template-columns:1fr!important; gap:36px!important; }
-  :is(.licita-applied-comparison__visual,.hero-comparison,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison) > span,:is(.licita-final-comparison__arrow,.illustration-evolution__arrow) { display:none!important; }
-  .licita-applied-comparison__visual figure,.licita-final-comparison__column,.hero-comparison figure { width:100%; min-width:0; transform:none!important; }
-  .licita-applied-comparison__meta { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px; }
-  .licita-applied-comparison__label,.licita-applied-comparison__meta figcaption { font-size:11px!important; }
-  .licita-applied-comparison__expand { flex:0 0 auto; font-size:12px!important; }
-  .licita-applied-comparison__visual img,.hero-comparison img,.licita-final-comparison video { width:100%!important; max-width:100%!important; height:auto!important; object-fit:contain!important; }
+  @include case-screenshots.stage-31;
+  @include case-screenshots.stage-32;
+  @include case-screenshots.stage-33;
+  @include case-screenshots.stage-34;
+  @include case-screenshots.stage-35;
+  @include case-screenshots.stage-36;
+  @include case-screenshots.stage-37;
   .visual-process-inner { width:100%; max-width:none; }
   .licitanow-story-panel :is(.licita-direction-insights,.visual-process-insights,.licita-color-intention__principles) { grid-template-columns:1fr!important; gap:32px!important; }
   .licitanow-story-panel .licita-color-section .licita-palette-editorial { grid-template-columns:1fr!important; gap:32px; }
@@ -1328,15 +1294,9 @@
     height:auto;
   }
 
-  .licitanow-page :is(figcaption,.licita-applied-comparison__label,.licita-challenge__metadata,.story-label) {
-    font-size:clamp(12px,3.35vw,13px)!important;
-    line-height:1.35!important;
-  }
+  @include case-screenshots.stage-38;
 
-  .licitanow-page :is(.licita-applied-comparison__expand,.next-case) {
-    font-size:clamp(13px,3.6vw,14px)!important;
-    font-weight:700!important;
-  }
+  @include case-screenshots.stage-39;
 }
 
 /* LicitaNow mobile containment — one deliberate breakpoint. */
@@ -1399,50 +1359,19 @@
     grid-template-columns:1fr;
   }
 
-  :is(.licita-applied-comparison__visual,.hero-comparison,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison,.illustration-evolution) {
-    grid-template-columns:1fr!important;
-    gap:36px!important;
-  }
+  @include case-screenshots.stage-40;
 
-  :is(.licita-applied-comparison__visual,.hero-comparison,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison) > span,
-  :is(.licita-final-comparison__arrow,.illustration-evolution__arrow) {
-    display:none!important;
-  }
+  @include case-screenshots.stage-41;
 
-  .licita-applied-comparison__visual figure,
-  .licita-final-comparison__column,
-  .hero-comparison figure {
-    width:100%;
-    min-width:0;
-    transform:none!important;
-  }
+  @include case-screenshots.stage-42;
 
-  .licita-applied-comparison__meta {
-    display:flex;
-    align-items:baseline;
-    justify-content:space-between;
-    gap:12px;
-    margin-bottom:12px;
-  }
+  @include case-screenshots.stage-43;
 
-  .licita-applied-comparison__label,
-  .licita-applied-comparison__meta figcaption {
-    font-size:11px!important;
-  }
+  @include case-screenshots.stage-44;
 
-  .licita-applied-comparison__expand {
-    flex:0 0 auto;
-    font-size:12px!important;
-  }
+  @include case-screenshots.stage-45;
 
-  .licita-applied-comparison__visual img,
-  .hero-comparison img,
-  .licita-final-comparison video {
-    width:100%!important;
-    max-width:100%!important;
-    height:auto!important;
-    object-fit:contain!important;
-  }
+  @include case-screenshots.stage-46;
 
   .visual-process-inner {
     width:100%;
@@ -1920,19 +1849,9 @@
 }
 
 /* LicitaNow 02 — títulos editoriais sem numeração. */
-.licitanow-story-panel .licita-applied-comparison {
-  border-top:0;
-}
+@include case-screenshots.stage-47;
 
-.licitanow-story-panel .licita-applied-comparison h4 {
-  color:#20242b;
-  font-size:14px;
-  font-weight:600;
-  line-height:1.3;
-  letter-spacing:.08em;
-  text-align:left;
-  text-transform:none;
-}
+@include case-screenshots.stage-48;
 
 /* LicitaNow 02 — chevron mais presente, apenas no card Problema. */
 .licitanow-story-panel .licita-problem-solution__card--problem .licita-problem-solution__toggle::before {
@@ -1946,39 +1865,16 @@
 }
 
 /* LicitaNow 02 — presença final da comparação 01 / Hero. */
-.licitanow-story-panel .licita-applied-comparison--hero {
-  width:min(82vw,1500px);
-  max-width:none;
-  margin-inline:auto;
-  position:relative;
-  left:50%;
-  transform:translateX(-50%);
-}
+@include case-screenshots.stage-49;
 
-.licitanow-story-panel .licita-applied-comparison--hero > header {
-  gap:16px;
-  margin-bottom:clamp(42px,3vw,50px);
-}
+@include case-screenshots.stage-50;
 
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual {
-  grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);
-  gap:clamp(20px,1.8vw,30px);
-}
+@include case-screenshots.stage-51;
 
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual img {
-  width:100%;
-  height:clamp(360px,34vw,560px);
-  object-fit:cover;
-  object-position:top;
-}
+@include case-screenshots.stage-52;
 
 @media(min-width:1200px) {
-  .licitanow-story-panel .licita-applied-decisions__header p,
-  .licitanow-story-panel .licita-applied-comparison--hero > header p {
-    width:max-content;
-    max-width:none;
-    white-space:nowrap;
-  }
+  @include case-screenshots.stage-53;
 
   .licitanow-story-panel .licita-applied-decisions__header p {
     margin-inline:auto;
@@ -1986,38 +1882,19 @@
 }
 
 @media(max-width:1199px) {
-  .licitanow-story-panel .licita-applied-comparison--hero {
-    width:100%;
-    max-width:100%;
-    left:auto;
-    transform:none;
-  }
+  @include case-screenshots.stage-54;
 }
 
 /* LicitaNow 02 — comparação 01 compacta e preenchida. */
-.licitanow-story-panel .licita-applied-comparison--hero {
-  padding-top:0;
-  border-top:0;
-}
+@include case-screenshots.stage-55;
 
-.licitanow-story-panel .licita-applied-comparison--hero + .licita-applied-comparison {
-  border-top:0;
-}
+@include case-screenshots.stage-56;
 
-.licitanow-story-panel .licita-applied-comparison--hero > header {
-  margin-bottom:clamp(42px,3vw,50px);
-}
+@include case-screenshots.stage-57;
 
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual {
-  grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr);
-  gap:clamp(20px,1.8vw,30px);
-  align-items:center;
-}
+@include case-screenshots.stage-58;
 
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual figure {
-  opacity:1;
-  transform:none;
-}
+@include case-screenshots.stage-59;
 
 /* LicitaNow 02 — mais largura útil para cada tópico em desktop. */
 @media(min-width:761px) {
@@ -2175,213 +2052,73 @@
 }
 
 /* LicitaNow 02 — variante wide centrada para comparações Antes / Depois. */
-.licitanow-story-panel .licita-applied-decisions {
-  width:min(92vw,1600px);
-  max-width:none;
-  margin-inline:auto;
-}
+@include case-screenshots.stage-60;
 
-.licitanow-story-panel .licita-applied-comparisons,
-.licitanow-story-panel .licita-applied-comparison {
-  width:100%;
-  max-width:100%;
-  margin-inline:auto;
-  position:static;
-  left:auto;
-  transform:none;
-}
+@include case-screenshots.stage-61;
 
-.licitanow-story-panel .licita-applied-comparison:not(.licita-applied-comparison--process) {
-  width:min(88vw,1500px);
-}
+@include case-screenshots.stage-62;
 
-.licitanow-story-panel .licita-applied-comparison--process {
-  width:min(92vw,1600px);
-  height:auto;
-  min-height:0;
-}
+@include case-screenshots.stage-63;
 
-.licitanow-story-panel .licita-applied-comparison--process > header {
-  width:min(100%,1214px);
-  margin-right:auto;
-  margin-left:auto;
-  gap:14px;
-  margin-bottom:42px;
-}
+@include case-screenshots.stage-64;
 
-.licitanow-story-panel .licita-applied-comparison--process .licita-applied-comparison__visual {
-  grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);
-  gap:16px;
-  align-items:center;
-  height:auto;
-  min-height:0;
-}
+@include case-screenshots.stage-65;
 
-.licitanow-story-panel .licita-applied-comparison--process .licita-applied-comparison__visual figcaption {
-  margin-bottom:12px;
-}
+@include case-screenshots.stage-66;
 
-.licitanow-story-panel .licita-applied-comparison--process .licita-applied-comparison__visual img {
-  display:block;
-  width:100%;
-  height:auto;
-  aspect-ratio:auto;
-  object-fit:contain;
-  object-position:top;
-  border-radius:4px;
-  box-shadow:0 10px 28px rgba(0,0,0,.08);
-}
+@include case-screenshots.stage-67;
 
 /* LicitaNow 02 — Princípios Antes / Depois em variante extra-wide. */
-.licitanow-story-panel .licita-applied-comparison--principles {
-  width:min(92vw,1600px);
-  height:auto;
-  min-height:0;
-  margin-inline:auto;
-}
+@include case-screenshots.stage-68;
 
-.licitanow-story-panel .licita-applied-comparison--principles > header {
-  width:min(100%,1214px);
-  gap:14px;
-  margin:0 auto 42px;
-}
+@include case-screenshots.stage-69;
 
-.licitanow-story-panel .licita-applied-comparison--principles .licita-applied-comparison__visual {
-  grid-template-columns:minmax(0,1fr) 40px minmax(0,1fr);
-  gap:16px;
-  align-items:center;
-  height:auto;
-  min-height:0;
-}
+@include case-screenshots.stage-70;
 
-.licitanow-story-panel .licita-applied-comparison--principles .licita-applied-comparison__visual figcaption {
-  margin-bottom:12px;
-}
+@include case-screenshots.stage-71;
 
-.licitanow-story-panel .licita-applied-comparison--principles .licita-applied-comparison__visual img {
-  display:block;
-  width:100%;
-  height:auto;
-  aspect-ratio:auto;
-  object-fit:contain;
-  object-position:top;
-  border-radius:4px;
-  box-shadow:0 10px 28px rgba(0,0,0,.08);
-}
+@include case-screenshots.stage-72;
 
-.licitanow-story-panel .licita-applied-comparison__visual,
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual {
-  grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr);
-  gap:16px;
-  align-items:start;
-}
+@include case-screenshots.stage-73;
 
-.licitanow-story-panel .licita-applied-comparison__visual img,
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual img {
-  display:block;
-  width:100%;
-  height:auto;
-  aspect-ratio:auto;
-  object-fit:contain;
-  object-position:top;
-}
+@include case-screenshots.stage-74;
 
 /* LicitaNow 02 — Hero Antes / Depois com os assets finais. */
-.licitanow-story-panel .licita-applied-comparison--hero {
-  width:min(88vw,1500px);
-  margin-inline:auto;
-}
+@include case-screenshots.stage-75;
 
-.licitanow-story-panel .licita-applied-comparison--hero > header {
-  gap:14px;
-  margin-bottom:44px;
-}
+@include case-screenshots.stage-76;
 
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual {
-  grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);
-  gap:16px;
-  align-items:start;
-}
+@include case-screenshots.stage-77;
 
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual figcaption {
-  margin-bottom:12px;
-}
+@include case-screenshots.stage-78;
 
-.licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual img {
-  width:100%;
-  height:auto;
-  aspect-ratio:auto;
-  object-fit:contain;
-  object-position:top;
-  border-radius:4px;
-  box-shadow:0 10px 28px rgba(0,0,0,.08);
-}
+@include case-screenshots.stage-79;
 
 /* Acabamento uniforme de todos os prints Antes / Depois da secção 02. */
-.licitanow-story-panel .licita-applied-decisions .licita-applied-comparison__visual img {
-  border-radius:4px;
-  box-shadow:0 12px 30px rgba(0,0,0,.10);
-}
+@include case-screenshots.stage-80;
 
 @media(min-width:901px) and (max-width:1199px) {
-  .licitanow-story-panel .licita-applied-decisions {
-    width:90vw;
-  }
+  @include case-screenshots.stage-81;
 }
 
 @media(max-width:900px) {
-  .licitanow-story-panel .licita-applied-decisions {
-    width:100%;
-    max-width:100%;
-  }
+  @include case-screenshots.stage-82;
 
-  .licitanow-story-panel .licita-applied-comparison--process {
-    width:100%;
-  }
+  @include case-screenshots.stage-83;
 
-  .licitanow-story-panel .licita-applied-comparison--hero {
-    width:100%;
-  }
+  @include case-screenshots.stage-84;
 
-  .licitanow-story-panel .licita-applied-comparison--principles {
-    width:100%;
-  }
+  @include case-screenshots.stage-85;
 
-  .licitanow-story-panel .licita-applied-comparison__visual,
-  .licitanow-story-panel .licita-applied-comparison--hero .licita-applied-comparison__visual,
-  .licitanow-story-panel .licita-applied-comparison--process .licita-applied-comparison__visual,
-  .licitanow-story-panel .licita-applied-comparison--principles .licita-applied-comparison__visual {
-    grid-template-columns:1fr;
-    gap:24px;
-  }
+  @include case-screenshots.stage-86;
 
-  .licitanow-story-panel .licita-applied-comparison__visual > span {
-    transform:rotate(90deg);
-  }
+  @include case-screenshots.stage-87;
 }
 
 /* Regra final — normalização integral do comparador Hero. */
-.licitanow-story-panel .licita-applied-comparison--hero {
-  width:min(92vw,1600px);
-  max-width:none;
-  height:auto;
-  min-height:0;
-  margin-inline:auto;
-  padding-top:0;
-  overflow:visible;
-  position:static;
-  left:auto;
-  right:auto;
-  transform:none;
-}
+@include case-screenshots.stage-88;
 
-.licitanow-story-panel .licita-applied-comparison--hero > header {
-  width:100%;
-  max-width:none;
-  gap:14px;
-  margin:0 0 44px;
-  padding:0;
-}
+@include case-screenshots.stage-89;
 
 .licitanow-story-panel .hero-comparison {
   display:grid;
@@ -2434,9 +2171,7 @@
 }
 
 @media(max-width:900px) {
-  .licitanow-story-panel .licita-applied-comparison--hero {
-    width:100%;
-  }
+  @include case-screenshots.stage-90;
 
   .licitanow-story-panel .hero-comparison {
     grid-template-columns:1fr;
@@ -2445,310 +2180,87 @@
 }
 
 /* Faixa editorial de decisões aplicada às comparações da secção 02. */
-.licitanow-story-panel .licita-applied-decisions-strip {
-  display:grid;
-  width:min(100%,1450px);
-  margin:44px auto 0;
-  padding:0;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:clamp(48px,4vw,64px);
-  list-style:none;
-}
+@include case-screenshots.stage-91;
 
-.licitanow-story-panel .licita-applied-decisions-strip li {
-  min-width:0;
-  margin:0;
-  padding:0;
-}
+@include case-screenshots.stage-92;
 
-.licitanow-story-panel .licita-applied-decisions-strip span {
-  display:block;
-  margin:0 0 9px;
-  color:var(--licita-accent);
-  font-size:12px;
-  font-weight:700;
-  line-height:1;
-  letter-spacing:.08em;
-}
+@include case-screenshots.stage-93;
 
-.licitanow-story-panel .licita-applied-decisions-strip h5 {
-  margin:0 0 12px;
-  color:#20242b;
-  font-size:13px;
-  font-weight:800;
-  line-height:1.2;
-  letter-spacing:.08em;
-}
+@include case-screenshots.stage-94;
 
-.licitanow-story-panel .licita-applied-decisions-strip p {
-  margin:0;
-  color:rgba(32,36,43,.72);
-  font-size:var(--body-copy-font-size);
-  font-weight:400;
-  line-height:var(--body-copy-line-height);
-}
+@include case-screenshots.stage-95;
 
 @media(max-width:760px) {
-  .licitanow-story-panel .licita-applied-decisions-strip {
-    grid-template-columns:1fr;
-    gap:36px;
-  }
+  @include case-screenshots.stage-96;
 }
 
 /* Regra final — um único eixo geométrico para Decisões Aplicadas. */
-.licitanow-story-panel .licita-applied-decisions {
-  display:flex;
-  width:100%;
-  max-width:100%;
-  margin-right:auto;
-  margin-left:auto;
-  padding-right:0;
-  padding-left:0;
-  justify-content:center;
-}
+@include case-screenshots.stage-97;
 
-.licitanow-story-panel .licita-applied-decisions__center {
-  box-sizing:border-box;
-  width:min(92vw,1600px);
-  max-width:none;
-  margin-right:auto;
-  margin-left:auto;
-  padding-right:0;
-  padding-left:0;
-  flex:0 0 min(92vw,1600px);
-}
+@include case-screenshots.stage-98;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparisons,
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison {
-  width:100%;
-  max-width:none;
-  margin-right:auto;
-  margin-left:auto;
-  padding-right:0;
-  padding-left:0;
-  position:static;
-  left:auto;
-  right:auto;
-  transform:none;
-}
+@include case-screenshots.stage-99;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison > header {
-  width:100%;
-  max-width:none;
-  margin-right:0;
-  margin-left:0;
-  padding-right:0;
-  padding-left:0;
-}
+@include case-screenshots.stage-100;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual {
-  display:grid;
-  width:100%;
-  max-width:none;
-  margin-right:auto;
-  margin-left:auto;
-  padding:0;
-  grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr);
-  gap:16px;
-  align-items:start;
-}
+@include case-screenshots.stage-101;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual > span {
-  align-self:center;
-  justify-self:center;
-  margin:0;
-  position:static;
-}
+@include case-screenshots.stage-102;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual img {
-  display:block;
-  width:100%;
-  max-width:100%;
-  height:auto;
-  object-fit:contain;
-  border:0;
-  border-radius:5px;
-  box-shadow:0 10px 32px rgba(0,0,0,.14);
-}
+@include case-screenshots.stage-103;
 
 @media(max-width:900px) {
-  .licitanow-story-panel .licita-applied-decisions__center {
-    width:100%;
-    flex-basis:100%;
-  }
+  @include case-screenshots.stage-104;
 
-  .licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual {
-    grid-template-columns:1fr;
-    gap:24px;
-  }
+  @include case-screenshots.stage-105;
 }
 
 /* Regra visual definitiva para todas as mockups Antes / Depois. */
-.licitanow-story-panel .licita-applied-decisions,
-.licitanow-story-panel .licita-applied-decisions__center,
-.licitanow-story-panel .licita-applied-comparisons,
-.licitanow-story-panel .licita-applied-comparison,
-.licitanow-story-panel .licita-applied-comparison__visual,
-.licitanow-story-panel .licita-applied-comparison__visual figure {
-  overflow:visible!important;
-}
+@include case-screenshots.stage-106;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual img {
-  border:0!important;
-  border-radius:5px!important;
-  box-shadow:0 12px 36px rgba(0,0,0,.15)!important;
-}
+@include case-screenshots.stage-107;
 
 /* Compensação ótica: os prints claros já têm maior separação tonal. */
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__before img {
-  box-shadow:0 12px 36px rgba(0,0,0,.10)!important;
-}
+@include case-screenshots.stage-108;
 
 /* Nomenclatura e separação editorial dos exemplos Antes / Depois. */
-.licitanow-story-panel .licita-applied-decisions__center :is(
-  .licita-applied-comparison--hero,
-  .licita-applied-comparison--process,
-  .licita-applied-comparison--principles
-) > header {
-  text-align:center;
-}
+@include case-screenshots.stage-109;
 
-.licitanow-story-panel .licita-applied-decisions__center :is(
-  .licita-applied-comparison--hero,
-  .licita-applied-comparison--process,
-  .licita-applied-comparison--principles
-) > header p {
-  margin-right:auto;
-  margin-left:auto;
-  text-align:center;
-}
+@include case-screenshots.stage-110;
 
-.licitanow-story-panel .licita-applied-decisions__center :is(
-  .licita-applied-comparison--process,
-  .licita-applied-comparison--principles,
-  .licita-applied-comparison--about
-) {
-  padding-top:32px;
-  border-top:1px solid rgba(32,36,43,.14);
-}
+@include case-screenshots.stage-111;
 
 /* As comparações nunca dependem do observer para permanecer visíveis. */
-.licitanow-story-panel .licita-applied-decisions .licita-applied-comparison__visual figure {
-  visibility:visible!important;
-  opacity:1!important;
-  transform:none!important;
-}
+@include case-screenshots.stage-112;
 
 /* CTA explícito e preview ampliado das comparações Antes / Depois. */
-.licita-applied-comparison__media {
-  position:relative;
-  width:100%;
-}
+@include case-screenshots.stage-113;
 
-.licita-applied-comparison__meta {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:100%;
-  margin-bottom:16px;
-}
+@include case-screenshots.stage-114;
 
-.licita-applied-comparison__label {
-  margin:0;
-  color:rgba(32,36,43,.58);
-  font-family:inherit;
-  font-size:11px;
-  font-weight:800;
-  line-height:1;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-}
+@include case-screenshots.stage-115;
 
-.licita-applied-comparison__label--after {
-  color:var(--licita-accent);
-}
+@include case-screenshots.stage-116;
 
-.licitanow-story-panel .licita-applied-comparison__visual .licita-applied-comparison__meta figcaption {
-  margin:0;
-}
+@include case-screenshots.stage-117;
 
-.licita-applied-comparison__expand {
-  display:inline-flex;
-  gap:5px;
-  align-items:center;
-  padding:0;
-  border:0;
-  border-radius:0;
-  background:transparent;
-  color:#202326;
-  box-shadow:none;
-  font-family:inherit;
-  font-size:13px;
-  font-weight:650;
-  line-height:1;
-  letter-spacing:.02em;
-  cursor:pointer;
-  transition:opacity 180ms ease;
-}
+@include case-screenshots.stage-118;
 
-.licita-applied-comparison__expand:hover {
-  background:transparent;
-  opacity:.65;
-  transform:none;
-  text-decoration:underline;
-  text-underline-offset:3px;
-}
+@include case-screenshots.stage-119;
 
-.licita-applied-comparison__expand > span {
-  display:inline-block;
-  font-size:15px;
-  font-weight:600;
-  text-decoration:none;
-}
+@include case-screenshots.stage-120;
 
 /* Fluxo visual Antes → Depois, contido na coluna central existente. */
-@keyframes comparisonArrowFlow {
-  0%,100% { transform:translateX(0); }
-  50% { transform:translateX(7px); }
-}
+@include case-screenshots.stage-121;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual > span {
-  position:relative;
-  display:block;
-  width:30px;
-  height:30px;
-  color:#34383c;
-  font-size:0;
-  animation:comparisonArrowFlow 1.8s ease-in-out infinite;
-}
+@include case-screenshots.stage-122;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual > span::before {
-  content:"";
-  position:absolute;
-  top:14px;
-  left:2px;
-  width:25px;
-  height:2px;
-  border-radius:999px;
-  background:currentColor;
-}
+@include case-screenshots.stage-123;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual > span::after {
-  content:"";
-  position:absolute;
-  top:9px;
-  right:2px;
-  width:10px;
-  height:10px;
-  border-top:2px solid currentColor;
-  border-right:2px solid currentColor;
-  transform:rotate(45deg);
-}
+@include case-screenshots.stage-124;
 
 @media(prefers-reduced-motion:reduce) {
-  .licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual > span {
-    animation:none;
-  }
+  @include case-screenshots.stage-125;
 }
 
 /* Síntese final do ponto 02 — comparação das landings completas. */
@@ -2840,22 +2352,7 @@
   overflow:visible;
 }
 
-.licita-global-view__comparison figure,
-.licita-global-view__comparison .licita-applied-comparison__media {
-  box-sizing:border-box;
-  width:100%;
-  max-width:100%;
-  min-width:0;
-  margin:0;
-  padding:0;
-  position:static;
-  left:auto;
-  right:auto;
-  overflow:visible;
-  visibility:visible;
-  opacity:1;
-  transform:none;
-}
+@include case-screenshots.stage-126;
 
 .licita-global-view__comparison .licita-global-view__image {
   display:block;
@@ -2936,10 +2433,7 @@
   }
 }
 
-.licita-applied-comparison__expand:focus-visible {
-  outline:2px solid var(--licita-accent);
-  outline-offset:3px;
-}
+@include case-screenshots.stage-127;
 
 .licita-image-preview {
   position:fixed;
@@ -3088,22 +2582,9 @@
   white-space:normal;
 }
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison > header {
-  width:100%;
-  max-width:none;
-  margin-right:auto;
-  margin-bottom:96px;
-  margin-left:auto;
-  text-align:left;
-}
+@include case-screenshots.stage-128;
 
-.licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison > header p {
-  width:min(100%,760px);
-  max-width:760px;
-  margin-right:0;
-  margin-left:0;
-  text-align:left;
-}
+@include case-screenshots.stage-129;
 
 @media(max-width:900px) {
   .licitanow-story-panel .licita-applied-decisions__header h3 {
@@ -3124,9 +2605,7 @@
   margin-top:60px;
 }
 
-.licitanow-story-panel .licita-problems-identified + .licita-applied-decisions {
-  margin-top:175px;
-}
+@include case-screenshots.stage-130;
 
 /* Secção 03 — narrativa sequencial: composição, ilustração e cor. */
 .licitanow-story-panel .licita-direction-composition {
@@ -3364,13 +2843,7 @@
   overflow: visible;
 }
 
-.illustration-evolution figure,
-.illustration-evolution .licita-applied-comparison__media {
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-  overflow: visible;
-}
+@include case-screenshots.stage-131;
 
 .illustration-evolution__explorations {
   grid-column: 1;
@@ -3400,22 +2873,11 @@
   text-align: left;
 }
 
-.illustration-evolution .licita-applied-comparison__meta {
-  margin-bottom: 16px;
-}
+@include case-screenshots.stage-132;
 
-.illustration-evolution .licita-applied-comparison__meta figcaption {
-  margin: 0;
-  color: rgba(32, 36, 43, .58);
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: .12em;
-}
+@include case-screenshots.stage-133;
 
-.illustration-evolution__hero .licita-applied-comparison__meta figcaption {
-  color: var(--licita-accent);
-}
+@include case-screenshots.stage-134;
 
 .illustration-evolution img {
   display: block;
@@ -3687,19 +3149,9 @@
   72%, 100% { clip-path: inset(0 0 0 0); }
 }
 
-.licita-process-asset > img,
-.licita-process-asset > .licita-applied-comparison__media img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 6px;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, .14);
-}
+@include case-screenshots.stage-135;
 
-.licita-process-asset--final > .licita-applied-comparison__media img {
-  box-shadow: 0 14px 40px rgba(0, 0, 0, .16);
-}
+@include case-screenshots.stage-136;
 
 .licita-process-asset + .licita-direction-insights,
 .visual-process-insights {
@@ -3713,9 +3165,7 @@
   gap: 64px;
 }
 
-.licita-process-asset--final .licita-applied-comparison__meta {
-  margin-bottom: 16px;
-}
+@include case-screenshots.stage-137;
 
 .licitanow-story-panel .licita-process-block--final {
   padding-bottom: 0;
@@ -3826,13 +3276,13 @@
   .licita-problem-solution__card { padding:24px 20px; }
   .licita-problem-solution__card header { display:grid; grid-template-columns:1fr auto; gap:12px; }
   .licita-problem-solution__items,.licita-problem-solution__card ul { grid-template-columns:1fr; }
-  :is(.licita-applied-comparison__visual,.hero-comparison,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison,.illustration-evolution) { grid-template-columns:1fr!important; gap:36px!important; }
-  :is(.licita-applied-comparison__visual,.hero-comparison,.licita-global-view__comparison,.licita-final-comparison,.licita-illustration-comparison) > span,:is(.licita-final-comparison__arrow,.illustration-evolution__arrow) { display:none!important; }
-  .licita-applied-comparison__visual figure,.licita-final-comparison__column,.hero-comparison figure { width:100%; min-width:0; transform:none!important; }
-  .licita-applied-comparison__meta { display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:12px; }
-  .licita-applied-comparison__label,.licita-applied-comparison__meta figcaption { font-size:11px!important; }
-  .licita-applied-comparison__expand { flex:0 0 auto; font-size:12px!important; }
-  .licita-applied-comparison__visual img,.hero-comparison img,.licita-final-comparison video { width:100%!important; max-width:100%!important; height:auto!important; object-fit:contain!important; }
+  @include case-screenshots.stage-138;
+  @include case-screenshots.stage-139;
+  @include case-screenshots.stage-140;
+  @include case-screenshots.stage-141;
+  @include case-screenshots.stage-142;
+  @include case-screenshots.stage-143;
+  @include case-screenshots.stage-144;
   .visual-process-inner { width:100%; max-width:none; }
   .licitanow-story-panel :is(.licita-direction-insights,.visual-process-insights,.licita-color-intention__principles) { grid-template-columns:1fr!important; gap:32px!important; }
   .licitanow-story-panel .licita-color-section .licita-palette-editorial { grid-template-columns:1fr!important; gap:32px; }
@@ -3865,8 +3315,8 @@
   .licitanow-story-panel :is(p,.licita-challenge__copy,.licita-experience__intro,.licita-direction__intro,.licita-proposal__intro,.licita-applied-decisions__header p) { font-size:16px!important; line-height:1.6!important; }
   .licitanow-story-panel :is(figure img,figure video),.licita-global-view :is(figure img,figure video) { display:block; width:100%; max-width:100%; height:auto; }
   .licitanow-story-panel figure,.licita-global-view figure { box-sizing:border-box; width:100vw!important; max-width:none!important; margin-left:calc((100% - 100vw) / 2)!important; margin-right:0!important; }
-  .licitanow-page :is(figcaption,.licita-applied-comparison__label,.licita-challenge__metadata,.story-label) { font-size:clamp(12px,3.35vw,13px)!important; line-height:1.35!important; }
-  .licitanow-page :is(.licita-applied-comparison__expand,.next-case) { font-size:clamp(13px,3.6vw,14px)!important; font-weight:700!important; }
+  @include case-screenshots.stage-145;
+  @include case-screenshots.stage-146;
 }
 
 @include case-mobile.layout;
@@ -4435,16 +3885,9 @@
 
   .licitanow-page .licita-global-view__comparison::-webkit-scrollbar { display:none; }
 
-  .licitanow-page .licita-global-view__comparison .licita-applied-comparison__meta {
-    min-width:0;
-    flex-wrap:wrap;
-  }
+  @include case-screenshots.stage-147;
 
-  .licitanow-page .licita-global-view__comparison .licita-applied-comparison__label {
-    white-space:normal;
-    overflow:visible;
-    text-overflow:clip;
-  }
+  @include case-screenshots.stage-148;
 
   .licitanow-page .licita-global-view__comparison > figure {
     width:100%!important;
@@ -4457,13 +3900,7 @@
     scroll-snap-stop:always;
   }
 
-  .licitanow-page .licita-global-view__comparison .licita-applied-comparison__media,
-  .licitanow-page .licita-global-view__comparison .licita-global-view__image {
-    width:100%!important;
-    max-width:100%!important;
-    height:auto!important;
-    object-fit:contain!important;
-  }
+  @include case-screenshots.stage-149;
 
   .licitanow-page .licita-global-view__dots {
     display:none;
@@ -4528,14 +3965,7 @@
 /* Match JUH's 96px desktop rhythm between each section subtitle and its content. */
 @media (min-width:769px) {
   /* Desktop editorial flow: spacing and headings separate the comparison blocks. */
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center :is(
-    .licita-applied-comparison--process,
-    .licita-applied-comparison--principles,
-    .licita-applied-comparison--about
-  ) {
-    padding-top:0;
-    border-top:0;
-  }
+  @include case-screenshots.stage-150;
 
   .licitanow-page .licitanow-story-panel .case-study-section-header > .case-study-section-subtitle {
     padding-bottom:0!important;
@@ -4564,31 +3994,19 @@
 }
 
 @media (max-width:768px) {
-  .licitanow-page .licitanow-story-panel .licita-problems-identified + .licita-applied-decisions {
-    margin-top:96px;
-  }
+  @include case-screenshots.stage-151;
 
   .licitanow-page .licitanow-story-panel .licita-applied-decisions__header > p {
     text-align:center!important;
   }
 
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison--hero > header {
-    margin-bottom:96px;
-  }
+  @include case-screenshots.stage-152;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison > header h4 {
-    color:#111!important;
-    font-weight:750!important;
-  }
+  @include case-screenshots.stage-153;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison {
-    border-top:0!important;
-  }
+  @include case-screenshots.stage-154;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions-strip li,
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions-strip :is(span,h5,p) {
-    text-align:center!important;
-  }
+  @include case-screenshots.stage-155;
 
   .licitanow-page .licitanow-story-panel .licita-problems-identified__header > p {
     text-align:center!important;
@@ -4682,13 +4100,9 @@
 }
 
 @media (max-width:768px) {
-  .licitanow-page .licita-global-view .licita-applied-comparison__media[data-case-no-mobile-expand] {
-    cursor:default!important;
-  }
+  @include case-screenshots.stage-156;
 
-  .licitanow-page .licita-global-view figure:has(.licita-applied-comparison__media[data-case-no-mobile-expand]) .licita-applied-comparison__expand {
-    display:none!important;
-  }
+  @include case-screenshots.stage-157;
 
   .licitanow-page .licitanow-story-panel .licita-references-header p {
     text-align:center!important;
@@ -4710,27 +4124,15 @@
     text-align:center!important;
   }
 
-  .case-study-page.civitas-page.licitanow-page .civitas-story-panel.licitanow-story-panel .illustration-evolution__explorations,
-  .case-study-page.civitas-page.licitanow-page .civitas-story-panel.licitanow-story-panel .illustration-evolution__explorations .licita-applied-comparison__media,
-  .case-study-page.civitas-page.licitanow-page .civitas-story-panel.licitanow-story-panel .illustration-evolution__explorations img {
-    border:0!important;
-    outline:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
-    filter:none!important;
-  }
+  @include case-screenshots.stage-158;
 
   .licitanow-page .licita-global-view {
     margin-top:32px;
   }
 
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison--principles + .licita-applied-comparison--about {
-    margin-top:-48px!important;
-  }
+  @include case-screenshots.stage-159;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison--hero + .licita-applied-comparison--process {
-    margin-top:-48px!important;
-  }
+  @include case-screenshots.stage-160;
 
   .licita-hero-decisions-carousel__viewport {
     width:100%;
@@ -4807,24 +4209,11 @@
 }
 
 @media (min-width:769px) {
-  .licitanow-page .licitanow-story-panel:has(.licita-applied-decisions) {
-    overflow:visible;
-  }
+  @include case-screenshots.stage-161;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison {
-    box-sizing:border-box;
-    width:100%;
-    max-width:100%;
-    min-width:0;
-  }
+  @include case-screenshots.stage-162;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual,
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual figure,
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__media,
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center .licita-applied-comparison__visual img {
-    min-width:0;
-    max-width:100%;
-  }
+  @include case-screenshots.stage-163;
 
   .licitanow-page .licitanow-story-panel .licita-hero-decisions-carousel__viewport {
     position:relative;
@@ -5103,49 +4492,15 @@
     min-width:0;
   }
 
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions,
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center,
-  .licitanow-page .licitanow-story-panel .licita-applied-comparisons,
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison,
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison__visual,
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison__visual > figure,
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison__media {
-    box-sizing:border-box!important;
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    margin-right:0!important;
-    margin-left:0!important;
-    overflow:visible!important;
-  }
+  @include case-screenshots.stage-164;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-decisions__center,
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison {
-    left:auto!important;
-    right:auto!important;
-    flex-basis:auto!important;
-    translate:none!important;
-  }
+  @include case-screenshots.stage-165;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison__visual {
-    display:grid!important;
-    grid-template-columns:minmax(0,1fr)!important;
-  }
+  @include case-screenshots.stage-166;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison__visual img {
-    display:block!important;
-    width:100%!important;
-    max-width:100%!important;
-    min-width:0!important;
-    height:auto!important;
-    object-fit:contain!important;
-  }
+  @include case-screenshots.stage-167;
 
-  .licitanow-page .licitanow-story-panel .licita-applied-comparison--principles .licita-applied-comparison__media {
-    width:84%!important;
-    max-width:84%!important;
-    margin-inline:auto!important;
-  }
+  @include case-screenshots.stage-168;
 
   .licitanow-page .licita-implementation__blocks .licita-implementation__code {
     display:flex;

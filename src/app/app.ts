@@ -4,6 +4,7 @@ import emailjs from '@emailjs/browser';
 import { ProjectCaseComponent } from './project-case/project-case';
 import { LicitaNowCaseComponent } from './licitanow-case/licitanow-case';
 import { JuhCaseComponent } from './juh-case/juh-case';
+import { SmartChargingCaseComponent } from './smart-charging-case/smart-charging-case';
 import { LanguageService } from './i18n/language.service';
 import { TranslateDirective } from './i18n/translate.directive';
 
@@ -49,7 +50,7 @@ interface ProjectChatMessage {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [ProjectCaseComponent, LicitaNowCaseComponent, JuhCaseComponent, FormsModule],
+  imports: [ProjectCaseComponent, LicitaNowCaseComponent, JuhCaseComponent, SmartChargingCaseComponent, FormsModule],
   hostDirectives: [TranslateDirective],
   templateUrl: './app.html',
   styleUrl: './app.scss',

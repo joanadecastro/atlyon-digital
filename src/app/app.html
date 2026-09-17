@@ -219,8 +219,7 @@
               [class.portfolio-project-card--civitas]="projectIndex === 0"
               [class.portfolio-project-card--licitanow]="projectIndex === 1"
               [class.portfolio-project-card--smart-charging]="projectIndex === 2"
-              [disabled]="projectIndex === 2"
-              (click)="projectIndex !== 2 && openProject(project)">
+              (click)="openProject(project)">
               <div class="case-card-content">
               <div class="case-card-copy">
                 @if (projectIndex === 0) {
@@ -517,26 +516,7 @@
 } @else if (selectedProject.slug === 'licitanow') {
 <app-licitanow-case></app-licitanow-case>
 } @else if (selectedProject.slug === 'smart-charging') {
-<main class="smart-charging-teaser">
-  <section class="smart-charging-teaser__hero">
-    <div class="smart-charging-teaser__glow" aria-hidden="true"></div>
-    <div class="smart-charging-teaser__inner">
-      <div class="smart-charging-teaser__copy">
-        <h1>SMART CHARGING</h1>
-        <h2>Gest&atilde;o inteligente de carregamentos</h2>
-        <span class="smart-charging-teaser__meta">Produto SaaS &middot; UI/UX &middot; Front-end</span>
-        <p>Produto digital para gest&atilde;o de carregamentos el&eacute;tricos de frotas autom&oacute;veis.</p>
-        <span class="smart-charging-teaser__status">BREVEMENTE DISPON&Iacute;VEL</span>
-      </div>
-      <div class="smart-charging-teaser__visual" aria-hidden="true">
-        <img class="smart-charging-teaser__image smart-charging-teaser__image--secondary"
-          src="/projects/smart_charging.png" alt="">
-        <img class="smart-charging-teaser__image smart-charging-teaser__image--primary"
-          src="/projects/hero/hero_smartcharging.png" alt="">
-      </div>
-    </div>
-  </section>
-</main>
+<app-smart-charging-case />
 } @else {
 <app-project-case [project]="selectedProject" (back)="navigateToProjectsStart()">
 </app-project-case>

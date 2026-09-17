@@ -180,7 +180,7 @@
 }
 
 /* Encapsulated case styles may be loaded after global CSS; keep this mapping authoritative. */
-html body :is(app-project-case, app-licitanow-case, app-juh-case)
+html body :is(app-project-case, app-licitanow-case, app-juh-case, app-smart-charging-case)
   .case-study-page.civitas-page .civitas-story-panel
   .case-study-section-header.editorial-section-header > .case-study-section-title {
   font-family:Inter,Arial,sans-serif!important;
@@ -191,7 +191,7 @@ html body :is(app-project-case, app-licitanow-case, app-juh-case)
   text-transform:none!important;
 }
 
-html body :is(app-project-case, app-licitanow-case, app-juh-case)
+html body :is(app-project-case, app-licitanow-case, app-juh-case, app-smart-charging-case)
   .case-study-page.civitas-page .civitas-story-panel
   .case-study-section-header.editorial-section-header > .case-study-section-subtitle {
   font-family:Inter,Arial,sans-serif!important;
@@ -227,7 +227,7 @@ html body :is(app-project-case, app-licitanow-case, app-juh-case)
   text-transform:none!important;
 }
 
-html body :is(app-project-case, app-licitanow-case, app-juh-case)
+html body :is(app-project-case, app-licitanow-case, app-juh-case, app-smart-charging-case)
   .case-study-page.civitas-page .civitas-story-panel
   .case-study-section-header.editorial-section-header > .case-study-section-number {
   font-family:Inter,Arial,sans-serif!important;

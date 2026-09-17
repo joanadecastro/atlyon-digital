@@ -1,0 +1,193 @@
+@use '../project-case/project-case';
+@use '../project-case/case-screenshots';
+@use '../project-case/case-media-shadow';
+
+// Consume the existing case layout and the canonical LicitaNow screenshot rules.
+@include case-screenshots.all;
+@media (min-width: 769px) {
+  @include case-screenshots.visible-toolbar;
+}
+@include case-screenshots.single-toolbar;
+
+@media (max-width: 768px) {
+  :host .civitas-story-panel :is([aria-labelledby='smart-parking'], [aria-labelledby='smart-permissions']) > .licitanow-page {
+    margin-top: 0 !important;
+  }
+
+  :host .civitas-story-panel :is([aria-labelledby='smart-parking'], [aria-labelledby='smart-permissions']) > .story-chapter-header {
+    margin-bottom: 24px;
+  }
+
+  :host .civitas-story-panel :is([aria-labelledby='smart-parking'], [aria-labelledby='smart-permissions'], .smart-charger-workflows) .licitanow-story-panel .licita-applied-decisions {
+    margin-top: 0;
+  }
+
+  :host .civitas-story-panel :is([aria-labelledby='smart-parking'], [aria-labelledby='smart-permissions'], .smart-charger-workflows) .licita-applied-comparison--process {
+    padding-top: 0;
+  }
+
+  :host .civitas-story-panel .story-chapter + .smart-charger-workflows {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview .smart-product-preview__stack {
+    display: block;
+    aspect-ratio: 1900 / 1080;
+    padding: 0;
+    overflow: hidden;
+    background: #f4f5f6;
+  }
+
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview .smart-product-preview__stack.smart-product-preview__stack > .smart-product-preview__screen {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0;
+    object-fit: contain;
+    box-shadow: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-4px);
+    transition: opacity 700ms ease-in-out, transform 700ms ease-in-out, visibility 700ms;
+    pointer-events: none;
+    z-index: auto;
+  }
+
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview .smart-product-preview__stack.smart-product-preview__stack > .smart-product-preview__screen.is-preview-current {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview .smart-product-preview__stack.smart-product-preview__stack > .smart-product-preview__screen {
+    transition: none;
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  :host ::ng-deep .case-study-page.civitas-page .civitas-story-panel
+  [data-case-screenshot-toolbar].panel-hotspot-visual__screen > .case-expand-affordance {
+    top: 10px;
+    grid-row: 2 / 3;
+    grid-column: 1 / 2;
+    align-self: start;
+  }
+}
+
+.civitas-story-panel .smart-preview-note + .smart-product-preview {
+  margin-top: var(--case-study-intro-visual-gap);
+}
+
+.civitas-story-panel .smart-product-preview + [aria-labelledby='smart-introduction'] {
+  margin-top: calc(var(--case-study-intro-visual-gap) + 40px);
+}
+
+:host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview > .interface-view-label { text-align: center !important; }
+@media (max-width: 768px) {
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-preview-note > .story-chapter-header > .interface-view-summary,
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview > :is(.interface-view-label, .interface-view-summary) {
+    text-align: left !important;
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-preview-note > .story-chapter-header > .interface-view-summary {
+    text-align: center !important;
+  }
+}
+.civitas-story-panel .smart-product-preview > .overview-hotspot-visual.panel-hotspot-visual {
+  width: 100%;
+  max-width: none;
+  padding-inline: 0;
+  margin-top: 24px;
+  height: auto;
+  min-height: 0;
+  align-items: flex-start;
+}
+.smart-product-preview__stack {
+  container-type: inline-size;
+  --preview-screen-height: min(136px, calc(100cqw / 10));
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  isolation: isolate;
+  width: 100%;
+  align-self: flex-start;
+  padding-bottom: 12px;
+  overflow: visible;
+}
+@media (min-width: 769px) {
+  .smart-product-preview__stack {
+    --preview-screen-height: clamp(114px, calc(100cqw / 10), 136px);
+  }
+}
+:host .case-study-page.civitas-page .civitas-story-panel
+.smart-product-preview .smart-product-preview__stack > .smart-product-preview__screen {
+  position: relative;
+  display: block;
+  flex: 0 0 auto;
+  width: auto !important;
+  min-width: 0;
+  height: var(--preview-screen-height) !important;
+  object-fit: contain;
+  border: 0;
+  @include case-media-shadow.subtle;
+}
+.smart-product-preview__screen + .smart-product-preview__screen {
+  margin-left: calc((100cqw - (14 * (1900 / 1080) + (1900 / 1285)) * var(--preview-screen-height)) / 14);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .smart-product-preview__screen:hover {
+    z-index: 1;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .smart-product-preview__screen {
+    transition: transform 200ms ease;
+  }
+
+  .smart-product-preview__screen:hover {
+    transform: translateY(-8px);
+  }
+}
+
+.civitas-story-panel .case-study-section-number {
+  color: color-mix(in srgb, var(--case-accent) 88%, black);
+}
+
+:host .case-study-page.civitas-page .civitas-story-panel
+  [data-case-screenshot-toolbar] > .licita-applied-comparison__media > img {
+  border-top-color: transparent !important;
+}
+
+@media (min-width: 769px) {
+  :host .case-study-page.civitas-page .civitas-story-panel
+  .licitanow-story-panel .licita-applied-decisions__center
+  [data-case-screenshot-toolbar] > .licita-applied-comparison__media > img {
+    box-shadow: 0 2px 5px rgba(25,32,38,.18) !important;
+  }
+
+  :host .case-study-page.civitas-page:not(.licitanow-page) .civitas-story-panel
+  .story-interface-panel [data-case-screenshot-toolbar].overview-hotspot-visual__screen.panel-hotspot-visual__screen > img {
+    box-shadow: 0 2px 5px rgba(25,32,38,.18) !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .civitas-story-panel [aria-labelledby='smart-introduction'] + [aria-labelledby='smart-overview'] {
+    margin-top: 120px;
+  }
+
+  .civitas-story-panel .story-chapter + .smart-charger-workflows {
+    margin-top: 120px;
+  }
+}

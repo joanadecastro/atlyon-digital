@@ -1,0 +1,1013 @@
+import { NgTemplateOutlet } from '@angular/common';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output, TemplateRef, ViewChild, inject } from '@angular/core';
+import { LanguageService } from '../i18n/language.service';
+import { TranslateDirective } from '../i18n/translate.directive';
+import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scroll-indicator.component';
+import { CaseImagePreviewComponent, CaseImagePreviewLegendItem } from '../project-case/case-image-preview.component';
+import { bindCaseExpandableMedia } from '../project-case/case-expandable-media';
+import { CASE_STUDY_NEXT } from '../case-study-navigation';
+
+type DemoKey = 'panel' | 'overview' | 'variant';
+type Demo = { key: DemoKey; element: HTMLElement; order: string[] };
+
+@Component({ selector: 'app-smart-charging-case', standalone: true, imports: [NgTemplateOutlet, CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent], hostDirectives: [TranslateDirective], templateUrl: './smart-charging-case.html', styleUrl: './smart-charging-case.scss', host: { style: '--civitas-hero-green:#c5d2e9;--case-accent:#c5d2e9' } })
+export class SmartChargingCaseComponent implements AfterViewInit, OnDestroy {
+  readonly language = inject(LanguageService);
+  readonly nextProject = CASE_STUDY_NEXT.smartCharging;
+  @Input() project: any;
+  @Output() back = new EventEmitter<void>();
+  @ViewChild('panelMockupDemo', { read: ElementRef }) panelRef?: ElementRef<HTMLElement>;
+  @ViewChild('overviewMockupDemo', { read: ElementRef }) overviewRef?: ElementRef<HTMLElement>;
+  @ViewChild('variantMockupDemo', { read: ElementRef }) variantRef?: ElementRef<HTMLElement>;
+  @ViewChild('panelComposition') panelComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('overviewComposition') overviewComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('variantComposition') variantComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('metricCardsComposition') metricCardsComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('flowIndicatorsComposition') flowIndicatorsComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('metricTagsDemo', { read: ElementRef }) metricTagsRef?: ElementRef<HTMLElement>;
+  @ViewChild('flowMetricsDemo', { read: ElementRef }) flowMetricsRef?: ElementRef<HTMLElement>;
+  @ViewChild('heroFlowOverlay', { read: ElementRef }) heroFlowOverlayRef?: ElementRef<HTMLElement>;
+  @ViewChild('heroPanelTags', { read: ElementRef }) heroPanelTagsRef?: ElementRef<HTMLElement>;
+  @ViewChild('responsiveMobileDemo', { read: ElementRef }) responsiveMobileDemoRef?: ElementRef<HTMLElement>;
+  @ViewChild('responsivePanelDemo', { read: ElementRef }) responsivePanelDemoRef?: ElementRef<HTMLElement>;
+  @ViewChild('responsivePanelComposition') responsivePanelComposition?: TemplateRef<{ preview: boolean }>;
+  @ViewChild('userNeedClose', { read: ElementRef }) userNeedCloseRef?: ElementRef<HTMLButtonElement>;
+  @ViewChild('userNeedSurface', { read: ElementRef }) userNeedSurfaceRef?: ElementRef<HTMLElement>;
+  @ViewChild(CaseImagePreviewComponent) private imagePreview?: CaseImagePreviewComponent;
+  activeOverviewHotspot: string | null = null;
+  demoPulsingHotspot: string | null = null;
+  challengeFrontScreen: 'panel' | 'overview' = 'panel';
+  challengeDepthSwitching = false;
+  flowMetricValues = ['0.0 kW', '0%', '0.0 kW', '0.0 kW'];
+  responsiveOverviewVariant: 0 | 1 = 0;
+  responsivePanelDesktopMode: 'desktop' | 'mobile' = 'desktop';
+  responsiveOverviewDesktopMode: 'desktop' | 'mobile' = 'desktop';
+  openArchitectureGroup: string | null = null;
+  openUserNeed: string | null = null;
+  isMobileViewport = false;
+  private stopProductPreview?: () => void;
+
+  private setupProductPreview(): void {
+    const screens = Array.from(this.host.nativeElement.querySelectorAll<HTMLImageElement>('.smart-product-preview__screen'));
+    const mobile = matchMedia('(max-width: 768px)');
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+    let timer: ReturnType<typeof setInterval> | undefined;
+    let index = 0;
+    const update = () => {
+      if (timer !== undefined) clearInterval(timer);
+      timer = undefined;
+      index = 0;
+      screens.forEach((screen, i) => {
+        screen.classList.toggle('is-preview-current', i === 0);
+        if (mobile.matches) screen.loading = 'eager';
+      });
+      if (mobile.matches && !reducedMotion.matches && screens.length > 1) {
+        timer = setInterval(() => {
+          if (document.hidden) return;
+          screens[index].classList.remove('is-preview-current');
+          index = (index + 1) % screens.length;
+          screens[index].classList.add('is-preview-current');
+        }, 2300);
+      }
+    };
+    update();
+    mobile.addEventListener('change', update);
+    reducedMotion.addEventListener('change', update);
+    this.stopProductPreview = () => {
+      if (timer !== undefined) clearInterval(timer);
+      mobile.removeEventListener('change', update);
+      reducedMotion.removeEventListener('change', update);
+    };
+  }
+
+  private revealObserver?: IntersectionObserver;
+  private storyRevealObserver?: IntersectionObserver;
+  private demoObserver?: IntersectionObserver;
+  private flowMetricsObserver?: IntersectionObserver;
+  private metricTagsObserver?: IntersectionObserver;
+  private variantFlowObserver?: IntersectionObserver;
+  private variantFlowFrame?: number;
+  private mainFlowObserver?: IntersectionObserver;
+  private mainFlowFrame?: number;
+  private overviewMetricTagTimers = new Map<HTMLElement, ReturnType<typeof setTimeout>>();
+  private compactFlowObservers: IntersectionObserver[] = [];
+  private compactFlowFrames = new Map<HTMLElement, number>();
+  private responsiveGroupObservers: IntersectionObserver[] = [];
+  private responsiveVariantObserver?: IntersectionObserver;
+  private responsiveVariantTimer?: ReturnType<typeof setInterval>;
+  private demos: Demo[] = [];
+  private ratios = new Map<DemoKey, number>();
+  private activeDemo: DemoKey | null = null;
+  private automaticHotspot: string | null = null;
+  private demoIndex = 0;
+  private running = false;
+  private manuallyPaused = false;
+  private demoTimer?: ReturnType<typeof setTimeout>;
+  private resumeTimer?: ReturnType<typeof setTimeout>;
+  private scrollFrame?: number;
+  private heroFrame?: number;
+  private challengeDepthTimer?: ReturnType<typeof setTimeout>;
+  private challengeDepthResumeTimer?: ReturnType<typeof setTimeout>;
+  private challengeDepthMidpointTimer?: ReturnType<typeof setTimeout>;
+  private challengeDepthFinishTimer?: ReturnType<typeof setTimeout>;
+  private flowMetricsFrame?: number;
+  private flowMetricsStartedAt?: number;
+  private flowMetricsActive = false;
+  private flowMetricsStart?: () => void;
+  private flowMetricsReset?: () => void;
+  private userNeedTrigger?: HTMLButtonElement;
+  private userNeedOutsidePointerHandler?: (event: PointerEvent) => void;
+  private unbindExpandableMedia?: () => void;
+
+  constructor(private readonly cdr: ChangeDetectorRef, private readonly host: ElementRef<HTMLElement>) {}
+
+  openChallengePreview(src: string, alt: string, event: Event): void {
+    event.stopPropagation();
+    this.imagePreview?.open(src, alt);
+  }
+
+  openPanelPreview(event: Event): void {
+    event.stopPropagation();
+    const legend: readonly CaseImagePreviewLegendItem[] = [
+      { number: '01', title: 'NAVEGAÇÃO E FILTROS' },
+      { number: '02', title: 'INDICADORES PRINCIPAIS' },
+      { number: '03', title: 'METEOROLOGIA' },
+      { number: '04', title: 'PREVISÃO DA PRODUÇÃO' },
+    ];
+    this.imagePreview?.open(
+      '/projects/civitas/civitas_painel.png',
+      'Painel completo anotado',
+      false,
+      legend,
+      this.panelComposition ?? null,
+      'story-interface-panel civitas-panel-preview',
+    );
+  }
+
+  openOverviewPreview(src: string, alt: string, includeQuota: boolean, event: Event): void {
+    event.stopPropagation();
+    const legend: CaseImagePreviewLegendItem[] = [
+      { number: '01', title: 'CONTEXTO' },
+      { number: '02', title: 'INDICADORES AO VIVO' },
+    ];
+    if (includeQuota) legend.push({ number: '02A', title: 'QUOTA MÉDIA' });
+    legend.push(
+      { number: '03', title: 'MÉTRICAS AGREGADAS' },
+      { number: '04', title: 'CAPITAL' },
+      { number: '05', title: 'EVOLUÇÃO' },
+    );
+    this.imagePreview?.open(
+      src,
+      alt,
+      false,
+      legend,
+      this.overviewComposition ?? null,
+      'story-structure story-interface-overview civitas-overview-preview',
+    );
+  }
+
+  openVariantPreview(event: Event): void {
+    event.stopPropagation();
+    const legend: readonly CaseImagePreviewLegendItem[] = [
+      { number: '01', title: 'CONTEXTO' },
+      { number: '02', title: 'INDICADORES AO VIVO' },
+      { number: '02A', title: 'QUOTA MÉDIA' },
+      { number: '03', title: 'MÉTRICAS AGREGADAS' },
+      { number: '04', title: 'CAPITAL' },
+      { number: '05', title: 'EVOLUÇÃO' },
+    ];
+    this.imagePreview?.open(
+      '/projects/civitas/Group%201852%20%281%29.png',
+      'Vista geral com quatro indicadores ao vivo',
+      false,
+      legend,
+      this.isMobileViewport ? this.variantComposition ?? null : null,
+      this.isMobileViewport ? 'story-structure civitas-variant-preview' : '',
+    );
+  }
+
+  onVariantCompositionImageLoad(event: Event, preview: boolean): void {
+    if (preview) this.imagePreview?.onImageLoad(event);
+  }
+
+  onAnnotatedCompositionImageLoad(event: Event, preview: boolean): void {
+    if (preview) this.imagePreview?.onImageLoad(event);
+  }
+
+  onFlowCompositionImageLoad(event: Event, preview: boolean): void {
+    if (!preview) return;
+    this.imagePreview?.onImageLoad(event);
+    const previewElement = (event.currentTarget as HTMLElement).parentElement;
+    const inlineElement = this.flowMetricsRef?.nativeElement;
+    if (!previewElement || !inlineElement) return;
+
+    const inlineRings = inlineElement.querySelectorAll<SVGCircleElement>('.flow-ring__progress');
+    previewElement.querySelectorAll<SVGCircleElement>('.flow-ring__progress').forEach((ring, index) => {
+      ring.style.strokeDasharray = inlineRings[index]?.style.strokeDasharray ?? '';
+    });
+
+    requestAnimationFrame(() => {
+      const sourceAnimations = inlineElement.getAnimations({ subtree:true });
+      previewElement.getAnimations({ subtree:true }).forEach((animation, index) => {
+        const source = sourceAnimations[index];
+        if (source?.currentTime != null) animation.currentTime = source.currentTime;
+      });
+    });
+  }
+
+  openComponentCompositionPreview(kind: 'cards' | 'flow', event: Event): void {
+    event.stopPropagation();
+    const cards = kind === 'cards';
+    if (!cards) this.flowMetricsStart?.();
+    this.imagePreview?.open(
+      cards
+        ? '/projects/civitas/componentes/civitas_painel%201.png'
+        : '/projects/civitas/componentes/Group%201852%20(1)%201.png',
+      cards ? 'Grelha de oito cards de métrica' : 'Quatro indicadores ao vivo e fluxo energético',
+      false,
+      [],
+      cards ? this.metricCardsComposition ?? null : this.flowIndicatorsComposition ?? null,
+      cards
+        ? 'story-components civitas-component-preview component-crop--cards'
+        : 'story-components civitas-component-preview component-crop--indicators',
+    );
+  }
+
+  openResponsivePanelComposition(event: Event): void {
+    event.stopPropagation();
+    this.imagePreview?.open(
+      '/projects/civitas/mockups_fixas/Group%201856.png',
+      'Comparação do painel em computador e mobile',
+      false,
+      [],
+      this.responsivePanelComposition ?? null,
+    );
+  }
+
+  setResponsivePanelDesktopMode(mode: 'desktop' | 'mobile'): void {
+    this.responsivePanelDesktopMode = mode;
+  }
+
+  setResponsiveOverviewDesktopMode(mode: 'desktop' | 'mobile'): void {
+    this.responsiveOverviewDesktopMode = mode;
+  }
+
+  openResponsivePanelStatePreview(event: Event): void {
+    event.stopPropagation();
+    const mobile = this.responsivePanelDesktopMode === 'mobile';
+    this.imagePreview?.open(
+      mobile
+        ? '/projects/civitas/mockups_fixas/Overview%20mobile%202%20(1).png'
+        : '/projects/civitas/mockups_fixas/Group%201856.png',
+      mobile ? 'Painel em mobile' : 'Painel em computador',
+    );
+  }
+
+  onResponsivePanelCompositionImageLoad(event: Event, preview: boolean): void {
+    if (preview) this.imagePreview?.onImageLoad(event);
+  }
+
+  protectPreviewHotspot(event: Event, preview: boolean): void {
+    if (preview) event.stopPropagation();
+  }
+
+  closeChallengePreview(): void {
+    this.imagePreview?.close();
+  }
+
+  closeChallengePreviewFromBackdrop(event: Event): void {
+    if (event.target === event.currentTarget) this.closeChallengePreview();
+  }
+
+  toggleArchitectureGroup(group: string): void {
+    this.openArchitectureGroup = this.openArchitectureGroup === group ? null : group;
+  }
+
+  get userNeedTitle(): string {
+    return ({ goals: 'OBJETIVOS', difficulties: 'DIFICULDADES', needs: 'NECESSIDADES', behavior: 'COMPORTAMENTO' } as Record<string, string>)[this.openUserNeed ?? ''] ?? '';
+  }
+
+  toggleUserNeed(need: string, event: Event): void {
+    const trigger = event.currentTarget as HTMLButtonElement;
+    if (this.openUserNeed === need) { this.closeUserNeed(); return; }
+    this.userNeedTrigger = trigger;
+    this.openUserNeed = need;
+    this.bindUserNeedOutsidePointer();
+    requestAnimationFrame(() => this.userNeedCloseRef?.nativeElement.focus());
+  }
+
+  closeUserNeed(): void {
+    if (!this.openUserNeed) return;
+    this.unbindUserNeedOutsidePointer();
+    this.openUserNeed = null;
+    const trigger = this.userNeedTrigger;
+    this.userNeedTrigger = undefined;
+    requestAnimationFrame(() => trigger?.focus());
+  }
+
+  private bindUserNeedOutsidePointer(): void {
+    this.unbindUserNeedOutsidePointer();
+    this.userNeedOutsidePointerHandler = (event: PointerEvent) => {
+      const surface = this.userNeedSurfaceRef?.nativeElement;
+      if (surface?.contains(event.target as Node)) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.closeUserNeed();
+    };
+    document.addEventListener('pointerdown', this.userNeedOutsidePointerHandler, true);
+  }
+
+  private unbindUserNeedOutsidePointer(): void {
+    if (!this.userNeedOutsidePointerHandler) return;
+    document.removeEventListener('pointerdown', this.userNeedOutsidePointerHandler, true);
+    this.userNeedOutsidePointerHandler = undefined;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  closeUserNeedFromEscape(event: KeyboardEvent): void {
+    if (event.key === 'Escape') this.closeUserNeed();
+  }
+
+  toggleOverviewHotspot(id: string, event: Event): void {
+    event.stopPropagation();
+    this.pauseForInteraction();
+    this.activeOverviewHotspot = this.activeOverviewHotspot === id ? null : id;
+  }
+
+  @HostListener('pointerover', ['$event'])
+  onPointerOver(event: PointerEvent): void {
+    const hotspot = (event.target as Element | null)?.closest('.overview-hotspot');
+    if (hotspot && !hotspot.contains(event.relatedTarget as Node | null)) this.pauseForInteraction();
+  }
+
+  @HostListener('pointerout', ['$event'])
+  onPointerOut(event: PointerEvent): void {
+    const hotspot = (event.target as Element | null)?.closest('.overview-hotspot');
+    if (hotspot && !hotspot.contains(event.relatedTarget as Node | null)) this.scheduleResume();
+  }
+
+  @HostListener('document:click')
+  @HostListener('document:keydown.escape')
+  closeOverviewHotspot(): void {
+    this.activeOverviewHotspot = null;
+    if (this.manuallyPaused) this.scheduleResume();
+  }
+
+  @HostListener('window:scroll')
+  @HostListener('document:scroll')
+  onScroll(): void {
+    if (this.scrollFrame !== undefined) return;
+    this.scrollFrame = requestAnimationFrame(() => {
+      this.scrollFrame = undefined;
+      this.measureVisibility();
+      this.measureFlowMetricsVisibility();
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.setupProductPreview();
+    this.isMobileViewport = matchMedia('(max-width: 768px)').matches;
+    this.cdr.detectChanges();
+    this.unbindExpandableMedia = bindCaseExpandableMedia(this.host.nativeElement, (src, alt) => this.imagePreview?.open(src, alt));
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hero = document.querySelector<HTMLElement>('.civitas-hero');
+    const heroItems = Array.from(document.querySelectorAll<HTMLElement>('.civitas-hero .civitas-reveal'));
+    if (reducedMotion || typeof IntersectionObserver === 'undefined') {
+      hero?.classList.add('is-entered');
+      heroItems.forEach(item => item.classList.add('is-visible'));
+    } else if (hero) {
+      this.revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.intersectionRatio >= .35) {
+          hero.classList.add('is-entered');
+          heroItems.forEach(item => item.classList.add('is-visible'));
+        } else if (entry.intersectionRatio < .08) {
+          hero.classList.remove('is-entered');
+          heroItems.forEach(item => item.classList.remove('is-visible'));
+        }
+      }), { threshold:[0,.08,.35,.4] });
+      this.revealObserver.observe(hero);
+    }
+    const panel = document.querySelector<HTMLElement>('.civitas-story-panel');
+    const chapters = Array.from(panel?.querySelectorAll<HTMLElement>('.story-chapter') ?? []);
+    panel?.classList.add('scroll-reveal-enabled');
+    if (reducedMotion || typeof IntersectionObserver === 'undefined') chapters.forEach(item => item.classList.add('is-entered'));
+    else {
+      this.storyRevealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+        const chapter = entry.target as HTMLElement;
+        const revealThreshold = chapter.classList.contains('story-user') ? .4 : .3;
+        if (entry.intersectionRatio >= revealThreshold) {
+          chapter.classList.add('is-entered');
+          if (chapter.classList.contains('story-challenge')) this.scheduleChallengeDepthChange();
+        } else if (entry.intersectionRatio < .08 && !chapter.classList.contains('story-architecture')) {
+          chapter.classList.remove('is-entered');
+          if (chapter.classList.contains('story-challenge')) {
+            this.clearChallengeDepthTimers();
+            this.challengeFrontScreen = 'panel';
+            this.challengeDepthSwitching = false;
+            this.render();
+          }
+        }
+      }), { threshold:[0,.08,.3,.4] });
+      chapters.forEach(item => this.storyRevealObserver?.observe(item));
+    }
+    this.setupDemos();
+    this.setupMainFlowDemo();
+    this.setupVariantFlowDemo();
+    this.setupMetricTagsDemo();
+    this.setupFlowMetricsDemo();
+    this.setupCompactFlowDemo(this.heroFlowOverlayRef?.nativeElement);
+    this.setupCompactFlowDemo(this.heroPanelTagsRef?.nativeElement);
+    this.setupResponsiveGroupReveal(this.responsivePanelDemoRef?.nativeElement, reducedMotion);
+    this.setupResponsiveGroupReveal(this.responsiveMobileDemoRef?.nativeElement, reducedMotion);
+    this.setupResponsiveVariantDemo(this.responsiveMobileDemoRef?.nativeElement, reducedMotion);
+  }
+
+  private setupResponsiveVariantDemo(element: HTMLElement | undefined, reducedMotion: boolean): void {
+    if (!element) return;
+    const stop = (): void => {
+      if (this.responsiveVariantTimer !== undefined) clearInterval(this.responsiveVariantTimer);
+      this.responsiveVariantTimer = undefined;
+    };
+    const start = (): void => {
+      if (this.responsiveVariantTimer !== undefined || reducedMotion) return;
+      this.responsiveOverviewVariant = 0;
+      this.render();
+      this.responsiveVariantTimer = setInterval(() => {
+        this.responsiveOverviewVariant = this.responsiveOverviewVariant === 0 ? 1 : 0;
+        this.render();
+      }, 3000);
+    };
+    if (reducedMotion || typeof IntersectionObserver === 'undefined') {
+      this.responsiveOverviewVariant = 0;
+      this.render();
+      if (!reducedMotion) start();
+      return;
+    }
+    this.responsiveVariantObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.intersectionRatio >= .25) start();
+      else if (entry.intersectionRatio < .08) {
+        stop();
+        this.responsiveOverviewVariant = 0;
+        this.render();
+      }
+    }), { threshold:[0,.08,.25,.4] });
+    this.responsiveVariantObserver.observe(element);
+  }
+
+  private setupResponsiveGroupReveal(element: HTMLElement | undefined, reducedMotion: boolean): void {
+    if (!element) return;
+    if (reducedMotion || typeof IntersectionObserver === 'undefined') {
+      element.classList.add('is-visible');
+      return;
+    }
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.intersectionRatio >= .25) {
+        element.classList.add('is-visible');
+      }
+      else if (entry.intersectionRatio < .08) element.classList.remove('is-visible');
+    }), { threshold:[0,.08,.25,.4] });
+    observer.observe(element);
+    this.responsiveGroupObservers.push(observer);
+  }
+
+  private setupCompactFlowDemo(element?: HTMLElement): void {
+    if (!element) return;
+    const rings = Array.from(element.querySelectorAll<SVGCircleElement>('.compact-flow-ring__progress'));
+    const values = Array.from(element.querySelectorAll<HTMLElement>('.compact-flow-value'));
+    const fallbackFinals = [72, 64, 81];
+    const finals = rings.map((ring, index) => Number(ring.dataset['final'] ?? fallbackFinals[index] ?? 0));
+    const formatValue = (value: HTMLElement, amount: number): string => value.dataset['unit'] === '%'
+      ? `${Math.round(amount)}%`
+      : `${amount.toFixed(1)} kW`;
+    let active = false;
+    const reset = (): void => {
+      const frame = this.compactFlowFrames.get(element);
+      if (frame !== undefined) cancelAnimationFrame(frame);
+      this.compactFlowFrames.delete(element);
+      element.classList.remove('is-running');
+      rings.forEach(ring => { ring.style.strokeDasharray = '0 100'; });
+      values.forEach(value => { value.textContent = formatValue(value, 0); });
+      this.stopOverviewMetricTags(element);
+    };
+    const finish = (): void => {
+      rings.forEach((ring, index) => { ring.style.strokeDasharray = `${finals[index]} ${100 - finals[index]}`; });
+      values.forEach(value => { value.textContent = formatValue(value, Number(value.dataset['final'] ?? 0)); });
+    };
+    const start = (): void => {
+      if (active) return;
+      active = true;
+      reset();
+      element.classList.add('is-running');
+      this.startOverviewMetricTags(element);
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+      const startedAt = performance.now();
+      const tick = (now: number): void => {
+        const elapsed = now - startedAt;
+        rings.forEach((ring, index) => {
+          const progress = this.flowMetricEase(Math.min(1, Math.max(0, elapsed - (index * 100)) / 2400));
+          const ringValue = finals[index] * progress;
+          ring.style.strokeDasharray = `${ringValue} ${100 - ringValue}`;
+          const value = values[index];
+          if (value) value.textContent = formatValue(value, Number(value.dataset['final'] ?? 0) * progress);
+        });
+        if (elapsed >= 2600) { finish(); this.compactFlowFrames.delete(element); return; }
+        this.compactFlowFrames.set(element, requestAnimationFrame(tick));
+      };
+      this.compactFlowFrames.set(element, requestAnimationFrame(tick));
+    };
+    if (typeof IntersectionObserver === 'undefined') { start(); return; }
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.intersectionRatio >= .3) start();
+      else if (entry.intersectionRatio <= .08 && active) { active = false; reset(); }
+    }), { threshold:[0,.08,.3,.4] });
+    observer.observe(element);
+    this.compactFlowObservers.push(observer);
+    reset();
+  }
+
+  private setupMainFlowDemo(): void {
+    const element = this.overviewRef?.nativeElement;
+    if (!element) return;
+    const rings = Array.from(element.querySelectorAll<SVGCircleElement>('.flow-ring__progress'));
+    const values = Array.from(element.querySelectorAll<HTMLElement>('.overview-flow-value'));
+    const finals = [72, 64, 81];
+    const delays = [0, 100, 200];
+    let active = false;
+    const reset = (): void => {
+      if (this.mainFlowFrame !== undefined) cancelAnimationFrame(this.mainFlowFrame);
+      this.mainFlowFrame = undefined;
+      element.classList.remove('is-overview-flow-running');
+      this.stopOverviewMetricTags(element);
+      rings.forEach(ring => { ring.style.strokeDasharray = '0 100'; });
+      values.forEach(value => { value.textContent = '0.0 kW'; });
+    };
+    const finish = (): void => {
+      rings.forEach((ring, index) => { ring.style.strokeDasharray = `${finals[index]} ${100 - finals[index]}`; });
+      values.forEach(value => { value.textContent = `${Number(value.dataset['final'] ?? 0).toFixed(1)} kW`; });
+    };
+    const start = (): void => {
+      if (active) return;
+      active = true;
+      reset();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+      element.classList.add('is-overview-flow-running');
+      this.startOverviewMetricTags(element);
+      const startedAt = performance.now();
+      const tick = (now: number): void => {
+        const elapsed = now - startedAt;
+        rings.forEach((ring, index) => {
+          const progress = this.flowMetricEase(Math.min(1, Math.max(0, elapsed - delays[index]) / 2400));
+          const value = finals[index] * progress;
+          ring.style.strokeDasharray = `${value} ${100 - value}`;
+          const metricValue = values[index];
+          if (metricValue) metricValue.textContent = `${(Number(metricValue.dataset['final'] ?? 0) * progress).toFixed(1)} kW`;
+        });
+        if (elapsed >= 2600) { finish(); this.mainFlowFrame = undefined; return; }
+        this.mainFlowFrame = requestAnimationFrame(tick);
+      };
+      this.mainFlowFrame = requestAnimationFrame(tick);
+    };
+    if (typeof IntersectionObserver === 'undefined') { start(); return; }
+    this.mainFlowObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.intersectionRatio >= .3) start();
+      else if (entry.intersectionRatio <= .08 && active) { active = false; reset(); }
+    }), { threshold:[0,.08,.3,.4] });
+    this.mainFlowObserver.observe(element);
+    reset();
+  }
+
+  private setupVariantFlowDemo(): void {
+    const element = this.variantRef?.nativeElement;
+    if (!element) return;
+    const rings = Array.from(element.querySelectorAll<SVGCircleElement>('.variant-progress-ring__progress'));
+    const values = Array.from(element.querySelectorAll<HTMLElement>('.variant-flow-value'));
+    const ringFinals = [72, 38, 64, 81];
+    const delays = [0, 100, 200, 300];
+    let active = false;
+    const reset = (): void => {
+      if (this.variantFlowFrame !== undefined) cancelAnimationFrame(this.variantFlowFrame);
+      this.variantFlowFrame = undefined;
+      element.classList.remove('is-variant-flow-running');
+      this.stopOverviewMetricTags(element);
+      rings.forEach(ring => { ring.style.strokeDasharray = '0 100'; });
+      values.forEach(value => { value.textContent = value.dataset['unit'] === '%' ? '0%' : '0.0 kW'; });
+    };
+    const finish = (): void => {
+      rings.forEach((ring, index) => { ring.style.strokeDasharray = `${ringFinals[index]} ${100 - ringFinals[index]}`; });
+      values.forEach(value => {
+        const final = Number(value.dataset['final'] ?? 0);
+        value.textContent = value.dataset['unit'] === '%' ? `${Math.round(final)}%` : `${final.toFixed(1)} kW`;
+      });
+    };
+    const start = (): void => {
+      if (active) return;
+      active = true;
+      reset();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { finish(); return; }
+      element.classList.add('is-variant-flow-running');
+      this.startOverviewMetricTags(element);
+      const startedAt = performance.now();
+      const tick = (now: number): void => {
+        const elapsed = now - startedAt;
+        rings.forEach((ring, index) => {
+          const progress = this.flowMetricEase(Math.min(1, Math.max(0, elapsed - delays[index]) / 2400));
+          const ringValue = ringFinals[index] * progress;
+          ring.style.strokeDasharray = `${ringValue} ${100 - ringValue}`;
+          const value = values[index];
+          const final = Number(value?.dataset['final'] ?? 0);
+          if (value) value.textContent = value.dataset['unit'] === '%' ? `${Math.round(final * progress)}%` : `${(final * progress).toFixed(1)} kW`;
+        });
+        if (elapsed >= 2700) { finish(); this.variantFlowFrame = undefined; return; }
+        this.variantFlowFrame = requestAnimationFrame(tick);
+      };
+      this.variantFlowFrame = requestAnimationFrame(tick);
+    };
+    if (typeof IntersectionObserver === 'undefined') { start(); return; }
+    this.variantFlowObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.intersectionRatio >= .3) start();
+      else if (entry.intersectionRatio <= .08 && active) { active = false; reset(); }
+    }), { threshold:[0,.08,.3,.4] });
+    this.variantFlowObserver.observe(element);
+    reset();
+  }
+
+  private startOverviewMetricTags(element: HTMLElement): void {
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const tags = Array.from(element.querySelectorAll<HTMLElement>('.overview-metric-state-tag'));
+    tags.forEach((tag, index) => {
+      const existing = this.overviewMetricTagTimers.get(tag);
+      if (existing !== undefined) clearTimeout(existing);
+      tag.classList.toggle('is-positive', index % 2 === 0);
+      if (reducedMotion) return;
+      const alternate = (): void => {
+        tag.classList.toggle('is-positive');
+        const timer = setTimeout(alternate, 2500 + Math.random() * 500);
+        this.overviewMetricTagTimers.set(tag, timer);
+      };
+      const timer = setTimeout(alternate, 2500 + Math.random() * 500 + (index * 130));
+      this.overviewMetricTagTimers.set(tag, timer);
+    });
+  }
+
+  private stopOverviewMetricTags(element?: HTMLElement): void {
+    const tags = element
+      ? Array.from(element.querySelectorAll<HTMLElement>('.overview-metric-state-tag'))
+      : Array.from(this.overviewMetricTagTimers.keys());
+    tags.forEach(tag => {
+      const timer = this.overviewMetricTagTimers.get(tag);
+      if (timer !== undefined) clearTimeout(timer);
+      this.overviewMetricTagTimers.delete(tag);
+      tag.classList.remove('is-positive');
+    });
+  }
+
+  private setupMetricTagsDemo(): void {
+    const element = this.metricTagsRef?.nativeElement;
+    if (!element) return;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || typeof IntersectionObserver === 'undefined') return;
+    this.metricTagsObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.intersectionRatio >= .3) element.classList.add('is-metric-tags-running');
+      else if (entry.intersectionRatio <= .08) element.classList.remove('is-metric-tags-running');
+    }), { threshold:[0,.08,.3,.4] });
+    this.metricTagsObserver.observe(element);
+  }
+
+  private setupFlowMetricsDemo(): void {
+    const element = this.flowMetricsRef?.nativeElement;
+    if (!element) return;
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rings = Array.from(element.querySelectorAll<SVGCircleElement>('.flow-ring__progress'));
+    const ringFinals = [72, 38, 64, 81];
+    const initialValues = ['0.0 kW', '0%', '0.0 kW', '0.0 kW'];
+    const finalValues = ['1.8 kW', '38%', '0.9 kW', '1.5 kW'];
+    const reset = (): void => {
+      if (this.flowMetricsFrame !== undefined) cancelAnimationFrame(this.flowMetricsFrame);
+      this.flowMetricsFrame = undefined;
+      this.flowMetricsStartedAt = undefined;
+      element.classList.remove('is-flow-metrics-running');
+      rings.forEach(ring => { ring.style.strokeDasharray = '0 100'; });
+      this.flowMetricValues = initialValues;
+      this.render();
+    };
+    const start = (): void => {
+      if (this.flowMetricsActive) return;
+      this.flowMetricsActive = true;
+      if (reducedMotion) {
+        rings.forEach((ring, index) => { ring.style.strokeDasharray = `${ringFinals[index]} ${100 - ringFinals[index]}`; });
+        this.flowMetricValues = finalValues;
+        this.render();
+        return;
+      }
+      if (this.flowMetricsFrame !== undefined) cancelAnimationFrame(this.flowMetricsFrame);
+      this.flowMetricsFrame = undefined;
+      element.classList.remove('is-flow-metrics-running');
+      void element.offsetWidth;
+      element.classList.add('is-flow-metrics-running');
+      this.flowMetricsStartedAt = performance.now();
+      const tick = (now: number): void => {
+        const elapsed = now - (this.flowMetricsStartedAt ?? now);
+        const starts = [0, 0, 0, 0];
+        const ends = [1.8, 38, .9, 1.5];
+        const delays = [0, 100, 200, 300];
+        const values = starts.map((initial, index) => {
+          const local = Math.max(0, elapsed - delays[index]);
+          const progress = this.flowMetricEase(Math.min(1, local / 2400));
+          return initial + ((ends[index] - initial) * progress);
+        });
+        const liveRings = Array.from(this.host.nativeElement.querySelectorAll<SVGCircleElement>('.component-crop--indicators .flow-ring__progress'));
+        liveRings.forEach((ring, index) => {
+          const metricIndex = index % ringFinals.length;
+          const local = Math.max(0, elapsed - delays[metricIndex]);
+          const progress = this.flowMetricEase(Math.min(1, local / 2400));
+          const value = ringFinals[metricIndex] * progress;
+          ring.style.strokeDasharray = `${value} ${100 - value}`;
+        });
+        this.flowMetricValues = [
+          `${values[0].toFixed(1)} kW`,
+          `${Math.round(values[1])}%`,
+          `${values[2].toFixed(1)} kW`,
+          `${values[3].toFixed(1)} kW`,
+        ];
+        this.render();
+        if (elapsed >= 2700) {
+          this.host.nativeElement.querySelectorAll<SVGCircleElement>('.component-crop--indicators .flow-ring__progress').forEach((ring, index) => {
+            const metricIndex = index % ringFinals.length;
+            ring.style.strokeDasharray = `${ringFinals[metricIndex]} ${100 - ringFinals[metricIndex]}`;
+          });
+          this.flowMetricValues = finalValues;
+          this.flowMetricsFrame = undefined;
+          this.render();
+          return;
+        }
+        this.flowMetricsFrame = requestAnimationFrame(tick);
+      };
+      this.flowMetricsFrame = requestAnimationFrame(tick);
+    };
+    this.flowMetricsStart = start;
+    this.flowMetricsReset = reset;
+    if (typeof IntersectionObserver === 'undefined') start();
+    else {
+      this.flowMetricsObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.intersectionRatio >= .3) start();
+          else if (entry.intersectionRatio <= .08 && this.flowMetricsActive) {
+            this.flowMetricsActive = false;
+            reset();
+          }
+        });
+      }, { threshold:[0,.08,.3,.4] });
+      this.flowMetricsObserver.observe(element);
+    }
+    this.measureFlowMetricsVisibility();
+  }
+
+  private measureFlowMetricsVisibility(): void {
+    const element = this.flowMetricsRef?.nativeElement;
+    if (!element || !this.flowMetricsStart || !this.flowMetricsReset) return;
+    const rect = element.getBoundingClientRect();
+    const visibleWidth = Math.max(0, Math.min(rect.right, innerWidth) - Math.max(rect.left, 0));
+    const visibleHeight = Math.max(0, Math.min(rect.bottom, innerHeight) - Math.max(rect.top, 0));
+    const ratio = (visibleWidth * visibleHeight) / Math.max(1, rect.width * rect.height);
+    if (ratio >= .3) this.flowMetricsStart();
+    else if (ratio <= .08 && this.flowMetricsActive) {
+      this.flowMetricsActive = false;
+      this.flowMetricsReset();
+    }
+  }
+
+  private flowMetricEase(value: number): number {
+    return 1 - Math.pow(1 - value, 4);
+  }
+
+  bringChallengeScreenToFront(screen: 'panel' | 'overview'): void {
+    this.clearChallengeDepthTimers();
+    this.challengeDepthSwitching = false;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.challengeFrontScreen = screen;
+      this.render();
+      return;
+    }
+    if (screen === this.challengeFrontScreen) {
+      this.render();
+      this.challengeDepthResumeTimer = setTimeout(() => this.scheduleChallengeDepthChange(), 6000);
+      return;
+    }
+    this.transitionChallengeDepthTo(screen, true);
+  }
+
+  private scheduleChallengeDepthChange(): void {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (this.challengeDepthTimer !== undefined) clearTimeout(this.challengeDepthTimer);
+    this.challengeDepthTimer = setTimeout(() => {
+      this.challengeDepthTimer = undefined;
+      this.transitionChallengeDepthTo(this.challengeFrontScreen === 'panel' ? 'overview' : 'panel', false);
+    }, 5800);
+  }
+
+  private transitionChallengeDepthTo(screen: 'panel' | 'overview', manual: boolean): void {
+    this.challengeDepthSwitching = true;
+    this.render();
+    this.challengeDepthMidpointTimer = setTimeout(() => {
+      this.challengeDepthMidpointTimer = undefined;
+      this.challengeFrontScreen = screen;
+      this.render();
+    }, 900);
+    this.challengeDepthFinishTimer = setTimeout(() => {
+      this.challengeDepthFinishTimer = undefined;
+      this.challengeDepthSwitching = false;
+      this.render();
+      if (manual) this.challengeDepthResumeTimer = setTimeout(() => this.scheduleChallengeDepthChange(), 6000);
+      else this.scheduleChallengeDepthChange();
+    }, 1800);
+  }
+
+  private clearChallengeDepthTimers(): void {
+    if (this.challengeDepthTimer !== undefined) clearTimeout(this.challengeDepthTimer);
+    if (this.challengeDepthResumeTimer !== undefined) clearTimeout(this.challengeDepthResumeTimer);
+    if (this.challengeDepthMidpointTimer !== undefined) clearTimeout(this.challengeDepthMidpointTimer);
+    if (this.challengeDepthFinishTimer !== undefined) clearTimeout(this.challengeDepthFinishTimer);
+    this.challengeDepthTimer = undefined;
+    this.challengeDepthResumeTimer = undefined;
+    this.challengeDepthMidpointTimer = undefined;
+    this.challengeDepthFinishTimer = undefined;
+  }
+
+  private setupDemos(): void {
+    const panel = this.panelRef?.nativeElement, overview = this.overviewRef?.nativeElement, variant = this.variantRef?.nativeElement;
+    if (!panel || !overview || !variant) return;
+    this.demos = [
+      { key: 'panel', element: panel, order: ['panel-1', 'panel-2', 'panel-3', 'panel-4'] },
+      { key: 'overview', element: overview, order: ['overview-3', 'overview-1', 'overview-4', 'overview-2', 'overview-5'] },
+      { key: 'variant', element: variant, order: ['overview-variant-quota', 'overview-variant-1', 'overview-variant-3', 'overview-variant-4', 'overview-variant-5', 'overview-variant-2'] },
+    ];
+    this.demos.forEach(demo => this.ratios.set(demo.key, 0));
+    if (typeof IntersectionObserver !== 'undefined') {
+      this.demoObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          const demo = this.demos.find(item => item.element === entry.target);
+          if (demo) {
+            const ratio = entry.isIntersecting ? entry.intersectionRatio : 0;
+            this.ratios.set(demo.key, ratio);
+            if (demo.key === 'panel') {
+              if (ratio >= .3 && !demo.element.classList.contains('is-panel-tags-running')) {
+                demo.element.classList.add('is-panel-tags-running');
+                this.startOverviewMetricTags(demo.element);
+              } else if (ratio <= .08 && demo.element.classList.contains('is-panel-tags-running')) {
+                demo.element.classList.remove('is-panel-tags-running');
+                this.stopOverviewMetricTags(demo.element);
+              }
+            }
+            if (demo.key === 'overview') {
+              if (ratio >= .3) demo.element.classList.add('is-overview-flow-running');
+              else if (ratio <= .08) demo.element.classList.remove('is-overview-flow-running');
+            }
+            if (demo.key === 'variant') {
+              if (ratio >= .3) demo.element.classList.add('is-variant-flow-running');
+              else if (ratio <= .08) demo.element.classList.remove('is-variant-flow-running');
+            }
+          }
+        });
+        this.selectDominant();
+      }, { threshold: [0, .1, .2, .35, .5, .75, 1] });
+      this.demos.forEach(demo => this.demoObserver?.observe(demo.element));
+    }
+    this.measureVisibility();
+  }
+
+  private measureVisibility(): void {
+    this.demos.forEach(demo => {
+      const r = demo.element.getBoundingClientRect();
+      const w = Math.max(0, Math.min(r.right, innerWidth) - Math.max(r.left, 0));
+      const h = Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0));
+      const ratio = w * h / Math.max(1, r.width * r.height);
+      this.ratios.set(demo.key, ratio);
+      if (demo.key === 'panel') {
+        if (ratio >= .3 && !demo.element.classList.contains('is-panel-tags-running')) {
+          demo.element.classList.add('is-panel-tags-running');
+          this.startOverviewMetricTags(demo.element);
+        } else if (ratio <= .08 && demo.element.classList.contains('is-panel-tags-running')) {
+          demo.element.classList.remove('is-panel-tags-running');
+          this.stopOverviewMetricTags(demo.element);
+        }
+      }
+      if (demo.key === 'overview') {
+        if (ratio >= .3) demo.element.classList.add('is-overview-flow-running');
+        else if (ratio <= .08) demo.element.classList.remove('is-overview-flow-running');
+      }
+      if (demo.key === 'variant') {
+        if (ratio >= .3) demo.element.classList.add('is-variant-flow-running');
+        else if (ratio <= .08) demo.element.classList.remove('is-variant-flow-running');
+      }
+    });
+    this.selectDominant();
+  }
+
+  private selectDominant(): void {
+    const visible = this.demos.map(demo => ({ demo, ratio: this.ratios.get(demo.key) ?? 0 }));
+    const candidate = visible.filter(item => item.ratio >= .35).sort((a, b) => b.ratio - a.ratio)[0]?.demo ?? null;
+    const activeRatio = this.activeDemo ? (this.ratios.get(this.activeDemo) ?? 0) : 0;
+    const next = candidate ?? (activeRatio >= .1 ? this.demos.find(item => item.key === this.activeDemo) ?? null : null);
+    if (next?.key === this.activeDemo) {
+      if (!this.running && !this.manuallyPaused) this.startCycle();
+      return;
+    }
+    this.stopCycle(true);
+    this.activeDemo = next?.key ?? null;
+    this.demoIndex = 0;
+    this.manuallyPaused = false;
+    this.clearResume();
+    if (next) this.startCycle();
+  }
+
+  private startCycle(): void {
+    const demo = this.demos.find(item => item.key === this.activeDemo);
+    if (!demo || this.running || this.manuallyPaused) return;
+    this.running = true;
+    this.runStep(demo);
+  }
+
+  private runStep(demo: Demo): void {
+    if (!this.running || this.activeDemo !== demo.key) return;
+    const id = demo.order[this.demoIndex];
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      this.openAutomatic(id);
+      this.queue(() => this.closeAndContinue(demo, 900), 2600);
+      return;
+    }
+    this.demoPulsingHotspot = id; this.render();
+    this.queue(() => {
+      this.demoPulsingHotspot = null; this.render();
+      this.queue(() => { this.openAutomatic(id); this.queue(() => this.closeAndContinue(demo, 650), 2200); }, 180);
+    }, 700);
+  }
+
+  private closeAndContinue(demo: Demo, pause: number): void {
+    if (!this.running || this.activeDemo !== demo.key) return;
+    if (this.activeOverviewHotspot === this.automaticHotspot) this.activeOverviewHotspot = null;
+    this.automaticHotspot = null; this.render();
+    const last = this.demoIndex === demo.order.length - 1;
+    this.demoIndex = last ? 0 : this.demoIndex + 1;
+    this.queue(() => this.runStep(demo), last ? 1400 : pause);
+  }
+
+  private openAutomatic(id: string): void {
+    this.automaticHotspot = id; this.activeOverviewHotspot = id; this.render();
+  }
+
+  private queue(action: () => void, delay: number): void {
+    if (this.demoTimer !== undefined) clearTimeout(this.demoTimer);
+    this.demoTimer = setTimeout(() => { this.demoTimer = undefined; action(); }, delay);
+  }
+
+  private pauseForInteraction(): void {
+    if (!this.activeDemo) return;
+    this.manuallyPaused = true;
+    if (this.activeOverviewHotspot === this.automaticHotspot) this.activeOverviewHotspot = null;
+    this.stopCycle(false);
+    this.clearResume();
+  }
+
+  private scheduleResume(): void {
+    if (!this.manuallyPaused || !this.activeDemo) return;
+    this.clearResume();
+    this.resumeTimer = setTimeout(() => {
+      this.resumeTimer = undefined;
+      this.measureVisibility();
+      if (!this.activeDemo) return;
+      this.manuallyPaused = false; this.demoIndex = 0; this.startCycle();
+    }, 4000);
+  }
+
+  private stopCycle(clearPopover: boolean): void {
+    if (this.demoTimer !== undefined) clearTimeout(this.demoTimer);
+    this.demoTimer = undefined; this.demoPulsingHotspot = null;
+    if (clearPopover && this.activeOverviewHotspot === this.automaticHotspot) this.activeOverviewHotspot = null;
+    this.automaticHotspot = null; this.running = false; this.render();
+  }
+
+  private clearResume(): void { if (this.resumeTimer !== undefined) clearTimeout(this.resumeTimer); this.resumeTimer = undefined; }
+  private render(): void { this.cdr.detectChanges(); }
+
+  ngOnDestroy(): void {
+    this.stopProductPreview?.();
+    this.unbindExpandableMedia?.();
+    this.unbindUserNeedOutsidePointer();
+    if (this.heroFrame !== undefined) cancelAnimationFrame(this.heroFrame);
+    if (this.scrollFrame !== undefined) cancelAnimationFrame(this.scrollFrame);
+    if (this.flowMetricsFrame !== undefined) cancelAnimationFrame(this.flowMetricsFrame);
+    if (this.variantFlowFrame !== undefined) cancelAnimationFrame(this.variantFlowFrame);
+    if (this.mainFlowFrame !== undefined) cancelAnimationFrame(this.mainFlowFrame);
+    if (this.demoTimer !== undefined) clearTimeout(this.demoTimer);
+    this.stopOverviewMetricTags();
+    this.compactFlowFrames.forEach(frame => cancelAnimationFrame(frame));
+    this.compactFlowObservers.forEach(observer => observer.disconnect());
+    this.responsiveGroupObservers.forEach(observer => observer.disconnect());
+    if (this.responsiveVariantTimer !== undefined) clearInterval(this.responsiveVariantTimer);
+    this.responsiveVariantObserver?.disconnect();
+    this.clearChallengeDepthTimers();
+    this.clearResume(); this.revealObserver?.disconnect(); this.storyRevealObserver?.disconnect(); this.demoObserver?.disconnect(); this.flowMetricsObserver?.disconnect(); this.metricTagsObserver?.disconnect(); this.variantFlowObserver?.disconnect(); this.mainFlowObserver?.disconnect();
+  }
+
+  goBack(): void { this.back.emit(); }
+  goToSection(sectionId: string): void { this.back.emit(); setTimeout(() => document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 250); }
+}
