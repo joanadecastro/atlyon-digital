@@ -201,7 +201,7 @@ export class App implements AfterViewInit, OnDestroy {
     afterNextRender(() => {
       const caseRoute = window.location.pathname.replace(/\/$/, '');
       if (caseRoute === '/case-studies/civitas' || caseRoute === '/case-studies/licitanow' || caseRoute === '/case-studies/smart-charging' || caseRoute === '/case-studies/juh') {
-        if (window.innerWidth > 768) window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        if (window.innerWidth > 768) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         this.selectedProject = caseRoute.endsWith('/juh') ? this.juhProject : caseRoute.endsWith('/licitanow')
           ? this.projects[1]
           : caseRoute.endsWith('/smart-charging') ? this.projects[2] : this.projects[0];
@@ -219,7 +219,7 @@ export class App implements AfterViewInit, OnDestroy {
     this.closeProjectChat();
     const caseRoute = window.location.pathname.replace(/\/$/, '');
     if (window.innerWidth > 768 || !caseRoute.startsWith('/case-studies/')) {
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      window.scrollTo({ top: 0, left: 0, behavior: caseRoute.startsWith('/case-studies/') ? 'instant' : 'auto' });
     }
     this.selectedProject = caseRoute === '/case-studies/civitas'
       ? this.projects[0]
@@ -2175,13 +2175,28 @@ export class App implements AfterViewInit, OnDestroy {
     this.servicesSceneElement = undefined;
   }
 
+  @HostListener('document:click', ['$event'])
+  onNextProjectClick(event: MouseEvent): void {
+    if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a.next-case') : null;
+    if (!link || link.target || link.hasAttribute('download')) return;
+    const destination = new URL(link.href, window.location.href);
+    if (destination.origin !== window.location.origin) return;
+    const route = destination.pathname.replace(/\/$/, '');
+    const project = route === '/case-studies/civitas' ? this.projects[0]
+      : [...this.projects, this.juhProject].find(candidate => candidate.route === route);
+    if (!project) return;
+    event.preventDefault();
+    this.openProject(project);
+  }
+
   openProject(project: any) {
     this.closeMenu();
     this.closeProjectChat();
     // Establish the case-study viewport before Angular mounts its observers.
     // Otherwise a fast production render can observe lower chapters at the
     // homepage's previous scroll position and leave one-shot reveals completed.
-    if (window.innerWidth > 768) window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    if (window.innerWidth > 768) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     this.selectedProject = project;
     if (window.innerWidth <= 768) this.enterMobileCaseAtTop(project);
     this.scheduleCaseStudyChatObserver();

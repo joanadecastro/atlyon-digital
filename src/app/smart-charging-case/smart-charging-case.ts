@@ -45,6 +45,8 @@ export class SmartChargingCaseComponent implements AfterViewInit, OnDestroy {
   openArchitectureGroup: string | null = null;
   openUserNeed: string | null = null;
   isMobileViewport = false;
+  readonly modalPreviewSources = ['Frame 845.png', 'Group 3197.png', 'Group 3200.png', 'Group 3201.png', 'Group 3202.png']
+    .map(file => `/projects/carregadoresEletricos/${file}`);
   private stopProductPreview?: () => void;
 
   private setupProductPreview(): void {

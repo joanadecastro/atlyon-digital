@@ -13,7 +13,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
   template: `
     <div class="case-image-preview" caseLightboxClose [caseLightboxOpen]="isOpen" [caseLightboxClosing]="isClosing" (caseLightboxClose)="close()" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.is-code-preview]="isCodePreview" [class.trim-mobile-right-edge]="trimMobileRightEdge"
       [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" [attr.aria-label]="language.translate(isCodePreview ? 'Snippet de código ampliado' : 'Preview ampliado da mockup')"
-      >
+      [class.has-light-backdrop]="hasLightBackdrop">
       @if (src || isCodePreview) {
         <div class="case-image-preview__panel" [class.has-legend]="legend.length > 0" (pointerdown)="handlePanelPointerDown($event)">
           <div class="case-image-preview__composition" [class.trim-top-edge]="trimTopEdge">
@@ -53,6 +53,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     .case-image-preview__template { position:relative; width:100%; max-width:100%; }
     img { display:block; width:auto; max-width:min(82vw,1500px); height:auto; max-height:86vh; object-fit:contain; border:0; border-radius:6px; box-shadow:0 24px 70px rgba(0,0,0,.18); opacity:0; transform:scale(.96); transition:transform 700ms cubic-bezier(.22,1,.36,1),opacity 350ms ease; }
     .is-image-entered img { opacity:1; transform:scale(1); }
+    .case-image-preview.has-light-backdrop { background:rgba(45,48,52,.72); }
     .case-image-preview__legend { display:none; }
     .case-image-preview__top-edge { display:none; }
     .case-image-preview__code { box-sizing:border-box; width:100%; height:100%; margin:0; padding:22px; overflow:hidden; border-radius:4px; background:#1e1e1e; color:#ededed; box-shadow:0 24px 70px rgba(0,0,0,.18); }
@@ -125,6 +126,12 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
 export class CaseImagePreviewComponent implements OnDestroy {
   readonly language = inject(LanguageService);
   @Input() trimTopEdge = false;
+  @Input() lightBackdropSources: readonly string[] = [];
+  get hasLightBackdrop(): boolean {
+    if (!this.src || !this.lightBackdropSources.length) return false;
+    const pathname = decodeURI(new URL(this.src, document.baseURI).pathname);
+    return this.lightBackdropSources.includes(pathname);
+  }
   src: string | null = null;
   alt = '';
   isOpen = false;
