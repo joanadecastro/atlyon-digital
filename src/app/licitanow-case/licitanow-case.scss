@@ -4505,7 +4505,7 @@
 
   .licitanow-page figure.licitanow-cover__screen--before {
     position:absolute !important;
-    inset:auto auto min(23.8cqw, calc(100cqh - 40.1cqw)) 0 !important;
+    inset:auto auto calc(min(23.8cqw, calc(100cqh - 40.1cqw)) + 2.5cqw) 0 !important;
     justify-self:auto !important;
     width:86% !important;
     max-width:86% !important;

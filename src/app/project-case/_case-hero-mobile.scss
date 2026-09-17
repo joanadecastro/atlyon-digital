@@ -90,7 +90,7 @@
         object-fit: contain; object-position: center;
         transform: none !important; animation: none !important;
       }
-      .case-hero__screen--rear { align-self: start; justify-self: start; z-index: 1; }
+      .case-hero__screen--rear { align-self: start; justify-self: start; z-index: 1; top: -2.5cqw !important; }
       // On short tracks, retain width/presence and crop below rather than
       // shrinking the pair or letting the front screen overflow above it.
       .case-hero__screen--front { align-self: safe end; justify-self: end; z-index: 2; }
@@ -149,6 +149,11 @@
 
     .civitas-page.juh-page {
       --case-hero-content-media-gap: 49.61px;
+      // Only fill the missing depth when the existing pair is nearly aligned.
+      // The front asset's intrinsic ratio is 1909 / 948; its Y stays unchanged.
+      .case-hero__screen--rear {
+        top: min(0px, calc(max(0px, calc(100cqh - 84cqw * 948 / 1909)) - 2.5cqw)) !important;
+      }
     }
 
     .civitas-page.licitanow-page {

@@ -539,7 +539,10 @@ export class App implements AfterViewInit, OnDestroy {
       metric.querySelector<HTMLElement>('.about-section__metric-number')
     );
     const targets = metrics.map((metric) => Number(metric.dataset['countTarget'] ?? 0));
-    const durations = metrics.map((metric) => Number(metric.dataset['countDuration'] ?? 1000));
+    // Match the approved JUH progression on mobile; preserve desktop timing.
+    const durations = metrics.map((metric) => window.innerWidth <= 768
+      ? 2800
+      : Number(metric.dataset['countDuration'] ?? 1000));
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const easeOutCubic = (value: number): number => 1 - Math.pow(1 - value, 3);
     const totalDuration = Math.max(...durations, 0);
@@ -1016,7 +1019,7 @@ export class App implements AfterViewInit, OnDestroy {
     this.aboutMetricsCompleted = false;
 
     this.mobileAboutMetricsObserver = new IntersectionObserver(([entry]) => {
-      if (window.innerWidth > 768 || !metrics.isConnected || !entry.isIntersecting || entry.intersectionRatio < 0.25) return;
+      if (window.innerWidth > 768 || !metrics.isConnected || !entry.isIntersecting || entry.intersectionRatio < 0.3) return;
       // Safari may deliver a queued intersection from before the layered layout
       // changed. Confirm the current metrics box against the useful viewport.
       const rect = metrics.getBoundingClientRect();
@@ -1024,10 +1027,10 @@ export class App implements AfterViewInit, OnDestroy {
       const viewportTop = viewport?.offsetTop ?? 0;
       const viewportBottom = viewportTop + Math.min(window.innerHeight, viewport?.height ?? window.innerHeight);
       const visibleHeight = Math.min(rect.bottom, viewportBottom) - Math.max(rect.top, viewportTop);
-      if (rect.height <= 0 || visibleHeight < rect.height * 0.25) return;
+      if (rect.height <= 0 || visibleHeight < rect.height * 0.3) return;
       this.startAboutMetrics(section);
       this.mobileAboutMetricsObserver?.disconnect();
-    }, { threshold: 0.25, rootMargin: '0px' });
+    }, { threshold: 0.3, rootMargin: '0px 0px -8% 0px' });
     const observer = this.mobileAboutMetricsObserver;
     requestAnimationFrame(() => {
       if (metrics.isConnected && this.observedMobileAboutMetrics === metrics) observer.observe(metrics);
