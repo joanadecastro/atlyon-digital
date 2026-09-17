@@ -516,7 +516,9 @@
 } @else if (selectedProject.slug === 'licitanow') {
 <app-licitanow-case></app-licitanow-case>
 } @else if (selectedProject.slug === 'smart-charging') {
+@defer (on immediate) {
 <app-smart-charging-case />
+}
 } @else {
 <app-project-case [project]="selectedProject" (back)="navigateToProjectsStart()">
 </app-project-case>
