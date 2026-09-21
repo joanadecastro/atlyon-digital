@@ -40,6 +40,57 @@ describe('Case lightbox close behavior', () => {
     preview.remove();
   });
 
+  it('handles click-only mobile activation on image, empty panel and backdrop', () => {
+    vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true } as MediaQueryList);
+    const host = document.createElement('div');
+    host.innerHTML = '<div><img></div><button><span>Next</span></button>';
+    const directive = new CaseLightboxCloseDirective(new ElementRef(host));
+    directive.caseLightboxOpen = true;
+    directive.caseLightboxTapClose = true;
+    const close = vi.fn();
+    directive.caseLightboxClose.subscribe(close);
+    for (const target of [host.querySelector('img')!, host.firstElementChild!, host]) {
+      target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    }
+    expect(close).toHaveBeenCalledTimes(3);
+    host.querySelector('span')!.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(close).toHaveBeenCalledTimes(3);
+    directive.ngOnDestroy();
+  });
+
+  it('does not apply click-to-close to desktop or cases without the mobile opt-in', () => {
+    const mobile = vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: false } as MediaQueryList);
+    const host = document.createElement('div');
+    const directive = new CaseLightboxCloseDirective(new ElementRef(host));
+    directive.caseLightboxOpen = true;
+    directive.caseLightboxTapClose = true;
+    const close = vi.fn();
+    directive.caseLightboxClose.subscribe(close);
+    host.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    mobile.mockReturnValue({ matches: true } as MediaQueryList);
+    directive.caseLightboxTapClose = false;
+    host.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    expect(close).not.toHaveBeenCalled();
+    directive.ngOnDestroy();
+  });
+
+  it('keeps mobile navigation controls interactive without triggering tap-to-close', () => {
+    vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true } as MediaQueryList);
+    const host = document.createElement('div');
+    const button = document.createElement('button');
+    button.setAttribute('data-case-lightbox-control', '');
+    host.append(button);
+    const directive = new CaseLightboxCloseDirective(new ElementRef(host));
+    directive.caseLightboxOpen = true;
+    const close = vi.fn();
+    directive.caseLightboxClose.subscribe(close);
+    const event = new Event('pointerdown', { bubbles: true, cancelable: true });
+    button.dispatchEvent(event);
+    expect(close).not.toHaveBeenCalled();
+    expect(event.defaultPrevented).toBe(false);
+    directive.ngOnDestroy();
+  });
+
   it('closes from backdrop and Escape but not from media content', () => {
     const host = document.createElement('div');
     const directive = new CaseLightboxCloseDirective(new ElementRef(host));

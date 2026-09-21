@@ -1,3 +1,4 @@
+import { nearestCaseSlide, scrollToCaseSlide } from '../project-case/case-snap-carousel';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild, inject } from '@angular/core';
 import { TranslateDirective } from '../i18n/translate.directive';
 import { CaseHeroScrollIndicatorComponent } from '../project-case/case-hero-scroll-indicator.component';
@@ -129,20 +130,14 @@ export class LicitaNowCaseComponent implements AfterViewInit, OnDestroy {
     if (!(rail instanceof HTMLElement)) return;
     const slides = Array.from(rail.children).filter((child): child is HTMLElement => child instanceof HTMLElement);
     if (!slides.length) return;
-    const railLeft = rail.getBoundingClientRect().left;
-    const active = slides.reduce((nearest, slide, index) => {
-      const distance = Math.abs(slide.getBoundingClientRect().left - railLeft);
-      return distance < nearest.distance ? { index, distance } : nearest;
-    }, { index: 0, distance: Number.POSITIVE_INFINITY }).index;
-    this.responsiveMockupSlide = active;
+    this.responsiveMockupSlide = nearestCaseSlide(rail, slides);
   }
 
   setResponsiveMockupSlide(slide: number): void {
     const rail = this.host.nativeElement.querySelector<HTMLElement>('.licita-responsive-implementation__screens');
     const target = rail?.children.item(slide);
     if (!rail || !(target instanceof HTMLElement)) return;
-    const left = target.getBoundingClientRect().left - rail.getBoundingClientRect().left + rail.scrollLeft;
-    rail.scrollTo({ left, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    scrollToCaseSlide(rail, target);
     this.responsiveMockupSlide = slide;
   }
 

@@ -5,15 +5,20 @@ import { LanguageService } from '../i18n/language.service';
 import { CaseLightboxCloseDirective } from './case-lightbox-close.directive';
 
 export type CaseImagePreviewLegendItem = { number: string; title: string };
+export type CaseImagePreviewItem = { src: string; alt: string };
 
 @Component({
   selector: 'app-case-image-preview',
   standalone: true,
   imports: [NgTemplateOutlet, CaseLightboxCloseDirective],
   template: `
-    <div class="case-image-preview" caseLightboxClose [caseLightboxOpen]="isOpen" [caseLightboxClosing]="isClosing" (caseLightboxClose)="close()" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.is-code-preview]="isCodePreview" [class.trim-mobile-right-edge]="trimMobileRightEdge"
-      [attr.aria-hidden]="!isOpen" role="dialog" aria-modal="true" [attr.aria-label]="language.translate(isCodePreview ? 'Snippet de código ampliado' : 'Preview ampliado da mockup')"
-      [class.has-light-backdrop]="hasLightBackdrop">
+    <div class="case-image-preview" caseLightboxClose [caseLightboxOpen]="isOpen" [caseLightboxClosing]="isClosing" [caseLightboxTapClose]="mobileTapClose" (caseLightboxClose)="close()" [class.is-open]="isOpen" [class.is-closing]="isClosing" [class.is-image-entered]="isImageEntered" [class.is-vertical-landing]="isVerticalLanding" [class.is-landscape]="isLandscape" [class.is-code-preview]="isCodePreview" [class.trim-mobile-right-edge]="trimMobileRightEdge"
+      [attr.aria-hidden]="!isOpen" role="dialog" tabindex="-1" aria-modal="true" [attr.aria-label]="language.translate(isCodePreview ? 'Snippet de código ampliado' : 'Preview ampliado da mockup')"
+      [class.has-light-backdrop]="hasLightBackdrop" [class.has-expanded-viewport]="hasExpandedViewport" [class.has-image-group]="activeImageGroup.length > 1" [class.is-single-image]="isSingleImage" [class.mobile-tap-close]="mobileTapClose">
+      @if (activeImageGroup.length > 1) {
+        <button type="button" class="case-image-preview__nav case-image-preview__nav--previous" data-case-lightbox-control [attr.aria-label]="language.translate('Imagem anterior')" (click)="navigateImage(-1)"><span class="cta-arrow" aria-hidden="true"></span></button>
+        <button type="button" class="case-image-preview__nav case-image-preview__nav--next" data-case-lightbox-control [attr.aria-label]="language.translate('Imagem seguinte')" (click)="navigateImage(1)"><span class="cta-arrow cta-arrow--right" aria-hidden="true"></span></button>
+      }
       @if (src || isCodePreview) {
         <div class="case-image-preview__panel" [class.has-legend]="legend.length > 0" (pointerdown)="handlePanelPointerDown($event)">
           <div class="case-image-preview__composition" [class.trim-top-edge]="trimTopEdge">
@@ -28,7 +33,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
                 <ng-container [ngTemplateOutlet]="compositionTemplate" [ngTemplateOutletContext]="{ preview: true }" />
               </div>
             } @else {
-              <img [src]="src" [alt]="alt" (load)="onImageLoad($event)">
+              <img [src]="displaySrc || src" [alt]="alt" (load)="onImageLoad($event)">
             }
             @if (trimTopEdge) {
               <span class="case-image-preview__top-edge" [style.background-image]="'url(&quot;' + src + '&quot;)'" aria-hidden="true"></span>
@@ -46,6 +51,13 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     </div>
   `,
   styles: `
+    .case-image-preview__nav { position:fixed; top:50%; transform:translateY(-50%); z-index:3; display:grid; place-items:center; width:44px; height:44px; padding:0; border:0; border-radius:50%; background:transparent; color:#fff; cursor:pointer; transition:background 200ms ease; }
+    .case-image-preview__nav--previous { left:2vw; }
+    .case-image-preview__nav--next { right:2vw; }
+    .case-image-preview__nav .cta-arrow { width:20px!important; height:20px!important; margin:0!important; }
+    .case-image-preview__nav--previous .cta-arrow { transform:rotate(225deg); }
+    .case-image-preview__nav:hover { background:rgba(255,255,255,.12); }
+    .case-image-preview__nav:focus-visible { outline:2px solid #fff; outline-offset:3px; }
     .case-image-preview { position:fixed; inset:0; z-index:20000; display:grid; place-items:center; padding:4vh 4vw; background:rgba(15,18,22,.72); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); visibility:hidden; opacity:0; pointer-events:none; transition:opacity 280ms ease,visibility 0s linear 720ms; }
     .case-image-preview.is-open { visibility:visible; opacity:1; pointer-events:auto; transition:opacity 280ms ease; }
     .case-image-preview__panel { position:relative; z-index:1; display:grid; place-items:center; max-width:82vw; max-height:86vh; overflow:visible; }
@@ -64,6 +76,7 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
     .case-image-preview__code-scroll::-webkit-scrollbar-track { border-radius:999px; background:#363636; }
     .case-image-preview__code-scroll::-webkit-scrollbar-thumb { border-radius:999px; background:#f2f2f2; }
     @media (min-width:769px) {
+      .case-image-preview.has-expanded-viewport { padding:2dvh 2vw; box-sizing:border-box; }
       .case-image-preview__composition.trim-top-edge .case-image-preview__top-edge { position:absolute; top:0; right:0; left:0; z-index:1; display:block; height:2px; border-radius:6px 6px 0 0; background-repeat:no-repeat; background-position:center -2px; background-size:100% auto; pointer-events:none; }
     }
     .case-image-preview__close { position:absolute; top:-14px; right:-14px; z-index:2; display:grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid rgba(0,0,0,.10); border-radius:50%; background:rgba(255,255,255,.94); color:#25282b; box-shadow:0 3px 12px rgba(0,0,0,.10); font:400 24px/1 Arial,sans-serif; cursor:pointer; }
@@ -119,6 +132,27 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
       }
       .case-image-preview.is-code-preview .case-image-preview__code-scroll::-webkit-scrollbar { display:none; }
     }
+    /* Opt-in for very wide evidence; all other previews keep their existing fit. */
+    @media (min-width:769px) {
+      .has-expanded-viewport .case-image-preview__panel { max-width:96vw; max-height:92dvh; }
+      .has-expanded-viewport img { max-width:96vw; max-height:92dvh; }
+    }
+    @media (max-width:768px) {
+      .has-expanded-viewport.is-landscape:not(.is-vertical-landing) .case-image-preview__composition,
+      .has-expanded-viewport.is-landscape:not(.is-vertical-landing) img { max-width:calc(100dvh - 40px); }
+      .has-expanded-viewport .case-image-preview__close { display:grid; pointer-events:auto; }
+    }
+    @media (max-width:768px) {
+      .case-image-preview__nav { top:auto; bottom:max(10px,env(safe-area-inset-bottom)); transform:none; }
+      .case-image-preview__nav--previous { left:calc(50% - 60px); }
+      .case-image-preview__nav--next { right:calc(50% - 60px); }
+      :is(.has-image-group,.is-single-image).is-landscape:not(.is-vertical-landing) :is(.case-image-preview__composition,img) { max-width:min(calc(100dvh - 128px),680px); }
+      :is(.has-image-group,.is-single-image) .case-image-preview__close { display:grid; pointer-events:auto; }
+    }
+    @media (max-width:768px) {
+      .case-image-preview.mobile-tap-close .case-image-preview__close { display:none!important; pointer-events:none; }
+      .case-image-preview.mobile-tap-close:not(.is-open) { visibility:hidden; pointer-events:none; transition:none; }
+    }
     @media (prefers-reduced-motion:reduce) { .case-image-preview,img,.case-image-preview__composition { transition-duration:120ms; transition-property:opacity,visibility; } }
     @media (max-width:768px) and (prefers-reduced-motion:reduce) { .is-landscape:not(.is-vertical-landing) .case-image-preview__composition,.is-landscape.is-image-entered:not(.is-vertical-landing) .case-image-preview__composition { transform:translate(-50%,-50%) rotate(90deg); } }
   `,
@@ -126,7 +160,93 @@ export type CaseImagePreviewLegendItem = { number: string; title: string };
 export class CaseImagePreviewComponent implements OnDestroy {
   readonly language = inject(LanguageService);
   @Input() trimTopEdge = false;
+  @Input() mobileTapClose = false;
   @Input() lightBackdropSources: readonly string[] = [];
+  @Input() expandedViewportSources: readonly string[] = [];
+  @Input() imageGroups: readonly (readonly CaseImagePreviewItem[])[] = [];
+  @Input() singleImageSources: readonly string[] = [];
+  /** Explicit opt-in: a page preview for an unusually large original. */
+  @Input() loadingPreviews: Readonly<Record<string, string>> = {};
+  displaySrc: string | null = null;
+  private readonly preparedOriginals = new Map<string, { image: HTMLImageElement; ready: boolean; promise: Promise<boolean>; renderSrc?: string }>();
+  private readonly decodeWorkers = new Set<Worker>();
+
+  preloadOriginal(src: string): Promise<boolean> {
+    const path = decodeURI(new URL(src, document.baseURI).pathname);
+    if (!this.loadingPreviews[path]) return Promise.resolve(false);
+    const existing = this.preparedOriginals.get(path);
+    if (existing) return existing.promise;
+    const image = new Image();
+    const entry: { image: HTMLImageElement; ready: boolean; promise: Promise<boolean>; renderSrc?: string } = { image, ready: false, promise: Promise.resolve(false) };
+    this.preparedOriginals.set(path, entry);
+    if (this.mobileTapClose && isMobileCasePreview()) {
+      image.decoding = 'async';
+      // Never pass the enormous original to the mobile renderer's image pipeline.
+      // If workers are unavailable, keep the already visible page preview.
+      entry.promise = new Promise<boolean>(resolve => {
+        let worker: Worker;
+        const failed = (): void => {
+          if (worker) { worker.terminate(); this.decodeWorkers.delete(worker); }
+          if (entry.renderSrc) URL.revokeObjectURL(entry.renderSrc);
+          this.preparedOriginals.delete(path);
+          resolve(false);
+        };
+        try {
+          worker = new Worker(new URL('./case-image-decode.worker', import.meta.url), { type: 'module' });
+          this.decodeWorkers.add(worker);
+          worker.onerror = failed;
+          worker.onmessage = ({ data }: MessageEvent<{ blob?: Blob }>) => {
+            if (!data.blob) { failed(); return; }
+            entry.renderSrc = URL.createObjectURL(data.blob);
+            image.src = entry.renderSrc;
+            void image.decode().then(() => {
+              entry.ready = true;
+              worker.terminate(); this.decodeWorkers.delete(worker);
+              resolve(true);
+            }).catch(failed);
+          };
+          worker.postMessage({ src: new URL(src, document.baseURI).href,
+            width: Math.max(3200, Math.ceil(Math.max(innerWidth, innerHeight) * devicePixelRatio)) });
+        } catch { failed(); }
+      });
+      return entry.promise;
+    }
+    image.src = src;
+    entry.promise = image.decode().then(() => {
+      entry.ready = true;
+      return true;
+    }).catch(() => {
+      // Keep the page preview visible and permit a later retry.
+      this.preparedOriginals.delete(path);
+      return false;
+    });
+    return entry.promise;
+  }
+  get isSingleImage(): boolean {
+    return !!this.src && this.singleImageSources.includes(decodeURI(new URL(this.src, document.baseURI).pathname));
+  }
+  get activeImageGroup(): readonly CaseImagePreviewItem[] {
+    if (!this.src || this.isCodePreview || this.compositionTemplate || this.isSingleImage) return [];
+    const path = decodeURI(new URL(this.src, document.baseURI).pathname);
+    return this.imageGroups.find(group => group.some(item => decodeURI(new URL(item.src, document.baseURI).pathname) === path)) ?? [];
+  }
+  private switchingGroupImage = false;
+  navigateImage(direction: number): void {
+    const group = this.activeImageGroup;
+    if (!this.isOpen || this.isClosing || group.length < 2 || !this.src) return;
+    const path = decodeURI(new URL(this.src, document.baseURI).pathname);
+    const index = group.findIndex(item => decodeURI(new URL(item.src, document.baseURI).pathname) === path);
+    const next = group[(index + direction + group.length) % group.length];
+    this.switchingGroupImage = true;
+    this.src = next.src;
+    this.displaySrc = null;
+    this.alt = this.language.translate(next.alt);
+    this.cdr.detectChanges();
+  }
+  get hasExpandedViewport(): boolean {
+    if (!this.src || !this.expandedViewportSources.length) return false;
+    return this.expandedViewportSources.includes(decodeURI(new URL(this.src, document.baseURI).pathname));
+  }
   get hasLightBackdrop(): boolean {
     if (!this.src || !this.lightBackdropSources.length) return false;
     const pathname = decodeURI(new URL(this.src, document.baseURI).pathname);
@@ -166,11 +286,16 @@ export class CaseImagePreviewComponent implements OnDestroy {
     trimMobileRightEdge = false,
     preparedImage?: HTMLImageElement,
   ): void {
+    this.switchingGroupImage = false;
     const cycle = ++this.previewCycle;
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
     this.isClosing = false;
     this.isCodePreview = false;
     this.src = src;
+    const path = decodeURI(new URL(src, document.baseURI).pathname);
+    const loadingPreview = !compositionTemplate && this.loadingPreviews[path];
+    this.displaySrc = loadingPreview ? (this.preparedOriginals.get(path)?.ready
+      ? (isMobileCasePreview() ? this.preparedOriginals.get(path)?.renderSrc ?? null : null) : loadingPreview) : null;
     this.alt = alt;
     this.isVerticalLanding = verticalLanding;
     this.isLandscape = false;
@@ -187,7 +312,14 @@ export class CaseImagePreviewComponent implements OnDestroy {
     // mounted image's load, without racing two independent opening RAF chains.
     const mountedImage = this.host.nativeElement.querySelector<HTMLImageElement>('.case-image-preview__composition img');
     const loadedImage = mountedImage?.complete && mountedImage.naturalWidth > 0 && mountedImage.naturalHeight > 0 &&
-      mountedImage.src === new URL(src, document.baseURI).href ? mountedImage : undefined;
+      mountedImage.src === new URL(this.displaySrc || src, document.baseURI).href ? mountedImage : undefined;
+    if (this.displaySrc) {
+      void this.preloadOriginal(src).then(ready => {
+        if (!ready || cycle !== this.previewCycle || this.isClosing) return;
+        this.displaySrc = isMobileCasePreview() ? this.preparedOriginals.get(path)?.renderSrc ?? null : null;
+        this.cdr.detectChanges();
+      });
+    }
     if (this.preparedMobileImage) {
       if (loadedImage) this.enterLoadedImage(loadedImage);
       return;
@@ -198,6 +330,8 @@ export class CaseImagePreviewComponent implements OnDestroy {
       this.cdr.detectChanges();
       if (!isMobileCasePreview()) {
         this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
+      } else if (this.mobileTapClose) {
+        this.host.nativeElement.querySelector<HTMLElement>('.case-image-preview')?.focus({ preventScroll: true });
       }
     }));
     // Reopening during the closing fade retains the same loaded <img>.
@@ -206,6 +340,7 @@ export class CaseImagePreviewComponent implements OnDestroy {
   }
 
   openCode(label: string, code: string): void {
+    this.displaySrc = null;
     this.preparedMobileImage = false;
     const cycle = ++this.previewCycle;
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
@@ -249,6 +384,16 @@ export class CaseImagePreviewComponent implements OnDestroy {
 
   onImageLoad(event: Event): void {
     if (this.isClosing || !this.src) return;
+    // Replacing a visible preview with its decoded original must not replay the reveal.
+    const path = decodeURI(new URL(this.src, document.baseURI).pathname);
+    if (this.loadingPreviews[path] && this.isImageEntered) return;
+    if (this.switchingGroupImage) {
+      this.switchingGroupImage = false;
+      const image = event.currentTarget as HTMLImageElement;
+      this.isLandscape = !this.isVerticalLanding && image.naturalWidth > image.naturalHeight;
+      this.cdr.detectChanges();
+      return;
+    }
     this.enterLoadedImage(event.currentTarget as HTMLImageElement);
   }
 
@@ -279,7 +424,7 @@ export class CaseImagePreviewComponent implements OnDestroy {
     this.isImageEntered = false;
     this.cdr.detectChanges();
     if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
-    this.cleanupTimer = window.setTimeout(() => {
+    const cleanup = (): void => {
       if (cycle === this.previewCycle && !this.isOpen) {
         this.src = null; this.alt = ''; this.isVerticalLanding = false; this.isLandscape = false; this.isCodePreview = false; this.codeLabel = ''; this.codeContent = ''; this.legend = [];
         this.compositionTemplate = null; this.compositionClass = '';
@@ -287,7 +432,9 @@ export class CaseImagePreviewComponent implements OnDestroy {
         this.returnFocus?.focus({ preventScroll: true });
         this.cdr.detectChanges();
       }
-    }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 140 : matchMedia('(max-width: 768px)').matches ? 900 : 720);
+    };
+    if (this.mobileTapClose && isMobileCasePreview()) cleanup();
+    else this.cleanupTimer = window.setTimeout(cleanup, matchMedia('(prefers-reduced-motion: reduce)').matches ? 140 : matchMedia('(max-width: 768px)').matches ? 900 : 720);
   }
 
   handlePanelPointerDown(event: Event): void {
@@ -300,10 +447,27 @@ export class CaseImagePreviewComponent implements OnDestroy {
 
   @HostListener('document:keydown', ['$event']) onKeydown(event: KeyboardEvent): void {
     if (!this.isOpen) return;
+    if (this.activeImageGroup.length > 1 && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+      event.preventDefault();
+      this.navigateImage(event.key === 'ArrowLeft' ? -1 : 1);
+    }
     if (event.key === 'Tab') {
       event.preventDefault();
-      this.host.nativeElement.querySelector<HTMLButtonElement>('.case-image-preview__close')?.focus();
+      if (this.activeImageGroup.length < 2) {
+        this.host.nativeElement.querySelector<HTMLElement>(this.mobileTapClose && isMobileCasePreview() ? '.case-image-preview' : '.case-image-preview__close')?.focus();
+        return;
+      }
+      const controls = Array.from(this.host.nativeElement.querySelectorAll<HTMLButtonElement>('button')).filter(button => getComputedStyle(button).display !== 'none');
+      const index = controls.indexOf(document.activeElement as HTMLButtonElement);
+      controls[(index + (event.shiftKey ? -1 : 1) + controls.length) % controls.length]?.focus();
     }
   }
-  ngOnDestroy(): void { ++this.previewCycle; if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer); }
+  ngOnDestroy(): void {
+    ++this.previewCycle;
+    this.decodeWorkers.forEach(worker => worker.terminate());
+    this.decodeWorkers.clear();
+    this.preparedOriginals.forEach(entry => { if (entry.renderSrc) URL.revokeObjectURL(entry.renderSrc); });
+    this.preparedOriginals.clear();
+    if (this.cleanupTimer !== undefined) window.clearTimeout(this.cleanupTimer);
+  }
 }

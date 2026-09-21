@@ -2191,6 +2191,9 @@ export class App implements AfterViewInit, OnDestroy {
   }
 
   openProject(project: any) {
+    // Landing entry must also prevent native Back/Forward scroll restoration
+    // from overriding the case-entry reset after popstate.
+    this.disableMobileCaseScrollRestoration();
     this.closeMenu();
     this.closeProjectChat();
     // Establish the case-study viewport before Angular mounts its observers.

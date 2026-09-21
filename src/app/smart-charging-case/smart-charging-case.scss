@@ -1,6 +1,75 @@
+@use '../project-case/case-flow';
+@use '../project-case/case-facts';
 @use '../project-case/project-case';
 @use '../project-case/case-screenshots';
 @use '../project-case/case-media-shadow';
+@use '../project-case/case-mobile';
+
+// LicitaNow problem/solution pattern: editorial rows, chevron and drawer transition.
+:host .civitas-page .smart-technical-accordion {
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  padding-top: 24px;
+  &__row { border-top: 1px solid rgba(32,36,43,.12); }
+  &__row:last-child { border-bottom: 1px solid rgba(32,36,43,.12); }
+  h3 { margin: 0; }
+  &__trigger {
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    width: 100%; padding: 32px 0; border: 0; background: transparent;
+    color: #20242b; text-align: left; font: inherit; font-size: 14px;
+    font-weight: 700; letter-spacing: .12em; line-height: 1.5;
+  }
+  button.smart-technical-accordion__trigger { cursor: pointer; }
+  button:focus-visible { outline: 2px solid #0f2f7f; outline-offset: 4px; }
+  &__toggle { position: relative; width: 18px; height: 18px; flex-shrink: 0; }
+  &__toggle::before {
+    content: ''; position: absolute; top: 2px; left: 4px; width: 9px; height: 9px;
+    border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+    transform: rotate(45deg); transition: transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  .is-open .smart-technical-accordion__toggle::before { transform: translateY(5px) rotate(225deg); }
+  &__drawer {
+    display: grid; grid-template-rows: 0fr; opacity: 0; overflow: hidden;
+    transition: grid-template-rows .45s cubic-bezier(.4,0,.2,1), opacity .36s ease;
+  }
+  .is-open .smart-technical-accordion__drawer { grid-template-rows: 1fr; opacity: 1; transition-duration: .62s,.46s; }
+  &__content { min-height: 0; overflow: hidden; }
+  &__content > p { max-width: 850px; margin: 32px auto 64px; }
+  &__evidence { padding: 0 0 40px; }
+  &__evidence.is-pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 32px; }
+  figure { margin: 0; min-width: 0; }
+  .interface-view-label { margin-bottom: 16px; }
+  .licita-applied-comparison__meta { display: flex !important; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 14px; }
+  .licita-applied-comparison__expand { display: inline-flex !important; position: static; flex-shrink: 0; }
+  img { display: block; width: 100%; height: auto; @include case-media-shadow.subtle; }
+}
+:host .civitas-page .civitas-story-panel .smart-technical-accordion .smart-technical-accordion__content > p {
+  text-align: center !important;
+}
+@media (min-width: 769px) {
+  :host .civitas-page .smart-technical-accordion__evidence {
+    width: 80%;
+    margin-inline: auto;
+    &.is-pair {
+      width: 100%;
+      row-gap: 0;
+      > figure { display: grid; grid-template-rows: subgrid; grid-row: span 2; align-items: start; }
+    }
+  }
+}
+@media (max-width: 768px) {
+  :host .civitas-page .smart-technical-accordion {
+    padding-top: 16px;
+    &__trigger { padding: 28px 0; }
+    &__content > p { margin: 24px 0 48px; }
+    &__evidence.is-pair { grid-template-columns: minmax(0,1fr); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host .civitas-page .smart-technical-accordion {
+    &__drawer, &__toggle::before { transition: none; }
+  }
+}
 
 // Consume the existing case layout and the canonical LicitaNow screenshot rules.
 @include case-screenshots.all;
@@ -8,6 +77,162 @@
   @include case-screenshots.visible-toolbar;
 }
 @include case-screenshots.single-toolbar;
+
+// LicitaNow Principles' left / center / right / hidden composition, adapted to screens.
+:host .civitas-page .smart-parking-layouts {
+  width: min(100%, 1120px);
+  margin: var(--case-study-intro-visual-gap) auto 0;
+
+  > .interface-view-label { text-align: left; margin: 0 0 20px; }
+  &__intro {
+    max-width: 780px;
+    margin: 0 0 32px;
+    color: var(--body-copy-color);
+    font-size: var(--body-copy-font-size);
+    font-weight: var(--body-copy-font-weight);
+    line-height: var(--body-copy-line-height);
+    text-align: left;
+  }
+  &__toolbar { display: flex; justify-content: flex-end; align-items: center; width: 82.14%; margin-inline: auto; }
+  &__toolbar .licita-applied-comparison__expand { display: inline-flex !important; position: static; }
+  &__stage { position: relative; }
+  &__counter { text-align: center; font-size: 13px; margin-top: 8px; }
+  &__navigation { position: absolute; inset: 0; pointer-events: none; }
+  &__navigation button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 4;
+    pointer-events: auto;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--smart-architecture-blue);
+    font: inherit;
+    font-size: 22px;
+    cursor: pointer;
+    transition: opacity .2s ease;
+    &:hover { opacity: .65; }
+    &:disabled { opacity: .25; cursor: default; }
+    &:first-child { left: -92px; }
+    &:last-child { right: -92px; }
+  }
+  &__chevron { display: block; width: 18px; height: 18px; border-top: 2px solid currentColor; border-right: 2px solid currentColor; transform: rotate(45deg); }
+  &__navigation button:first-child span { transform: rotate(-135deg); }
+  &__rail {
+    display: grid;
+    place-items: center;
+    isolation: isolate;
+    width: 100%;
+    min-width: 0;
+    padding: 14px 0;
+  }
+  &__rail > figure {
+    box-sizing: border-box;
+    grid-area: 1 / 1;
+    min-width: 0;
+    width: 82.14%;
+    max-width: 82.14%;
+    margin: 0;
+    padding: 0;
+    transition: transform 540ms cubic-bezier(.22,1,.36,1), opacity 540ms ease;
+    &.center { z-index: 3; transform: translateX(0) scale(1); opacity: 1; }
+    &.left { z-index: 2; transform: translateX(-22%) scale(.84); opacity: .85; }
+    &.right { z-index: 2; transform: translateX(22%) scale(.84); opacity: .85; }
+    &.hidden { z-index: 0; transform: scale(.7); opacity: 0; visibility: hidden; pointer-events: none; }
+  }
+  &__rail img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1900 / 1080;
+    object-fit: contain;
+    @include case-media-shadow.subtle;
+  }
+  button:focus-visible, &__rail:focus-visible { outline: 2px solid var(--smart-architecture-blue); outline-offset: 3px; }
+}
+@media (max-width: 768px) {
+  :host .civitas-page .smart-parking-layouts__toolbar { width: calc((100% - 64px) * .84); }
+  :host .civitas-page .smart-parking-layouts__stage { padding-inline: 32px; }
+  :host .civitas-page .smart-parking-layouts__navigation button:first-child { left: -6px; }
+  :host .civitas-page .smart-parking-layouts__navigation button:last-child { right: -6px; }
+  :host .civitas-page .smart-parking-layouts__rail > figure {
+    width: 84% !important; max-width: 84% !important;
+    &.left { transform: translateX(-14%) scale(.84); }
+    &.right { transform: translateX(14%) scale(.84); }
+  }
+}
+:host .civitas-page [aria-labelledby='smart-parking'] > .case-process-flow { margin-bottom: var(--case-study-intro-visual-gap); }
+@media (prefers-reduced-motion: reduce) {
+  :host .civitas-page .smart-parking-layouts__rail > figure { transition: none; }
+}
+
+// Position-only refinement of the approved fact line.
+:host .case-study-page.civitas-page [aria-labelledby='smart-introduction'] .licita-result-facts {
+  justify-content: center;
+  margin-top: 64px;
+}
+
+// Product landscape uses the large evidence width and the original asset ratio.
+:host .civitas-page [aria-labelledby='smart-challenge'] {
+  .smart-introduction-copy p + p { margin-top: 18px; }
+  .smart-product-scope { margin-top: var(--case-study-intro-visual-gap); }
+  .smart-product-scope > .interface-view-label { width: 100%; text-align: center; }
+  .smart-product-scope > .interface-view-summary { text-align: center; }
+  .smart-product-scope__landscape {
+    width: min(92vw, 1600px);
+    max-width: none;
+    margin: 32px calc((100% - min(92vw, 1600px)) / 2) 0;
+  }
+  .smart-product-scope__landscape figcaption { margin-bottom: 14px; }
+  .smart-product-scope__landscape > .licita-applied-comparison__meta {
+    display: flex !important;
+    margin-bottom: 14px;
+    > figcaption { margin-bottom: 0; }
+    > .licita-applied-comparison__expand { display: inline-flex !important; }
+  }
+  .smart-product-scope__landscape > .licita-applied-comparison__media {
+    display: block;
+    width: 100%;
+    max-width: none !important;
+    margin: 0 !important;
+    height: auto;
+    max-height: none;
+    aspect-ratio: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+  .smart-product-scope__landscape img {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+@media (max-width: 768px) {
+  :host .case-study-page.civitas-page .civitas-story-panel [aria-labelledby='smart-introduction'] {
+    padding-bottom: 32px;
+  }
+  :host .case-study-page.civitas-page [aria-labelledby='smart-challenge'] > .smart-introduction-copy {
+    row-gap: 48px;
+  }
+  :host .case-study-page.civitas-page [aria-labelledby='smart-introduction'] .licita-result-facts { margin-top: 40px; }
+  :host .civitas-page [aria-labelledby='smart-challenge'] {
+    .smart-product-scope > .interface-view-label,
+    .smart-product-scope > .interface-view-summary { text-align: left; }
+    .smart-product-scope__landscape { width: 100%; margin-inline: 0; }
+  }
+}
 
 @media (max-width: 768px) {
   :host .civitas-story-panel :is([aria-labelledby='smart-parking'], [aria-labelledby='smart-permissions']) > .licitanow-page {
@@ -32,131 +257,12 @@
 }
 
 @media (max-width: 768px) {
-  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview .smart-product-preview__stack {
-    display: block;
-    aspect-ratio: 1900 / 1080;
-    padding: 0;
-    overflow: hidden;
-    background: #f4f5f6;
-  }
-
-  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview .smart-product-preview__stack.smart-product-preview__stack > .smart-product-preview__screen {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    margin: 0;
-    object-fit: contain;
-    box-shadow: none;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateX(-4px);
-    transition: opacity 700ms ease-in-out, transform 700ms ease-in-out, visibility 700ms;
-    pointer-events: none;
-    z-index: auto;
-  }
-
-  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview .smart-product-preview__stack.smart-product-preview__stack > .smart-product-preview__screen.is-preview-current {
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-  }
-}
-
-@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
-  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview .smart-product-preview__stack.smart-product-preview__stack > .smart-product-preview__screen {
-    transition: none;
-    transform: none;
-  }
-}
-
-@media (max-width: 768px) {
   :host ::ng-deep .case-study-page.civitas-page .civitas-story-panel
   [data-case-screenshot-toolbar].panel-hotspot-visual__screen > .case-expand-affordance {
     top: 10px;
     grid-row: 2 / 3;
     grid-column: 1 / 2;
     align-self: start;
-  }
-}
-
-.civitas-story-panel .smart-preview-note + .smart-product-preview {
-  margin-top: var(--case-study-intro-visual-gap);
-}
-
-.civitas-story-panel .smart-product-preview + [aria-labelledby='smart-introduction'] {
-  margin-top: calc(var(--case-study-intro-visual-gap) + 40px);
-}
-
-:host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview > .interface-view-label { text-align: center !important; }
-@media (max-width: 768px) {
-  :host .case-study-page.civitas-page .civitas-story-panel .smart-preview-note > .story-chapter-header > .interface-view-summary,
-  :host .case-study-page.civitas-page .civitas-story-panel .smart-product-preview > :is(.interface-view-label, .interface-view-summary) {
-    text-align: left !important;
-    width: 100%;
-    max-width: 100%;
-    margin-inline: 0;
-  }
-  :host .case-study-page.civitas-page .civitas-story-panel .smart-preview-note > .story-chapter-header > .interface-view-summary {
-    text-align: center !important;
-  }
-}
-.civitas-story-panel .smart-product-preview > .overview-hotspot-visual.panel-hotspot-visual {
-  width: 100%;
-  max-width: none;
-  padding-inline: 0;
-  margin-top: 24px;
-  height: auto;
-  min-height: 0;
-  align-items: flex-start;
-}
-.smart-product-preview__stack {
-  container-type: inline-size;
-  --preview-screen-height: min(136px, calc(100cqw / 10));
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
-  isolation: isolate;
-  width: 100%;
-  align-self: flex-start;
-  padding-bottom: 12px;
-  overflow: visible;
-}
-@media (min-width: 769px) {
-  .smart-product-preview__stack {
-    --preview-screen-height: clamp(114px, calc(100cqw / 10), 136px);
-  }
-}
-:host .case-study-page.civitas-page .civitas-story-panel
-.smart-product-preview .smart-product-preview__stack > .smart-product-preview__screen {
-  position: relative;
-  display: block;
-  flex: 0 0 auto;
-  width: auto !important;
-  min-width: 0;
-  height: var(--preview-screen-height) !important;
-  object-fit: contain;
-  border: 0;
-  @include case-media-shadow.subtle;
-}
-.smart-product-preview__screen + .smart-product-preview__screen {
-  margin-left: calc((100cqw - (14 * (1900 / 1080) + (1900 / 1285)) * var(--preview-screen-height)) / 14);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .smart-product-preview__screen:hover {
-    z-index: 1;
-  }
-}
-
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .smart-product-preview__screen {
-    transition: transform 200ms ease;
-  }
-
-  .smart-product-preview__screen:hover {
-    transform: translateY(-8px);
   }
 }
 
@@ -190,4 +296,676 @@
   .civitas-story-panel .story-chapter + .smart-charger-workflows {
     margin-top: 120px;
   }
+}
+
+
+@include case-facts.base;
+@media (max-width: 768px) { @include case-facts.mobile; }
+
+// Reuse LicitaNow's equal editorial columns.
+:host .civitas-page :is([aria-labelledby='smart-introduction'], [aria-labelledby='smart-challenge'], [aria-labelledby='smart-parking']) {
+  .smart-introduction-copy {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px clamp(32px, 5vw, 72px);
+    width: 100%;
+    max-width: 980px;
+    margin-inline: auto;
+  }
+  .smart-introduction-copy > div { min-width: 0; }
+  .smart-introduction-copy .interface-view-label { width: 100%; margin: 0 0 20px; text-align: left; text-transform: uppercase !important; }
+  .smart-introduction-copy p {
+    margin: 0;
+    color: var(--body-copy-color);
+    font-size: var(--body-copy-font-size);
+    font-weight: var(--body-copy-font-weight);
+    line-height: var(--body-copy-line-height);
+    text-align: left;
+  }
+  .licita-result-facts { width: 100%; max-width: 980px; margin: 48px auto 0; justify-content: flex-start; text-align: left; font-weight: 400; }
+  .licita-result-facts b { color: #20242b; font-weight: 650; }
+  .licita-result-facts > span > span::before { content: none; }
+}
+@media (min-width: 769px) {
+  // Same full-pair width as case-screenshots' licita-applied-decisions__center.
+  :host .civitas-story-panel { overflow: visible; }
+  :host .civitas-page :is([aria-labelledby='smart-introduction'], [aria-labelledby='smart-challenge'], [aria-labelledby='smart-parking']) {
+    .smart-introduction-copy,
+    .licita-result-facts {
+      width: min(92vw, 1600px);
+      max-width: none;
+      margin-inline: calc((100% - min(92vw, 1600px)) / 2);
+    }
+  }
+}
+@media (max-width: 768px) {
+  :host .civitas-page :is([aria-labelledby='smart-introduction'], [aria-labelledby='smart-challenge'], [aria-labelledby='smart-parking']) .smart-introduction-copy { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  :host .civitas-page :is([aria-labelledby='smart-introduction'], [aria-labelledby='smart-challenge'], [aria-labelledby='smart-parking']) .licita-result-facts { margin-top: 28px; }
+  :host .civitas-page :is([aria-labelledby='smart-introduction'], [aria-labelledby='smart-challenge'], [aria-labelledby='smart-parking']) .licita-result-facts > span + span::before { content: none; }
+  :host .case-study-page.civitas-page [aria-labelledby='smart-introduction'] .licita-result-facts {
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 14px 12px;
+    font-size: 12px;
+    text-align: left;
+
+    > span { width: 100%; min-width: 0; text-wrap: pretty; }
+    b { font-weight: 650; letter-spacing: 0; }
+    > span:last-child b { white-space: nowrap; }
+  }
+}
+
+// LicitaNow's editorial problem/solution rows, kept open and connected by Civitas arrows.
+:host .smart-pilot-trigger { display: none; }
+:host .civitas-page .smart-pilot-insights {
+  margin-top: calc(var(--case-study-intro-visual-gap) + 40px);
+  // Same subordinate editorial scale as Civitas' information/overview headings.
+  &__title {
+    width: 100%;
+    margin: 0;
+    color: var(--section-title-color);
+    font-size: clamp(17px, 1.2vw, 20px);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -.01em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+  > .story-chapter-header > p { margin-top: 24px !important; text-align: center !important; }
+  .licita-problem-solution {
+    display: grid;
+    gap: 0;
+    width: min(100%, 1120px);
+    margin: var(--case-study-intro-visual-gap) auto 0;
+    padding: 0;
+    list-style: none;
+  }
+  .licita-problem-solution__pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+    gap: 26px;
+    align-items: start;
+    padding: 30px 0;
+    border-top: 1px solid rgba(32,36,43,.12);
+  }
+  .licita-problem-solution__pair:last-child { border-bottom: 1px solid rgba(32,36,43,.12); }
+  .licita-problem-solution__pair > div { min-width: 0; }
+  .interface-view-label { width: 100%; margin: 0 0 14px; text-align: left; }
+  .licita-problem-solution__pair p {
+    margin: 0;
+    color: var(--body-copy-color);
+    font-size: var(--body-copy-font-size);
+    font-weight: var(--body-copy-font-weight);
+    line-height: var(--body-copy-line-height);
+    text-align: left;
+  }
+  .responsive-desktop-flow__arrow { position: static; translate: none; align-self: center; color: var(--smart-architecture-blue); }
+  .responsive-desktop-flow__arrow i { animation-play-state: running; }
+}
+@media (min-width: 769px) {
+  :host .civitas-page .smart-pilot-insights .responsive-desktop-flow__arrow { translate: -18px 0; }
+}
+@media (max-width: 768px) {
+  :host .civitas-page .smart-pilot-insights {
+    .licita-problem-solution { overflow-anchor: none; }
+    .licita-problem-solution__pair {
+      display: block;
+      padding: 0;
+    }
+    .smart-pilot-need { position: relative; padding: 32px 54px 32px 0; }
+    .interface-view-label { margin-bottom: 8px; }
+    .smart-pilot-trigger {
+      display: flex; align-items: center; justify-content: flex-end;
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      padding: 0; border: 0; background: transparent; color: #20242b; cursor: pointer;
+    }
+    .smart-pilot-trigger:focus-visible { outline: 2px solid #0f2f7f; outline-offset: 4px; }
+    // LicitaNow mobile problem/solution chevron (18px frame, 10px mark).
+    .licita-problem-solution__toggle {
+      position: relative; flex: 0 0 18px; width: 18px; height: 18px;
+      margin-right: 18px; opacity: .82;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .licita-problem-solution__toggle::before {
+      content: ''; position: absolute; top: 3px; left: 5px;
+      width: 10px; height: 10px; border: solid #25282b;
+      border-width: 0 1.75px 1.75px 0;
+      transform: rotate(45deg); transition: transform 300ms ease;
+    }
+    .is-open .licita-problem-solution__toggle::before { transform: translateY(5px) rotate(225deg); }
+    .smart-pilot-response {
+      display: grid; grid-template-rows: 0fr;
+      box-sizing: border-box; width: 100%; max-width: none;
+      margin: 0; padding: 0; background: #f7f7f5;
+      overflow: hidden; visibility: hidden;
+      transition: grid-template-rows .45s cubic-bezier(.4,0,.2,1), visibility 0s .45s;
+    }
+    .smart-pilot-response__clip { min-height: 0; overflow: hidden; }
+    .smart-pilot-response__content { padding: 24px 20px; }
+    .is-open .smart-pilot-response {
+      grid-template-rows: 1fr; visibility: visible;
+      transition: grid-template-rows .45s cubic-bezier(.4,0,.2,1), visibility 0s;
+    }
+    .responsive-desktop-flow__arrow { display: none !important; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host .civitas-page .smart-pilot-insights .responsive-desktop-flow__arrow i { animation: none; opacity: .65; }
+  :host .civitas-page .smart-pilot-insights .licita-problem-solution__toggle,
+  :host .civitas-page .smart-pilot-insights .licita-problem-solution__toggle::before,
+  :host .civitas-page .smart-pilot-insights .smart-pilot-response { transition: none !important; }
+}
+
+// Civitas' cards, circular centre and dashed connections, arranged for three roles.
+:host { --smart-architecture-blue: #0f2f7f; }
+@media (min-width: 769px) {
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-platform-architecture > .architecture-intro > .case-study-section-subtitle {
+    width: min(100%, 760px) !important;
+    max-width: none !important;
+  }
+}
+:host .civitas-page .story-user.smart-operational-roles {
+  .user-profile-map__grid {
+    --role-gap: 48px;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-rows: auto 140px auto;
+    grid-template-areas: "goals needs" "person person" "difficulties difficulties";
+    gap: var(--role-gap);
+    min-height: 0;
+    padding: 0;
+  }
+  .user-profile-map__grid::before,
+  .user-profile-map__grid::after { content: none; }
+  .user-need { height: auto; min-height: 0; }
+  .user-need--difficulties { width: calc((100% - var(--role-gap)) / 2); justify-self: center; }
+  .user-profile-map__person {
+    position: relative;
+    inset: auto;
+    grid-area: person;
+    width: 168px;
+    height: 168px;
+    box-sizing: border-box;
+    border: 0;
+    padding: 10px;
+    gap: 6px;
+    background: var(--smart-architecture-blue);
+    box-shadow: 0 8px 18px rgba(20,35,32,.14), 0 2px 5px rgba(20,35,32,.08);
+    color: #fff;
+    margin: 0;
+    align-self: center;
+  }
+  .user-profile-map__person span { text-align: center; white-space: nowrap; font-size: 16px; font-weight: 700; line-height: 1.2; letter-spacing: .02em; color: #fff; }
+  .user-need--goals::after,
+  .user-need--needs::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    height: calc(var(--role-gap) + 70px);
+    width: calc(50% + var(--role-gap) / 2);
+    border-bottom: 1px dashed rgba(38,48,44,.42);
+    pointer-events: none;
+  }
+  .user-need--goals::after { left: 50%; border-left: 1px dashed rgba(38,48,44,.42); }
+  .user-need--needs::after { right: 50%; border-right: 1px dashed rgba(38,48,44,.42); }
+  .user-need--difficulties::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    height: var(--role-gap);
+    border-left: 1px dashed rgba(38,48,44,.42);
+    pointer-events: none;
+  }
+}
+@media (max-width: 768px) {
+  :host .civitas-page .story-user.smart-operational-roles {
+    .user-profile-map__grid { --role-gap: 36px; grid-template-rows: auto 84px auto; column-gap: 10px !important; }
+    .user-profile-map__person { width: 100px; height: 100px; padding: 8px; }
+    .user-need { display: flex; align-items: stretch; overflow: visible; }
+    .user-need__toggle { box-sizing: border-box; height: auto; min-height: 84px; padding: 18px 10px; align-items: center; }
+    .smart-role-heading { display: grid; gap: 6px; text-align: left; }
+    .user-need--difficulties { width: 78% !important; justify-self: center; }
+    .user-profile-map__person span { font-size: 11px; }
+    .user-need--goals::after,
+    .user-need--needs::after { height: calc(var(--role-gap) + 42px); width: calc(50% + 5px); }
+  }
+}
+
+// Platform structure uses Civitas' root, module pills, connector pseudo-elements
+// and .story-architecture.is-entered animation/reduced-motion rules unchanged.
+:host .case-study-page.civitas-page .civitas-story-panel .smart-platform-architecture {
+  --smart-module-blue: color-mix(in srgb, var(--smart-architecture-blue) 45%, var(--civitas-hero-green));
+  --smart-line: rgba(38,48,47,.62);
+
+  .architecture-tree {
+    display: block;
+    width: 100% !important;
+    max-width: 1080px;
+    left: 0;
+    margin: calc(var(--case-study-intro-visual-gap) * .65) auto 0 !important;
+    padding: 0 !important;
+  }
+  .architecture-tree::before,
+  .architecture-level-two::before,
+  .architecture-area::after,
+  .architecture-area__children::before,
+  .architecture-items::before { content: none !important; }
+
+  .architecture-root {
+    align-content: center;
+    gap: 6px;
+    position: relative;
+    top: auto;
+    left: auto;
+    box-sizing: border-box;
+    width: 124px;
+    height: 124px;
+    min-height: 124px;
+    font-size: 14px;
+    margin: 0 auto 48px !important;
+    padding: 10px !important;
+    background: var(--smart-architecture-blue);
+    color: #fff;
+  }
+  .architecture-root > span {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: .02em;
+    text-align: center;
+    white-space: nowrap;
+    color: #fff;
+  }
+  .architecture-root::after {
+    content: '';
+    display: block !important;
+    top: 100%;
+    left: calc(50% - 1px);
+    width: 2px;
+    height: 48px;
+    background: var(--smart-line);
+  }
+  .architecture-level-two {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px;
+    width: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .architecture-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 0;
+    margin: 0;
+    padding: 40px 0 0 !important;
+    gap: 0;
+  }
+  .architecture-area::before {
+    content: '';
+    display: block;
+    left: 50%;
+    top: 0;
+    width: calc(100% + 32px);
+    height: 2px;
+    background: var(--smart-line);
+  }
+  .architecture-area:last-child::before { content: none; }
+  .architecture-area h3 {
+    z-index: 4;
+    box-sizing: border-box;
+    width: 100%;
+    height: 52px;
+    min-height: 52px;
+    margin: 0 !important;
+    padding: 8px 20px;
+    background: var(--smart-module-blue);
+    color: #fff;
+  }
+  .architecture-area h3::after {
+    content: '';
+    display: block !important;
+    top: -40px;
+    left: calc(50% - 1px);
+    width: 2px;
+    height: 40px;
+    background: var(--smart-line);
+  }
+  .architecture-area__children {
+    position: relative;
+    top: 0;
+    display: block;
+    width: 100%;
+    margin: 28px 0 0 !important;
+    padding: 0 !important;
+    border: 0;
+  }
+  .architecture-group { display: block; width: 100%; padding: 0; }
+  .architecture-group::before {
+    content: '';
+    display: block !important;
+    top: -42px;
+    left: 12px;
+    width: 2px;
+    height: 43px;
+    background: var(--smart-line);
+  }
+  .architecture-items {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    margin: 0 !important;
+    padding: 0 0 0 36px !important;
+    border: 0;
+    overflow: visible;
+    opacity: 1;
+    visibility: visible;
+  }
+  .architecture-items > span {
+    box-sizing: border-box;
+    display: grid !important;
+    place-items: center;
+    width: 100%;
+    max-width: 100%;
+    min-height: 38px;
+    padding: 8px 13px;
+    white-space: normal;
+    text-align: center !important;
+    background: #fff;
+  }
+  .architecture-items > span::before {
+    content: '';
+    display: block !important;
+    position: absolute;
+    left: -25px;
+    top: calc(50% - 1px);
+    width: 25px;
+    height: 2px;
+    background: var(--smart-line);
+  }
+  .architecture-items > span::after {
+    content: '';
+    position: absolute;
+    left: -25px;
+    top: -18px;
+    width: 2px;
+    height: calc(100% + 20px);
+    background: var(--smart-line);
+  }
+  .architecture-items > span:first-child::after { top: -1px; height: calc(100% + 3px); }
+  .architecture-items > span:last-child::after { height: calc(50% + 18px); }
+}
+@media (max-width: 768px) {
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-platform-architecture {
+    .architecture-area h3 { position: relative; padding-right: 38px; }
+    .architecture-area .smart-area-toggle {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: flex-end;
+      width: 100%; height: 100%; margin: 0; padding: 0 14px;
+      border: 0; border-radius: inherit; background: transparent; color: #fff;
+      box-shadow: none; cursor: pointer;
+    }
+    .architecture-area .architecture-area__children {
+      max-height: 0; margin: 0 !important; padding: 0 !important;
+      overflow: hidden; opacity: 0; visibility: hidden;
+      transition: max-height 300ms ease, padding-top 300ms ease, opacity 220ms ease;
+    }
+    .architecture-area.is-open .architecture-area__children {
+      max-height: 600px; padding-top: 28px !important; opacity: 1; visibility: visible;
+    }
+    .architecture-tree .architecture-area .architecture-area__children::before {
+      content: none !important;
+      display: none !important;
+    }
+    .architecture-level-two { grid-template-columns: 1fr; gap: 32px; padding-left: 76px !important; }
+    .architecture-area { padding-top: 0 !important; }
+    .architecture-area::before {
+      content: '';
+      display: block !important;
+      left: -24px;
+      top: 25px;
+      width: 24px;
+      height: 2px;
+    }
+    .architecture-area:last-child::before { content: ''; }
+    .architecture-area::after {
+      content: '' !important;
+      display: block !important;
+      position: absolute;
+      left: -24px;
+      top: 25px;
+      width: 2px;
+      height: calc(100% + 32px);
+      background: var(--smart-line);
+    }
+    .architecture-area:last-child::after { content: none !important; }
+    .architecture-area h3::after { content: none; display: none !important; }
+    .architecture-root { margin-left: -10px !important; }
+    .architecture-root::after { height: 73px; }
+  }
+}
+@media (min-width: 769px) {
+  :host .smart-platform-architecture .smart-area-toggle { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host .smart-platform-architecture .architecture-area__children { transition: none !important; }
+}
+
+@include case-flow.overview('.civitas-page .case-process-flow');
+:host { --case-flow-bg: var(--civitas-hero-green); --case-flow-arrow-color: #8a8a86; }
+@media (max-width: 768px) {
+  :host .civitas-page [aria-labelledby='smart-parking'] .case-process-flow { --juh-flow-gap: 36px; margin-bottom: 56px; }
+  :host .civitas-page [aria-labelledby='smart-reservations'] .case-process-flow { --juh-flow-gap: 40px; }
+  :host .case-study-page.civitas-page [aria-labelledby='smart-parking'] > .smart-introduction-copy { row-gap: 48px; }
+}
+
+// Real screens follow Civitas' chevron motion and the existing stacked mobile flow.
+:host .civitas-page [aria-labelledby='smart-parking'] {
+  .smart-introduction-copy p + p { margin-top: 18px; }
+  .case-process-flow li::after { content: none; }
+  .case-process-flow .responsive-desktop-flow__arrow {
+    top: 50%;
+    left: 100%;
+    width: var(--juh-flow-gap);
+    translate: 0 -50%;
+    color: var(--case-flow-arrow-color);
+  }
+  .case-process-flow .responsive-desktop-flow__arrow i {
+    width: 10px;
+    height: 10px;
+    border-width: 2px;
+    animation-play-state: running;
+  }
+}
+
+// Reuse the approved evidence shadow without adding a screenshot frame.
+:host .case-study-page.civitas-page .civitas-story-panel [aria-labelledby='smart-challenge']
+  .smart-product-scope__landscape > .licita-applied-comparison__media > img {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 32768 / 12601;
+  border: 0 !important;
+  border-radius: 0 !important;
+  @include case-media-shadow.subtle;
+}
+@media (max-width: 768px) {
+  :host .civitas-page [aria-labelledby='smart-parking'] .case-process-flow .responsive-desktop-flow__arrow {
+    top: 100%;
+    left: 50%;
+    height: var(--juh-flow-gap);
+    translate: -50% 0;
+    transform: rotate(90deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host .civitas-page [aria-labelledby='smart-parking'] .case-process-flow .responsive-desktop-flow__arrow i { animation: none; opacity: .65; }
+}
+
+:host .civitas-page .smart-geographic-sequence {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) repeat(3, 44px minmax(0, 1fr));
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin: var(--case-study-intro-visual-gap) auto 0;
+
+  figure { min-width: 0; margin: 0; align-self: end; display: grid; grid-template-rows: subgrid; grid-row: 1 / span 2; }
+  @for $step from 1 through 4 {
+    figure:nth-of-type(#{$step}) { grid-column: #{$step * 2 - 1}; }
+  }
+  @for $step from 1 through 3 {
+    > .responsive-desktop-flow__arrow:nth-of-type(#{$step}) { grid-column: #{$step * 2}; grid-row: 2; }
+  }
+  figure > .licita-applied-comparison__meta {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px 12px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  figure > .licita-applied-comparison__meta > figcaption {
+    flex: 1 1 110px;
+    min-width: 0;
+    margin: 0 !important;
+    text-align: left !important;
+    overflow-wrap: anywhere;
+  }
+  figure > .licita-applied-comparison__meta > .licita-applied-comparison__expand {
+    display: inline-flex !important;
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+  img { display: block; width: 100%; height: auto; aspect-ratio: 1900 / 1080; object-fit: contain; border: 0; border-radius: 0; box-shadow: none; }
+  .responsive-desktop-flow__arrow { position: static; translate: none; color: var(--smart-sequence-arrow, #8a8a86); margin-top: 0; }
+  .responsive-desktop-flow__arrow i { animation-play-state: running; }
+}
+@media (max-width: 768px) {
+  :host .civitas-page .smart-geographic-sequence {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    margin-inline: 0;
+    gap: 24px;
+    figure:nth-of-type(n) { display: block !important; grid-column: 1; grid-row: auto; }
+    figure > .licita-applied-comparison__meta { margin-bottom: 16px; }
+    > .responsive-desktop-flow__arrow:nth-of-type(n) { grid-column: 1; grid-row: auto; }
+    .responsive-desktop-flow__arrow { justify-self: center; margin-top: 0; transform: rotate(90deg); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :host .civitas-page .smart-geographic-sequence .responsive-desktop-flow__arrow i { animation: none; opacity: .65; }
+}
+
+// One mobile evidence policy; desktop toolbars keep their existing rules.
+@media (max-width:768px) {
+  :host .case-study-page.civitas-page .civitas-story-panel .smart-reservation-evidence {
+    padding-bottom: 24px;
+    > .interface-view-summary { display: none !important; }
+  }
+  :host .case-study-page.civitas-page .civitas-story-panel figure[data-case-screenshot-toolbar] > .licita-applied-comparison__meta > .licita-applied-comparison__expand,
+  :host .civitas-page .civitas-story-panel .smart-parking-layouts__toolbar {
+    display: none !important;
+  }
+  :host .civitas-page .civitas-story-panel .licita-applied-comparison__meta {
+    display: block !important;
+    width: 100%;
+  }
+  :host .civitas-page .civitas-story-panel .licita-applied-comparison__label {
+    width: 100%; max-width: none; text-align: left;
+  }
+  :host .civitas-page .civitas-story-panel figure[data-case-screenshot-toolbar] {
+    display: flex !important;
+    flex-direction: column;
+    gap: 0;
+  }
+  :host .case-study-page.civitas-page .civitas-story-panel figure[data-case-screenshot-toolbar] > .licita-applied-comparison__meta {
+    display: block !important;
+    order: 2;
+    flex: none;
+    width: 100%;
+    max-width: none;
+    margin: 12px 0 24px !important;
+    padding: 0;
+  }
+  :host .case-study-page.civitas-page .civitas-story-panel figure[data-case-screenshot-toolbar] > .licita-applied-comparison__meta > figcaption {
+    display: block; width: 100%; max-width: none; margin: 0 !important;
+    text-align: left !important; overflow-wrap: normal;
+  }
+  :host ::ng-deep .case-mobile-evidence-expand:focus-visible { outline: 2px solid #0f2f7f; outline-offset: 3px; }
+}
+
+// Overlay the established chevrons without changing the evidence grid or gutters.
+:host .civitas-page .smart-charger-workflows {
+  .licita-applied-comparison__visual { position: relative; }
+  .smart-infrastructure-arrow {
+    position: absolute; display: flex !important; margin: 0;
+    color: #0f2f7f; pointer-events: none; translate: -50% -50%;
+  }
+  .smart-infrastructure-arrow i { animation-play-state: running; }
+}
+
+:host .civitas-page :is(.smart-charger-workflows, [aria-labelledby='smart-permissions']) .licita-applied-comparison__visual figure figcaption {
+  color: var(--licita-accent);
+}
+@media (min-width:769px) {
+  :host .civitas-page .smart-charger-workflows .licita-applied-comparison__before { grid-column: 1; grid-row: 1; }
+  :host .civitas-page .smart-charger-workflows .licita-applied-comparison__after { grid-column: 3; grid-row: 1; }
+}
+@media (max-width:768px) {
+  :host .civitas-page .smart-charger-workflows .smart-infrastructure-arrow { transform: rotate(90deg) !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  :host .civitas-page .smart-charger-workflows .smart-infrastructure-arrow i { animation: none; opacity: .65; }
+}
+
+// LicitaNow responsive implementation: native swipe/snap with a smaller preview.
+:host .smart-evidence-dots { display: none; }
+@media (max-width: 768px) {
+  :host .case-study-page.civitas-page .civitas-story-panel {
+    .smart-parking-layouts__stage { padding: 0; }
+    .smart-parking-layouts__navigation,
+    .smart-parking-layouts__counter,
+    .smart-geographic-sequence > .responsive-desktop-flow__arrow { display: none !important; }
+    :is(.smart-geographic-sequence, .smart-parking-layouts__rail) {
+      @include case-mobile.compact-preview-carousel;
+      display: flex; align-items: flex-start; justify-content: flex-start;
+      width: calc(100% + 2 * var(--mobile-text-gutter));
+      max-width: calc(100% + 2 * var(--mobile-text-gutter));
+      margin-inline: calc(-1 * var(--mobile-text-gutter));
+      min-width: 0; padding: 24px 0 12px;
+      margin-top: -24px;
+      overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain;
+      scroll-snap-type: x mandatory; scroll-behavior: smooth;
+      touch-action: pan-x pan-y; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      &::-webkit-scrollbar { display: none; }
+      > figure {
+        position: relative; flex: 0 0 92%; width: 92% !important; max-width: 92% !important;
+        transform: none !important; opacity: 1 !important; visibility: visible !important;
+        pointer-events: auto; transition: none; z-index: auto;
+        scroll-snap-align: start; scroll-snap-stop: always;
+      }
+      > figure img { pointer-events: auto; }
+    }
+    .smart-evidence-dots {
+      display: flex; align-items: center; justify-content: center;
+      gap: 9px; margin: 18px auto 0;
+      button {
+        width: 8px; height: 8px; padding: 0;
+        border: 1px solid rgba(32,36,43,.48); border-radius: 50%;
+        background: transparent; cursor: pointer;
+        &.is-active { background: #20242b; }
+        &:focus-visible { outline: 2px solid #0f2f7f; outline-offset: 4px; }
+      }
+    }
+  }
+}
+@media (max-width: 768px) and (prefers-reduced-motion: reduce) {
+  :host .case-study-page.civitas-page .civitas-story-panel :is(.smart-geographic-sequence, .smart-parking-layouts__rail) { scroll-behavior: auto; }
 }

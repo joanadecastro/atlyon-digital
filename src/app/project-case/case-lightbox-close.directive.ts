@@ -9,6 +9,7 @@ import { lockCaseLightboxScroll, unlockCaseLightboxScroll } from './case-lightbo
 export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
   @Input() caseLightboxOpen = false;
   @Input() caseLightboxClosing = false;
+  @Input() caseLightboxTapClose = false;
   @Output() readonly caseLightboxClose = new EventEmitter<void>();
   private returnFocus?: HTMLElement;
   private readonly scrollLockOwner = {};
@@ -22,19 +23,27 @@ export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
     event.preventDefault();
     event.stopImmediatePropagation();
   };
-  private readonly closeFromAnyMobilePointer = (event: PointerEvent): void => {
+  private readonly closeFromAnyMobilePointer = (event: Event): void => {
     if (!isMobileCasePreview() || !this.caseLightboxOpen || this.caseLightboxClosing) return;
+    if (event.type === 'click' && !this.caseLightboxTapClose) return;
+    if (event.target instanceof Element && event.target.closest('[data-case-lightbox-control],button,a,input,select,textarea,summary,[role="button"],[contenteditable="true"]')) return;
     event.preventDefault();
     // Closing removes the dialog from hit testing. Consume this gesture's
     // compatibility click so it cannot activate the preview underneath.
     this.clearClosingTapClick();
-    document.addEventListener('click', this.consumeClosingTapClick, true);
-    document.addEventListener('pointerdown', this.clearClosingTapClick, { capture: true, once: true });
+    if (event.type === 'pointerdown') {
+      document.addEventListener('click', this.consumeClosingTapClick, true);
+      document.addEventListener('pointerdown', this.clearClosingTapClick, { capture: true, once: true });
+    } else {
+      // A click-only activation is already complete; do not swallow the next tap.
+      event.stopImmediatePropagation();
+    }
     this.caseLightboxClose.emit();
   };
 
   constructor(private readonly host: ElementRef<HTMLElement>) {
     this.host.nativeElement.addEventListener('pointerdown', this.closeFromAnyMobilePointer, { capture: true });
+    this.host.nativeElement.addEventListener('click', this.closeFromAnyMobilePointer, { capture: true });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -71,6 +80,7 @@ export class CaseLightboxCloseDirective implements OnChanges, OnDestroy {
   ngOnDestroy(): void {
     this.clearClosingTapClick();
     this.host.nativeElement.removeEventListener('pointerdown', this.closeFromAnyMobilePointer, { capture: true });
+    this.host.nativeElement.removeEventListener('click', this.closeFromAnyMobilePointer, { capture: true });
     unlockCaseLightboxScroll(this.scrollLockOwner, false);
   }
 }

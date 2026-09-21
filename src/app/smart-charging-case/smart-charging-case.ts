@@ -1,3 +1,4 @@
+import { nearestCaseSlide, scrollToCaseSlide } from '../project-case/case-snap-carousel';
 import { NgTemplateOutlet } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output, TemplateRef, ViewChild, inject } from '@angular/core';
 import { LanguageService } from '../i18n/language.service';
@@ -12,6 +13,75 @@ type Demo = { key: DemoKey; element: HTMLElement; order: string[] };
 
 @Component({ selector: 'app-smart-charging-case', standalone: true, imports: [NgTemplateOutlet, CaseHeroScrollIndicatorComponent, CaseImagePreviewComponent], hostDirectives: [TranslateDirective], templateUrl: './smart-charging-case.html', styleUrl: './smart-charging-case.scss', host: { style: '--civitas-hero-green:#c5d2e9;--case-accent:#c5d2e9' } })
 export class SmartChargingCaseComponent implements AfterViewInit, OnDestroy {
+  readonly parkingLayouts = ['Group 3207.png', 'Group 3208.png', 'Group 3189.png', 'Group 3209.png', 'Group 3192.png']
+    .map(file => `/projects/carregadoresEletricos/${file}`);
+  parkingLayoutSlide = 0;
+  openTechnicalArea: number | null = 1;
+  openPilotNeed: number | null = 1;
+
+  togglePilotNeed(id: number): void {
+    this.openPilotNeed = this.openPilotNeed === id ? null : id;
+  }
+  readonly technicalAreas = [
+    { id: 1, label: '01 · DETALHES DO CARREGADOR', copy: 'O detalhe do carregador concentrava a informação técnica do equipamento e o estado dos seus conectores, funcionando como ponto de entrada para as restantes áreas de gestão técnica.', screens: [{ file: 'Group 3196.png', title: 'Detalhe técnico do carregador', label: '' }] },
+    { id: 2, label: '02 · COMANDOS OCPP', copy: 'A área de Comandos OCPP reunia operações técnicas de configuração e controlo do carregador, permitindo atuar sobre o equipamento a partir da própria plataforma.', screens: [{ file: 'Group 3211 (1).png', title: 'Comandos OCPP', label: '' }] },
+    { id: 3, label: '03 · LOGS OCPP', copy: '', screens: [] },
+    { id: 4, label: '04 · ESTATÍSTICAS', copy: 'Os mesmos dados operacionais podiam ser consultados em dois modos de visualização. Dois controlos permitiam alternar diretamente entre a tabela, para uma leitura detalhada das transações, e o gráfico, para uma leitura visual da evolução e do desempenho no período selecionado.', screens: [{ file: 'Group 3210 (1).png', title: 'Consulta detalhada das transações', label: '' }, { file: 'Group 3198.png', title: 'Evolução e desempenho', label: '' }] },
+  ];
+  readonly singleImagePreviewSources = [...this.parkingLayouts, ...this.technicalAreas.flatMap(area => area.screens.map(screen => `/projects/carregadoresEletricos/${screen.file}`))];
+
+  // Same one-open-area state as LicitaNow's problem/solution accordion.
+  toggleTechnicalArea(id: number): void {
+    if (id === 3) return;
+    this.openTechnicalArea = this.openTechnicalArea === id ? null : id;
+  }
+  readonly previewImageGroups = [
+    ['Group 3191.png', 'Group 3206.png', 'Group 3193.png', 'Group 3194.png'].map((file, index) => ({
+      src: `/projects/carregadoresEletricos/${file}`,
+      alt: ['01 · VISÃO GEOGRÁFICA', '02 · LOCALIZAÇÃO', '03 · PARQUE', '04 · PLANTA DO PARQUE'][index],
+    })),
+  ];
+
+  // Adapted from licitanow-redesign/snippets/principles-carousel.js (updateCarousel).
+  parkingLayoutPosition(index: number): 'left' | 'center' | 'right' | 'hidden' {
+    const count = this.parkingLayouts.length;
+    if (index === this.parkingLayoutSlide) return 'center';
+    if (index === (this.parkingLayoutSlide - 1 + count) % count) return 'left';
+    if (index === (this.parkingLayoutSlide + 1) % count) return 'right';
+    return 'hidden';
+  }
+
+  setParkingLayoutSlide(slide: number): void {
+    const count = this.parkingLayouts.length;
+    this.parkingLayoutSlide = (slide % count + count) % count;
+  }
+
+  geographicSlide = 0;
+
+  onMobileEvidenceScroll(event: Event, group: 'geographic' | 'parking'): void {
+    if (!matchMedia('(max-width: 768px)').matches) return;
+    const rail = event.currentTarget as HTMLElement;
+    const slides = Array.from(rail.querySelectorAll<HTMLElement>(':scope > figure'));
+    const index = nearestCaseSlide(rail, slides);
+    if (group === 'geographic') this.geographicSlide = index;
+    else this.parkingLayoutSlide = index;
+  }
+
+  selectMobileEvidence(group: 'geographic' | 'parking', index: number): void {
+    const selector = group === 'geographic' ? '.smart-geographic-sequence' : '.smart-parking-layouts__rail';
+    const rail = this.host.nativeElement.querySelector<HTMLElement>(selector);
+    const target = rail?.querySelectorAll<HTMLElement>(':scope > figure')[index];
+    if (rail && target) scrollToCaseSlide(rail, target);
+  }
+
+  readonly productLandscapePreviewSources = ['/projects/carregadoresEletricos/Group 3204 (1).png'];
+  readonly lightboxLoadingPreviews = {
+    '/projects/carregadoresEletricos/Group 3204 (1).png': '/projects/carregadoresEletricos/product-landscape-preview.webp',
+  };
+
+  preloadProductLandscape(): void {
+    void this.imagePreview?.preloadOriginal(this.productLandscapePreviewSources[0]);
+  }
   readonly language = inject(LanguageService);
   readonly nextProject = CASE_STUDY_NEXT.smartCharging;
   @Input() project: any;
@@ -47,41 +117,6 @@ export class SmartChargingCaseComponent implements AfterViewInit, OnDestroy {
   isMobileViewport = false;
   readonly modalPreviewSources = ['Frame 845.png', 'Group 3197.png', 'Group 3200.png', 'Group 3201.png', 'Group 3202.png']
     .map(file => `/projects/carregadoresEletricos/${file}`);
-  private stopProductPreview?: () => void;
-
-  private setupProductPreview(): void {
-    const screens = Array.from(this.host.nativeElement.querySelectorAll<HTMLImageElement>('.smart-product-preview__screen'));
-    const mobile = matchMedia('(max-width: 768px)');
-    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-    let timer: ReturnType<typeof setInterval> | undefined;
-    let index = 0;
-    const update = () => {
-      if (timer !== undefined) clearInterval(timer);
-      timer = undefined;
-      index = 0;
-      screens.forEach((screen, i) => {
-        screen.classList.toggle('is-preview-current', i === 0);
-        if (mobile.matches) screen.loading = 'eager';
-      });
-      if (mobile.matches && !reducedMotion.matches && screens.length > 1) {
-        timer = setInterval(() => {
-          if (document.hidden) return;
-          screens[index].classList.remove('is-preview-current');
-          index = (index + 1) % screens.length;
-          screens[index].classList.add('is-preview-current');
-        }, 2300);
-      }
-    };
-    update();
-    mobile.addEventListener('change', update);
-    reducedMotion.addEventListener('change', update);
-    this.stopProductPreview = () => {
-      if (timer !== undefined) clearInterval(timer);
-      mobile.removeEventListener('change', update);
-      reducedMotion.removeEventListener('change', update);
-    };
-  }
-
   private revealObserver?: IntersectionObserver;
   private storyRevealObserver?: IntersectionObserver;
   private demoObserver?: IntersectionObserver;
@@ -120,6 +155,27 @@ export class SmartChargingCaseComponent implements AfterViewInit, OnDestroy {
   private userNeedTrigger?: HTMLButtonElement;
   private userNeedOutsidePointerHandler?: (event: PointerEvent) => void;
   private unbindExpandableMedia?: () => void;
+  private infrastructureArrowObserver?: ResizeObserver;
+
+  private alignInfrastructureArrow(): void {
+    const visual = this.host.nativeElement.querySelector<HTMLElement>('.smart-charger-workflows .licita-applied-comparison__visual');
+    const arrow = visual?.querySelector<HTMLElement>('.smart-infrastructure-arrow');
+    const images = visual?.querySelectorAll<HTMLImageElement>('img');
+    if (!visual || !arrow || !images || images.length !== 2) return;
+    const align = (): void => {
+      const bounds = visual.getBoundingClientRect();
+      const first = images[0].getBoundingClientRect();
+      const second = images[1].getBoundingClientRect();
+      const mobile = matchMedia('(max-width:768px)').matches;
+      const nextEvidence = images[1].closest('figure')!.getBoundingClientRect();
+      arrow.style.left = `${(mobile ? first.left + first.width / 2 : (first.right + second.left) / 2) - bounds.left}px`;
+      arrow.style.top = `${(mobile ? (first.bottom + nextEvidence.top) / 2 : first.top + first.height / 2) - bounds.top}px`;
+    };
+    this.infrastructureArrowObserver = new ResizeObserver(align);
+    this.infrastructureArrowObserver.observe(visual);
+    images.forEach(image => this.infrastructureArrowObserver!.observe(image.closest('figure')!));
+    align();
+  }
 
   constructor(private readonly cdr: ChangeDetectorRef, private readonly host: ElementRef<HTMLElement>) {}
 
@@ -367,10 +423,10 @@ export class SmartChargingCaseComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    this.setupProductPreview();
     this.isMobileViewport = matchMedia('(max-width: 768px)').matches;
     this.cdr.detectChanges();
-    this.unbindExpandableMedia = bindCaseExpandableMedia(this.host.nativeElement, (src, alt) => this.imagePreview?.open(src, alt));
+    this.unbindExpandableMedia = bindCaseExpandableMedia(this.host.nativeElement, (src, alt) => this.imagePreview?.open(src, alt), undefined, true);
+    this.alignInfrastructureArrow();
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const hero = document.querySelector<HTMLElement>('.civitas-hero');
     const heroItems = Array.from(document.querySelectorAll<HTMLElement>('.civitas-hero .civitas-reveal'));
@@ -991,8 +1047,8 @@ export class SmartChargingCaseComponent implements AfterViewInit, OnDestroy {
   private render(): void { this.cdr.detectChanges(); }
 
   ngOnDestroy(): void {
-    this.stopProductPreview?.();
     this.unbindExpandableMedia?.();
+    this.infrastructureArrowObserver?.disconnect();
     this.unbindUserNeedOutsidePointer();
     if (this.heroFrame !== undefined) cancelAnimationFrame(this.heroFrame);
     if (this.scrollFrame !== undefined) cancelAnimationFrame(this.scrollFrame);

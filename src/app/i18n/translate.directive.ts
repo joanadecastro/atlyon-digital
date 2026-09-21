@@ -1,10 +1,15 @@
 import { AfterViewInit, Directive, ElementRef, OnDestroy, effect } from '@angular/core';
 import { LanguageService } from './language.service';
 
+// Nested directives observe the same DOM nodes. Keep one canonical source per
+// node so a parent cannot capture its child's English output as the PT original.
+const originalText = new WeakMap<Text, string>();
+const originalAttributes = new WeakMap<Element, Map<string, string>>();
+
 @Directive({ selector: '[appTranslate]', standalone: true })
 export class TranslateDirective implements AfterViewInit, OnDestroy {
-  private readonly originalText = new WeakMap<Text, string>();
-  private readonly originalAttributes = new WeakMap<Element, Map<string, string>>();
+  private readonly originalText = originalText;
+  private readonly originalAttributes = originalAttributes;
   private observer?: MutationObserver;
   private ready = false;
   private readonly languageEffect = effect(() => {
@@ -67,7 +72,8 @@ export class TranslateDirective implements AfterViewInit, OnDestroy {
         if (original) {
           const leading = original.match(/^\s*/)?.[0] ?? '';
           const trailing = original.match(/\s*$/)?.[0] ?? '';
-          text.data = `${leading}${this.language.translate(original)}${trailing}`;
+          const translated = `${leading}${this.language.translate(original)}${trailing}`;
+          if (text.data !== translated) text.data = translated;
         }
       } else if (node instanceof Element) {
         const element = node;

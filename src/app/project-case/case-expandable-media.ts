@@ -1,5 +1,121 @@
+import { scrollToCaseSlide } from './case-snap-carousel';
+
 type ImageOpener = (src: string, alt: string) => void;
 type VideoOpener = (src: string, label: string) => void;
+const EXPAND_ICON = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2H2v4M10 2h4v4M14 10v4h-4M6 14H2v-4" stroke="#2c3035" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+// One action per expandable evidence: desktop label, mobile icon and whole image.
+function bindToolbarEvidence(host: HTMLElement): () => void {
+  const mobile = matchMedia('(max-width: 768px)');
+  const positions = new Map<HTMLElement, string>();
+  const observedMedia = new Set<HTMLElement>();
+  const imageActions = new Map<HTMLImageElement, { trigger: HTMLButtonElement; active: boolean }>();
+  const imageCursors = new Map<HTMLImageElement, string>();
+  let imageGesture: { x: number; y: number; moved: boolean } | undefined;
+  const imagePointerDown = (event: PointerEvent): void => {
+    imageGesture = event.target instanceof HTMLImageElement && imageActions.has(event.target)
+      ? { x: event.clientX, y: event.clientY, moved: false } : undefined;
+  };
+  const imagePointerMove = (event: PointerEvent): void => {
+    // Same tap/drag threshold used by the shared case media interaction below.
+    if (imageGesture && Math.hypot(event.clientX - imageGesture.x, event.clientY - imageGesture.y) > 10) imageGesture.moved = true;
+  };
+  const imagePointerCancel = (): void => { if (imageGesture) imageGesture.moved = true; };
+  const imageClick = (event: MouseEvent): void => {
+    if (!(event.target instanceof HTMLImageElement)) return;
+    const action = imageActions.get(event.target);
+    if (!action) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    const dragged = event.detail !== 0 && imageGesture?.moved;
+    imageGesture = undefined;
+    if (dragged) return;
+    if (action.active) action.trigger.click();
+    else if (mobile.matches) {
+      const slide = event.target.closest('figure');
+      if (slide?.parentElement) scrollToCaseSlide(slide.parentElement, slide);
+    }
+  };
+  const entries = new Map<HTMLButtonElement, { trigger: HTMLButtonElement; button: HTMLButtonElement; display: string; priority: string }>();
+  const register = (trigger: HTMLButtonElement): void => {
+    if (entries.has(trigger)) return;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'case-expand-affordance case-mobile-evidence-expand';
+    button.setAttribute('aria-label', trigger.getAttribute('aria-label') || 'Ampliar');
+    button.innerHTML = EXPAND_ICON;
+    button.style.cssText = 'position:absolute;top:-22px;right:10px;bottom:auto;z-index:20;width:44px;height:44px;padding:0;border:1px solid rgba(32,36,43,.10);border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 2px 6px rgba(0,0,0,.08);display:grid;place-items:center;box-sizing:border-box;cursor:pointer;pointer-events:auto';
+    button.addEventListener('click', event => { event.stopPropagation(); trigger.click(); });
+    entries.set(trigger, { trigger, button, display: trigger.style.getPropertyValue('display'), priority: trigger.style.getPropertyPriority('display') });
+  };
+  const sync = (): void => {
+    host.querySelectorAll<HTMLButtonElement>('.licita-applied-comparison__expand').forEach(register);
+    imageActions.clear();
+    for (const { trigger, button, display, priority } of entries.values()) {
+      if (!host.contains(trigger)) { button.remove(); entries.delete(trigger); continue; }
+      if (mobile.matches) trigger.style.setProperty('display', 'none', 'important');
+      else if (display) trigger.style.setProperty('display', display, priority);
+      else trigger.style.removeProperty('display');
+      const selector = trigger.getAttribute('data-case-expand-target');
+      const target = selector ? host.querySelector<HTMLElement>(selector) : trigger.closest<HTMLElement>('figure');
+      if (target) {
+        const active = !mobile.matches || !target.hasAttribute('data-case-mobile-slide') || target.classList.contains('is-mobile-active');
+        const images = selector ? target.parentElement?.querySelectorAll<HTMLImageElement>('figure img') : target.querySelectorAll<HTMLImageElement>('img');
+        images?.forEach(image => {
+          const isActive = active && (!selector || target.contains(image));
+          imageActions.set(image, { trigger, active: isActive });
+          if (!imageCursors.has(image)) imageCursors.set(image, image.style.cursor);
+          image.style.cursor = isActive ? 'pointer' : '';
+          image.draggable = false;
+        });
+      }
+      if (!mobile.matches || !target) { button.remove(); continue; }
+      if (target.hasAttribute('data-case-mobile-slide') && !target.classList.contains('is-mobile-active')) {
+        button.remove(); continue;
+      }
+      if (!positions.has(target)) {
+        positions.set(target, target.style.position);
+        if (getComputedStyle(target).position === 'static') target.style.position = 'relative';
+      }
+      if (button.parentElement !== target) target.append(button);
+      const image = target.querySelector<HTMLImageElement>('img');
+      if (image) {
+        // Captions can sit below the media: keep the control on the image itself.
+        button.style.top = `${Math.max(0, image.getBoundingClientRect().top - target.getBoundingClientRect().top) - 22}px`;
+        for (const element of [target, image]) {
+          if (!observedMedia.has(element)) { observedMedia.add(element); resizeObserver.observe(element); }
+        }
+      }
+    }
+    if (!mobile.matches) {
+      positions.forEach((position, target) => target.style.position = position);
+      positions.clear();
+    }
+  };
+  const resizeObserver = new ResizeObserver(sync);
+  const observer = new MutationObserver(sync);
+  observer.observe(host, { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+  mobile.addEventListener('change', sync);
+  host.addEventListener('pointerdown', imagePointerDown, true);
+  host.addEventListener('pointermove', imagePointerMove, true);
+  host.addEventListener('pointercancel', imagePointerCancel, true);
+  host.addEventListener('click', imageClick, true);
+  sync();
+  return () => {
+    observer.disconnect(); resizeObserver.disconnect(); mobile.removeEventListener('change', sync);
+    host.removeEventListener('pointerdown', imagePointerDown, true);
+    host.removeEventListener('pointermove', imagePointerMove, true);
+    host.removeEventListener('pointercancel', imagePointerCancel, true);
+    host.removeEventListener('click', imageClick, true);
+    imageCursors.forEach((cursor, image) => image.style.cursor = cursor);
+    entries.forEach(({ button, trigger, display, priority }) => {
+      button.remove();
+      if (display) trigger.style.setProperty('display', display, priority);
+      else trigger.style.removeProperty('display');
+    });
+    positions.forEach((position, target) => target.style.position = position);
+  };
+}
 
 const EDITORIAL_MEDIA_SELECTOR = '.civitas-story-panel img,.civitas-story-panel video,.licitanow-story-panel img,.licitanow-story-panel video,.juh-story img,.juh-story video';
 const EXCLUDED_MEDIA_SELECTOR = '.user-profile-map__person,.licita-image-preview,.licita-video-preview,.case-hero,[aria-hidden="true"],[data-case-native-controls]';
@@ -45,11 +161,11 @@ function addAffordance(wrapper: HTMLElement, trigger?: HTMLButtonElement): void 
   icon.setAttribute('aria-hidden', 'true');
   const isCivitasComponentCrop = !!wrapper.closest('.civitas-page:not(.licitanow-page) .story-components figure.component-crop');
   icon.style.cssText = `position:absolute;top:${isCivitasComponentCrop ? '-8px' : '10px'};right:10px;z-index:20;pointer-events:none;width:34px;height:34px;border:1px solid rgba(32,36,43,.10);border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 2px 6px rgba(0,0,0,.08);display:grid;place-items:center;box-sizing:border-box`;
-  icon.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2H2v4M10 2h4v4M14 10v4h-4M6 14H2v-4" stroke="#2c3035" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  icon.innerHTML = EXPAND_ICON;
   wrapper.append(icon);
 }
 
-export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpener, openVideo?: VideoOpener): () => void {
+export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpener, openVideo?: VideoOpener, mobileIconOnly = false): () => void {
   const mobile = matchMedia('(max-width: 768px)');
   const actions = new Map<HTMLElement, () => void>();
   const triggerByMedia = new Map<HTMLElement, HTMLButtonElement>();
@@ -117,7 +233,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
     for (const [wrapper] of actions) {
       const trigger = triggerByMedia.get(wrapper);
       const mobileExpansionDisabled = mobile.matches && wrapper.hasAttribute('data-case-no-mobile-expand') && !trigger;
-      const expandable = !mobileExpansionDisabled && (mobile.matches || wrapper.hasAttribute('data-case-expand-desktop'));
+      const expandable = !mobileIconOnly && !mobileExpansionDisabled && (mobile.matches || wrapper.hasAttribute('data-case-expand-desktop'));
       wrapper.classList.toggle('case-expandable-media', expandable);
       if (expandable) {
         if (mobile.matches) addAffordance(wrapper, trigger);
@@ -192,6 +308,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   };
 
   sync();
+  const unbindMobileButtons = mobileIconOnly ? bindToolbarEvidence(host) : undefined;
   host.addEventListener('pointerdown', startGesture, true);
   host.addEventListener('pointermove', trackGesture, true);
   host.addEventListener('pointerup', endVideoTap, true);
@@ -201,6 +318,7 @@ export function bindCaseExpandableMedia(host: HTMLElement, openImage: ImageOpene
   host.addEventListener('keydown', activate);
   mobile.addEventListener('change', sync);
   return () => {
+    unbindMobileButtons?.();
     videoTapAreas.forEach(({ button, parent, position }) => {
       button.remove();
       parent.style.position = position;

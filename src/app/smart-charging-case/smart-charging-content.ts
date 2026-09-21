@@ -21,7 +21,7 @@ export const SMART_CHARGING_CHAPTERS: readonly SmartChargingChapter[] = [
     "id": "overview",
     "title": "Visão Global",
     "subtitle": "Uma plataforma operacional, do território ao ponto de carregamento.",
-    "copy": "Concebida para responder às necessidades de gestão de uma frota operacional, a plataforma liga localizações, parques, carregadores, veículos, reservas e permissões numa única experiência, com uma arquitetura preparada para diferentes operações e contextos.",
+    "copy": "A navegação preservava o contexto espacial à medida que o utilizador passava de uma visão geográfica ampla para a localização e, por fim, para o parque onde podia consultar os lugares de carregamento.",
     "screens": [
       {
         "file": "Group 3190.png",
@@ -36,7 +36,7 @@ export const SMART_CHARGING_CHAPTERS: readonly SmartChargingChapter[] = [
     "id": "parking",
     "title": "Do Mapa ao Parque",
     "subtitle": "Plantas reais, espaços interativos e estados visuais.",
-    "copy": "Cerca de 50 plantas de parques foram desenhadas individualmente a partir dos planos do cliente. O parque circular e o parque retangular representam edifícios distintos — não variantes da mesma localização. As cores dos lugares comunicam disponibilidade, utilização, reserva, carregamento e falhas.",
+    "copy": "Múltiplas plantas de parques foram desenhadas individualmente a partir das plantas fornecidas. O parque circular e o parque retangular representam edifícios distintos, cada um com a sua configuração física.",
     "screens": [
       {
         "file": "Group 3193.png",
@@ -57,7 +57,7 @@ export const SMART_CHARGING_CHAPTERS: readonly SmartChargingChapter[] = [
     "id": "reservations",
     "title": "Reservas",
     "subtitle": "A representação física transforma-se numa ação operacional.",
-    "copy": "A seleção de um lugar permite reservar o carregamento, associando localização, cartão, tipo de conector, potência, data e hora, com opções de lembrete.",
+    "copy": "Ao chegar à planta, o utilizador precisava de encontrar onde carregar dentro daquele espaço físico. A decisão foi permitir selecionar diretamente um lugar EV verde — disponível — para abrir o formulário de reserva desse lugar.",
     "screens": [
       {
         "file": "Group 3197.png",
@@ -70,9 +70,9 @@ export const SMART_CHARGING_CHAPTERS: readonly SmartChargingChapter[] = [
   },
   {
     "id": "chargers",
-    "title": "Gestão de Carregadores",
+    "title": "Infraestrutura de Carregamento",
     "subtitle": "Da infraestrutura física à informação técnica.",
-    "copy": "Estado dos conectores, dados técnicos e gestão OCPP acompanham os fluxos de configuração de carregadores e localizações.",
+    "copy": "A configuração começa pela localização geográfica, seguida dos carregadores associados. A gestão técnica reúne conectores, estados, comandos e logs OCPP e informação operacional.",
     "screens": [
       {
         "file": "Group 3196.png",
@@ -83,14 +83,14 @@ export const SMART_CHARGING_CHAPTERS: readonly SmartChargingChapter[] = [
     ],
     "supporting": [
       {
-        "file": "Frame 845.png",
-        "caption": "Adicionar carregadores e definir coordenadas no mapa",
+        "file": "Group 3201.png",
+        "caption": "Adicionar uma localização geográfica",
         "width": 1900,
         "height": 1080
       },
       {
-        "file": "Group 3201.png",
-        "caption": "Adicionar uma localização geográfica",
+        "file": "Frame 845.png",
+        "caption": "Adicionar carregadores e definir coordenadas no mapa",
         "width": 1900,
         "height": 1080
       }

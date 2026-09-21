@@ -1,0 +1,11 @@
+// Canonical LicitaNow fact line, shared without changing its cascade.
+@mixin base {
+.licita-result-facts{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px 20px;color:rgba(32,36,43,.68);font-size:13px;text-align:center}
+.licita-result-facts span+span::before,.licita-result-facts strong::before{content:"·";margin-right:20px;color:rgba(32,36,43,.36)}
+.licita-result-facts strong{display:inline-flex;align-items:center;gap:7px;color:var(--licita-accent);font-size:10px;letter-spacing:.12em}
+.licita-result-facts strong svg{flex:0 0 auto;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+}
+@mixin mobile {
+.licita-result-facts { display:flex; flex-wrap:wrap; justify-content:center; gap:8px 12px; }
+.licita-result-facts span + span::before,.licita-result-facts strong::before { margin-right:12px; }
+}

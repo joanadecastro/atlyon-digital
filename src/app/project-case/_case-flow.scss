@@ -1,0 +1,94 @@
+// Existing JUH overview process, shared without changing its layout or motion.
+@mixin overview($selector) {
+  #{$selector} {
+    --juh-flow-gap:clamp(30px,3.2vw,48px);
+    display:grid;
+    grid-template-columns:repeat(var(--case-flow-steps, 6),minmax(0,1fr));
+    gap:var(--juh-flow-gap);
+    width:min(88%,1120px);
+    margin:clamp(46px,4.5vw,68px) auto 0;
+    padding:0;
+    border:0;
+    list-style:none;
+  }
+
+  #{$selector} li {
+    position:relative;
+    display:grid;
+    place-items:center;
+    min-width:0;
+    min-height:52px;
+    padding:10px 14px;
+    box-sizing:border-box;
+    border:1px solid rgba(32,36,43,.12);
+    border-radius:12px;
+    background:color-mix(in srgb,var(--case-flow-bg, var(--juh-project-bg)) 68%,#fff);
+    color:#20242b;
+    font:inherit;
+    font-weight:650;
+    line-height:1.25;
+    text-align:center;
+  }
+
+  #{$selector} li:not(:last-child)::after {
+    content:'→';
+    position:absolute;
+    top:50%;
+    left:100%;
+    display:grid;
+    place-items:center;
+    width:var(--juh-flow-gap);
+    height:18px;
+    margin:0;
+    color:var(--case-flow-arrow-color, var(--juh-flow-arrow-color));
+    font-size:20px;
+    font-weight:400;
+    line-height:1;
+    transform:translateY(-50%);
+    animation:juhOverviewFlowArrow 2.2s cubic-bezier(.22,1,.36,1) infinite;
+  }
+
+  #{$selector} li:nth-child(2)::after { animation-delay:120ms; }
+  #{$selector} li:nth-child(3)::after { animation-delay:240ms; }
+  #{$selector} li:nth-child(4)::after { animation-delay:360ms; }
+  #{$selector} li:nth-child(5)::after { animation-delay:480ms; }
+
+  @keyframes juhOverviewFlowArrow {
+    0%,100% { opacity:.48; translate:0 0; }
+    50% { opacity:.9; translate:4px 0; }
+  }
+
+  @media (max-width:768px) {
+
+    #{$selector} {
+      --juh-flow-gap:22px;
+      grid-template-columns:minmax(0,1fr);
+      width:calc(100% - 28px);
+      max-width:360px;
+      margin:36px auto 0;
+    }
+
+    #{$selector} li {
+      width:100%;
+      min-height:46px;
+      padding-block:5px;
+    }
+
+    #{$selector} li:not(:last-child)::after {
+      content:'↓';
+      top:100%;
+      left:50%;
+      width:18px;
+      height:var(--juh-flow-gap);
+      transform:translateX(-50%);
+      animation-name:juhOverviewFlowArrowMobile;
+    }
+  }
+
+  @keyframes juhOverviewFlowArrowMobile {
+    0%,100% { opacity:.48; translate:0 0; }
+    50% { opacity:.9; translate:0 4px; }
+  }
+
+  @media (prefers-reduced-motion:reduce) { #{$selector} li:not(:last-child)::after { animation:none; } }
+}

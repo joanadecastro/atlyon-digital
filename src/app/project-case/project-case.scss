@@ -6122,6 +6122,7 @@
   will-change:auto!important;
 }
 
+.scroll-reveal-enabled .smart-platform-architecture .architecture-items > span::before,
 .scroll-reveal-enabled .story-architecture .architecture-root::after,
 .scroll-reveal-enabled .story-architecture .architecture-area::before,
 .scroll-reveal-enabled .story-architecture .architecture-area:is(.architecture-area--panel,.architecture-area--overview) h3::after,
@@ -6131,6 +6132,7 @@
   transform-origin:left center;
 }
 
+.scroll-reveal-enabled .smart-platform-architecture .architecture-items > span::after,
 .scroll-reveal-enabled .story-architecture .architecture-level-two::before,
 .scroll-reveal-enabled .story-architecture .architecture-area__children::before,
 .scroll-reveal-enabled .story-architecture .architecture-scope-note::before {
@@ -6158,18 +6160,22 @@
   transition:transform 480ms ease-out 1030ms;
 }
 
+.scroll-reveal-enabled .smart-platform-architecture .architecture-area--panel .architecture-items > span::after,
 .scroll-reveal-enabled .story-architecture .architecture-area--panel .architecture-area__children::before {
   transition:transform 620ms ease-out 1260ms;
 }
 
+.scroll-reveal-enabled .smart-platform-architecture .architecture-area--overview .architecture-items > span::after,
 .scroll-reveal-enabled .story-architecture .architecture-area--overview .architecture-area__children::before {
   transition:transform 620ms ease-out 1620ms;
 }
 
+.scroll-reveal-enabled .smart-platform-architecture .architecture-items > span::before,
 .scroll-reveal-enabled .story-architecture .architecture-group::before {
   transition:transform 480ms ease-out 1510ms;
 }
 
+.scroll-reveal-enabled .smart-platform-architecture .architecture-area--overview .architecture-items > span::before,
 .scroll-reveal-enabled .story-architecture .architecture-area--overview .architecture-group::before {
   transition-delay:1870ms;
 }
@@ -6194,6 +6200,7 @@
   transition:transform 500ms ease-out 2360ms;
 }
 
+.scroll-reveal-enabled .smart-platform-architecture.is-entered .architecture-items > span::before,
 .scroll-reveal-enabled .story-architecture.is-entered .architecture-root::after,
 .scroll-reveal-enabled .story-architecture.is-entered .architecture-area::before,
 .scroll-reveal-enabled .story-architecture.is-entered .architecture-area:is(.architecture-area--panel,.architecture-area--overview) h3::after,
@@ -6202,6 +6209,7 @@
   transform:scaleX(1);
 }
 
+.scroll-reveal-enabled .smart-platform-architecture.is-entered .architecture-items > span::after,
 .scroll-reveal-enabled .story-architecture.is-entered .architecture-level-two::before,
 .scroll-reveal-enabled .story-architecture.is-entered .architecture-area__children::before,
 .scroll-reveal-enabled .story-architecture.is-entered .architecture-scope-note::before {
@@ -6224,6 +6232,8 @@
 }
 
 @media(prefers-reduced-motion:reduce) {
+  .scroll-reveal-enabled .smart-platform-architecture .architecture-items > span::before,
+  .scroll-reveal-enabled .smart-platform-architecture .architecture-items > span::after,
   .scroll-reveal-enabled .story-architecture .architecture-root::after,
   .scroll-reveal-enabled .story-architecture .architecture-level-two::before,
   .scroll-reveal-enabled .story-architecture .architecture-area::before,

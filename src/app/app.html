@@ -198,23 +198,8 @@
 
         <div class="portfolio-scroll-frame">
         <div #projectStrip id="project-strip" class="portfolio-catalog portfolio-catalog--static" [class.project-preview-at-start]="!canScrollProjectsBack" [class.project-preview-pointer]="projectPreviewPointer" (pointermove)="updateProjectPreview($event)" (pointerleave)="projectPreviewPointer = false" tabindex="0" role="region" aria-label="Projetos" (wheel)="scrollProjects($event)" (scroll)="updateProjectNavigation()">
-          @for (project of projects; track project.name; let projectIndex = $index) {
-            @if (projectIndex === 2) {
-              <a class="portfolio-project-card portfolio-project-card--juh" [href]="juhProjectUrl" (click)="openJuhProject($event)">
-                <div class="case-card-content">
-                  <div class="case-card-copy">
-                    <strong>
-                      <span class="case-card-title-main">JUH</span>
-                      <span class="case-card-title-secondary">E-commerce</span>
-                    </strong>
-                    <small>Front-end &middot; Angular &middot; TypeScript</small>
-                  </div>
-                  <span class="case-card-action case-card-cta">
-                    Ver projeto completo <span class="case-card-cta__arrow cta-arrow" aria-hidden="true"></span>
-                  </span>
-                </div>
-              </a>
-            }
+          @for (projectIndex of [2, 1, 0]; track projectIndex) {
+            @let project = projects[projectIndex];
             <button type="button" class="portfolio-project-card"
               [class.portfolio-project-card--civitas]="projectIndex === 0"
               [class.portfolio-project-card--licitanow]="projectIndex === 1"
@@ -243,16 +228,29 @@
                 }
               </div>
 
-              @if (projectIndex === 2) {
-                <span class="case-card-action case-card-status">Projeto brevemente dispon&iacute;vel</span>
-              } @else {
-                <span class="case-card-action case-card-cta">
-                  Ver projeto completo <span class="case-card-cta__arrow cta-arrow" aria-hidden="true"></span>
-                </span>
-              }
+              <span class="case-card-action case-card-cta">
+                @if (projectIndex === 2) {View full project} @else {Ver projeto completo}
+                <span class="case-card-cta__arrow cta-arrow" aria-hidden="true"></span>
+              </span>
               </div>
 
             </button>
+            @if (projectIndex === 0) {
+              <a class="portfolio-project-card portfolio-project-card--juh" [href]="juhProjectUrl" (click)="openJuhProject($event)">
+                <div class="case-card-content">
+                  <div class="case-card-copy">
+                    <strong>
+                      <span class="case-card-title-main">JUH</span>
+                      <span class="case-card-title-secondary">E-commerce</span>
+                    </strong>
+                    <small>Front-end &middot; Angular &middot; TypeScript</small>
+                  </div>
+                  <span class="case-card-action case-card-cta">
+                    Ver projeto completo <span class="case-card-cta__arrow cta-arrow" aria-hidden="true"></span>
+                  </span>
+                </div>
+              </a>
+            }
           }
 
           <button type="button" class="case-project-overlay"

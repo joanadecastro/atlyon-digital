@@ -12436,22 +12436,7 @@ body {
     box-shadow: 0 12px 32px rgba(0, 0, 0, .08);
   }
 
-  #portfolio .portfolio-catalog--static .portfolio-project-card--smart-charging::before {
-    content: "";
-    position: absolute;
-    z-index: 0;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0;
-    background:
-      radial-gradient(ellipse 55% 68% at 64% 48%, rgba(255,255,255,.42), transparent 76%),
-      #c5c8cc;
-    transition: opacity .45s cubic-bezier(.22, 1, .36, 1);
-  }
 
-  #portfolio .portfolio-catalog--static .portfolio-project-card--smart-charging:hover::before {
-    opacity: 1;
-  }
 }
 
 /* Serviços — reveal unitário dos seis blocos editoriais. */
@@ -16867,14 +16852,7 @@ body {
   }
 }
 
-/* Mobile shows the existing desktop inactive surface without requiring hover. */
-@media (max-width: 768px) {
-  #portfolio .portfolio-catalog--static .portfolio-project-card--smart-charging {
-    background:
-      radial-gradient(ellipse 55% 68% at 64% 48%, rgba(255,255,255,.42), transparent 76%),
-      #c5c8cc !important;
-  }
-}
+
 
 @media (max-width: 768px) {
   .case-study-chat-trigger {
@@ -17025,6 +17003,13 @@ body {
 #portfolio .portfolio-catalog--static .portfolio-project-card--civitas,
 #portfolio .portfolio-catalog--static .portfolio-project-card--civitas:hover {
   background: #afbeca !important;
+  background-image: none !important;
+}
+
+/* Smart Charging uses its hero colour through the same card background mechanism. */
+#portfolio .portfolio-catalog--static .portfolio-project-card--smart-charging,
+#portfolio .portfolio-catalog--static .portfolio-project-card--smart-charging:hover {
+  background: #c5d2e9 !important;
   background-image: none !important;
 }
 
