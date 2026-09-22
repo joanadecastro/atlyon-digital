@@ -229,7 +229,7 @@
               </div>
 
               <span class="case-card-action case-card-cta">
-                @if (projectIndex === 2) {View full project} @else {Ver projeto completo}
+                Ver projeto completo
                 <span class="case-card-cta__arrow cta-arrow" aria-hidden="true"></span>
               </span>
               </div>
@@ -514,9 +514,7 @@
 } @else if (selectedProject.slug === 'licitanow') {
 <app-licitanow-case></app-licitanow-case>
 } @else if (selectedProject.slug === 'smart-charging') {
-@defer (on immediate) {
 <app-smart-charging-case />
-}
 } @else {
 <app-project-case [project]="selectedProject" (back)="navigateToProjectsStart()">
 </app-project-case>

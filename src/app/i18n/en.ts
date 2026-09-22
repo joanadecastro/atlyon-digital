@@ -1,4 +1,7 @@
 export const EN: Readonly<Record<string, string>> = {
+  'Algumas das cerca de 40 plantas interativas desenhadas em Adobe Illustrator para diferentes localizações da cidade do Porto.': 'Some of the nearly 40 interactive parking layouts created in Adobe Illustrator for different locations across the city of Porto.',
+  '03 · PARQUE — PLANTA': '03 · PARK — LAYOUT',
+  '04 · PLANTA — ECRÃ FULL SCREEN': '04 · LAYOUT — FULL SCREEN',
   'GRÁFICO': 'CHART',
   'Evolução e desempenho': 'Evolution and performance',
   'Os mesmos dados operacionais podiam ser consultados em dois modos de visualização. Dois controlos permitiam alternar diretamente entre a tabela, para uma leitura detalhada das transações, e o gráfico, para uma leitura visual da evolução e do desempenho no período selecionado.': 'The same operational data could be explored through two viewing modes. Two controls allowed users to switch directly between the table, for detailed transaction analysis, and the chart, for a visual reading of evolution and performance across the selected period.',

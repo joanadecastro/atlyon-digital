@@ -79,6 +79,12 @@
 @include case-screenshots.single-toolbar;
 
 // LicitaNow Principles' left / center / right / hidden composition, adapted to screens.
+:host .civitas-page .smart-parking-layouts__caption {
+  width: 100%;
+  max-width: none;
+  text-align: center;
+}
+
 :host .civitas-page .smart-parking-layouts {
   width: min(100%, 1120px);
   margin: var(--case-study-intro-visual-gap) auto 0;
@@ -175,6 +181,13 @@
 :host .case-study-page.civitas-page [aria-labelledby='smart-introduction'] .licita-result-facts {
   justify-content: center;
   margin-top: 64px;
+}
+
+@media (min-width: 769px) {
+  :host .case-study-page.civitas-page [aria-labelledby='smart-challenge'] .smart-product-scope {
+    margin-top: calc(var(--case-study-intro-visual-gap) + 32px);
+    .smart-product-scope__landscape { margin-top: 56px; }
+  }
 }
 
 // Product landscape uses the large evidence width and the original asset ratio.
