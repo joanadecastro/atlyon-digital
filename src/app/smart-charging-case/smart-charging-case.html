@@ -459,9 +459,6 @@
         <div class="smart-evidence-dots" role="group" [attr.aria-label]="language.currentLanguage() === 'en' ? 'Parking layouts' : 'Plantas de parques'">
           @for (slide of [0, 1, 2, 3, 4]; track slide) {<button type="button" [class.is-active]="parkingLayoutSlide === slide" [attr.aria-pressed]="parkingLayoutSlide === slide" [attr.aria-label]="(language.currentLanguage() === 'en' ? 'Show layout ' : 'Mostrar planta ') + (slide + 1)" (click)="selectMobileEvidence('parking', slide)"></button>}
         </div>
-        <div class="smart-parking-layouts__counter">
-            <span aria-live="polite" aria-atomic="true">@for (slide of [parkingLayoutSlide]; track slide) {<span>{{ slide + 1 }} / 5</span>}</span>
-        </div>
         <p class="interface-view-summary smart-parking-layouts__caption">Algumas das cerca de 40 plantas interativas desenhadas em Adobe Illustrator para diferentes localizações da cidade do Porto.</p>
       </section>
     </div>

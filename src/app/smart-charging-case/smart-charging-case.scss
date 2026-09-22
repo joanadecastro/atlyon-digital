@@ -82,6 +82,7 @@
 :host .civitas-page .smart-parking-layouts__caption {
   width: 100%;
   max-width: none;
+  margin-top: 12px;
   text-align: center;
 }
 
@@ -102,7 +103,6 @@
   &__toolbar { display: flex; justify-content: flex-end; align-items: center; width: 82.14%; margin-inline: auto; }
   &__toolbar .licita-applied-comparison__expand { display: inline-flex !important; position: static; }
   &__stage { position: relative; }
-  &__counter { text-align: center; font-size: 13px; margin-top: 8px; }
   &__navigation { position: absolute; inset: 0; pointer-events: none; }
   &__navigation button {
     position: absolute;
@@ -943,7 +943,6 @@
   :host .case-study-page.civitas-page .civitas-story-panel {
     .smart-parking-layouts__stage { padding: 0; }
     .smart-parking-layouts__navigation,
-    .smart-parking-layouts__counter,
     .smart-geographic-sequence > .responsive-desktop-flow__arrow { display: none !important; }
     :is(.smart-geographic-sequence, .smart-parking-layouts__rail) {
       @include case-mobile.compact-preview-carousel;
