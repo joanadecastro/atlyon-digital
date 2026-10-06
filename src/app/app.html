@@ -10,6 +10,12 @@
     </a>
   }
 
+  <div class="language-switcher" aria-label="Idioma" (click)="$event.stopPropagation()">
+    <button type="button" [class.is-active]="language.currentLanguage() === 'pt'" [attr.aria-pressed]="language.currentLanguage() === 'pt'" (click)="language.setLanguage('pt')">PT</button>
+    <span aria-hidden="true">|</span>
+    <button type="button" [class.is-active]="language.currentLanguage() === 'en'" [attr.aria-pressed]="language.currentLanguage() === 'en'" (click)="language.setLanguage('en')">EN</button>
+  </div>
+
   <button class="menu-toggle" type="button" (click)="$event.stopPropagation(); toggleDesktopMenu()"
     (mouseenter)="openDesktopMenuHover()" (focus)="openDesktopMenuHover()"
     [class.is-open]="isMenuOpen || desktopMenuOpen" [attr.aria-expanded]="isMenuOpen || desktopMenuOpen"
@@ -37,7 +43,7 @@
       <a href="#processo" (click)="navigateToSection($event, 'processo')" [class.active]="activeSection === 'processo'">Processo</a>
       <a href="#servicos" (click)="navigateToSection($event, 'servicos')" [class.active]="activeSection === 'servicos'"><span class="nav-label-mobile">Servi&ccedil;os</span><span class="nav-label-desktop">Especializa&ccedil;&atilde;o</span></a>
     </div>
-    <div class="language-switcher" aria-label="Idioma">
+    <div class="language-switcher language-switcher--mobile" aria-label="Idioma">
       <button type="button" [class.is-active]="language.currentLanguage() === 'pt'" [attr.aria-pressed]="language.currentLanguage() === 'pt'" (click)="language.setLanguage('pt')">PT</button>
       <span aria-hidden="true">|</span>
       <button type="button" [class.is-active]="language.currentLanguage() === 'en'" [attr.aria-pressed]="language.currentLanguage() === 'en'" (click)="language.setLanguage('en')">EN</button>
@@ -74,11 +80,11 @@
       <div class="hero-copy-area">
         <p class="hero-kicker">
           <span class="hero-kicker-first">UI/UX &amp;</span>
-          <span class="hero-kicker-wide">FRONT-END</span>
+          <span class="hero-kicker-wide">PRODUCT DESIGN</span>
         </p>
 
         <h1>
-          <span>Da estrat&eacute;gia ao design e desenvolvimento front-end.</span>
+          <span>Do conceito &agrave; experi&ecirc;ncia digital, com vis&atilde;o de design e implementa&ccedil;&atilde;o.</span>
         </h1>
         <div class="hero-title-accent" aria-hidden="true"></div>
 
@@ -122,7 +128,7 @@
           <svg class="about-showcase-cv__icon about-resource-link__github" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.63-.2.63-.44v-1.8c-2.57.56-3.11-1.09-3.11-1.09-.42-1.07-1.03-1.35-1.03-1.35-.84-.58.06-.57.06-.57.93.07 1.42.96 1.42.96.83 1.41 2.17 1 2.7.76.08-.6.32-1 .59-1.23-2.05-.23-4.2-1.02-4.2-4.57 0-1.01.36-1.84.95-2.49-.1-.23-.41-1.17.09-2.45 0 0 .78-.25 2.54.95A8.84 8.84 0 0 1 12 7.1c.79 0 1.57.1 2.31.31 1.77-1.2 2.54-.95 2.54-.95.51 1.28.19 2.22.1 2.45.59.65.95 1.48.95 2.49 0 3.56-2.16 4.33-4.22 4.56.33.29.63.85.63 1.72v2.66c0 .24.17.53.64.44A9.25 9.25 0 0 0 12 2.75Z"/></svg>
           <span class="cta-arrow" aria-hidden="true"></span>
         </a>
-        <a class="about-resource-link" href="/cv/Cv_UiFrontend_JoanaCastro.pdf" download="Cv_UiFrontend_JoanaCastro.pdf" aria-label="Descarregar CV">
+        <a class="about-resource-link" href="/cv/JoanaCastro_UIUX_CV.pdf" download="JoanaCastro_UIUX_CV.pdf" aria-label="Descarregar CV">
         <svg class="about-showcase-cv__icon" viewBox="0 0 20 20" aria-hidden="true">
           <path d="M5.5 2.5h5.8l3.2 3.2v11.8h-9z"/>
           <path d="M11.3 2.5v3.2h3.2M7.5 10h5M7.5 13h4"/>
@@ -155,7 +161,7 @@
           <div class="about-metric__value about-section__metric-value-wrap">
             <span class="about-section__metric-number">0</span><span class="about-section__metric-suffix">+</span>
           </div>
-          <span class="about-metric__label">ANOS EM FRONT-END</span>
+          <span class="about-metric__label">ANOS EM UI/UX</span>
         </div>
         <div class="about-metric" data-count-target="95" data-count-duration="1100">
           <div class="about-metric__value about-section__metric-value-wrap">
@@ -163,11 +169,11 @@
           </div>
           <span class="about-metric__label">INTERFACES DESENHADAS</span>
         </div>
-        <div class="about-metric" data-count-target="19" data-count-duration="950">
+        <div class="about-metric" data-count-target="4" data-count-duration="950">
           <div class="about-metric__value about-section__metric-value-wrap">
             <span class="about-section__metric-number">0</span><span class="about-section__metric-suffix">+</span>
           </div>
-          <span class="about-metric__label">MARCAS DESENVOLVIDAS</span>
+          <span class="about-metric__label">ANOS EM FRONT-END</span>
         </div>
       </div>
 
@@ -379,7 +385,7 @@
           <div class="process-step__title-wrap">
             <h3 class="process-step__title" data-process-text="Contexto &amp;&#10;Objetivos">Contexto &amp;<br>Objetivos</h3>
           </div>
-          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 0">Compreendo o problema, os objetivos, o utilizador e os requisitos para definir prioridades antes de avan&ccedil;ar.</p>
+          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 0">Compreendo o problema, os objetivos, os utilizadores e os requisitos para definir prioridades antes de avan&ccedil;ar.</p>
         </div>
         <div class="process-sticky__number-column" [class.is-revealed]="highestProcessStepReached >= 1" [class.is-current]="highestProcessStepReached === 1">
           <div class="process-sticky__number-wrap">
@@ -388,16 +394,16 @@
           <div class="process-step__title-wrap">
             <h3 class="process-step__title" data-process-text="Estrat&eacute;gia &amp;&#10;Dire&ccedil;&atilde;o">Estrat&eacute;gia &amp;<br>Dire&ccedil;&atilde;o</h3>
           </div>
-          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 1">Estruturo a abordagem, exploro solu&ccedil;&otilde;es e defino uma dire&ccedil;&atilde;o visual e funcional alinhada com o projeto.</p>
+          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 1">Estruturo a abordagem, exploro solu&ccedil;&otilde;es e defino a dire&ccedil;&atilde;o visual e funcional do produto.</p>
         </div>
         <div class="process-sticky__number-column" [class.is-revealed]="highestProcessStepReached >= 2" [class.is-current]="highestProcessStepReached === 2">
           <div class="process-sticky__number-wrap">
             <span class="process-sticky__number" data-process-text="03.">03.</span>
           </div>
           <div class="process-step__title-wrap">
-            <h3 class="process-step__title" data-process-text="Design &amp;&#10;Desenvolvimento">Design &amp;<br>Desenvolvimento</h3>
+            <h3 class="process-step__title" data-process-text="UI/UX &amp;&#10;Product Design">UI/UX &amp;<br>Product Design</h3>
           </div>
-          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 2">Transformo a dire&ccedil;&atilde;o definida em interfaces e experi&ecirc;ncias digitais, aproximando design e implementa&ccedil;&atilde;o.</p>
+          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 2">Transformo a dire&ccedil;&atilde;o definida em fluxos de utilizador, interfaces responsivas, prot&oacute;tipos e sistemas de design reutiliz&aacute;veis.</p>
         </div>
         <div class="process-sticky__number-column" [class.is-revealed]="highestProcessStepReached >= 3" [class.is-current]="highestProcessStepReached === 3">
           <div class="process-sticky__number-wrap">
@@ -406,7 +412,7 @@
           <div class="process-step__title-wrap">
             <h3 class="process-step__title" data-process-text="Valida&ccedil;&atilde;o &amp;&#10;Entrega">Valida&ccedil;&atilde;o &amp;<br>Entrega</h3>
           </div>
-          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 3">Refino a solu&ccedil;&atilde;o, valido os principais detalhes e preparo o trabalho para implementa&ccedil;&atilde;o, entrega ou evolu&ccedil;&atilde;o.</p>
+          <p class="process-step__description process-sticky__description" [attr.aria-hidden]="highestProcessStepReached < 3">Refino a experi&ecirc;ncia, valido os principais detalhes e preparo o design para implementa&ccedil;&atilde;o, entrega e evolu&ccedil;&atilde;o futura.</p>
         </div>
         </div>
       </div>
@@ -569,7 +575,7 @@
       </div>
       <div class="site-footer__actions">
       <a class="site-footer__source" href="https://github.com/joanadecastro/atlyon-digital" target="_blank" rel="noopener noreferrer"><svg class="site-footer__source-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.63-.2.63-.44v-1.8c-2.57.56-3.11-1.09-3.11-1.09-.42-1.07-1.03-1.35-1.03-1.35-.84-.58.06-.57.06-.57.93.07 1.42.96 1.42.96.83 1.41 2.17 1 2.7.76.08-.6.32-1 .59-1.23-2.05-.23-4.2-1.02-4.2-4.57 0-1.01.36-1.84.95-2.49-.1-.23-.41-1.17.09-2.45 0 0 .78-.25 2.54.95A8.84 8.84 0 0 1 12 7.1c.79 0 1.57.1 2.31.31 1.77-1.2 2.54-.95 2.54-.95.51 1.28.19 2.22.1 2.45.59.65.95 1.48.95 2.49 0 3.56-2.16 4.33-4.22 4.56.33.29.63.85.63 1.72v2.66c0 .24.17.53.64.44A9.25 9.25 0 0 0 12 2.75Z" /></svg><span class="site-footer__source-label site-footer__source-label--desktop">VER C&Oacute;DIGO DESTE SITE</span><span class="site-footer__source-label site-footer__source-label--mobile">C&Oacute;DIGO DO SITE</span><span class="cta-arrow" aria-hidden="true"></span></a>
-      <a class="site-footer__cv" href="/cv/Cv_UiFrontend_JoanaCastro.pdf" download="Cv_UiFrontend_JoanaCastro.pdf">DESCARREGAR CV <span class="cta-arrow" aria-hidden="true"></span></a>
+      <a class="site-footer__cv" href="/cv/JoanaCastro_UIUX_CV.pdf" download="JoanaCastro_UIUX_CV.pdf">DESCARREGAR CV <span class="cta-arrow" aria-hidden="true"></span></a>
       </div>
     </div>
   </div>
@@ -654,7 +660,7 @@
                     [class.project-chat-suggestions--initial]="message.intro">
                     @for (action of message.actions; track action.id) {
                       @if (action.href) {
-                        <a class="project-chat-suggestion" [href]="action.href" [attr.aria-label]="action.href.startsWith('mailto:') ? 'Enviar email' : null" [attr.download]="action.download ? 'Cv_UiFrontend_JoanaCastro.pdf' : null" [attr.target]="action.href.startsWith('http') ? '_blank' : null" [attr.rel]="action.href.startsWith('http') ? 'noopener noreferrer' : null">{{ action.label }}@if (action.download) {<span class="cta-arrow" aria-hidden="true"></span>}</a>
+                        <a class="project-chat-suggestion" [href]="action.href" [attr.aria-label]="action.href.startsWith('mailto:') ? 'Enviar email' : null" [attr.download]="action.download ? 'JoanaCastro_UIUX_CV.pdf' : null" [attr.target]="action.href.startsWith('http') ? '_blank' : null" [attr.rel]="action.href.startsWith('http') ? 'noopener noreferrer' : null">{{ action.label }}@if (action.download) {<span class="cta-arrow" aria-hidden="true"></span>}</a>
                       } @else {
                         <button
                           type="button"

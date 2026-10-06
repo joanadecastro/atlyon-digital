@@ -7265,11 +7265,13 @@ body .project-chat__composer button:hover { background:transparent; color:#315cf
   }
 
   .hero-main-panel {
-    width: min(
+    width: calc(min(
       calc(100% - ((var(--site-content-gutter) - var(--hero-page-gutter)) * 2)),
       160vh,
       1440px
-    );
+    ) - 32px);
+    /* Preserve the copy position and column width as each outer edge moves in 16px. */
+    grid-template-columns: calc(58% + 2.56px) calc(32% + 10.24px) minmax(0, 1fr);
     height: clamp(440px, calc(100vh - var(--home-hero-panel-top) - 104px), 560px);
     margin-top: 0;
   }
@@ -8030,6 +8032,13 @@ body .project-chat__composer button:hover { background:transparent; color:#315cf
   color: rgba(242, 243, 245, .66);
   font-size: clamp(14px, .82vw, 15px);
   line-height: 1.45;
+}
+
+@media (min-width: 1101px) {
+  .hero--dark-preview .hero-copy-area h1 {
+    width: min(482px, 54vw);
+    max-width: 482px;
+  }
 }
 
 .hero--dark-preview.hero-entering .hero-copy-area .hero-kicker {
@@ -10798,10 +10807,11 @@ body {
   .navbar:not(.is-scrolled):hover nav {
     position: fixed !important;
     top: 25px !important;
-    right: calc(clamp(14px, 2.4vw, 34px) + 60px) !important;
+    right: calc(clamp(14px, 2.4vw, 34px) + 124px) !important;
     display: flex !important;
     width: auto !important;
     height: auto !important;
+    min-height: 39px;
     padding: 10px 22px !important;
     transform: translateX(10px) !important;
     background: rgba(255, 255, 255, 0.68) !important;
@@ -10823,7 +10833,7 @@ body {
   .navbar.is-scrolled.desktop-menu-open nav,
   .navbar:not(.is-scrolled).desktop-menu-open nav {
     top: 25px !important;
-    right: calc(clamp(14px, 2.4vw, 34px) + 60px) !important;
+    right: calc(clamp(14px, 2.4vw, 34px) + 124px) !important;
     transform: translateX(0) !important;
     opacity: 1 !important;
     visibility: visible !important;
@@ -13237,6 +13247,36 @@ body {
 .language-switcher button:is(:hover,:focus-visible) { opacity:1; }
 .language-switcher button.is-active { border-bottom-color:#315cff; color:#315cff; opacity:1; }
 
+.navbar > .language-switcher {
+  position:fixed;
+  top:46px;
+  right:calc(clamp(14px, 2.4vw, 34px) + 60px);
+  z-index:10008;
+  margin:0;
+  padding:0;
+  color:#5f6468;
+  transform:translateY(-50%);
+}
+
+.language-switcher--mobile {
+  display:none;
+}
+
+@media (max-width:768px) {
+  .navbar > .language-switcher {
+    display:none;
+  }
+
+  .navbar.menu-open > nav.mobile-open .language-switcher.language-switcher--mobile {
+    position:static!important;
+    inset:auto!important;
+    /* The menu already has a 38px gap; leave 24px below the links. */
+    margin:-14px 0 0!important;
+    transform:none!important;
+    flex-shrink:0;
+  }
+}
+
 @media (max-width:820px) {
   .language-switcher {
     margin-top:auto;
@@ -14319,12 +14359,13 @@ body {
   .navbar:not(.is-scrolled).desktop-menu-open > nav {
     position:fixed!important;
     top:25px!important;
-    right:calc(clamp(14px,2.4vw,34px) + 60px)!important;
+    right:calc(clamp(14px,2.4vw,34px) + 124px)!important;
     display:flex!important;
     width:auto!important;
     max-width:none!important;
     height:auto!important;
     padding:10px 22px!important;
+    min-height:39px;
     align-items:center!important;
     background:rgba(255,255,255,.68)!important;
     -webkit-backdrop-filter:blur(16px)!important;
@@ -14733,8 +14774,10 @@ body {
   .hero--dark-preview .hero-copy-area h1,
   .hero-copy-area h1 {
     width:100%!important;
-    max-width:none!important;
-    white-space:nowrap!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    /* Wrapped text uses the existing space above the CTA without moving the title or CTA. */
+    height:1lh;
     word-break:keep-all!important;
     overflow-wrap:normal!important;
     hyphens:none!important;
